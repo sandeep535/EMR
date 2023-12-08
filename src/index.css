@@ -31,3 +31,15 @@ body,
   background-color: #4ccfc2 !important;
   margin: 5px !important;
 }
+.reg_div{
+    padding: 15px;
+    background: #f2f0f0;
+    border: 1px solid #a4a4a4;
+    border-radius: 5px;
+}
+.visit_div{
+  margin-top: 15px;
+}
+.input_background{
+  background: white;
+}

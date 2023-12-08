@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Box} from '@mui/material';
+import { Box,Typography,useTheme} from '@mui/material';
 import {TextField, FormControl,InputLabel,Select,MenuItem,Grid, Button} from "@material-ui/core";
+import { tokens } from "../../theme";
+import Autocomplete from '@mui/material/Autocomplete';
 //import * as yup from 'yup';
-import Header from "../../components/Header";
 import Translations from '../../resources/translations';
 import { DataGrid } from '@mui/x-data-grid';
 
@@ -10,7 +11,8 @@ import { DataGrid } from '@mui/x-data-grid';
 
 const VisitCreation = () => {
 
-
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
   const [title, setTitle] = useState([]);
   const [firstName, setFirstName] = useState([]);
   const [lastName, setLastName] = useState([]);
@@ -64,51 +66,38 @@ const VisitCreation = () => {
     {
       field: 'Servicetype',
       headerName: 'Service Type',
-      width: 150,
+      width: 200,
       editable: true,
     },
     {
       field: 'servicename',
       headerName: 'Service Name',
-      width: 150,
+      width: 200,
       editable: true,
-    },
-    {
-      field: 'visittype',
-      headerName: 'Visit Type',
-      type: 'number',
-      width: 110,
-      editable: true,
-    },
-    {
-      field: 'DocName',
-      headerName: 'Doctor Name',
-      sortable: true,
-      width: 160
     },
     {
         field: 'price',
         headerName: 'Price',
         sortable: true,
-        width: 160
+        width: 150
       },
       {
         field: 'qnty',
         headerName: 'Quantity',
         sortable: true,
-        width: 160
+        width: 150
       },
       {
         field: 'discount',
         headerName: 'Discount',
         sortable: true,
-        width: 160
+        width: 150
       },
       {
         field: 'totAmt',
         headerName: 'Total Amount',
         sortable: true,
-        width: 160
+        width: 150
       }
   ];
   
@@ -183,55 +172,20 @@ const VisitCreation = () => {
   ]
 
   const VisitTypeList=[
-    {
-        name:'General',
-        value:'General',
-        id:1
-    },
-    {
-        name:'Emergency',
-        value:'Emergency',
-        id:2
-    }
+    { label:'General',id:1},
+    { label:'Emergency',id:2}
 ]
 const SpecialityList=[
-    {
-        name:'General Medicine',
-        value:'General Medicine',
-        id:1
-    },
-    {
-        name:'Physio',
-        value:'Physio',
-        id:2
-    },
-    {
-        name:'Physchology',
-        value:'Physchology',
-        id:3
-    },
-    {
-        name:'Dental',
-        value:'Dental',
-        id:4
-    }
+    { label:'General Medicine',id:1},
+    { label:'Physio',id:2},
+    { label:'Physchology',id:3},
+    { label:'Dental',id:4}
 ]
+
 const DoctorList=[
-    {
-        name:'Dr.Ram',
-        value:'Dr.Ram',
-        id:1
-    },
-    {
-        name:'Dr.Sandeep',
-        value:'Dr.Sandeep',
-        id:2
-    },
-    {
-        name:'Dr.shiva',
-        value:'Dr.Shiva',
-        id:3
-    }
+    { label:'Dr.Ram',id:1},
+    { label:'Dr.Sandeep', id:2},
+    { label:'Dr.Shiva',id:3}
 ]
   
   function clearData (){
@@ -254,16 +208,22 @@ const DoctorList=[
 
   return (
     <Box m="20px">
-      <Header title={Translations.visitCreation.pagetitle} subtitle={Translations.visitCreation.pagesubtitle} />
         <form onSubmit={handleSubmit}>
-          <Box display="grid" gap="20px">
+          <Box display="grid" gap="15px" className='reg_div'>
+            <Grid xs={12} container>
+              <Grid item xs={4}>
+                <Typography variant="h5" color={colors.greenAccent[400]}>
+                Patient Registration
+                </Typography>
+              </Grid>
+            </Grid>
             <Grid xs={12} container spacing={4}>
               <Grid item xs={2}>
                 <FormControl variant="outlined" fullWidth>
                   <InputLabel style={{ disableAnimation: false }} disableAnimation={false}  htmlFor="title">
                     {Translations.patientRegistration.title}
                   </InputLabel>
-                  <Select
+                  <Select className='input_background'
                     value={title}
                     label={Translations.patientRegistration.title}
                     name="title"
@@ -277,30 +237,33 @@ const DoctorList=[
                   </Select>
                 </FormControl>
               </Grid>
-              <Grid item xs={4} spacing={4}>
-            
+              <Grid item xs={4}>
                 <TextField
+                  className='input_background'
                   fullWidth
                   variant="outlined"
                   type="text"
+                  required
                   label={Translations.patientRegistration.firstName}
                   name="firstName"
                   onChange={e => setFirstName(e.target.value)}
                   value={firstName}
                 />
               </Grid>
-              <Grid item xs={4} spacing={4}>
+              <Grid item xs={4}>
                 <TextField
                   fullWidth
+                  className='input_background'
                   variant="outlined"
                   type="text"
+                  required
                   label={Translations.patientRegistration.lastName}
                   name="lastName"
                   onChange={e => setLastName(e.target.value)}
                   value={lastName}
                 />
               </Grid>
-              <Grid item xs={2}  spacing={4} >
+              <Grid item xs={2} >
                 <FormControl  variant="outlined" fullWidth>
                   <InputLabel
                     style={{ disableAnimation: false }}
@@ -309,8 +272,10 @@ const DoctorList=[
                       {Translations.patientRegistration.gender}
                   </InputLabel>
                   <Select
+                    className='input_background'
                     label={Translations.patientRegistration.title}
                     name="gender"
+                    required
                     onChange={e => setGender(e.target.value)}
                     value={gender}
                     >
@@ -327,6 +292,7 @@ const DoctorList=[
               <Grid item xs={4} >
                 <TextField
                   type="date"
+                  className='input_background'
                   variant='outlined'
                   onChange={e => setDOB(e.target.value)}
                   value={dob}
@@ -336,6 +302,7 @@ const DoctorList=[
               <Grid item xs={4} >
                 <TextField
                   fullWidth
+                  className='input_background'
                   variant="outlined"
                   type="number"
                   label={Translations.patientRegistration.age}
@@ -347,8 +314,10 @@ const DoctorList=[
               <Grid item xs={4}>
                 <TextField
                   fullWidth
+                  className='input_background'
                   variant="outlined"
                   type="text"
+                  required
                   label={Translations.patientRegistration.contact}
                   name="contact"
                   onChange={e => setContact(e.target.value)}
@@ -356,80 +325,56 @@ const DoctorList=[
                 />
               </Grid>
             </Grid>
+          </Box>
+          <Box display="grid" gap="20px" className='reg_div visit_div'>
+          <Grid xs={12} container>
+              <Grid item xs={4}>
+                <Typography variant="h5" color={colors.greenAccent[400]}>
+                Visit Creation
+                </Typography>
+              </Grid>
+            </Grid>
             <Grid xs={12} container spacing={4}>
-              <Grid item xs={3} >
+              <Grid item xs={3} spacing={4}>
                 <FormControl  variant="outlined" fullWidth>
-                  <InputLabel
-                  style={{ disableAnimation: false }}
-                  disableAnimation={false}
-                  htmlFor="speciality">
-                    {Translations.visitCreation.speciality}
-                  </InputLabel>
-                  <Select
-                    label={Translations.visitCreation.speciality}
-                    required
-                    name="speciality"
-                    onChange={e => setSpeciality(e.target.value)}
-                    value={speciality}
-                    >
-                    {SpecialityList.map((spcl) => (
-                    <MenuItem key={spcl.id} value={spcl.value}>
-                      {spcl.name}
-                    </MenuItem>
-                    ))}
-                  </Select>
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    options={SpecialityList}
+                    sx={{ width: 300 }}
+                    renderInput={(params) => <TextField {...params} label= {Translations.visitCreation.speciality} />}
+                  />
                 </FormControl>
               </Grid>
-              <Grid item xs={3}   >
+              <Grid item xs={3}  spacing={4} >
                 <FormControl  variant="outlined" fullWidth>
-                  <InputLabel
-                    style={{ disableAnimation: false }}
-                    disableAnimation={false}
-                    htmlFor="DocName">
-                    {Translations.visitCreation.DocName}
-                  </InputLabel>
-                  <Select
-                    label={Translations.visitCreation.DocName}
-                    required
-                    name="DocName"
-                    onChange={e => setDocName(e.target.value)}
-                    value={docName}
-                    >
-                    {DoctorList.map((dtrName) => (
-                      <MenuItem key={dtrName.id} value={dtrName.value}>
-                        {dtrName.name}
-                      </MenuItem>
-                      ))}
-                  </Select>
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    variant="outlined"
+                    fullWidth
+                    options={DoctorList}
+                    sx={{ width: 300 }}
+                    renderInput={(params) => <TextField {...params} label= {Translations.visitCreation.DocName} />}
+                  />
                 </FormControl>
               </Grid>
-              <Grid item xs={3}  >
+              <Grid item xs={3} spacing={4} >
                 <FormControl  variant="outlined" fullWidth>
-                  <InputLabel
-                    style={{ disableAnimation: false }}
-                    disableAnimation={false}
-                    htmlFor="visitType">
-                    {Translations.visitCreation.visitType}
-                  </InputLabel>
-                  <Select
-                    label={Translations.visitCreation.visitType}
-                    required
-                    name="visitType"
-                    onChange={e => setVisitType(e.target.value)}
-                    value={visitType}
-                    >
-                    {VisitTypeList.map((vstype) => (
-                    <MenuItem key={vstype.id} value={vstype.value}>
-                      {vstype.name}
-                    </MenuItem>
-                    ))}
-                  </Select>
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    options={VisitTypeList}
+                    sx={{ width: 300 }}
+                    renderInput={(params) => <TextField {...params} label= {Translations.visitCreation.visitType} />}
+                  />
                 </FormControl>
               </Grid>
-              <Grid item xs={3}   >
+              <Grid item xs={3} spacing={4}  >
                 <TextField
                     fullWidth
                     variant="outlined"
+                    className='input_background'
                     type="text"
                     label={Translations.visitCreation.visitReason}
                     name="Reason For Visit"
@@ -437,6 +382,8 @@ const DoctorList=[
                     value={visitreason}/>
               </Grid>
             </Grid>
+          </Box>
+          <Box display="grid" gap="20px">
             <Grid xs={12} container spacing={4}>
               <Box sx={{ height: 400, width: '100%',paddingLeft:'2%',marginTop:'2%' }}>
                 <DataGrid

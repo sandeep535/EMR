@@ -142,7 +142,7 @@ const Registration = () => {
   
   return (
     <Box m="20px">
-      <Header title={Translations.patientRegistration.pagetitle} subtitle={Translations.patientRegistration.pagesubtitle} />
+      <Header title={Translations.patientRegistration.pagetitle} />
           <form onSubmit={handleSubmit}>
             <Box display="grid"
               gap="20px">
