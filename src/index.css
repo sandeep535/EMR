@@ -26,3 +26,8 @@ body,
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+.MuiButton-containedSecondary {
+  color: #fff;
+  background-color: #4ccfc2 !important;
+  margin: 5px !important;
+}

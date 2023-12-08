@@ -1,21 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { Box,TextField, Button, FormControl } from '@mui/material';
-//import * as yup from 'yup';
+import React, { useState } from 'react';
+import { Box} from '@mui/material';
+import {TextField, FormControl,InputLabel,Select,MenuItem,Grid, Button} from "@material-ui/core";
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 import Header from "../../components/Header";
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import { GetCountries, GetState, GetCity } from "react-country-state-city";
-import Grid from '@mui/material/Grid';
 import Translations from '../../resources/translations';
+import AddressController from '../address/addressComponent';
 //import axios from 'axios';
 
 const Registration = () => {
-
-  const [countryid, setCountryid] = useState(0);
-  const [countriesList, setCountriesList] = useState([]);
-  const [stateList, setStateList] = useState([]);
-  const [cityList, setCityList] = useState([]);
 
   const [title, setTitle] = useState([]);
   const [firstName, setFirstName] = useState([]);
@@ -32,7 +27,11 @@ const Registration = () => {
   const [state, setState] = useState([]);
   const [pincode, setPincode] = useState([]);
 
+  const [ isAlertVisible, setIsAlertVisible ] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+
   function handleSubmit(event) {
+    setOpen(true);
     event.preventDefault();
     const obj = {
       "Title":title,
@@ -51,6 +50,14 @@ const Registration = () => {
       "Pin Code":pincode
     }
     console.log(obj); 
+    
+    setTimeout(() => {
+      setOpen(false);
+      setIsAlertVisible(true);
+    }, 3000);
+    setTimeout(() => {
+      setIsAlertVisible(false);
+    }, 6000);
 
     /*axios.post('/user', obj)
     .then(function (response) {
@@ -98,17 +105,17 @@ const Registration = () => {
   const GenderList=[
       {
           name:'Male',
-          Value:'Male',
+          value:'Male',
           id:1
       },
       {
           name:'Female',
-          Value:'Female',
+          value:'Female',
           id:2
       },
       {
           name:'Others',
-          Value:'Others',
+          value:'Others',
           id:3
       }
   ]
@@ -133,27 +140,32 @@ const Registration = () => {
       setPincode('');
   } 
   
-  useEffect(() => {
-    GetCountries().then((result) => {
-      setCountriesList(result);
-    });
-  }, []);
-
   return (
     <Box m="20px">
       <Header title={Translations.patientRegistration.pagetitle} subtitle={Translations.patientRegistration.pagesubtitle} />
-     
           <form onSubmit={handleSubmit}>
             <Box display="grid"
-              gap="40px">
+              gap="20px">
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  {isAlertVisible && <Stack sx={{ width: '100%' }} spacing={2} >
+                    <Alert variant="filled" severity="success"><strong>Registration Success !!!</strong></Alert>
+                  </Stack>}
+                </Grid>
+              </Grid>
               <Grid container spacing={2}>
                 <Grid item xs={2} spacing={4}>
 
                   <FormControl variant="outlined" fullWidth>
-                    <InputLabel shrink>{Translations.patientRegistration.title}</InputLabel>
+                    <InputLabel
+                      style={{ disableAnimation: false }}
+                      disableAnimation={false}
+                      htmlFor="title"
+                    >
+                    {Translations.patientRegistration.title}
+                    </InputLabel>
+                    
                       <Select
-                        labelId="demo-simple-select-filled-label"
-                        id="demo-simple-select-filled"
                         value={title}
                         label={Translations.patientRegistration.title}
                         name="title"
@@ -168,39 +180,44 @@ const Registration = () => {
                   </FormControl>
                 </Grid>
 
-                <Grid item xs={5} spacing={4}>
+                <Grid item xs={4} spacing={4}>
                   <TextField
                     fullWidth
-                    variant="filled"
                     type="text"
+                    variant="outlined"
+                    required
                     label={Translations.patientRegistration.firstName}
                     name="firstName"
                     onChange={e => setFirstName(e.target.value)}
                     value={firstName}
                   />
                 </Grid>
-                <Grid item xs={5} spacing={4}>
+                <Grid item xs={4} spacing={4}>
                   <TextField
                     fullWidth
-                    variant="filled"
                     type="text"
+                    variant="outlined"
+                    required
                     label={Translations.patientRegistration.lastName}
                     name="lastName"
                     onChange={e => setLastName(e.target.value)}
                     value={lastName}
                   />
                 </Grid>
-              </Grid>
-              <Grid container spacing={4}>
-                <Grid item xs={4} >
+                <Grid item xs={2} >
 
                 <FormControl  variant="outlined" fullWidth>
-                    <InputLabel shrink>{Translations.patientRegistration.gender}</InputLabel>
+                      <InputLabel
+                        style={{ disableAnimation: false }}
+                        disableAnimation={false}
+                        htmlFor="gender"
+                      >
+                      {Translations.patientRegistration.gender}
+                      </InputLabel>
                       <Select
-                        labelId="demo-simple-select-filled-label"
-                        id="demo-simple-select-filled"
-                        label={Translations.patientRegistration.title}
+                        label={Translations.patientRegistration.gender}
                         name="gender"
+                        required
                         onChange={e => setGender(e.target.value)}
                         value={gender}
                       >
@@ -213,164 +230,55 @@ const Registration = () => {
                   </FormControl>
 
                 </Grid>
-                <Grid item xs={4} >
+              </Grid>
+              <Grid container spacing={4}>
+                <Grid item xs={3} >
                   <TextField
                       type="date"
-                      variant='filled'
-                      label={Translations.patientRegistration.dob}
+                      variant="outlined"
                       onChange={e => setDOB(e.target.value)}
                       value={dob}
                       fullWidth
                   />
                 </Grid>
-                <Grid item xs={4} >
+                <Grid item xs={3} >
                   <TextField
                     fullWidth
-                    variant="filled"
                     type="number"
+                    variant="outlined"
                     label={Translations.patientRegistration.age}
                     name="age"
                     onChange={e => setAge(e.target.value)}
                     value={age}
                   />
                 </Grid>
-              </Grid>
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
+                <Grid item xs={3}>
                   <TextField
                     fullWidth
-                    variant="filled"
                     type="email"
+                    variant="outlined"
                     label={Translations.patientRegistration.email}
                     name="email"
                     onChange={e => setEmail(e.target.value)}
                     value={email}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={3}>
                   <TextField
                     fullWidth
-                    variant="filled"
                     type="text"
+                    variant="outlined"
                     label={Translations.patientRegistration.contact}
                     name="contact"
+                    required
                     onChange={e => setContact(e.target.value)}
                     value={contact}
                   />
                 </Grid>
               </Grid>
-
-              <Grid container spacing={2}>
-                <Grid item xs={6}>
-                  <TextField
-                    fullWidth
-                    variant="filled"
-                    type="text"
-                    label={Translations.Common.address1}
-                    name="address1"
-                    onChange={e => setAddress1(e.target.value)}
-                    value={address1}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    fullWidth
-                    variant="filled"
-                    type="text"
-                    label={Translations.Common.address2}
-                    name="address2"
-                    onChange={e => setAddress2(e.target.value)}
-                    value={address2}
-                  />
-                </Grid>
-              </Grid>
-              <Grid container spacing={2}>
-                <Grid item xs={3}>
-                  <FormControl  variant="outlined" fullWidth>
-                    <InputLabel shrink>{Translations.Common.country}</InputLabel>
-                      <Select name="country"
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        label={Translations.Common.country}
-                        onChange={(e) => {
-                          const country = countriesList.find(cntry => cntry.name === e.target.value);
-                          setCountryid(country.id);
-                          setCountry(country.name);
-                          GetState(country.id).then((result) => {
-                            setStateList(result);
-                          });
-                        }}
-                        value={country}
-                      >
-                        {countriesList.map((item) => (
-                        <MenuItem key={item.id} value={item.name}>
-                          {item.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={3}>
-                  <FormControl variant="outlined" fullWidth>
-                    <InputLabel shrink>{Translations.Common.state}</InputLabel>
-                    <Select name="state" 
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select1"
-                      label={Translations.patientRegistration.state}
-                      onChange={(e) => {
-                        const state = stateList.find(st => st.name === e.target.value); //here you will get full state object.
-                        setState(state.name);
-                        GetCity(countryid, state.id).then((result) => {
-                          setCityList(result);
-                        });
-                      }}
-                      value={state}
-                      >
-                        {stateList.map((item1) => (
-                        <MenuItem key={item1.id} value={item1.name}>
-                          {item1.name}
-                        </MenuItem>
-                      ))}
-                      
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={3}>
-                  <FormControl variant="outlined" fullWidth>
-                    <InputLabel shrink>{Translations.Common.city}</InputLabel>
-                    <Select name="city" 
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select2"
-                      label={Translations.patientRegistration.city}
-                      onChange={(e) => {
-                        const city = cityList.find(cty => cty.name === e.target.value);
-                        setCity(city.name); //here you will get full city object.
-                      }}
-                      value={city}
-                      >
-                        {cityList.map((item2) => (
-                        <MenuItem key={item2.id} value={item2.name}>
-                          {item2.name}
-                        </MenuItem>
-                      ))}
-                      
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={3}>
-                  <TextField
-                    fullWidth
-                    variant="filled"
-                    type="text"
-                    label={Translations.Common.pincode}
-                    name="pincode"
-                    onChange={e => setPincode(e.target.value)}
-                    value={pincode}
-                  />
-                </Grid>
-              </Grid>
-
+              <AddressController />             
             </Box>
+          
             <Box display="flex" justifyContent="center" mt="20px">
               <Button type="submit" color="secondary" variant="contained">
                 {Translations.Common.registerBtn}
@@ -378,8 +286,12 @@ const Registration = () => {
               <Button color="secondary" variant="contained" onClick={clearData}>
                 {Translations.Common.clearBtn}
               </Button>
+              <Backdrop sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }} open={open}>
+                <CircularProgress color="inherit" />
+              </Backdrop>
             </Box>
           </form>
+          
     </Box>
   );
 }
