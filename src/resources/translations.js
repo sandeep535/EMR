@@ -10,7 +10,7 @@ const Translations = {
         dob: "Date of Birth",
         age: 'Age',
         email: "E-mail",
-        contact: "Contact",
+        contact: "Mobile Number",
         
     },
     "Common":{

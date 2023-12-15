@@ -4,9 +4,9 @@ import { Routes, Route } from "react-router-dom";
 import { MyProSidebarProvider } from "./pages/global/sidebar/sidebarContext";
 
 import Topbar from "./pages/global/Topbar";
-import VisitCreation from "./pages/visit-creation/visitCreationIndex";
+import VisitCreation from "./pages/visit-creation/VisitCreation";
 import Dashboard from "./pages/dashboard";
-import Registration from "./pages/registration-form";
+import Registration from "./pages/registration-form/ClientRegistration";
 
 const App = () => {
   const [theme, colorMode] = useMode();
