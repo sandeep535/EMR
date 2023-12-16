@@ -9,6 +9,9 @@ import Dashboard from "./pages/dashboard";
 import Registration from "./pages/registration-form/ClientRegistration";
 import Loader from './components/Loader/Loader';
 import AppProvider from "./components/Context/AppProvider";
+import VisitDasboard from "./pages/VisistDashboard/VisitDashboard";
+import VisitActivity from "./pages/VisitActivites/VisitActivity";
+
 const App = () => {
   const [theme, colorMode] = useMode();
   return (
@@ -25,6 +28,8 @@ const App = () => {
                   <Route path="/" element={<Dashboard />} />
                   <Route path="/registration" element={<Registration />} />
                   <Route path='/visit-creation' element={<VisitCreation />} />
+                  <Route path='/vist-dashboard' element={<VisitDasboard />} />
+                  <Route path='/vist-activity' element={<VisitActivity />} />
                 </Routes>
               </main>
             </div>

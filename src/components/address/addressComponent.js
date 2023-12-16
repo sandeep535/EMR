@@ -93,6 +93,7 @@ const AddressController = forwardRef((props, ref) => {
             name="address1"
             onChange={e => setAddress1(e.target.value)}
             value={address1}
+            size='small'
           />
         </Grid>
         <Grid item xs={6}>
@@ -104,12 +105,13 @@ const AddressController = forwardRef((props, ref) => {
             name="address2"
             onChange={e => setAddress2(e.target.value)}
             value={address2}
+            size='small'
           />
         </Grid>
       </Grid>
       <Grid container spacing={2}>
         <Grid item xs={3}>
-          <FormControl variant="outlined" fullWidth>
+          <FormControl variant="outlined"  size='small' fullWidth>
             <InputLabel
               style={{ disableAnimation: false }}
               disableAnimation={false}
@@ -134,7 +136,7 @@ const AddressController = forwardRef((props, ref) => {
           </FormControl>
         </Grid>
         <Grid item xs={3}>
-          <FormControl variant="outlined" fullWidth>
+          <FormControl variant="outlined"  size='small' fullWidth>
             <InputLabel
               style={{ disableAnimation: false }}
               disableAnimation={false}
@@ -160,7 +162,7 @@ const AddressController = forwardRef((props, ref) => {
           </FormControl>
         </Grid>
         <Grid item xs={3}>
-          <FormControl variant="outlined" fullWidth>
+          <FormControl variant="outlined"  size='small' fullWidth>
             <InputLabel
               style={{ disableAnimation: false }}
               disableAnimation={false}
@@ -186,6 +188,7 @@ const AddressController = forwardRef((props, ref) => {
         </Grid>
         <Grid item xs={3}>
           <TextField
+           size='small'
             fullWidth
             variant="outlined"
             type="text"

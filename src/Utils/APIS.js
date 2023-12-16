@@ -43,6 +43,16 @@ const APIS={
         URL:"visit",
         METHOD:"POST",
         ACTION:"Save Visist"
+    },
+    GET_VISITS:{
+        URL:"visit/getVisits/{0}/{1}/{2}/{3}",
+        METHOD:"GET",
+        ACTION:"Get Visist"
+    },
+    UPDATE_VISIT_STATUS:{
+        URL:"visit/updateVisitStatus/{0}/{1}",
+        METHOD:"GET",
+        ACTION:"Update Visist"
     }
 }
 export default APIS;

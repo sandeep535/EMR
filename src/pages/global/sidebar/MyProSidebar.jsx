@@ -218,6 +218,13 @@ const MyProSidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+            <Item
+              title="Visit Dashboard"
+              to="/vist-dashboard"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}
+            />
             {/*<Item
               title="FAQ Page"
               to="/faq"
