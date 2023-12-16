@@ -38,6 +38,11 @@ const APIS={
         URL:"common/getServiceMasterData/{0}",
         METHOD:"GET",
         ACTION:""
+    },
+    SAVE_VISIT:{
+        URL:"visit",
+        METHOD:"POST",
+        ACTION:"Save Visist"
     }
 }
 export default APIS;

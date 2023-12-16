@@ -1,6 +1,12 @@
 import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
 import { Box } from '@mui/material';
-import { TextField, FormControl, InputLabel, Select, MenuItem, Grid } from "@material-ui/core";
+//import { TextField, FormControl, InputLabel, Select, MenuItem, Grid } from "@material-ui/core";
+import FormControl from '@mui/material/FormControl';
+import Grid from '@mui/material/Grid';
+import TextField from '@mui/material/TextField';
+import Select, { SelectChangeEvent } from '@mui/material/Select'
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
 import Translations from '../../resources/translations';
 import APIS from '../../Utils/APIS';
 import { sendRequest } from '../../pages/global/DataManager';

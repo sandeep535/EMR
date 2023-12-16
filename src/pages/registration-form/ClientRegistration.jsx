@@ -1,11 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Box } from '@mui/material';
-import { FormControl, InputLabel, Select, MenuItem, Grid, Button } from "@material-ui/core";
+import Grid from '@mui/material/Grid';
 import Alert from '@mui/material/Alert';
-import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
 import Header from "../../components/Header";
 import Translations from '../../resources/translations';
 import AddressController from '../../components/address/addressComponent';
@@ -13,6 +10,8 @@ import { sendRequest } from '../global/DataManager'
 import APIS from '../../Utils/APIS';
 import RegistrationInformation from '../../components/RegistrationInformation/RegistrationInformation';
 import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
+import EMRAlert from '../../Utils/CustomAlert';
+
 const ClientRegistration = () => {
   const [isAlertVisible, setIsAlertVisible] = React.useState(false);
   const [open, setOpen] = React.useState(false);
@@ -27,9 +26,6 @@ const ClientRegistration = () => {
     console.log(regFormData);
     saveClientRegistration(regFormData);
   }
-
-
-
   useEffect(() => {
     return () => console.log("Cleanup..");
   }, []);
@@ -43,7 +39,12 @@ const ClientRegistration = () => {
       data: data
     }
     let result = await sendRequest(payLoad);
-    console.log(result);
+    if (result) {
+      EMRAlert.alertifySuccess("Patient Saved Succussfully");
+    } else {
+      EMRAlert.alertifyError("Not created");
+    }
+    
   }
   return (
     <Box m="20px">
@@ -61,16 +62,6 @@ const ClientRegistration = () => {
           <RegistrationInformation ref={registrationInformationRef} />
           <AddressController ref={addrssComponentRef} />
         </Box>
-
-        {/* <Box display="flex" justifyContent="center" mt="20px">
-          <Button type="submit" color="secondary" variant="contained">
-            {Translations.Common.registerBtn}
-          </Button>
-          <Button color="secondary" variant="contained" onClick={() => { }}>
-            {Translations.Common.clearBtn}
-          </Button>
-
-        </Box> */}
         <FormButtonComponent button1={"Register"} button2={"Clear"} />
       </form>
 

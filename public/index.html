@@ -1,20 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <meta name="theme-color" content="#000000" />
 
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="theme-color" content="#000000" />
 
-    <title>EMR</title>
-  </head>
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+  <script src="../src/Utils/CustomAlert.js"></script>
+  <title>EMR</title>
+  <style>
+    #mainAlertDiv {
+      position: fixed;
+      height: auto;
+      width: 400px;
+      right: 35px;
+      top: 10px;
+      z-index: 9999;
+      padding-bottom: 5px;
+    }
 
-  <body>
-    <div id="root"></div>
-  </body>
+    .successAlertCss {
+      position: relative;
+      height: auto;
+      width: 400px;
+      left: 10px;
+      z-index: 9999;
+      border-radius: 10px;
+      overflow: hidden;
+      min-height: 40px;
+      border: 3px solid #428bca;
+      -webkit-animation: myfirst 2s normal;
+      animation: myfirst 2s normal;
+      -webkit-animation-direction: normal;
+      animation-direction: normal;
+      -webkit-animation-delay: 3s;
+      animation-delay: 3s;
+    }
+
+    .inSideDiv {
+      border: 1px solid #428bca;
+      background-color: #428bca;
+    }
+
+    .fa.fontawsomeCss {
+      padding: 10px;
+      white-space: nowrap;
+    }
+
+    #textDiv {
+      color: black;
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      padding: 20px;
+      background-color: #eee;
+      display: table;
+      width: 100%;
+    }
+
+    .fontawsomeCss {
+      color: white;
+      padding: 10px;
+      font-size: 20px
+    }
+
+    .errorAlertCss {
+      position: relative;
+      height: auto;
+      width: 400px;
+      left: 10px;
+      z-index: 9999;
+      border-radius: 10px;
+      overflow: hidden;
+      min-height: 40px;
+      border: 3px solid #ff0033;
+      -webkit-animation: myfirst 2s normal;
+      animation: myfirst 2s normal;
+      -webkit-animation-direction: normal;
+      animation-direction: normal;
+      -webkit-animation-delay: 3s;
+      animation-delay: 3s;
+    }
+
+    .inSideErrorDiv {
+      border: 1px solid #ff0033;
+      background-color: #ff0033;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="mainAlertDiv"></div>
+  <div id="root"></div>
+</body>
+
 </html>

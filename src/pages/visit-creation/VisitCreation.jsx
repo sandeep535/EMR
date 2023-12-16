@@ -2,14 +2,14 @@
 import React, { useRef, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import { Box, Typography, useTheme } from '@mui/material'
-import { FormControl, InputLabel, Select, MenuItem, Grid, Button } from "@material-ui/core";
+import { Box, InputLabel } from '@mui/material'
+import Grid from '@mui/material/Grid';
+import FormControl from '@mui/material/FormControl';
 import Translations from '../../resources/translations';
 import { sendRequest } from '../global/DataManager'
 import APIS from '../../Utils/APIS';
 import RegistrationInformation from '../../components/RegistrationInformation/RegistrationInformation';
 import Paper from '@mui/material/Paper';
-import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -17,15 +17,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
-
-const DemoPaper = styled(Paper)(({ theme }) => ({
-  width: '100%',
-  height: '100%',
-  padding: theme.spacing(1),
-  ...theme.typography.body2,
-  textAlign: 'center',
-  borderColor: 'primary.main'
-}));
+import EMRAlert from '../../Utils/CustomAlert';
+import DemoPaper from '../../Utils/CustomCssUtil';
+import Divider from '@mui/material/Divider';
 
 const visitServiceTableHeaders = [{
   name: 'Service Type',
@@ -47,23 +41,29 @@ const visitServiceTableHeaders = [{
   width: '15%'
 }]
 export default function VisitCreation() {
-  const [value, setValue] = React.useState();
+  const [doctor, setDoctor] = React.useState();
   const [contact, setContact] = React.useState();
-  const [inputValue, setInputValue] = React.useState('');
-  const [options, setOptions] = React.useState([]);
-  const [specialityList, setSpecialityList] = React.useState([]);
-  const [visitTypeList, setVisitTypeList] = React.useState([]);
-  const [visitreason, setVisitReason] = React.useState([]);
+  const [specility, setSpecility] = React.useState();
+  const [visitType, setVisitType] = React.useState();
 
+  const [doctorInputValueChange, setDoctorInputValueChange] = React.useState('');
   const [serviceinputValue, setServiceInputValue] = React.useState('');
-  const [serviceoptions, setServiceOptions] = React.useState([]);
-  const [serviceValues, setServiceValues] = React.useState();
-  const [visitServiceList, setVisitServiceList] = React.useState([]);
 
+  const [doctoroptions, setDoctoroptions] = React.useState([]);
+  const [serviceoptions, setServiceOptions] = React.useState([]);
+  const [visiiTypeOptions, setVisiiTypeOptions] = React.useState([]);
+  const [specialityListOptions, setSpecialityListOptions] = React.useState([]);
+
+  const [visitServiceList, setVisitServiceList] = React.useState([]);
   const [clientsearchlist, setClientsearchlist] = React.useState([]);
+
+  const [visitreason, setVisitReason] = React.useState([]);
+  const [serviceValues, setServiceValues] = React.useState();
+
+
+
   const [selectedClientData, setSelectedClientData] = React.useState([]);
   const registrationInformationRef = useRef();
-
   useEffect(() => {
     getLookUpDetails();
   }, []);
@@ -93,7 +93,7 @@ export default function VisitCreation() {
     }
     let result = await sendRequest(payLoad);
     if (result) {
-      setOptions(result)
+      setDoctoroptions(result)
     }
   }
 
@@ -104,12 +104,11 @@ export default function VisitCreation() {
       paramas: ["SPECILAITY,VISIT_TYPES"]
     }
     let result = await sendRequest(payLoad);
-    console.log(result);
     if (result && result.SPECILAITY) {
-      setSpecialityList(result.SPECILAITY);
+      setSpecialityListOptions(result.SPECILAITY);
     }
     if (result && result.VISIT_TYPES) {
-      setVisitTypeList(result.VISIT_TYPES);
+      setVisiiTypeOptions(result.VISIT_TYPES);
     }
 
   }
@@ -129,9 +128,8 @@ export default function VisitCreation() {
   }
 
   function addServicetoList(newService) {
-    debugger
     var obj = {
-      service: newService,
+      serviceid: newService,
       serviceprice: newService.price,
       servicediscount: 0,
       quantity: 0,
@@ -155,27 +153,45 @@ export default function VisitCreation() {
     let totalAmountAfterDiscount = totalAmount - data.servicediscount;
     return totalAmountAfterDiscount;
   }
-  function populateClientDatatoForm(clientData){
+  function populateClientDatatoForm(clientData) {
     registrationInformationRef.current.setFormData1(clientData);
     setSelectedClientData(clientData);
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
-    // const VisitCreationObj = {
-    //   "speciality": speciality,
-    //   "docName": docName,
-    //   "visitType": visitType,
-    //   "visitreason": visitreason
-    // }
-    // console.log(VisitCreationObj);
+    var clientDeatils = "";
+    if (selectedClientData && selectedClientData.seqid) {
+      clientDeatils = selectedClientData;
+    } else {
+      clientDeatils = registrationInformationRef.current.getFormData();
+    }
+    let sendingObj = {
+      visitdate: new Date(),
+      doctor: doctor,
+      visittype: visitType,
+      specilaity: specility,
+      visitdiscount: 0,
+      visittotalamount: 0,
+      reason: visitreason,
+      status: 1,
+      clientid: clientDeatils,
+      services: visitServiceList
+    }
 
-
-    //setStoreData([...storeData, VisitCreationObj]);
-    //clearData();
+    var payLoad = {
+      method: APIS.SAVE_VISIT.METHOD,
+      url: APIS.SAVE_VISIT.URL,
+      paramas: [],
+      data: sendingObj
+    }
+    let result = await sendRequest(payLoad);
+    if (result) {
+      EMRAlert.alertifySuccess("Visit Saved Succussfully");
+    } else {
+      EMRAlert.alertifyError("Not created")
+    }
   };
-
-
   return (
     <Box m="10px">
       <Box m="10px">
@@ -202,41 +218,33 @@ export default function VisitCreation() {
             sx={{ width: 300 }}
             renderInput={(params) => <TextField {...params} label="Search client" />}
           />
-          {/* <TextField
-            className='input_background'
-            fullWidth
-            variant="outlined"
-            type="text"
-            required
-            size="small"
-            label={Translations.patientRegistration.contact}
-            name="contact"
-            onBlur={e => {
-              getDataBasedOnMobileNumber(e.target.value)
-            }}
-            onChange={e => setContact(e.target.value)}
-            value={contact}
-          /> */}
         </Grid>
       </Box>
       <form onSubmit={handleSubmit}>
         <Box display="grid" gap="10px">
+          <Divider sx={{ color: "secondary.light",fontSize:14 }} textAlign="left">Client Details</Divider>
           <DemoPaper square={false}>
-            <RegistrationInformation data = {selectedClientData} ref={registrationInformationRef} />
+            <RegistrationInformation data={selectedClientData} ref={registrationInformationRef} />
           </DemoPaper>
         </Box>
+        <Divider sx={{ color: "secondary.light",paddingTop:1,fontSize:14 }} textAlign="left">Visit Details</Divider>
+       
         <Box display="grid" gap="10px" style={{ marginTop: '10px' }}>
           <DemoPaper square={false}>
-            <Grid xs={12} container spacing={4}>
-              <Grid item xs={3} spacing={4}>
+            <Grid xs={12} container spacing={1}>
+              <Grid item xs={3} spacing={2}>
                 <FormControl variant="outlined" fullWidth>
                   <Autocomplete
                     size="small"
                     disablePortal
                     id="combo-box-demo"
-                    options={specialityList}
+                    options={specialityListOptions}
                     key={option => option.lookupid}
                     getOptionLabel={option => option.lookupvalue}
+                    value={specility}
+                    onChange={(event, newValue) => {
+                      setSpecility(newValue);
+                    }}
                     renderOption={(props, option) => {
                       return (
                         <li {...props} key={option.lookupid}>
@@ -248,42 +256,45 @@ export default function VisitCreation() {
                   />
                 </FormControl>
               </Grid>
-              <Grid item xs={3} spacing={4}>
+              <Grid item xs={3} spacing={2}>
                 <FormControl variant="outlined" size="small" fullWidth>
                   <Autocomplete
                     size="small"
-                    value={value}
+                    value={doctor}
                     onChange={(event, newValue) => {
-                      console.log("111111", newValue)
-                      setValue(newValue);
+                      setDoctor(newValue);
                     }}
                     key={option => option.id}
                     getOptionLabel={option => option.firstname}
-                    inputValue={inputValue}
+                    inputValue={doctorInputValueChange}
                     onInputChange={(event, newInputValue) => {
                       if (newInputValue.length != 1) {
                         getDoctorsData(newInputValue)
                       }
-                      setInputValue(newInputValue);
+                      setDoctorInputValueChange(newInputValue);
 
                     }}
                     id="controllable-states-demo"
-                    options={options}
+                    options={doctoroptions}
                     sx={{ width: 300 }}
                     renderInput={(params) => <TextField {...params} label="Docor Name" />}
                   />
                 </FormControl>
               </Grid>
 
-              <Grid item xs={3} spacing={4} >
+              <Grid item xs={3} spacing={2} >
                 <FormControl variant="outlined" size="small" fullWidth>
                   <Autocomplete
                     size="small"
                     disablePortal
                     id="visitTypeList"
-                    options={visitTypeList}
+                    options={visiiTypeOptions}
                     key={option => option.lookupid}
                     getOptionLabel={option => option.lookupvalue}
+                    value={visitType}
+                    onChange={(event, newValue) => {
+                      setVisitType(newValue);
+                    }}
                     renderOption={(props, option) => {
                       return (
                         <li {...props} key={option.lookupid}>
@@ -295,8 +306,7 @@ export default function VisitCreation() {
                   />
                 </FormControl>
               </Grid>
-
-              <Grid item xs={3} spacing={4}  >
+              <Grid item xs={3} spacing={2}  >
                 <TextField
                   fullWidth
                   variant="outlined"
@@ -308,12 +318,7 @@ export default function VisitCreation() {
                   onChange={e => setVisitReason(e.target.value)}
                   value={visitreason} />
               </Grid>
-
-
-
-            </Grid>
-            <Grid xs={12} container spacing={4}>
-              <Grid item xs={3} spacing={4}>
+              <Grid item xs={3} spacing={2}>
                 <FormControl variant="outlined" fullWidth>
                   <Autocomplete
                     size="small"
@@ -340,78 +345,81 @@ export default function VisitCreation() {
                 </FormControl>
               </Grid>
             </Grid>
-            <TableContainer component={Paper}>
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    {(visitServiceTableHeaders.map(header => {
-                      return (
-                        <TableCell width={header.width}>{header.name}</TableCell>
-                      )
-                    }))}
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {visitServiceList && visitServiceList.map((service, index) => (
-                    <TableRow key={service.service.service}>
-                      <TableCell>{(service && service.service) ? service.service.serviceType : ""}</TableCell>
-                      <TableCell>{(service && service.service) ? service.service.servicename : ""}</TableCell>
-                      <TableCell>
-                        <TextField
-                          fullWidth
-                          variant="outlined"
-                          className='input_background'
-                          type="text"
-                          onChange={(e) => {
-                            setChangesToVisistServicelist(e.target.value, index, 'serviceprice')
-                          }}
-                          label={"Price"}
-                          size="small"
-                          value={service.serviceprice}
-                        />
-                      </TableCell>
-                      <TableCell >
-                        <TextField
-                          fullWidth
-                          variant="outlined"
-                          className='input_background'
-                          type="text"
-                          label={"Qty"}
-                          onChange={(e) => {
-                            setChangesToVisistServicelist(e.target.value, index, 'quantity')
-                          }}
-                          value={service.quantity}
-                          size="small"
-                        />
-                      </TableCell>
-                      <TableCell >
-                        <TextField
-                          fullWidth
-                          variant="outlined"
-                          className='input_background'
-                          type="text"
-                          label={"Discount"}
-                          onChange={(e) => {
-                            setChangesToVisistServicelist(e.target.value, index, 'servicediscount')
-                          }}
-                          value={service.servicediscount}
-                          size="small"
-                        />
-                      </TableCell>
-                      <TableCell>{service.servicetotalamount}</TableCell>
+            <Grid xs={12} container spacing={1}>
+              <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      {(visitServiceTableHeaders.map(header => {
+                        return (
+                          <TableCell width={header.width}>{header.name}</TableCell>
+                        )
+                      }))}
                     </TableRow>
-                  ))}
-                </TableBody>
+                  </TableHead>
+                  <TableBody>
+                    {visitServiceList && visitServiceList.map((service, index) => (
+                      <TableRow key={service.serviceid.service}>
+                        <TableCell>{(service && service.serviceid) ? service.serviceid.serviceType : ""}</TableCell>
+                        <TableCell>{(service && service.serviceid) ? service.serviceid.servicename : ""}</TableCell>
+                        <TableCell>
+                          <TextField
+                            fullWidth
+                            variant="outlined"
+                            className='input_background'
+                            type="text"
+                            onChange={(e) => {
+                              setChangesToVisistServicelist(e.target.value, index, 'serviceprice')
+                            }}
+                            label={"Price"}
+                            size="small"
+                            value={service.serviceprice}
+                          />
+                        </TableCell>
+                        <TableCell >
+                          <TextField
+                            fullWidth
+                            variant="outlined"
+                            className='input_background'
+                            type="text"
+                            label={"Qty"}
+                            onChange={(e) => {
+                              setChangesToVisistServicelist(e.target.value, index, 'quantity')
+                            }}
+                            value={service.quantity}
+                            size="small"
+                          />
+                        </TableCell>
+                        <TableCell >
+                          <TextField
+                            fullWidth
+                            variant="outlined"
+                            className='input_background'
+                            type="text"
+                            label={"Discount"}
+                            onChange={(e) => {
+                              setChangesToVisistServicelist(e.target.value, index, 'servicediscount')
+                            }}
+                            value={service.servicediscount}
+                            size="small"
+                          />
+                        </TableCell>
+                        <TableCell>{service.servicetotalamount}</TableCell>
+                      </TableRow>
+                    ))}
+                    <TableRow key={"12111"}>
+                      <TableCell>{
+                      }</TableCell>
+                    </TableRow>
+                  </TableBody>
 
-              </Table>
-            </TableContainer>
+                </Table>
+              </TableContainer>
+            </Grid>
           </DemoPaper>
         </Box>
         <FormButtonComponent button1={"Save"} button2={"Clear"} />
       </form>
-
     </Box>
-
-
   );
 }

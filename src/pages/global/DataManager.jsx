@@ -1,7 +1,13 @@
 import axios from 'axios';
-import serviceDetails from '../../Utils/Service'
+import serviceDetails from '../../Utils/Service';
+import  React,{useContext} from 'react';
+import AppContext from '../../components/Context/AppContext';
+import { render } from '@testing-library/react';
 
 export const sendRequest = async payload => {
+    
+    //const {showLoader,setShowLoader} = useContext(AppContext);
+   // setShowLoader(true);
     let serverUrl = serviceDetails.SERVICE_URL;
     if (payload.method == "GET") {
         let subURL = appendGetVariblesToUrl(payload.url, payload.paramas);

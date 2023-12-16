@@ -2,7 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Box } from '@mui/material';
 import Translations from '../../resources/translations';
-import { Button } from "@material-ui/core";
+import Button from '@mui/material/Button';
 
 const FormButtonComponent = (props) => {
     

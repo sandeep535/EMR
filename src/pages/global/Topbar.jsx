@@ -27,7 +27,7 @@ const Topbar = () => {
             <MenuOutlinedIcon />
           </IconButton>
         )}
-        <Box
+        {/* <Box
           display="flex"
           backgroundColor={colors.primary[400]}
           p={0.2}
@@ -37,7 +37,7 @@ const Topbar = () => {
           <IconButton type="button">
             <SearchIcon />
           </IconButton>
-        </Box>
+        </Box> */}
       </Box>
       <Box display="flex">
         <IconButton onClick={colorMode.toggleColorMode}>
