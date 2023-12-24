@@ -21,6 +21,7 @@ import EMRAlert from '../../Utils/CustomAlert';
 import DemoPaper from '../../Utils/CustomCssUtil';
 import Divider from '@mui/material/Divider';
 
+
 const visitServiceTableHeaders = [{
   name: 'Service Type',
   width: '15%'
@@ -78,8 +79,6 @@ export default function VisitCreation() {
     if (result && result.size != 0) {
       setClientsearchlist(result);
     }
-
-    debugger
   }
 
   async function getDoctorsData(value) {
@@ -194,6 +193,7 @@ export default function VisitCreation() {
   };
   return (
     <Box m="10px">
+     
       <Box m="10px">
         <Grid xs={6} container>
           <Autocomplete

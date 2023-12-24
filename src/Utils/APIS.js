@@ -53,6 +53,21 @@ const APIS={
         URL:"visit/updateVisitStatus/{0}/{1}",
         METHOD:"GET",
         ACTION:"Update Visist"
+    },
+    SAVE_VITALS:{
+        URL:"visit/vitals",
+        METHOD:"POST",
+        ACTION:"Save Vitals"
+    },
+    GET_DRUG_MASTER_DATA:{
+        URL:"drugs/getDrugMasterData/{0}",
+        METHOD:"GET",
+        ACTION:""
+    },
+    SAVE_VISIT_DATA:{
+        URL:"visit/saveVisitData",
+        METHOD:"POST",
+        ACTION:"SAVE VISIT DATA"
     }
 }
 export default APIS;

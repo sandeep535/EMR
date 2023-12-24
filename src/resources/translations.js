@@ -31,7 +31,23 @@ const Translations = {
         visitType:'Visit Type',
         speciality:'Specilaity',
         DocName :'Doctor Name'
-    }
+    },
+    "vitalsForm":{
+        height:'Height',
+        weight:'Weight',
+        bmi:'BMI',
+        bloodpressure :"Blood Pressure",
+        systolic :"Systolic",
+        diastolic:"Diastolic",
+        pulse:"Pulse",
+        respiratoryrate :"Respiratory Rate",
+        temperature:'Temperature'
+    },
+    "Prescriptions":{
+       dose:"Dose",
+       doseunit:"Dose Unit",
+       sig:"SIG"
+    },
     
 }
 export default Translations;

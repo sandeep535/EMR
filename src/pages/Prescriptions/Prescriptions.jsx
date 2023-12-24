@@ -1,0 +1,274 @@
+import React, { useEffect, forwardRef, useState, useImperativeHandle, useContext } from 'react';
+import TextField from '@mui/material/TextField';
+import { Box } from '@mui/material'
+import Grid from '@mui/material/Grid';
+import { sendRequest } from '../global/DataManager';
+import Button from '@mui/material/Button';
+import APIS from '../../Utils/APIS';
+import { useNavigate } from "react-router-dom";
+import AppContext from '../../components/Context/AppContext';
+import Container from '@mui/material/Container';
+import Translations from '../../resources/translations';
+import DemoPaper from '../../Utils/CustomCssUtil';
+import Divider from '@mui/material/Divider';
+import FormControl from '@mui/material/FormControl';
+import Autocomplete from '@mui/material/Autocomplete';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import Paper from '@mui/material/Paper';
+import Moment from 'react-moment';
+import ClearIcon from '@mui/icons-material/Clear';
+
+const prescriptionHeadersList = [{
+    name: 'Drug Name',
+    width: '30%'
+}, {
+    name: 'Dose',
+    width: '10%'
+}, {
+    name: 'SIG',
+    width: '30%'
+}, {
+    name: 'Start Date',
+    width: '10%'
+}, {
+    name: 'End Date',
+    width: '10%'
+}, {
+    name: 'Actions',
+    width: '10%'
+}]
+const Prescriptions = forwardRef((props, ref) => {
+    const [drugListOptions, setDrugListOptions] = React.useState([]);
+    const [drugListinputValue, setDrugListinputValue] = React.useState('');
+
+    const [selectedDrugValues, setSelectedDrugValues] = React.useState();
+    const [dose, setDose] = React.useState();
+    const [doseunit, setDoseunit] = React.useState();
+    const [sig, setSig] = React.useState();
+    const [startdate, setStartdate] = React.useState();
+    const [todate, setTodate] = React.useState();
+    const [instructions, setInstructions] = React.useState();
+
+    const [prescriptionList, setPrescriptionList] = React.useState([]);
+    const appContextValue = useContext(AppContext);
+    useEffect(() => {
+        // getDrugMasterData();
+    }, []);
+    useImperativeHandle(
+        ref,
+        () => {
+            return {
+                getFormData: () => {
+                    return {
+                        prescriptionList
+                    }
+                },
+                setFormData1: (data) => {
+                    setPrescriptionList(data.prescriptionList)
+                }
+            }
+        },
+        [prescriptionList],
+    );
+    async function addPrescriptionTollist() {
+        var obj = {
+            drugid: selectedDrugValues.drugid,
+            drugname: selectedDrugValues.drugname,
+            dose: dose,
+            doseunit: doseunit,
+            sig: sig,
+            startdate: startdate,
+            endate: todate,
+            status: 1,
+            clientid: appContextValue.selectedVisitDeatils.clientid.seqid,
+            visitid: appContextValue.selectedVisitDeatils.visitid,
+            capturedby: 1,
+            instructions:instructions
+        }
+        var copySelectedList = [...prescriptionList];
+        copySelectedList.push(obj);
+        setPrescriptionList(copySelectedList);
+    }
+    async function getDrugMasterData(newValue) {
+        var payLoad = {
+            method: APIS.GET_DRUG_MASTER_DATA.METHOD,
+            url: APIS.GET_DRUG_MASTER_DATA.URL,
+            paramas: [newValue]
+        }
+        let result = await sendRequest(payLoad);
+        console.log(result);
+        if (result) {
+            setDrugListOptions(result);
+        }
+    }
+    return (
+        <>
+            <DemoPaper square={false}>
+                <Box m="10px">
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <Grid container spacing={1}>
+                            <Grid item xs={6} spacing={1} >
+                                <FormControl variant="outlined" fullWidth>
+                                    <Autocomplete
+                                        size="small"
+                                        value={selectedDrugValues}
+                                        onChange={(event, newValue) => {
+                                            setSelectedDrugValues(newValue);
+                                            // addServicetoList(newValue);
+                                        }}
+                                        key={option => option.drugcode}
+                                        getOptionLabel={option => option.drugname}
+                                        inputValue={drugListinputValue}
+                                        onInputChange={(event, newInputValue) => {
+                                            if (newInputValue.length > 2) {
+                                                getDrugMasterData(newInputValue)
+                                            }
+                                            setDrugListinputValue(newInputValue);
+
+                                        }}
+                                        id="drug-controllable-states-demo"
+                                        options={drugListOptions}
+                                        //  sx={{ width: 300 }}
+                                        renderInput={(params) => <TextField {...params} label="Search Drug" />}
+                                    />
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={3} spacing={1} >
+                                <FormControl variant="outlined" fullWidth>
+                                    <TextField
+                                        fullWidth
+                                        type="text"
+                                        size="small"
+                                        variant="outlined"
+                                        required
+                                        label={Translations.Prescriptions.dose}
+                                        name="Dose"
+                                        onChange={e => setDose(e.target.value)}
+                                        value={dose}
+                                    />
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={3} spacing={1} >
+                                <FormControl variant="outlined" fullWidth>
+                                    <TextField
+                                        fullWidth
+                                        type="text"
+                                        size="small"
+                                        variant="outlined"
+                                        required
+                                        label={Translations.Prescriptions.doseunit}
+                                        name="doseunit"
+                                        onChange={e => setDoseunit(e.target.value)}
+                                        value={doseunit}
+                                    />
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={6} spacing={1} >
+                                <FormControl variant="outlined" fullWidth>
+                                    <TextField
+                                        fullWidth
+                                        type="text"
+                                        size="small"
+                                        variant="outlined"
+                                        required
+                                        label={Translations.Prescriptions.sig}
+                                        name="sig"
+                                        onChange={e => setSig(e.target.value)}
+                                        value={sig}
+
+                                    />
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={3} spacing={1} >
+                                <FormControl variant="outlined" fullWidth>
+                                    <DatePicker
+                                        label="Start Date"
+                                        value={startdate}
+                                        onChange={newValue => setStartdate(new Date(newValue))}
+                                        format="DD-MM-YYYY"
+                                        fullWidth
+                                        size="small"
+                                    />
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={3} spacing={1} >
+                                <FormControl variant="outlined" fullWidth>
+                                    <DatePicker
+                                        label="To Date"
+                                        value={todate}
+                                        onChange={newValue => setTodate(new Date(newValue))}
+                                        format="DD-MM-YYYY"
+                                        fullWidth
+                                        size="small"
+                                    />
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={10} spacing={1} >
+                                <FormControl variant="outlined" fullWidth>
+                                    <TextField
+                                        fullWidth
+                                        type="text"
+                                        size="small"
+                                        variant="outlined"
+                                        required
+                                        multiline
+                                        rows={3}
+                                        label={"Instructions"}
+                                        name={props.label}
+                                        onChange={e => setInstructions(e.target.value)}
+                                        value={instructions}
+                                    />
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={2} spacing={1} >
+                                <Button variant="contained" onClick={() => {
+                                    addPrescriptionTollist();
+                                }}>Add</Button>
+                            </Grid>
+                            <Grid xs={12} container spacing={1}>
+                                <TableContainer component={Paper}>
+                                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                        <TableHead>
+                                            <TableRow>
+                                                {(prescriptionHeadersList.map(header => {
+                                                    return (
+                                                        <TableCell width={header.width}>{header.name}</TableCell>
+                                                    )
+                                                }))}
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody>
+                                            {prescriptionList && prescriptionList.map((prescription, index) => (
+                                                <TableRow key={prescription.drugid}>
+                                                    <TableCell>{(prescription && prescription.drugname) ? prescription.drugname : ""}</TableCell>
+                                                    <TableCell>{(prescription && prescription.dose) ? prescription.dose + "" + prescription.doseunit : ""}</TableCell>
+                                                    <TableCell>{(prescription && prescription.sig) ? prescription.sig : ""}</TableCell>
+                                                    <TableCell>{(prescription && prescription.startdate) ? <Moment format="DD-MMM-YYYY">
+                                                   { new Date(prescription.startdate)}
+                                                    </Moment> : ""}</TableCell>
+                                                    <TableCell>{(prescription && prescription.endate) ? <Moment format="DD-MMM-YYYY">
+                                                    {new Date(prescription.endate)}
+                                                    </Moment> : ""}</TableCell>
+                                                    <TableCell><ClearIcon/></TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
+                            </Grid>
+                        </Grid>
+                    </LocalizationProvider>
+                </Box>
+            </DemoPaper>
+        </>
+    )
+});
+export default Prescriptions;
