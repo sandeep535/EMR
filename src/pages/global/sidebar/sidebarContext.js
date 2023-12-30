@@ -1,6 +1,7 @@
 import React, { useState, createContext, useContext } from "react";
 import { ProSidebarProvider } from "react-pro-sidebar";
 import MyProSidebar from "./MyProSidebar";
+import LoginPage from "../../Login/LoginPage";
 
 const SidebarContext = createContext({});
 
@@ -9,8 +10,14 @@ export const MyProSidebarProvider = ({ children }) => {
   const [sidebarBackgroundColor, setSidebarBackgroundColor] =
     useState(undefined);
   const [sidebarImage, setSidebarImage] = useState(undefined);
+  const [isLogin ,setIslogin] = useState(false)
   return (
     <ProSidebarProvider>
+      {!isLogin && <LoginPage onSusccuss = {(status)=>{
+        console.log(status);
+        setIslogin(true);
+      }} />}
+      {isLogin && 
       <SidebarContext.Provider
         value={{
           sidebarBackgroundColor,
@@ -32,7 +39,7 @@ export const MyProSidebarProvider = ({ children }) => {
           <MyProSidebar />
           {children}
         </div>
-      </SidebarContext.Provider>
+      </SidebarContext.Provider>}
     </ProSidebarProvider>
   );
 };

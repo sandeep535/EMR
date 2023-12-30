@@ -24,6 +24,7 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 //import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import SwitchRightOutlinedIcon from "@mui/icons-material/SwitchRightOutlined";
 import SwitchLeftOutlinedIcon from "@mui/icons-material/SwitchLeftOutlined";
+import EmployeeMaster from "../../EmpployeMaster/EmployeeMatser";
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -225,6 +226,12 @@ const MyProSidebar = () => {
               selected={selected}
               setSelected={setSelected}
             />
+             <Item
+              title="Employee Master"
+              to="/employeeMaster"
+              icon={<PersonOutlinedIcon />}
+              selected={selected}
+              setSelected={setSelected}/>
             {/*<Item
               title="FAQ Page"
               to="/faq"

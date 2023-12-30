@@ -68,6 +68,36 @@ const APIS={
         URL:"visit/saveVisitData",
         METHOD:"POST",
         ACTION:"SAVE VISIT DATA"
+    },
+    GET_VITALS_DATA:{
+        URL:"visit/getVitals/{0}",
+        METHOD:"GET",
+        ACTION:""
+    },
+    GET_NOTES:{
+        URL:"visit/getNotes/{0}",
+        METHOD:"GET",
+        ACTION:""
+    },
+    GET_DIAGNOSIS:{
+        URL:"visit/getDiagnosis/{0}",
+        METHOD:"GET",
+        ACTION:""
+    },
+    GET_PRESCRIPTIONS:{
+        URL:"drugs/getPrescriptions/{0}",
+        METHOD:"GET",
+        ACTION:""
+    },
+    LOGIN:{
+        URL:"auth/signin",
+        METHOD:"POST",
+        ACTION:""
+    },
+    GET_MASTER_DATA_BASED_ON_CODE:{
+        URL:"common/getMasterDataBasedCode/{0}",
+        METHOD:"GET",
+        ACTION:""
     }
 }
 export default APIS;

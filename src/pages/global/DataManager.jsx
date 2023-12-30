@@ -23,7 +23,8 @@ export const sendRequest = async payload => {
             headers: {
                'content-type': 'application/json', 
                "Access-Control-Allow-Origin": "*",
-               "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+               "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+               "Authorization":"Bearer "+sessionStorage.getItem("token")
             },
             data: payload.data,
         });

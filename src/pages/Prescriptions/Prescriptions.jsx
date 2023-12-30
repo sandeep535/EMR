@@ -25,6 +25,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Moment from 'react-moment';
 import ClearIcon from '@mui/icons-material/Clear';
+import styles from './PrescriptionStyles';
 
 const prescriptionHeadersList = [{
     name: 'Drug Name',
@@ -72,12 +73,24 @@ const Prescriptions = forwardRef((props, ref) => {
                     }
                 },
                 setFormData1: (data) => {
-                    setPrescriptionList(data.prescriptionList)
+                    debugger;
+                    setPrescriptionList(data)
                 }
             }
         },
         [prescriptionList],
     );
+    function clearPrescriptonFormData() {
+        setDrugListinputValue("");
+        setSelectedDrugValues("")
+        setDose("")
+        setDoseunit("")
+        setSig("");
+        setStartdate("");
+        setTodate("");
+        setInstructions("")
+
+    }
     async function addPrescriptionTollist() {
         var obj = {
             drugid: selectedDrugValues.drugid,
@@ -91,11 +104,12 @@ const Prescriptions = forwardRef((props, ref) => {
             clientid: appContextValue.selectedVisitDeatils.clientid.seqid,
             visitid: appContextValue.selectedVisitDeatils.visitid,
             capturedby: 1,
-            instructions:instructions
+            instructions: instructions
         }
         var copySelectedList = [...prescriptionList];
         copySelectedList.push(obj);
         setPrescriptionList(copySelectedList);
+        clearPrescriptonFormData();
     }
     async function getDrugMasterData(newValue) {
         var payLoad = {
@@ -109,6 +123,13 @@ const Prescriptions = forwardRef((props, ref) => {
             setDrugListOptions(result);
         }
     }
+
+    function removePrescriptionFromList(index) {
+        var copyPrescriptionList = [...prescriptionList];
+        copyPrescriptionList.splice(index, 1);
+        setPrescriptionList(copyPrescriptionList);
+    }
+
     return (
         <>
             <DemoPaper square={false}>
@@ -252,12 +273,14 @@ const Prescriptions = forwardRef((props, ref) => {
                                                     <TableCell>{(prescription && prescription.dose) ? prescription.dose + "" + prescription.doseunit : ""}</TableCell>
                                                     <TableCell>{(prescription && prescription.sig) ? prescription.sig : ""}</TableCell>
                                                     <TableCell>{(prescription && prescription.startdate) ? <Moment format="DD-MMM-YYYY">
-                                                   { new Date(prescription.startdate)}
+                                                        {new Date(prescription.startdate)}
                                                     </Moment> : ""}</TableCell>
                                                     <TableCell>{(prescription && prescription.endate) ? <Moment format="DD-MMM-YYYY">
-                                                    {new Date(prescription.endate)}
+                                                        {new Date(prescription.endate)}
                                                     </Moment> : ""}</TableCell>
-                                                    <TableCell><ClearIcon/></TableCell>
+                                                    <TableCell><ClearIcon styles={styles.cursor} onClick={() => {
+                                                        removePrescriptionFromList(index);
+                                                    }} /></TableCell>
                                                 </TableRow>
                                             ))}
                                         </TableBody>

@@ -11,6 +11,7 @@ import Loader from './components/Loader/Loader';
 import AppProvider from "./components/Context/AppProvider";
 import VisitDasboard from "./pages/VisistDashboard/VisitDashboard";
 import VisitActivity from "./pages/VisitActivites/VisitActivity";
+import EmployeeMaster from "./pages/EmpployeMaster/EmployeeMatser";
 
 const App = () => {
   const [theme, colorMode] = useMode();
@@ -30,6 +31,7 @@ const App = () => {
                   <Route path='/visit-creation' element={<VisitCreation />} />
                   <Route path='/vist-dashboard' element={<VisitDasboard />} />
                   <Route path='/vist-activity' element={<VisitActivity />} />
+                  <Route path='/employeeMaster' element={<EmployeeMaster />} />
                 </Routes>
               </main>
             </div>

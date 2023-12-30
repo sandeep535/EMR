@@ -6,7 +6,7 @@
       //display: 'flex',
       flexWrap: 'wrap',
       flexDirection: 'row',
-      height: '100px',
+      height: 'auto',
       border: '1px solid rgb(111, 215, 188)',
       borderRadius:2,
       width:'100%'

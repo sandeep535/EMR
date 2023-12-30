@@ -1,15 +1,6 @@
 import React, { useRef, useEffect, useState, useContext } from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
-import { Box, InputLabel } from '@mui/material'
-import Grid from '@mui/material/Grid';
-import FormControl from '@mui/material/FormControl';
-import Translations from '../../resources/translations';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
+import { Box } from '@mui/material'
 import { sendRequest } from '../global/DataManager';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import APIS from '../../Utils/APIS';
 import AppContext from '../../components/Context/AppContext';
@@ -21,6 +12,7 @@ import Prescriptions from '../Prescriptions/Prescriptions';
 import Divider from '@mui/material/Divider';
 import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
 
+
 export default function VisitActivity() {
     const appContextValue = useContext(AppContext);
     const vitalsRef = useRef();
@@ -28,8 +20,55 @@ export default function VisitActivity() {
     const diagnosissRef = useRef();
     const prescriptionRef = useRef();
     useEffect(() => {
-
+        getVitalsData();
+        getNotes();
+        getDig();
+        getPresctiptions();
     }, []);
+    async function getVitalsData(){
+        var payLoad = {
+            method: APIS.GET_VITALS_DATA.METHOD,
+            url: APIS.GET_VITALS_DATA.URL,
+            paramas: [appContextValue.selectedVisitDeatils.visitid],
+        }
+        let result = await sendRequest(payLoad);
+        if (result) {
+            vitalsRef.current.setFormData1(result);
+        }
+    }
+    async function getNotes(){
+        var payLoad = {
+            method: APIS.GET_NOTES.METHOD,
+            url: APIS.GET_NOTES.URL,
+            paramas: [appContextValue.selectedVisitDeatils.visitid],
+        }
+        let result = await sendRequest(payLoad);
+        if (result) {
+            notesRef.current.setFormData1(result)
+        }
+    }
+    async function getDig(){
+        var payLoad = {
+            method: APIS.GET_DIAGNOSIS.METHOD,
+            url: APIS.GET_DIAGNOSIS.URL,
+            paramas: [appContextValue.selectedVisitDeatils.visitid],
+        }
+        let result = await sendRequest(payLoad);
+        if (result) {
+            diagnosissRef.current.setFormData1(result);
+        }
+    }
+    async function getPresctiptions(){
+        var payLoad = {
+            method: APIS.GET_PRESCRIPTIONS.METHOD,
+            url: APIS.GET_PRESCRIPTIONS.URL,
+            paramas: [appContextValue.selectedVisitDeatils.visitid],
+        }
+        let result = await sendRequest(payLoad);
+        if (result) {
+            prescriptionRef.current.setFormData1(result)
+        }
+    }
     async function updateVisitStatus(status) {
         var payLoad = {
             method: APIS.UPDATE_VISIT_STATUS.METHOD,
@@ -49,7 +88,6 @@ export default function VisitActivity() {
         const notesData = notesRef.current.getFormData();
         const diagnosissData = diagnosissRef.current.getFormData();
         const prescriptionData = prescriptionRef.current.getFormData();
-        debugger
         event.preventDefault();
         var sendingOnj = {
             clientid:appContextValue.selectedVisitDeatils.clientid.seqid,
@@ -105,7 +143,7 @@ export default function VisitActivity() {
                     <Notes label={"Diagnosis"}  ref={diagnosissRef}/>
                     <Divider sx={{ color: "secondary.light", fontSize: 14 }} textAlign="left">Prescriptions</Divider>
                     <Prescriptions  ref={prescriptionRef}/>
-                 <FormButtonComponent button1={"Save"} button2={"Clear"} />
+                   {appContextValue && appContextValue.selectedVisitDeatils && appContextValue.selectedVisitDeatils.status == 3 && <FormButtonComponent button1={"Save"} button2={"Clear"} />}
                 </form>
             </Box>
 

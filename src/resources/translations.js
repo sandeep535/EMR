@@ -13,6 +13,22 @@ const Translations = {
         contact: "Mobile Number",
         
     },
+    "employeeRegistration":{
+        pagetitle:'EMPLOYE REGISTRATION',
+        pagesubtitle:'Register a new patient Profile',
+        title : 'Title',
+        firstName: "Firt Name",
+        lastName: "Last Name",
+        gender: "Gender",
+        dob: "Date of Birth",
+        age: 'Age',
+        email: "E-mail",
+        contact: "Mobile Number",
+        username:'User Name',
+        password:'Password',
+        role:'Role',
+        designation:'Designation'
+    },
     "Common":{
         address1: "Address 1",
         address2: "Address 2",
