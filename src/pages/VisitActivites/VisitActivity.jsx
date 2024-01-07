@@ -19,21 +19,26 @@ export default function VisitActivity() {
     const notesRef = useRef();
     const diagnosissRef = useRef();
     const prescriptionRef = useRef();
+    var notesAPIData = [];
+    var diagnosissAPIData = [];
     useEffect(() => {
+        callVisitAPis();
+    }, []);
+    function callVisitAPis(){
         getVitalsData();
         getNotes();
         getDig();
         getPresctiptions();
-    }, []);
+    }
     async function getVitalsData(){
         var payLoad = {
             method: APIS.GET_VITALS_DATA.METHOD,
             url: APIS.GET_VITALS_DATA.URL,
-            paramas: [appContextValue.selectedVisitDeatils.visitid],
+            paramas: [appContextValue.selectedVisitDeatils.visitid,0],
         }
         let result = await sendRequest(payLoad);
-        if (result) {
-            vitalsRef.current.setFormData1(result);
+        if (result && result.length!=0) {
+            vitalsRef.current.setFormData1(result[0]);
         }
     }
     async function getNotes(){
@@ -44,6 +49,7 @@ export default function VisitActivity() {
         }
         let result = await sendRequest(payLoad);
         if (result) {
+            notesAPIData = result;
             notesRef.current.setFormData1(result)
         }
     }
@@ -55,6 +61,7 @@ export default function VisitActivity() {
         }
         let result = await sendRequest(payLoad);
         if (result) {
+            diagnosissAPIData = result;
             diagnosissRef.current.setFormData1(result);
         }
     }
@@ -62,14 +69,14 @@ export default function VisitActivity() {
         var payLoad = {
             method: APIS.GET_PRESCRIPTIONS.METHOD,
             url: APIS.GET_PRESCRIPTIONS.URL,
-            paramas: [appContextValue.selectedVisitDeatils.visitid],
+            paramas: [appContextValue.selectedVisitDeatils.visitid,0],
         }
         let result = await sendRequest(payLoad);
         if (result) {
             prescriptionRef.current.setFormData1(result)
         }
     }
-    async function updateVisitStatus(status) {
+    async function updateVisitStatus(status,label) {
         var payLoad = {
             method: APIS.UPDATE_VISIT_STATUS.METHOD,
             url: APIS.UPDATE_VISIT_STATUS.URL,
@@ -77,7 +84,10 @@ export default function VisitActivity() {
         }
         let result = await sendRequest(payLoad);
         if (result) {
-            EMRAlert.alertifySuccess("Visit started succussfully");
+            EMRAlert.alertifySuccess("Visit "+label+" succussfully");
+            let copyData = {...appContextValue.selectedVisitDeatils};
+            copyData.status = status;
+            appContextValue.setSelectedVisitDeatils(copyData);
         } else {
             EMRAlert.alertifyError("Not created");
         }
@@ -86,7 +96,13 @@ export default function VisitActivity() {
         
         const vitalData = vitalsRef.current.getFormData();
         const notesData = notesRef.current.getFormData();
+        if(notesAPIData && notesAPIData.notesid){
+            notesData.notesid = notesAPIData.notesid;
+        }
         const diagnosissData = diagnosissRef.current.getFormData();
+        if(diagnosissAPIData && diagnosissAPIData.diagnosisid){
+            diagnosissData.diagnosisid = diagnosissAPIData.diagnosisid;
+        }
         const prescriptionData = prescriptionRef.current.getFormData();
         event.preventDefault();
         var sendingOnj = {
@@ -98,6 +114,8 @@ export default function VisitActivity() {
             notesDTO:notesData,
             diagnosisDTO:diagnosissData
         }
+    
+
         var payLoad = {
             method: APIS.SAVE_VISIT_DATA.METHOD,
             url: APIS.SAVE_VISIT_DATA.URL,
@@ -107,6 +125,7 @@ export default function VisitActivity() {
         let result = await sendRequest(payLoad);
         if (result) {
             EMRAlert.alertifySuccess("Visit data saved succussfully");
+            callVisitAPis()
         } else {
             EMRAlert.alertifyError("Not created");
         }
@@ -122,7 +141,7 @@ export default function VisitActivity() {
                         justifyContent="flex-end"
                         alignItems="flex-end"
                     >
-                        <Button color="secondary" variant="outlined" onClick={() => updateVisitStatus(3)}>Start Visit</Button>
+                        <Button color="secondary" variant="outlined" onClick={() => updateVisitStatus(3,"Started")}>Start Visit</Button>
                     </Box>
                 }
                 {appContextValue && appContextValue.selectedVisitDeatils.status == 3 &&
@@ -132,7 +151,7 @@ export default function VisitActivity() {
                         justifyContent="flex-end"
                         alignItems="flex-end"
                     >
-                        <Button color="secondary" variant="outlined" onClick={() => updateVisitStatus(4)}>Close Visit</Button>
+                        <Button color="secondary" variant="outlined" onClick={() => updateVisitStatus(4,"Closed")}>Close Visit</Button>
                     </Box>
                 }
                 <form onSubmit={handlePrescriptionSubmit}>

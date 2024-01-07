@@ -41,7 +41,7 @@ export default function VisitDasboard() {
     const navigate = useNavigate();
     useEffect(() => {
         getVisitDetails();
-    }, [toDate]);
+    }, [toDate,fromDate]);
 
     async function getVisitDetails() {
 

@@ -1,17 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
-import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 import APIS from '../../Utils/APIS';
 import { sendRequest } from '../global/DataManager';
 import RegistrationInformation from '../../components/RegistrationInformation/RegistrationInformation';
@@ -20,12 +10,14 @@ import FormButtonComponent from '../../components/FormButtonComponent/FormButton
 import Header from "../../components/Header";
 import Autocomplete from '@mui/material/Autocomplete';
 import FormControl from '@mui/material/FormControl';
+import EMRAlert from '../../Utils/CustomAlert';
+import EmployeeMasterList from './EmployeeMasterList';
 
 export default function EmployeeMaster(props) {
     const [username, setUsername] = useState([]);
     const [password, setPassword] = useState([]);
     const [role,setRole] = useState('');
-    const [designation,setDesignation] = useState([]);
+    const [designation,setDesignation] = useState("");
 
     const [rolesList,setRolesList] = useState([]);
     const [designationList,setDesignationList] = useState([]);
@@ -51,13 +43,39 @@ export default function EmployeeMaster(props) {
         const regFormData = registrationInformationRef.current.getFormData();
         event.preventDefault();
         const data = new FormData(event.currentTarget);
+        debugger
         var obj = {
-            username: data.get('username'),
-            password: data.get('password'),
+            firstname:regFormData.firstname,
+            lastname:regFormData.lastname,
+            username:username,
+            password:password,
+            title:regFormData.title,
+            designation:(designation) ?designation:regFormData.title,
+            gender:regFormData.gender,
+            role:role,
+            age:regFormData.age,
+            dob:new Date(regFormData.dob),
+            mail:regFormData.email,
+            mobilenumber:regFormData.contact
         }
+        saveData(obj);
 
     };
 
+    async function saveData(data){
+        var payLoad = {
+            method: APIS.EMP_REGISTRATION.METHOD,
+            url: APIS.EMP_REGISTRATION.URL,
+            paramas: [],
+            data: data
+          }
+          let result = await sendRequest(payLoad);
+          if (result) {
+            EMRAlert.alertifySuccess("Employee Saved Succussfully");
+          } else {
+            EMRAlert.alertifyError("Not Saved");
+          }
+    }
     return (
         <>
             <Box m="20px">
@@ -146,6 +164,9 @@ export default function EmployeeMaster(props) {
                     <FormButtonComponent button1={"Register"} button2={"Clear"} />
                 </form>
 
+            </Box>
+            <Box m="20px">
+                <EmployeeMasterList/>
             </Box>
         </>
     );

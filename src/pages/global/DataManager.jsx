@@ -16,21 +16,26 @@ export const sendRequest = async payload => {
     }else{
          serverUrl = serviceDetails.SERVICE_URL + payload.url;
     }
+    var headers =  {
+        'content-type': 'application/json', 
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
+        
+     }
+    if(payload.url != 'auth/signin'){
+        headers.Authorization="Bearer "+sessionStorage.getItem("token");
+    }
     try {
         const response = await axios(serverUrl, {
             crossdomain: true,
             method: payload.method,
-            headers: {
-               'content-type': 'application/json', 
-               "Access-Control-Allow-Origin": "*",
-               "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-               "Authorization":"Bearer "+sessionStorage.getItem("token")
-            },
+            headers: headers,
             data: payload.data,
         });
         return response.data;
     } catch (error) {
-        throw error;
+        console.log("----------------error",error)
+       // throw error;
     }
 };
 

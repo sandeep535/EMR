@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -14,6 +14,8 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import APIS from '../../Utils/APIS';
 import { sendRequest } from '../global/DataManager';
+import AppContext from '../../components/Context/AppContext';
+import { useSidebarContext } from "../global/sidebar/sidebarContext";
 
 function Copyright(props) {
   return (
@@ -33,6 +35,8 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function LoginPage(props) {
+    const appContextValue = useContext(AppContext);
+    
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -51,9 +55,11 @@ export default function LoginPage(props) {
     }
     let result = await sendRequest(payLoad);
     debugger
-    if (result ) {
-        props.onSusccuss(true);
-        sessionStorage.setItem("token",result);
+    if (result && result != "false" ) {
+      //  props.onSusccuss(true);
+        appContextValue.setIslogin(true);
+        sessionStorage.setItem("token",result.token);
+        appContextValue.setLoggedInUserDetails(result);
         console.log(result)
     }
 }

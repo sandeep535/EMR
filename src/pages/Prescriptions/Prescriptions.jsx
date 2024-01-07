@@ -169,7 +169,6 @@ const Prescriptions = forwardRef((props, ref) => {
                                         type="text"
                                         size="small"
                                         variant="outlined"
-                                        required
                                         label={Translations.Prescriptions.dose}
                                         name="Dose"
                                         onChange={e => setDose(e.target.value)}
@@ -184,7 +183,6 @@ const Prescriptions = forwardRef((props, ref) => {
                                         type="text"
                                         size="small"
                                         variant="outlined"
-                                        required
                                         label={Translations.Prescriptions.doseunit}
                                         name="doseunit"
                                         onChange={e => setDoseunit(e.target.value)}
@@ -199,7 +197,6 @@ const Prescriptions = forwardRef((props, ref) => {
                                         type="text"
                                         size="small"
                                         variant="outlined"
-                                        required
                                         label={Translations.Prescriptions.sig}
                                         name="sig"
                                         onChange={e => setSig(e.target.value)}
@@ -239,7 +236,6 @@ const Prescriptions = forwardRef((props, ref) => {
                                         type="text"
                                         size="small"
                                         variant="outlined"
-                                        required
                                         multiline
                                         rows={3}
                                         label={"Instructions"}

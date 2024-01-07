@@ -1,18 +1,11 @@
-import React, { useEffect, useState, useContext,forwardRef,useImperativeHandle } from 'react';
+import React, { useState, useContext,forwardRef,useImperativeHandle } from 'react';
 import TextField from '@mui/material/TextField';
 import { Box } from '@mui/material'
 import Grid from '@mui/material/Grid';
-import { sendRequest } from '../global/DataManager';
-import Button from '@mui/material/Button';
-import APIS from '../../Utils/APIS';
-import { useNavigate } from "react-router-dom";
 import AppContext from '../../components/Context/AppContext';
-import Container from '@mui/material/Container';
 import Translations from '../../resources/translations';
 import DemoPaper from '../../Utils/CustomCssUtil';
 import Divider from '@mui/material/Divider';
-import EMRAlert from '../../Utils/CustomAlert';
-import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
 
 const Vitals = forwardRef((props, ref) => {
     const [height, setHeight] = useState("");
@@ -23,38 +16,10 @@ const Vitals = forwardRef((props, ref) => {
     const [pulse, setPulse] = useState("");
     const [respiratoryrate, setRespiratoryrate] = useState("");
     const [temperature, setTemperature] = useState("");
+    const [vitalid, setVitalId] = useState("");
 
     const appContextValue = useContext(AppContext);
-    // async function handleSubmit(event) {
-    //     event.preventDefault();
-    //     var sendingObj = {
-    //         visitid: appContextValue.selectedVisitDeatils.visitid,
-    //         clientid: appContextValue.selectedVisitDeatils.clientid.seqid,
-    //         height: height,
-    //         weight: weight,
-    //         bmi: bmi,
-    //         systolic: systolic,
-    //         diastolic: diastolic,
-    //         pulse: pulse,
-    //         respiratoryrate: respiratoryrate,
-    //         temperature: temperature,
-    //         capturedby: 1
-    //     }
-    //     var payLoad = {
-    //         method: APIS.SAVE_VITALS.METHOD,
-    //         url: APIS.SAVE_VITALS.URL,
-    //         paramas: [],
-    //         data: sendingObj
-    //     }
-    //     let result = await sendRequest(payLoad);
-    //     console.log(result);
-    //     if (result) {
-    //         EMRAlert.alertifySuccess("Viatls Saved Succussfully");
-    //     }else{
-    //         EMRAlert.alertifyError("Not Saved")
-    //     }
-
-    // }
+    
     useImperativeHandle(
         ref,
         () => {
@@ -68,18 +33,20 @@ const Vitals = forwardRef((props, ref) => {
                         diastolic,
                         pulse,
                         respiratoryrate,
-                        temperature
+                        temperature,
+                        vitalid
                     }
                 },
                 setFormData1: (data) => {
                     setHeight(data.height);
                     setWeight(data.weight);
                     setBmi(data.bmi);
-                    setDiastolic(data.systolic);
-                    setSystolic(data.pulse);
-                    setPulse(data);
+                    setDiastolic(data.diastolic);
+                    setSystolic(data.systolic);
+                    setPulse(data.pulse);
                     setRespiratoryrate(data.respiratoryrate);
                     setTemperature(data.temperature);
+                    setVitalId(data.vitalid);
                 }
             }
         },

@@ -46,7 +46,8 @@ const Translations = {
         visitReason:'Reason for Visit',
         visitType:'Visit Type',
         speciality:'Specilaity',
-        DocName :'Doctor Name'
+        DocName :'Doctor Name',
+        token:'Token'
     },
     "vitalsForm":{
         height:'Height',
@@ -64,6 +65,11 @@ const Translations = {
        doseunit:"Dose Unit",
        sig:"SIG"
     },
+    "SERVICE_MASTER":{
+        SERVICE_NAME:"Service Name",
+        PRICE:'Price',
+        STATUS:'Status'
+     },
     
 }
 export default Translations;

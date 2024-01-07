@@ -24,6 +24,11 @@ const APIS={
         METHOD:"POST",
         ACTION:""
     },
+    EMP_REGISTRATION:{
+        URL:"common/saveEmployee",
+        METHOD:"POST",
+        ACTION:"Save Employee"
+    },
     CLIENT_DATA_BASED_ON_PHONENUMBER:{
         URL:"registration/getDatabasedonmobilenumber/{0}",
         METHOD:"GET",
@@ -70,7 +75,7 @@ const APIS={
         ACTION:"SAVE VISIT DATA"
     },
     GET_VITALS_DATA:{
-        URL:"visit/getVitals/{0}",
+        URL:"visit/getVitals/{0}/{1}",
         METHOD:"GET",
         ACTION:""
     },
@@ -85,7 +90,7 @@ const APIS={
         ACTION:""
     },
     GET_PRESCRIPTIONS:{
-        URL:"drugs/getPrescriptions/{0}",
+        URL:"drugs/getPrescriptions/{0}/{1}",
         METHOD:"GET",
         ACTION:""
     },
@@ -98,6 +103,23 @@ const APIS={
         URL:"common/getMasterDataBasedCode/{0}",
         METHOD:"GET",
         ACTION:""
+    },
+    GET_EMP_ALL_DATA:{
+        URL:"common/getEmployeesAllEmp/{0}/{1}",
+        METHOD:"GET",
+        ACTION:""
+    },
+    SAVE_MASTER_DATA:{
+        URL:"common/saveServiceMasterData",
+        METHOD:"POST",
+        ACTION:"SAVE SERVICE MASTER DATA"
+    },
+    GET_ALL_SERVICE_MASTER_DATA:{
+        URL:"common/getAllServiceMasterData/{0}/{1}",
+        METHOD:"GET",
+        ACTION:""
     }
+
+    
 }
 export default APIS;

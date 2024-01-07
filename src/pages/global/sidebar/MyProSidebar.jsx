@@ -1,34 +1,35 @@
-// docs https://github.com/azouaoui-med/react-pro-sidebar
-import { useState } from "react";
-import { Menu, Sidebar, MenuItem } from "react-pro-sidebar";
+import { useState, useContext } from "react";
+import { Menu, Sidebar } from "react-pro-sidebar";
 import { useProSidebar } from "react-pro-sidebar";
-
 import { useSidebarContext } from "./sidebarContext";
-
 import { Link } from "react-router-dom";
 import { tokens } from "../../../theme";
 import { useTheme, Box, Typography, IconButton } from "@mui/material";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-//import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
-//import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
-//import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-//import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-//import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
-//import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
-//import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
-
-//import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-//import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 import SwitchRightOutlinedIcon from "@mui/icons-material/SwitchRightOutlined";
 import SwitchLeftOutlinedIcon from "@mui/icons-material/SwitchLeftOutlined";
-import EmployeeMaster from "../../EmpployeMaster/EmployeeMatser";
+import AppContext from '../../../components/Context/AppContext';
+import LeftMenu from '../../../common/LeftMenu';
+import Paper from '@mui/material/Paper';
+import MenuList from '@mui/material/MenuList';
+import MenuItem from '@mui/material/MenuItem';
+import Icon from '@mui/material/Icon';
+import { useNavigate } from "react-router-dom";
+import ListSubheader from '@mui/material/ListSubheader';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Collapse from '@mui/material/Collapse';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import StarBorder from '@mui/icons-material/StarBorder';
+
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-
   return (
     <MenuItem
       active={selected === title}
@@ -43,11 +44,22 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 };
 
 const MyProSidebar = () => {
+  const appContextValue = useContext(AppContext);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [selected, setSelected] = useState("Dashboard");
   const { sidebarRTL, setSidebarRTL, sidebarImage } = useSidebarContext();
   const { collapseSidebar, toggleSidebar, collapsed, broken } = useProSidebar();
+  const [open, setOpen] = useState(true);
+  const [leftMenuList, setLeftMenuList] = useState(LeftMenu);
+
+  const handleClick = (item) => {
+    setLeftMenuList(
+      leftMenuList.map(e => e.title === item.title ? ({...e, isOpen: !e.isOpen} ) : (e))
+   )
+  };
+
+  const navigate = useNavigate();
   return (
     <Box
       sx={{
@@ -155,126 +167,55 @@ const MyProSidebar = () => {
                   fontWeight="bold"
                   sx={{ m: "10px 0 0 0" }}
                 >
-                  Harun Jeylan
+                  {appContextValue && appContextValue.loggedInUserDetails && appContextValue.loggedInUserDetails.firstname}
                 </Typography>
               </Box>
             </Box>
           )}
-          <Box paddingLeft={collapsed ? undefined : "10%"}>
-            <Item
-              title="Dashboard"
-              to="/"
-              icon={<HomeOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-
-            {/*<Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 20px 5px 20px" }}
+          <Box>
+            <List
+              sx={{ width: '100%', maxWidth: 360}}
+              component="nav"
+              aria-labelledby="nested-list-subheader"
+              // subheader={
+              //   <ListSubheader component="div" id="nested-list-subheader">
+              //     Nested List Items
+              //   </ListSubheader>
+              // }
             >
-              Data
-            </Typography>
-            <Item
-              title="Manage Team"
-              to="/team"
-              icon={<PeopleOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Contacts Information"
-              to="/contacts"
-              icon={<ContactsOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Invoices Balances"
-              to="/invoices"
-              icon={<ReceiptOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
+              {leftMenuList && leftMenuList.map((menu,index)=> {
+                return (
+                  <>
+                    <ListItemButton onClick={() => handleClick(menu)}>
+                      <ListItemIcon>
+                        <InboxIcon />
+                      </ListItemIcon>
+                      <ListItemText primary={menu.title} />
+                      {menu.isOpen ? <ExpandLess /> : <ExpandMore />}
+                    </ListItemButton>
+                    <Collapse in={menu.isOpen} timeout="auto" unmountOnExit>
+                      {menu.subMenu && menu.subMenu.map(submenu => {
+                        return (
+                          <List component="div" disablePadding>
+                            <ListItemButton sx={{ pl: 4 }}>
+                              <ListItemIcon>
+                                <StarBorder />
+                              </ListItemIcon>
+                              <ListItemText primary={submenu.title} />
+                            </ListItemButton>
+                          </List>
+                        )
+                      })}
+                    </Collapse>
+                  </>
+                )
+              })}
 
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 20px 5px 20px" }}
-            >
-              Pages
-              </Typography>*/}
-            <Item
-              title="Registration"
-              to="/registration"
-              icon={<PersonOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Visit Creation"
-              to="/visit-creation"
-              icon={<PersonOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Visit Dashboard"
-              to="/vist-dashboard"
-              icon={<PersonOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-             <Item
-              title="Employee Master"
-              to="/employeeMaster"
-              icon={<PersonOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}/>
-            {/*<Item
-              title="FAQ Page"
-              to="/faq"
-              icon={<HelpOutlineOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
 
-            <Typography
-              variant="h6"
-              color={colors.grey[300]}
-              sx={{ m: "15px 20px 5px 20px" }}
-            >
-              Charts
-            </Typography>
-            <Item
-              title="Bar Chart"
-              to="/bar"
-              icon={<BarChartOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Pie Chart"
-              to="/pie"
-              icon={<PieChartOutlineOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Line Chart"
-              to="/line"
-              icon={<TimelineOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-            />
-            <Item
-              title="Geography Chart"
-              to="/geography"
-              icon={<MapOutlinedIcon />}
-              selected={selected}
-              setSelected={setSelected}
-              />*/}
+            </List>
+            {/* <Paper sx={{ width: 320, maxWidth: '100%', backgroundColor: '#f2f0f0' }}>
+             
+            </Paper> */}
           </Box>
         </Menu>
       </Sidebar>

@@ -20,7 +20,13 @@ import FormButtonComponent from '../../components/FormButtonComponent/FormButton
 import EMRAlert from '../../Utils/CustomAlert';
 import DemoPaper from '../../Utils/CustomCssUtil';
 import Divider from '@mui/material/Divider';
-
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import dayjs, { Dayjs } from 'dayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Moment from 'react-moment';
+import moment from 'moment';
 
 const visitServiceTableHeaders = [{
   name: 'Service Type',
@@ -61,7 +67,8 @@ export default function VisitCreation() {
   const [visitreason, setVisitReason] = React.useState([]);
   const [serviceValues, setServiceValues] = React.useState();
 
-
+  const [visitdate, setVisitdate] = React.useState(dayjs(moment(new Date()).format("YYYY-MM-DD")));
+  const [token, setToken] = React.useState();
 
   const [selectedClientData, setSelectedClientData] = React.useState([]);
   const registrationInformationRef = useRef();
@@ -166,7 +173,7 @@ export default function VisitCreation() {
       clientDeatils = registrationInformationRef.current.getFormData();
     }
     let sendingObj = {
-      visitdate: new Date(),
+      visitdate: new Date(visitdate),
       doctor: doctor,
       visittype: visitType,
       specilaity: specility,
@@ -175,7 +182,8 @@ export default function VisitCreation() {
       reason: visitreason,
       status: 1,
       clientid: clientDeatils,
-      services: visitServiceList
+      services: visitServiceList,
+      token: token
     }
 
     var payLoad = {
@@ -193,7 +201,7 @@ export default function VisitCreation() {
   };
   return (
     <Box m="10px">
-     
+
       <Box m="10px">
         <Grid xs={6} container>
           <Autocomplete
@@ -222,13 +230,13 @@ export default function VisitCreation() {
       </Box>
       <form onSubmit={handleSubmit}>
         <Box display="grid" gap="10px">
-          <Divider sx={{ color: "secondary.light",fontSize:14 }} textAlign="left">Client Details</Divider>
+          <Divider sx={{ color: "secondary.light", fontSize: 14 }} textAlign="left">Client Details</Divider>
           <DemoPaper square={false}>
             <RegistrationInformation data={selectedClientData} ref={registrationInformationRef} />
           </DemoPaper>
         </Box>
-        <Divider sx={{ color: "secondary.light",paddingTop:1,fontSize:14 }} textAlign="left">Visit Details</Divider>
-       
+        <Divider sx={{ color: "secondary.light", paddingTop: 1, fontSize: 14 }} textAlign="left">Visit Details</Divider>
+
         <Box display="grid" gap="10px" style={{ marginTop: '10px' }}>
           <DemoPaper square={false}>
             <Grid xs={12} container spacing={1}>
@@ -343,6 +351,32 @@ export default function VisitCreation() {
                     renderInput={(params) => <TextField {...params} label="Add Services" />}
                   />
                 </FormControl>
+              </Grid>
+              <Grid item xs={3} spacing={2}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={['DateField', 'DateField']}>
+                    <DatePicker
+                      label="From Date"
+                      value={visitdate}
+                      onChange={newValue => setVisitdate(new Date(newValue))}
+                      format="DD-MM-YYYY"
+                      fullWidth
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
+              </Grid>
+              <Grid item xs={3} spacing={2}>
+                <TextField
+                  fullWidth
+                  type="text"
+                  size="small"
+                  variant="outlined"
+                  required
+                  label={Translations.visitCreation.token}
+                  name="token"
+                  onChange={e => setToken(e.target.value)}
+                  value={token}
+                />
               </Grid>
             </Grid>
             <Grid xs={12} container spacing={1}>
