@@ -53,10 +53,16 @@ const MyProSidebar = () => {
   const [open, setOpen] = useState(true);
   const [leftMenuList, setLeftMenuList] = useState(LeftMenu);
 
-  const handleClick = (item) => {
-    setLeftMenuList(
-      leftMenuList.map(e => e.title === item.title ? ({...e, isOpen: !e.isOpen} ) : (e))
-   )
+  const handleClick = (item,menuType) => {
+    if(menuType){
+      navigate(item.to)
+    }else{
+      setLeftMenuList(
+        leftMenuList.map(e => e.title === item.title ? ({ ...e, isOpen: !e.isOpen }) : (e))
+      )
+      //navigate(item.to)
+    }
+    
   };
 
   const navigate = useNavigate();
@@ -174,16 +180,11 @@ const MyProSidebar = () => {
           )}
           <Box>
             <List
-              sx={{ width: '100%', maxWidth: 360}}
+              sx={{ width: '100%', maxWidth: 360 }}
               component="nav"
               aria-labelledby="nested-list-subheader"
-              // subheader={
-              //   <ListSubheader component="div" id="nested-list-subheader">
-              //     Nested List Items
-              //   </ListSubheader>
-              // }
             >
-              {leftMenuList && leftMenuList.map((menu,index)=> {
+              {leftMenuList && leftMenuList.map((menu, index) => {
                 return (
                   <>
                     <ListItemButton onClick={() => handleClick(menu)}>
@@ -197,7 +198,7 @@ const MyProSidebar = () => {
                       {menu.subMenu && menu.subMenu.map(submenu => {
                         return (
                           <List component="div" disablePadding>
-                            <ListItemButton sx={{ pl: 4 }}>
+                            <ListItemButton sx={{ pl: 4 }} onClick={() => handleClick(submenu,"submenu")}>
                               <ListItemIcon>
                                 <StarBorder />
                               </ListItemIcon>
@@ -210,12 +211,8 @@ const MyProSidebar = () => {
                   </>
                 )
               })}
-
-
             </List>
-            {/* <Paper sx={{ width: 320, maxWidth: '100%', backgroundColor: '#f2f0f0' }}>
-             
-            </Paper> */}
+
           </Box>
         </Menu>
       </Sidebar>

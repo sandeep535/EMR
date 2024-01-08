@@ -15,6 +15,44 @@
         icon:"star",
         isPatientSpecific :false,
     }]
+},
+{
+    title:"Masters",
+    to:"/employeeMaster",
+    icon:"star",
+    isPatientSpecific :false,
+    isOpen:false,
+    subMenu:[{
+        title:"Employee Master",
+        to:"/employeeMaster",
+        icon:"HomeOutlinedIcon",
+        isPatientSpecific :false,
+        isOpen:false,
+    },{
+        title:"Service Master",
+        to:"/serviceMaster",
+        icon:"HomeOutlinedIcon",
+        isPatientSpecific :false,
+        isOpen:false,
+    },]
+},{
+    title:"Clinical Data",
+    to:"/employeeMaster",
+    icon:"star",
+    isPatientSpecific :false,
+    isOpen:false,
+    subMenu:[{
+        title:"Vitals",
+        to:"/vitalsList",
+        icon:"HomeOutlinedIcon",
+        isPatientSpecific :true,
+        isOpen:false,
+    },{
+        title:"Prescriptions",
+        to:"/prescriptionsList",
+        icon:"HomeOutlinedIcon",
+        isPatientSpecific :true,
+    }]
 },{
     title:"Registration",
     to:"/registration",
@@ -32,30 +70,6 @@
     to:"/vist-dashboard",
     icon:"HomeOutlinedIcon",
     isPatientSpecific :false,
-    isOpen:false,
-},{
-    title:"Employee Master",
-    to:"/employeeMaster",
-    icon:"HomeOutlinedIcon",
-    isPatientSpecific :false,
-    isOpen:false,
-},{
-    title:"Service Master",
-    to:"/serviceMaster",
-    icon:"HomeOutlinedIcon",
-    isPatientSpecific :false,
-    isOpen:false,
-},{
-    title:"Vitals",
-    to:"/vitalsList",
-    icon:"HomeOutlinedIcon",
-    isPatientSpecific :true,
-    isOpen:false,
-},{
-    title:"Prescriptions",
-    to:"/prescriptionsList",
-    icon:"HomeOutlinedIcon",
-    isPatientSpecific :true,
     isOpen:false,
 }];
 export default LeftMenu
