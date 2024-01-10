@@ -11,6 +11,7 @@ import Notes from '../Notes/Notes';
 import Prescriptions from '../Prescriptions/Prescriptions';
 import Divider from '@mui/material/Divider';
 import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
+import Allergies from '../Allergies/Allergies';
 
 
 export default function VisitActivity() {
@@ -19,6 +20,7 @@ export default function VisitActivity() {
     const notesRef = useRef();
     const diagnosissRef = useRef();
     const prescriptionRef = useRef();
+    const allergiesref = useRef();
     var notesAPIData = [];
     var diagnosissAPIData = [];
     useEffect(() => {
@@ -29,6 +31,18 @@ export default function VisitActivity() {
         getNotes();
         getDig();
         getPresctiptions();
+        getAllerigies();
+    }
+    async function getAllerigies(){
+        var payLoad = {
+            method: APIS.GET_ALLERIGIES_DATA.METHOD,
+            url: APIS.GET_ALLERIGIES_DATA.URL,
+            paramas: [appContextValue.selectedVisitDeatils.visitid,0],
+        }
+        let result = await sendRequest(payLoad);
+        if (result && result.length!=0) {
+            allergiesref.current.setFormData1(result);
+        }
     }
     async function getVitalsData(){
         var payLoad = {
@@ -104,6 +118,7 @@ export default function VisitActivity() {
             diagnosissData.diagnosisid = diagnosissAPIData.diagnosisid;
         }
         const prescriptionData = prescriptionRef.current.getFormData();
+        const allergiesrefData = allergiesref.current.getFormData();
         event.preventDefault();
         var sendingOnj = {
             clientid:appContextValue.selectedVisitDeatils.clientid.seqid,
@@ -112,7 +127,8 @@ export default function VisitActivity() {
             prescriptions:prescriptionData.prescriptionList,
             vitalsDTO:vitalData,
             notesDTO:notesData,
-            diagnosisDTO:diagnosissData
+            diagnosisDTO:diagnosissData,
+            allergies:allergiesrefData.allergiesList
         }
     
 
@@ -162,6 +178,8 @@ export default function VisitActivity() {
                     <Notes label={"Diagnosis"}  ref={diagnosissRef}/>
                     <Divider sx={{ color: "secondary.light", fontSize: 14 }} textAlign="left">Prescriptions</Divider>
                     <Prescriptions  ref={prescriptionRef}/>
+                    <Divider sx={{ color: "secondary.light", fontSize: 14 }} textAlign="left">Allerigies</Divider>
+                    <Allergies  ref={allergiesref}/>
                    {appContextValue && appContextValue.selectedVisitDeatils && appContextValue.selectedVisitDeatils.status == 3 && <FormButtonComponent button1={"Save"} button2={"Clear"} />}
                 </form>
             </Box>

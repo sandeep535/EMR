@@ -29,10 +29,9 @@ const App = () => {
               <main>
                 <Topbar />
                 <Routes>
-                  <Route path="/" element={<Dashboard />} />
+                  <Route path='/vist-dashboard' element={<VisitDasboard />} />
                   <Route path="/registration" element={<Registration />} />
                   <Route path='/visit-creation' element={<VisitCreation />} />
-                  <Route path='/vist-dashboard' element={<VisitDasboard />} />
                   <Route path='/vist-activity' element={<VisitActivity />} />
                   <Route path='/employeeMaster' element={<EmployeeMaster />} />
                   <Route path='/serviceMaster' element={<ServiceMaster />} />

@@ -70,6 +70,12 @@ const Translations = {
         PRICE:'Price',
         STATUS:'Status'
      },
+     "ALLERGY":{
+        ALLERGYNAME:"Allergy",
+        STATUS:'Status',
+        INDICATIONS:'Indication',
+        SERVERITY:"severity"
+     }
     
 }
 export default Translations;

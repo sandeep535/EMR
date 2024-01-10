@@ -64,6 +64,13 @@ export default function VisitDasboard() {
 
     function gotoActivitiesPage(visit) {
         appContextValue.setSelectedVisitDeatils(visit);
+        var copyData = [...appContextValue.leftMenuList];
+        copyData.map(item=>{
+            if(item.hasOwnProperty("isPatientSpecific")){
+                item.isPatientSpecific = true;
+            }
+        });
+        appContextValue.setLeftMenuList(copyData);
         navigate("/vist-activity");
     }
 

@@ -1,11 +1,13 @@
 import AppContext from './AppContext';
 import { useState } from 'react';
+import LeftMenu from '../../common/LeftMenu';
 
 export default function AppProvider(props) {
     const [showLoader, setShowLoader] = useState(false);
     const [selectedVisitDeatils, setSelectedVisitDeatils] = useState([]);
     const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
     const [isLogin, setIslogin] = useState(false);
+    const [leftMenuList, setLeftMenuList] = useState(LeftMenu);
 
     return (
         <AppContext.Provider value={
@@ -25,6 +27,10 @@ export default function AppProvider(props) {
                 isLogin:isLogin,
                 setIslogin:(flag)=>{
                     setIslogin(flag)
+                },
+                leftMenuList:leftMenuList,
+                setLeftMenuList:(data)=>{
+                    setLeftMenuList(data)
                 }
             }
         }>

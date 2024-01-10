@@ -47,22 +47,36 @@ const MyProSidebar = () => {
   const appContextValue = useContext(AppContext);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [selected, setSelected] = useState("Dashboard");
   const { sidebarRTL, setSidebarRTL, sidebarImage } = useSidebarContext();
   const { collapseSidebar, toggleSidebar, collapsed, broken } = useProSidebar();
-  const [open, setOpen] = useState(true);
-  const [leftMenuList, setLeftMenuList] = useState(LeftMenu);
 
-  const handleClick = (item,menuType) => {
-    if(menuType){
-      navigate(item.to)
-    }else{
-      setLeftMenuList(
-        leftMenuList.map(e => e.title === item.title ? ({ ...e, isOpen: !e.isOpen }) : (e))
-      )
-      //navigate(item.to)
+  const removePatientSpecific = (copyData)=>{
+    copyData.map(item => {
+      if (item.hasOwnProperty("isPatientSpecific")) {
+        item.isPatientSpecific = false;
+      }
+    });
+    return copyData;
+  }
+  const handleClick = (item, menuType,index) => {
+    if (menuType) {
+      var copyData = [...appContextValue.leftMenuList];
+      if (item.isRefreshMenu) {
+        copyData = removePatientSpecific(copyData);
+        appContextValue.setLeftMenuList(copyData);
+        appContextValue.setSelectedVisitDeatils([]);
+      }
+      navigate(item.to);
+    } else {
+      var copyData = [...appContextValue.leftMenuList];
+      copyData[index].isOpen = !copyData[index].isOpen;
+      if (item.isRefreshMenu) {
+        copyData = removePatientSpecific(copyData);
+        appContextValue.setSelectedVisitDeatils([]);
+      }
+      appContextValue.setLeftMenuList(copyData);
     }
-    
+
   };
 
   const navigate = useNavigate();
@@ -184,32 +198,62 @@ const MyProSidebar = () => {
               component="nav"
               aria-labelledby="nested-list-subheader"
             >
-              {leftMenuList && leftMenuList.map((menu, index) => {
-                return (
-                  <>
-                    <ListItemButton onClick={() => handleClick(menu)}>
-                      <ListItemIcon>
-                        <InboxIcon />
-                      </ListItemIcon>
-                      <ListItemText primary={menu.title} />
-                      {menu.isOpen ? <ExpandLess /> : <ExpandMore />}
-                    </ListItemButton>
-                    <Collapse in={menu.isOpen} timeout="auto" unmountOnExit>
-                      {menu.subMenu && menu.subMenu.map(submenu => {
-                        return (
-                          <List component="div" disablePadding>
-                            <ListItemButton sx={{ pl: 4 }} onClick={() => handleClick(submenu,"submenu")}>
-                              <ListItemIcon>
-                                <StarBorder />
-                              </ListItemIcon>
-                              <ListItemText primary={submenu.title} />
-                            </ListItemButton>
-                          </List>
-                        )
-                      })}
-                    </Collapse>
-                  </>
-                )
+              {appContextValue && appContextValue.leftMenuList && appContextValue.leftMenuList.map((menu, index) => {
+                if (menu.hasOwnProperty("isPatientSpecific") == false) {
+                  return (
+                    <>
+                      <ListItemButton onClick={() => handleClick(menu,"",index)}>
+                        <ListItemIcon>
+                          <InboxIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={menu.title} />
+                        {menu.isOpen ? <ExpandLess /> : <ExpandMore />}
+                      </ListItemButton>
+                      <Collapse in={menu.isOpen} timeout="auto" unmountOnExit>
+                        {menu.subMenu && menu.subMenu.map(submenu => {
+                          return (
+                            <List component="div" disablePadding>
+                              <ListItemButton sx={{ pl: 4 }} onClick={() => handleClick(submenu, "submenu",index)}>
+                                <ListItemIcon>
+                                  <StarBorder />
+                                </ListItemIcon>
+                                <ListItemText primary={submenu.title} />
+                              </ListItemButton>
+                            </List>
+                          )
+                        })}
+                      </Collapse>
+                    </>
+                  )
+                }
+                if (menu.hasOwnProperty("isPatientSpecific") == true && menu.isPatientSpecific == true) {
+                  return (
+                    <>
+                      <ListItemButton onClick={() => handleClick(menu,"",index)}>
+                        <ListItemIcon>
+                          <InboxIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={menu.title} />
+                        {menu.isOpen ? <ExpandLess /> : <ExpandMore />}
+                      </ListItemButton>
+                      <Collapse in={menu.isOpen} timeout="auto" unmountOnExit>
+                        {menu.subMenu && menu.subMenu.map(submenu => {
+                          return (
+                            <List component="div" disablePadding>
+                              <ListItemButton sx={{ pl: 4 }} onClick={() => handleClick(submenu, "submenu",index)}>
+                                <ListItemIcon>
+                                  <StarBorder />
+                                </ListItemIcon>
+                                <ListItemText primary={submenu.title} />
+                              </ListItemButton>
+                            </List>
+                          )
+                        })}
+                      </Collapse>
+                    </>
+                  )
+                }
+
               })}
             </List>
 

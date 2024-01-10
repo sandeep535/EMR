@@ -118,7 +118,12 @@ const APIS={
         URL:"common/getAllServiceMasterData/{0}/{1}",
         METHOD:"GET",
         ACTION:""
-    }
+    },
+    GET_ALLERIGIES_DATA:{
+        URL:"visit/getAllergies/{0}/{1}",
+        METHOD:"GET",
+        ACTION:""
+    },
 
     
 }

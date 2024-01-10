@@ -2,74 +2,74 @@
     title:"Dashboard",
     to:"/",
     icon:"star",
-    isPatientSpecific :false,
     isOpen:false,
+    isRefreshMenu:true,
     subMenu:[{
-        title:"Sub-1",
-        to:"/",
-        icon:"star",
-        isPatientSpecific :false,
-    },{
-        title:"Sub-2",
-        to:"/",
-        icon:"star",
-        isPatientSpecific :false,
+        title:"Visit Dashboard",
+        to:"/vist-dashboard",
+        icon:"HomeOutlinedIcon",
+        isOpen:false,
+        isRefreshMenu:true,
     }]
-},
-{
-    title:"Masters",
-    to:"/employeeMaster",
-    icon:"star",
-    isPatientSpecific :false,
-    isOpen:false,
-    subMenu:[{
-        title:"Employee Master",
-        to:"/employeeMaster",
-        icon:"HomeOutlinedIcon",
-        isPatientSpecific :false,
-        isOpen:false,
-    },{
-        title:"Service Master",
-        to:"/serviceMaster",
-        icon:"HomeOutlinedIcon",
-        isPatientSpecific :false,
-        isOpen:false,
-    },]
 },{
     title:"Clinical Data",
     to:"/employeeMaster",
     icon:"star",
     isPatientSpecific :false,
     isOpen:false,
+    isRefreshMenu:false,
     subMenu:[{
         title:"Vitals",
         to:"/vitalsList",
         icon:"HomeOutlinedIcon",
-        isPatientSpecific :true,
+        isPatientSpecific :false,
         isOpen:false,
+        isRefreshMenu:false,
     },{
         title:"Prescriptions",
         to:"/prescriptionsList",
         icon:"HomeOutlinedIcon",
-        isPatientSpecific :true,
+        isPatientSpecific :false,
+        isRefreshMenu:false,
+    }]
+},
+{
+    title:"Registration",
+    to:"",
+    icon:"star",
+    isOpen:false,
+    isRefreshMenu:true,
+    subMenu:[{
+        title:"Registration",
+        to:"/registration",
+        icon:"PersonOutlinedIcon",
+        isOpen:false,
+        isRefreshMenu:true,
+    },{
+        title:"Visit Creation",
+        to:"/visit-creation",
+        icon:"HomeOutlinedIcon",
+        isOpen:false,
+        isRefreshMenu:true,
     }]
 },{
-    title:"Registration",
-    to:"/registration",
-    icon:"PersonOutlinedIcon",
-    isPatientSpecific :false,
+    title:"Masters",
+    to:"/employeeMaster",
+    icon:"star",
     isOpen:false,
-},{
-    title:"Visit Creation",
-    to:"/visit-creation",
-    icon:"HomeOutlinedIcon",
-    isPatientSpecific :false,
-    isOpen:false,
-},{
-    title:"Visit Dashboard",
-    to:"/vist-dashboard",
-    icon:"HomeOutlinedIcon",
-    isPatientSpecific :false,
-    isOpen:false,
+    isRefreshMenu:true,
+    subMenu:[{
+        title:"Employee Master",
+        to:"/employeeMaster",
+        icon:"HomeOutlinedIcon",
+        isOpen:false,
+        isRefreshMenu:true,
+    },{
+        title:"Service Master",
+        to:"/serviceMaster",
+        icon:"HomeOutlinedIcon",
+        isOpen:false,
+        isRefreshMenu:true,
+    },]
 }];
 export default LeftMenu
