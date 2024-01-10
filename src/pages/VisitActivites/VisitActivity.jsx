@@ -13,7 +13,11 @@ import Prescriptions from '../Prescriptions/Prescriptions';
 import Divider from '@mui/material/Divider';
 import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
 import Allergies from '../Allergies/Allergies';
-
+import { useReactToPrint } from 'react-to-print';
+import { ComponentToPrint } from '../../components/Print/ComponentToPrint';
+import PrintTableFomat from '../../common/Prints/PrintTableFomat';
+import PrintHeaders from '../../common/PrintHeaders'
+import PrintTextFormar from '../../common/Prints/PrintTextFormar';
 
 export default function VisitActivity() {
     const appContextValue = useContext(AppContext);
@@ -22,6 +26,8 @@ export default function VisitActivity() {
     const diagnosissRef = useRef();
     const prescriptionRef = useRef();
     const allergiesref = useRef();
+
+    const [enablePrint,setEnablePrint] = useState(false);
     var notesAPIData = [];
     var diagnosissAPIData = [];
     useEffect(() => {
@@ -147,6 +153,15 @@ export default function VisitActivity() {
             EMRAlert.alertifyError("Not created");
         }
     }
+
+    const componentRef = useRef();
+   
+    const handlePrint = useReactToPrint({
+        content: () => componentRef.current,
+        onAfterPrint: () => {
+            setEnablePrint(false);
+          }
+      });
     return (
         <Box sx={{ m: 1 }}>
                 <ClientBanner clientData={appContextValue.selectedVisitDeatils.clientid} visitData={appContextValue.selectedVisitDeatils} />
@@ -171,6 +186,7 @@ export default function VisitActivity() {
                     </Box>
                 }
                 <form onSubmit={handlePrescriptionSubmit}>
+<<<<<<< Updated upstream
                     <Grid container spacing={1} xs={12}>
                         <Grid item xs={4} spacing={4}>
                             <Vitals ref={vitalsRef}/>
@@ -193,7 +209,37 @@ export default function VisitActivity() {
                         </Grid>
                     </Grid>
                    {appContextValue && appContextValue.selectedVisitDeatils && appContextValue.selectedVisitDeatils.status == 3 && <FormButtonComponent button1={"Save"} button2={"Clear"} />}
+=======
+                    <Vitals ref={vitalsRef}/>
+                    <Divider sx={{ color: "secondary.light", fontSize: 14 }} textAlign="left">General Notes</Divider>
+                    <Notes label={"General Notes"} ref={notesRef}/>
+                    <Divider sx={{ color: "secondary.light", fontSize: 14 }} textAlign="left">Diagnosis</Divider>
+                    <Notes label={"Diagnosis"}  ref={diagnosissRef}/>
+                    <Divider sx={{ color: "secondary.light", fontSize: 14 }} textAlign="left">Prescriptions</Divider>
+                    <Prescriptions  ref={prescriptionRef}/>
+                    <Divider sx={{ color: "secondary.light", fontSize: 14 }} textAlign="left">Allerigies</Divider>
+                    <Allergies  ref={allergiesref}/>
+                   
+                    {appContextValue && appContextValue.selectedVisitDeatils && appContextValue.selectedVisitDeatils.status == 3 && <FormButtonComponent button1={"Save"} button2={"Clear"} />}
+>>>>>>> Stashed changes
                 </form>
+                {enablePrint && (
+                    <ComponentToPrint ref={componentRef} >
+                        <PrintTableFomat headers = {PrintHeaders.VITALS} data={[vitalsRef.current.getFormData()]} title="Vitals"/>
+                        <PrintTableFomat headers = {PrintHeaders.PRESCRIPTIONS} data={prescriptionRef.current.getFormData().prescriptionList} title="Medications"/>
+                        <PrintTableFomat headers = {PrintHeaders.ALLERIGIES} data={allergiesref.current.getFormData().allergiesList} title="Allerigies"/>
+                        <PrintTextFormar headers = {PrintHeaders.NOTES} data={notesRef.current.getFormData()}/>
+                        <PrintTextFormar headers = {PrintHeaders.Diagnosis} data={diagnosissRef.current.getFormData()}/>
+                    </ComponentToPrint>
+                )}
+                   
+                    <button onClick={()=>{
+                        setEnablePrint(true)
+                        setTimeout(function(){
+                            handlePrint();
+                        },100)
+                       
+                    }}>Print this out!</button>
             </Box>
     )
 }
