@@ -26,6 +26,9 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import ClearIcon from '@mui/icons-material/Clear';
 import AppContext from '../../components/Context/AppContext';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
 
 const allergiesColumns = [{
     name: 'Allergy',
@@ -123,9 +126,13 @@ const Allergies = forwardRef((props, ref) => {
     }
     return (
         <>
-            <DemoPaper square={false}>
                 <form onSubmit={handleSubmit}>
                     <Box display="grid" gap="10px">
+                    <Card variant="outlined">
+                        <CardContent>
+                            <Typography sx={{ fontSize: 16 }}  className='card-header' >
+                                Allergies
+                            </Typography>
                         <Grid container spacing={1}>
                             <Grid item xs={3} spacing={1}>
                                 <TextField
@@ -203,7 +210,7 @@ const Allergies = forwardRef((props, ref) => {
                             </Grid>
                         </Grid>
                         <Grid xs={12} container spacing={1}>
-                            <TableContainer component={Paper}>
+                            <TableContainer component={Paper} >
                                 <Table sx={{ minWidth: 650 }} aria-label="simple table">
                                     <TableHead>
                                         <TableRow>
@@ -214,7 +221,7 @@ const Allergies = forwardRef((props, ref) => {
                                             }))}
                                         </TableRow>
                                     </TableHead>
-                                    <TableBody>
+                                    <TableBody className='grid-height'>
                                         {allergiesList && allergiesList.map((callergy, index) => (
                                             <TableRow key={callergy.id}>
                                                 <TableCell>{(callergy && callergy.allergy) ? callergy.allergy : ""}</TableCell>
@@ -230,10 +237,11 @@ const Allergies = forwardRef((props, ref) => {
                                 </Table>
                             </TableContainer>
                         </Grid>
+                        </CardContent>
+                    </Card>
                     </Box>
 
                 </form>
-            </DemoPaper>
         </>
     )
 });

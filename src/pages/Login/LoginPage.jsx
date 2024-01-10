@@ -16,6 +16,7 @@ import APIS from '../../Utils/APIS';
 import { sendRequest } from '../global/DataManager';
 import AppContext from '../../components/Context/AppContext';
 import { useSidebarContext } from "../global/sidebar/sidebarContext";
+import ErrorMessage from '../../components/ErrorMessage/Errormsg';
 
 function Copyright(props) {
   return (
@@ -36,6 +37,7 @@ const defaultTheme = createTheme();
 
 export default function LoginPage(props) {
     const appContextValue = useContext(AppContext);
+    const [showError, setShowError] = useState(false);
     
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -55,12 +57,16 @@ export default function LoginPage(props) {
     }
     let result = await sendRequest(payLoad);
     debugger
-    if (result && result != "false" ) {
+    if (result && result.result != "false" ) {
       //  props.onSusccuss(true);
+        setShowError(false);
         appContextValue.setIslogin(true);
         sessionStorage.setItem("token",result.token);
         appContextValue.setLoggedInUserDetails(result);
         console.log(result)
+    }
+    else{
+      setShowError(true);
     }
 }
 
@@ -123,6 +129,7 @@ export default function LoginPage(props) {
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
+              { showError ? <ErrorMessage type="error" message="Invalid User Name and Password !"></ErrorMessage> : null }
               <Button
                 type="submit"
                 fullWidth

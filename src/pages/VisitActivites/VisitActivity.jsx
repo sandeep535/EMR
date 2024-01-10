@@ -7,6 +7,7 @@ import AppContext from '../../components/Context/AppContext';
 import EMRAlert from '../../Utils/CustomAlert';
 import ClientBanner from '../../components/ClientBanner/ClientBanner';
 import Vitals from '../Vitals/Vitals';
+import Grid from '@mui/material/Grid';
 import Notes from '../Notes/Notes';
 import Prescriptions from '../Prescriptions/Prescriptions';
 import Divider from '@mui/material/Divider';
@@ -147,8 +148,7 @@ export default function VisitActivity() {
         }
     }
     return (
-        <>
-            <Box sx={{ m: 1 }}>
+        <Box sx={{ m: 1 }}>
                 <ClientBanner clientData={appContextValue.selectedVisitDeatils.clientid} visitData={appContextValue.selectedVisitDeatils} />
                 {appContextValue && appContextValue.selectedVisitDeatils.status == 1 &&
                     <Box
@@ -171,19 +171,29 @@ export default function VisitActivity() {
                     </Box>
                 }
                 <form onSubmit={handlePrescriptionSubmit}>
-                    <Vitals ref={vitalsRef}/>
-                    <Divider sx={{ color: "secondary.light", fontSize: 14 }} textAlign="left">General Notes</Divider>
-                    <Notes label={"General Notes"} ref={notesRef}/>
-                    <Divider sx={{ color: "secondary.light", fontSize: 14 }} textAlign="left">Diagnosis</Divider>
-                    <Notes label={"Diagnosis"}  ref={diagnosissRef}/>
-                    <Divider sx={{ color: "secondary.light", fontSize: 14 }} textAlign="left">Prescriptions</Divider>
-                    <Prescriptions  ref={prescriptionRef}/>
-                    <Divider sx={{ color: "secondary.light", fontSize: 14 }} textAlign="left">Allerigies</Divider>
-                    <Allergies  ref={allergiesref}/>
+                    <Grid container spacing={1} xs={12}>
+                        <Grid item xs={4} spacing={4}>
+                            <Vitals ref={vitalsRef}/>
+                        </Grid>
+                        <Grid item xs={8}>
+                            <Allergies  ref={allergiesref}/> 
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={1} xs={12}>
+                        <Grid item xs={12} spacing={4}>
+                            <Prescriptions  ref={prescriptionRef}/>
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={1} xs={12}>
+                        <Grid item xs={6} spacing={4}>
+                            <Notes label={"Diagnosis"}  ref={diagnosissRef}/>
+                        </Grid>
+                        <Grid item xs={6} spacing={4}>
+                            <Notes label={"General Notes"} ref={notesRef}/>
+                        </Grid>
+                    </Grid>
                    {appContextValue && appContextValue.selectedVisitDeatils && appContextValue.selectedVisitDeatils.status == 3 && <FormButtonComponent button1={"Save"} button2={"Clear"} />}
                 </form>
             </Box>
-
-        </>
     )
 }

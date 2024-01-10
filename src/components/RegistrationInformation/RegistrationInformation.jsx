@@ -10,6 +10,7 @@ import Translations from '../../resources/translations';
 import APIS from '../../Utils/APIS';
 import { sendRequest } from '../../pages/global/DataManager';
 
+
 const RegistrationInformation = forwardRef((props, ref) => {
     // console.log("sssssssssssssssssssddddddddd",props)
     const [title, setTitle] = useState([]);
@@ -87,6 +88,7 @@ const RegistrationInformation = forwardRef((props, ref) => {
                     <FormControl size="small" fullWidth>
                         <InputLabel
                             id="demo-select-small-label"
+                            required
                         >
                             {Translations.patientRegistration.title}
                         </InputLabel>
@@ -142,6 +144,7 @@ const RegistrationInformation = forwardRef((props, ref) => {
                             disableAnimation={false}
                             htmlFor="gender"
                             size="small"
+                            required
 
                         >
                             {Translations.patientRegistration.gender}
@@ -150,7 +153,6 @@ const RegistrationInformation = forwardRef((props, ref) => {
                             label={Translations.patientRegistration.gender}
                             name="gender"
                             size="small"
-                            required
                             renderValue={(o) => o.lookupvalue}
                             onChange={e => setGender(e.target.value)}
                             value={gender}
@@ -174,6 +176,7 @@ const RegistrationInformation = forwardRef((props, ref) => {
                         onChange={e => setDOB(e.target.value)}
                         value={dob}
                         fullWidth
+                        required
                     />
                 </Grid>
                 <Grid item xs={3} >

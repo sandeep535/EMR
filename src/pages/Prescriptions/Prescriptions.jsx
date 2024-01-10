@@ -26,6 +26,9 @@ import Paper from '@mui/material/Paper';
 import Moment from 'react-moment';
 import ClearIcon from '@mui/icons-material/Clear';
 import styles from './PrescriptionStyles';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
 
 const prescriptionHeadersList = [{
     name: 'Drug Name',
@@ -132,8 +135,12 @@ const Prescriptions = forwardRef((props, ref) => {
 
     return (
         <>
-            <DemoPaper square={false}>
                 <Box m="10px">
+                    <Card variant="outlined">
+                        <CardContent>
+                            <Typography sx={{ fontSize: 16 }}  className='card-header' >
+                                Prescriptions
+                            </Typography>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <Grid container spacing={1}>
                             <Grid item xs={6} spacing={1} >
@@ -252,7 +259,7 @@ const Prescriptions = forwardRef((props, ref) => {
                             </Grid>
                             <Grid xs={12} container spacing={1}>
                                 <TableContainer component={Paper}>
-                                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                    <Table sx={{ minWidth: 650 }} aria-label="simple table" className='grid-height'>
                                         <TableHead>
                                             <TableRow>
                                                 {(prescriptionHeadersList.map(header => {
@@ -262,7 +269,7 @@ const Prescriptions = forwardRef((props, ref) => {
                                                 }))}
                                             </TableRow>
                                         </TableHead>
-                                        <TableBody>
+                                        <TableBody >
                                             {prescriptionList && prescriptionList.map((prescription, index) => (
                                                 <TableRow key={prescription.drugid}>
                                                     <TableCell>{(prescription && prescription.drugname) ? prescription.drugname : ""}</TableCell>
@@ -285,8 +292,9 @@ const Prescriptions = forwardRef((props, ref) => {
                             </Grid>
                         </Grid>
                     </LocalizationProvider>
-                </Box>
-            </DemoPaper>
+                    </CardContent>
+                </Card>
+            </Box>
         </>
     )
 });
