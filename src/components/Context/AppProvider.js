@@ -6,8 +6,9 @@ export default function AppProvider(props) {
     const [showLoader, setShowLoader] = useState(false);
     const [selectedVisitDeatils, setSelectedVisitDeatils] = useState([]);
     const [loggedInUserDetails, setLoggedInUserDetails] = useState({});
+    const [loggedInRolesTaks, setLoggedInRolesTaks] = useState({});
     const [isLogin, setIslogin] = useState(false);
-    const [leftMenuList, setLeftMenuList] = useState(LeftMenu);
+    const [leftMenuList, setLeftMenuList] = useState([]);
 
     return (
         <AppContext.Provider value={
@@ -23,6 +24,10 @@ export default function AppProvider(props) {
                 loggedInUserDetails:loggedInUserDetails,
                 setLoggedInUserDetails:(data) =>{
                     setLoggedInUserDetails(data);
+                },
+                loggedInRolesTaks:loggedInRolesTaks,
+                setLoggedInRolesTaks:(data) =>{
+                    setLoggedInRolesTaks(data);
                 },
                 isLogin:isLogin,
                 setIslogin:(flag)=>{

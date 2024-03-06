@@ -14,7 +14,7 @@ import Divider from '@mui/material/Divider';
 import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
 import Allergies from '../Allergies/Allergies';
 import { useReactToPrint } from 'react-to-print';
-import { ComponentToPrint } from '../../components/Print/ComponentToPrint';
+import { ComponentToPrint, FunctionalComponentToPrint } from '../../components/Print/ComponentToPrint';
 import PrintTableFomat from '../../common/Prints/PrintTableFomat';
 import PrintHeaders from '../../common/PrintHeaders'
 import PrintTextFormar from '../../common/Prints/PrintTextFormar';
@@ -27,42 +27,42 @@ export default function VisitActivity() {
     const prescriptionRef = useRef();
     const allergiesref = useRef();
 
-    const [enablePrint,setEnablePrint] = useState(false);
+    const [enablePrint, setEnablePrint] = useState(false);
     var notesAPIData = [];
     var diagnosissAPIData = [];
     useEffect(() => {
         callVisitAPis();
     }, []);
-    function callVisitAPis(){
+    function callVisitAPis() {
         getVitalsData();
         getNotes();
         getDig();
         getPresctiptions();
         getAllerigies();
     }
-    async function getAllerigies(){
+    async function getAllerigies() {
         var payLoad = {
             method: APIS.GET_ALLERIGIES_DATA.METHOD,
             url: APIS.GET_ALLERIGIES_DATA.URL,
-            paramas: [appContextValue.selectedVisitDeatils.visitid,0],
+            paramas: [appContextValue.selectedVisitDeatils.visitid, 0],
         }
         let result = await sendRequest(payLoad);
-        if (result && result.length!=0) {
+        if (result && result.length != 0) {
             allergiesref.current.setFormData1(result);
         }
     }
-    async function getVitalsData(){
+    async function getVitalsData() {
         var payLoad = {
             method: APIS.GET_VITALS_DATA.METHOD,
             url: APIS.GET_VITALS_DATA.URL,
-            paramas: [appContextValue.selectedVisitDeatils.visitid,0],
+            paramas: [appContextValue.selectedVisitDeatils.visitid, 0],
         }
         let result = await sendRequest(payLoad);
-        if (result && result.length!=0) {
+        if (result && result.length != 0) {
             vitalsRef.current.setFormData1(result[0]);
         }
     }
-    async function getNotes(){
+    async function getNotes() {
         var payLoad = {
             method: APIS.GET_NOTES.METHOD,
             url: APIS.GET_NOTES.URL,
@@ -74,7 +74,7 @@ export default function VisitActivity() {
             notesRef.current.setFormData1(result)
         }
     }
-    async function getDig(){
+    async function getDig() {
         var payLoad = {
             method: APIS.GET_DIAGNOSIS.METHOD,
             url: APIS.GET_DIAGNOSIS.URL,
@@ -86,18 +86,18 @@ export default function VisitActivity() {
             diagnosissRef.current.setFormData1(result);
         }
     }
-    async function getPresctiptions(){
+    async function getPresctiptions() {
         var payLoad = {
             method: APIS.GET_PRESCRIPTIONS.METHOD,
             url: APIS.GET_PRESCRIPTIONS.URL,
-            paramas: [appContextValue.selectedVisitDeatils.visitid,0],
+            paramas: [appContextValue.selectedVisitDeatils.visitid, 0],
         }
         let result = await sendRequest(payLoad);
         if (result) {
             prescriptionRef.current.setFormData1(result)
         }
     }
-    async function updateVisitStatus(status,label) {
+    async function updateVisitStatus(status, label) {
         var payLoad = {
             method: APIS.UPDATE_VISIT_STATUS.METHOD,
             url: APIS.UPDATE_VISIT_STATUS.URL,
@@ -105,45 +105,45 @@ export default function VisitActivity() {
         }
         let result = await sendRequest(payLoad);
         if (result) {
-            EMRAlert.alertifySuccess("Visit "+label+" succussfully");
-            let copyData = {...appContextValue.selectedVisitDeatils};
+            EMRAlert.alertifySuccess("Visit " + label + " succussfully");
+            let copyData = { ...appContextValue.selectedVisitDeatils };
             copyData.status = status;
             appContextValue.setSelectedVisitDeatils(copyData);
         } else {
             EMRAlert.alertifyError("Not created");
         }
     }
-    async function handlePrescriptionSubmit(event){
-        
+    async function handlePrescriptionSubmit(event) {
+
         const vitalData = vitalsRef.current.getFormData();
         const notesData = notesRef.current.getFormData();
-        if(notesAPIData && notesAPIData.notesid){
+        if (notesAPIData && notesAPIData.notesid) {
             notesData.notesid = notesAPIData.notesid;
         }
         const diagnosissData = diagnosissRef.current.getFormData();
-        if(diagnosissAPIData && diagnosissAPIData.diagnosisid){
+        if (diagnosissAPIData && diagnosissAPIData.diagnosisid) {
             diagnosissData.diagnosisid = diagnosissAPIData.diagnosisid;
         }
         const prescriptionData = prescriptionRef.current.getFormData();
         const allergiesrefData = allergiesref.current.getFormData();
         event.preventDefault();
         var sendingOnj = {
-            clientid:appContextValue.selectedVisitDeatils.clientid.seqid,
-            visitid:appContextValue.selectedVisitDeatils.visitid,
-            capturedby:1,
-            prescriptions:prescriptionData.prescriptionList,
-            vitalsDTO:vitalData,
-            notesDTO:notesData,
-            diagnosisDTO:diagnosissData,
-            allergies:allergiesrefData.allergiesList
+            clientid: appContextValue.selectedVisitDeatils.clientid.seqid,
+            visitid: appContextValue.selectedVisitDeatils.visitid,
+            capturedby: 1,
+            prescriptions: prescriptionData.prescriptionList,
+            vitalsDTO: vitalData,
+            notesDTO: notesData,
+            diagnosisDTO: diagnosissData,
+            allergies: allergiesrefData.allergiesList
         }
-    
+
 
         var payLoad = {
             method: APIS.SAVE_VISIT_DATA.METHOD,
             url: APIS.SAVE_VISIT_DATA.URL,
             paramas: [],
-            data:sendingOnj
+            data: sendingOnj
         }
         let result = await sendRequest(payLoad);
         if (result) {
@@ -155,16 +155,20 @@ export default function VisitActivity() {
     }
 
     const componentRef = useRef();
-   
+
     const handlePrint = useReactToPrint({
         content: () => componentRef.current,
         onAfterPrint: () => {
             setEnablePrint(false);
-          }
-      });
+        },
+        onBeforeGetContent:()=>{
+            debugger
+        }
+    });
     return (
         <Box sx={{ m: 1 }}>
-                <ClientBanner clientData={appContextValue.selectedVisitDeatils.clientid} visitData={appContextValue.selectedVisitDeatils} />
+            <ClientBanner clientData={appContextValue.selectedVisitDeatils.clientid} visitData={appContextValue.selectedVisitDeatils} />
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
                 {appContextValue && appContextValue.selectedVisitDeatils.status == 1 &&
                     <Box
                         mt={1}
@@ -172,7 +176,7 @@ export default function VisitActivity() {
                         justifyContent="flex-end"
                         alignItems="flex-end"
                     >
-                        <Button color="secondary" variant="outlined" onClick={() => updateVisitStatus(3,"Started")}>Start Visit</Button>
+                        <Button color="primary" variant="outlined" onClick={() => updateVisitStatus(3, "Started")}>Start Visit</Button>
                     </Box>
                 }
                 {appContextValue && appContextValue.selectedVisitDeatils.status == 3 &&
@@ -182,64 +186,59 @@ export default function VisitActivity() {
                         justifyContent="flex-end"
                         alignItems="flex-end"
                     >
-                        <Button color="secondary" variant="outlined" onClick={() => updateVisitStatus(4,"Closed")}>Close Visit</Button>
+                        <Button color="primary" variant="outlined" onClick={() => updateVisitStatus(4, "Closed")}>Close Visit</Button>
                     </Box>
                 }
-                <form onSubmit={handlePrescriptionSubmit}>
-<<<<<<< Updated upstream
-                    <Grid container spacing={1} xs={12}>
-                        <Grid item xs={4} spacing={4}>
-                            <Vitals ref={vitalsRef}/>
-                        </Grid>
-                        <Grid item xs={8}>
-                            <Allergies  ref={allergiesref}/> 
-                        </Grid>
-                    </Grid>
-                    <Grid container spacing={1} xs={12}>
-                        <Grid item xs={12} spacing={4}>
-                            <Prescriptions  ref={prescriptionRef}/>
-                        </Grid>
-                    </Grid>
-                    <Grid container spacing={1} xs={12}>
-                        <Grid item xs={6} spacing={4}>
-                            <Notes label={"Diagnosis"}  ref={diagnosissRef}/>
-                        </Grid>
-                        <Grid item xs={6} spacing={4}>
-                            <Notes label={"General Notes"} ref={notesRef}/>
-                        </Grid>
-                    </Grid>
-                   {appContextValue && appContextValue.selectedVisitDeatils && appContextValue.selectedVisitDeatils.status == 3 && <FormButtonComponent button1={"Save"} button2={"Clear"} />}
-=======
-                    <Vitals ref={vitalsRef}/>
-                    <Divider sx={{ color: "secondary.light", fontSize: 14 }} textAlign="left">General Notes</Divider>
-                    <Notes label={"General Notes"} ref={notesRef}/>
-                    <Divider sx={{ color: "secondary.light", fontSize: 14 }} textAlign="left">Diagnosis</Divider>
-                    <Notes label={"Diagnosis"}  ref={diagnosissRef}/>
-                    <Divider sx={{ color: "secondary.light", fontSize: 14 }} textAlign="left">Prescriptions</Divider>
-                    <Prescriptions  ref={prescriptionRef}/>
-                    <Divider sx={{ color: "secondary.light", fontSize: 14 }} textAlign="left">Allerigies</Divider>
-                    <Allergies  ref={allergiesref}/>
-                   
-                    {appContextValue && appContextValue.selectedVisitDeatils && appContextValue.selectedVisitDeatils.status == 3 && <FormButtonComponent button1={"Save"} button2={"Clear"} />}
->>>>>>> Stashed changes
-                </form>
-                {enablePrint && (
-                    <ComponentToPrint ref={componentRef} >
-                        <PrintTableFomat headers = {PrintHeaders.VITALS} data={[vitalsRef.current.getFormData()]} title="Vitals"/>
-                        <PrintTableFomat headers = {PrintHeaders.PRESCRIPTIONS} data={prescriptionRef.current.getFormData().prescriptionList} title="Medications"/>
-                        <PrintTableFomat headers = {PrintHeaders.ALLERIGIES} data={allergiesref.current.getFormData().allergiesList} title="Allerigies"/>
-                        <PrintTextFormar headers = {PrintHeaders.NOTES} data={notesRef.current.getFormData()}/>
-                        <PrintTextFormar headers = {PrintHeaders.Diagnosis} data={diagnosissRef.current.getFormData()}/>
-                    </ComponentToPrint>
-                )}
-                   
-                    <button onClick={()=>{
+                <Box
+                    mt={1}
+                    display="flex"
+                    justifyContent="flex-end"
+                    alignItems="flex-end"
+                >
+                    <Button color="primary" variant="outlined" onClick={() => {
                         setEnablePrint(true)
-                        setTimeout(function(){
+                        setTimeout(function () {
                             handlePrint();
-                        },100)
-                       
-                    }}>Print this out!</button>
+                        }, 100)
+
+                    }}>Print</Button>
+                </Box>
             </Box>
+            <form onSubmit={handlePrescriptionSubmit}>
+                <Grid container spacing={1} xs={12}>
+                    <Grid item xs={4} spacing={4}>
+                        <Vitals ref={vitalsRef} />
+                    </Grid>
+                    <Grid item xs={8}>
+                        <Allergies ref={allergiesref} />
+                    </Grid>
+                </Grid>
+                <Grid container spacing={1} xs={12}>
+                    <Grid item xs={12} spacing={4}>
+                        <Prescriptions ref={prescriptionRef} />
+                    </Grid>
+                </Grid>
+                <Grid container spacing={1} xs={12}>
+                    <Grid item xs={6} spacing={4}>
+                        <Notes label={"Diagnosis"} ref={diagnosissRef} />
+                    </Grid>
+                    <Grid item xs={6} spacing={4}>
+                        <Notes label={"General Notes"} ref={notesRef} />
+                    </Grid>
+                </Grid>
+                {appContextValue && appContextValue.selectedVisitDeatils && appContextValue.selectedVisitDeatils.status == 3 && <FormButtonComponent button1={"Save"} button2={"Clear"} />}
+            </form>
+            {enablePrint && (
+                <FunctionalComponentToPrint ref={componentRef} >
+                    <Box sx={{ width: '100%' }}>
+                        <PrintTableFomat headers={PrintHeaders.VITALS} data={[vitalsRef.current.getFormData()]} title="Vitals" />
+                        <PrintTableFomat headers={PrintHeaders.PRESCRIPTIONS} data={prescriptionRef.current.getFormData().prescriptionList} title="Medications" />
+                        <PrintTableFomat headers={PrintHeaders.ALLERIGIES} data={allergiesref.current.getFormData().allergiesList} title="Allerigies" />
+                        <PrintTextFormar headers={PrintHeaders.NOTES} data={notesRef.current.getFormData()} />
+                        <PrintTextFormar headers={PrintHeaders.Diagnosis} data={diagnosissRef.current.getFormData()} />
+                    </Box>
+                </FunctionalComponentToPrint>
+            )}
+        </Box>
     )
 }

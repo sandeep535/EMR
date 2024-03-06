@@ -17,6 +17,7 @@ import { sendRequest } from '../global/DataManager';
 import AppContext from '../../components/Context/AppContext';
 import { useSidebarContext } from "../global/sidebar/sidebarContext";
 import ErrorMessage from '../../components/ErrorMessage/Errormsg';
+import LeftMenu from '../../common/LeftMenu';
 
 function Copyright(props) {
   return (
@@ -36,39 +37,75 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function LoginPage(props) {
-    const appContextValue = useContext(AppContext);
-    const [showError, setShowError] = useState(false);
-    
+  const appContextValue = useContext(AppContext);
+  const [showError, setShowError] = useState(false);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    var obj ={
-        username: data.get('username'),
-        password: data.get('password'),
-      }
+    var obj = {
+      username: data.get('username'),
+      password: data.get('password'),
+    }
     callLogin(obj);
   };
-  async function callLogin(obj){
+  async function fetchRolesTransData(roleid) {
+    let roleidcopy = (roleid) ? roleid : '';
     var payLoad = {
-        method: APIS.LOGIN.METHOD,
-        url: APIS.LOGIN.URL,
-        paramas: [],
-        data:obj
+      method: APIS.GET_ROLES_TASKS_TRANS_ROLEID.METHOD,
+      url: APIS.GET_ROLES_TASKS_TRANS_ROLEID.URL,
+      paramas: [roleidcopy]
+    }
+    let result = await sendRequest(payLoad);
+    if (result && result.size != 0) {
+      appContextValue.setLoggedInRolesTaks(result);
+      debugger
+      var obj = {}
+      for(var i=0;i<result.length;i++){
+        obj[result[i].actioncode] = result[i].ispermission;
+      }
+     
+      setRolesTasksToLeftMenu(obj)
+      //appContextValue.setLeftMenuList(LeftMenu);
+    }
+  }
+  function setRolesTasksToLeftMenu(permissions){
+    console.log(LeftMenu);
+    let copyLeftMenu = [...LeftMenu];
+    for(var i=0;i<copyLeftMenu.length;i++){
+      var submentList = [];
+      for(var j=0;j<copyLeftMenu[i].subMenu.length;j++){
+        if(copyLeftMenu[i].subMenu[j].hasOwnProperty("screencode") && permissions[copyLeftMenu[i].subMenu[j].screencode] == 1){
+          submentList.push(copyLeftMenu[i].subMenu[j]);
+        }
+      }
+      copyLeftMenu[i].subMenu = submentList;
+    }
+    appContextValue.setLeftMenuList(copyLeftMenu);
+
+  }
+  async function callLogin(obj) {
+    var payLoad = {
+      method: APIS.LOGIN.METHOD,
+      url: APIS.LOGIN.URL,
+      paramas: [],
+      data: obj
     }
     let result = await sendRequest(payLoad);
     debugger
-    if (result && result.result != "false" ) {
+    if (result && result.token != "false") {
       //  props.onSusccuss(true);
-        setShowError(false);
-        appContextValue.setIslogin(true);
-        sessionStorage.setItem("token",result.token);
-        appContextValue.setLoggedInUserDetails(result);
-        console.log(result)
+      setShowError(false);
+      appContextValue.setIslogin(true);
+      sessionStorage.setItem("token", result.token);
+      appContextValue.setLoggedInUserDetails(result);
+      fetchRolesTransData(result.role.id);
+      console.log(result)
     }
-    else{
+    else {
       setShowError(true);
     }
-}
+  }
 
   return (
     <ThemeProvider theme={defaultTheme}>
@@ -129,7 +166,7 @@ export default function LoginPage(props) {
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
               />
-              { showError ? <ErrorMessage type="error" message="Invalid User Name and Password !"></ErrorMessage> : null }
+              {showError ? <ErrorMessage type="error" message="Invalid User Name and Password !"></ErrorMessage> : null}
               <Button
                 type="submit"
                 fullWidth

@@ -1,4 +1,4 @@
-import React, { useState, useContext,forwardRef,useImperativeHandle } from 'react';
+import React, { useState, useContext, forwardRef, useImperativeHandle } from 'react';
 import TextField from '@mui/material/TextField';
 import { Box } from '@mui/material'
 import Grid from '@mui/material/Grid';
@@ -22,7 +22,7 @@ const Vitals = forwardRef((props, ref) => {
     const [vitalid, setVitalId] = useState("");
 
     const appContextValue = useContext(AppContext);
-    
+
     useImperativeHandle(
         ref,
         () => {
@@ -58,15 +58,16 @@ const Vitals = forwardRef((props, ref) => {
 
     return (
         <>
-           {/* <Divider sx={{ color: "secondary.light", fontSize: 14 }} textAlign="left">Vitals Sign</Divider>
+            {/* <Divider sx={{ color: "secondary.light", fontSize: 14 }} textAlign="left">Vitals Sign</Divider>
             <DemoPaper square={false}>
                 <form >*/}
-                    <Box display="grid" gap="10px">
-                    <Card variant="outlined">
-                        <CardContent>
-                            <Typography sx={{ fontSize: 16 }}  className='card-header' >
-                                Vitals
-                            </Typography>
+            <Box display="grid" gap="10px">
+                <Card variant="outlined">
+                    <CardContent>
+                        <Typography sx={{ fontSize: 16 }} className='card-header' >
+                            Vitals
+                        </Typography>
+                        <Box sx={{ m: 1 }}>
                             <Grid container spacing={1}>
                                 <Grid item xs={6} spacing={4}>
                                     <TextField
@@ -169,13 +170,14 @@ const Vitals = forwardRef((props, ref) => {
                                         onChange={e => setTemperature(e.target.value)}
                                         value={temperature}
                                     />
-                                    </Grid>
                                 </Grid>
-                            </CardContent>
-                        </Card>
-                    </Box>
-                    {/* <FormButtonComponent button1={"Save"} button2={"Clear"} /> */}
-                {/* </form>
+                            </Grid>
+                        </Box>
+                    </CardContent>
+                </Card>
+            </Box>
+            {/* <FormButtonComponent button1={"Save"} button2={"Clear"} /> */}
+            {/* </form>
             </DemoPaper >*/}
         </>
     )

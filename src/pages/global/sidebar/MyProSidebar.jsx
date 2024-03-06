@@ -199,7 +199,7 @@ const MyProSidebar = () => {
               aria-labelledby="nested-list-subheader"
             >
               {appContextValue && appContextValue.leftMenuList && appContextValue.leftMenuList.map((menu, index) => {
-                if (menu.hasOwnProperty("isPatientSpecific") == false) {
+                if (menu.hasOwnProperty("isPatientSpecific") == false && menu.subMenu.length!=0) {
                   return (
                     <>
                       <ListItemButton onClick={() => handleClick(menu,"",index)}>
@@ -226,7 +226,7 @@ const MyProSidebar = () => {
                     </>
                   )
                 }
-                if (menu.hasOwnProperty("isPatientSpecific") == true && menu.isPatientSpecific == true) {
+                if (menu.hasOwnProperty("isPatientSpecific") == true && menu.isPatientSpecific == true && menu.subMenu.length!=0) {
                   return (
                     <>
                       <ListItemButton onClick={() => handleClick(menu,"",index)}>

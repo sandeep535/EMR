@@ -25,13 +25,11 @@ import dayjs, { Dayjs } from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import Moment from 'react-moment';
 import moment from 'moment';
+import CardComponent from '../../components/Common/CardComponent';
+
 
 const visitServiceTableHeaders = [{
-  name: 'Service Type',
-  width: '15%'
-}, {
   name: 'Service Name',
   width: '25%'
 }, {
@@ -71,10 +69,18 @@ export default function VisitCreation() {
   const [token, setToken] = React.useState();
 
   const [selectedClientData, setSelectedClientData] = React.useState([]);
+
+  const [visitdiscount, setVisitdiscount] = React.useState(0);
+  const [totalAmount, setTotalAmount] = React.useState();
+  const [visittotalamount, setVisittotalamount] = React.useState();
   const registrationInformationRef = useRef();
   useEffect(() => {
     getLookUpDetails();
   }, []);
+
+  useEffect(() => {
+    updateTotalAmount();
+  }, [visitServiceList]);
 
   async function getDataBasedOnMobileNumber(mobileNumber) {
     var payLoad = {
@@ -138,12 +144,13 @@ export default function VisitCreation() {
       serviceid: newService,
       serviceprice: newService.price,
       servicediscount: 0,
-      quantity: 0,
-      servicetotalamount: 0
+      quantity: 1,
+      servicetotalamount: newService.price * 1
     }
     let copyList = [...visitServiceList];
     copyList.push(obj);
     setVisitServiceList(copyList);
+
   }
 
   function setChangesToVisistServicelist(data, index, key) {
@@ -152,6 +159,22 @@ export default function VisitCreation() {
     let totalAmount = calParticularServiceTotalAmount(copyVisitServiceData[index]);
     copyVisitServiceData[index]['servicetotalamount'] = totalAmount;
     setVisitServiceList(copyVisitServiceData);
+    updateTotalAmount();
+  }
+  function updateTotalAmount() {
+    let copyVisitServiceData = [...visitServiceList];
+    let totalAmount = 0;
+    copyVisitServiceData.forEach(item => {
+      totalAmount = totalAmount + calParticularServiceTotalAmount(item);
+    });
+    let afterDiscount = totalAmount - visitdiscount;
+    setVisittotalamount(afterDiscount);
+    setTotalAmount(totalAmount);
+  }
+
+  function setTotalAmountAfterDiscountFun(discountAmount) {
+    var aftertotalAmount = totalAmount - discountAmount;
+    setVisittotalamount(aftertotalAmount);
   }
 
   function calParticularServiceTotalAmount(data) {
@@ -159,6 +182,7 @@ export default function VisitCreation() {
     let totalAmountAfterDiscount = totalAmount - data.servicediscount;
     return totalAmountAfterDiscount;
   }
+
   function populateClientDatatoForm(clientData) {
     registrationInformationRef.current.setFormData1(clientData);
     setSelectedClientData(clientData);
@@ -177,8 +201,8 @@ export default function VisitCreation() {
       doctor: doctor,
       visittype: visitType,
       specilaity: specility,
-      visitdiscount: 0,
-      visittotalamount: 0,
+      visitdiscount: visitdiscount,
+      visittotalamount: visittotalamount,
       reason: visitreason,
       status: 1,
       clientid: clientDeatils,
@@ -201,7 +225,6 @@ export default function VisitCreation() {
   };
   return (
     <Box m="10px">
-
       <Box m="10px">
         <Grid xs={6} container>
           <Autocomplete
@@ -230,15 +253,14 @@ export default function VisitCreation() {
       </Box>
       <form onSubmit={handleSubmit}>
         <Box display="grid" gap="10px">
-          <Divider sx={{ color: "secondary.light", fontSize: 14 }} textAlign="left">Client Details</Divider>
-          <DemoPaper square={false}>
+          <CardComponent title="Client Details">
             <RegistrationInformation data={selectedClientData} ref={registrationInformationRef} />
-          </DemoPaper>
+          </CardComponent>
         </Box>
-        <Divider sx={{ color: "secondary.light", paddingTop: 1, fontSize: 14 }} textAlign="left">Visit Details</Divider>
+        {/* <Divider sx={{ color: "secondary.light", paddingTop: 1, fontSize: 14 }} textAlign="left">Visit Details</Divider> */}
+        <CardComponent title="Visit Details">
+          <Box display="grid" gap="10px" style={{ marginTop: '10px' }}>
 
-        <Box display="grid" gap="10px" style={{ marginTop: '10px' }}>
-          <DemoPaper square={false}>
             <Grid xs={12} container spacing={1}>
               <Grid item xs={3} spacing={2}>
                 <FormControl variant="outlined" fullWidth>
@@ -394,7 +416,6 @@ export default function VisitCreation() {
                   <TableBody>
                     {visitServiceList && visitServiceList.map((service, index) => (
                       <TableRow key={service.serviceid.service}>
-                        <TableCell>{(service && service.serviceid) ? service.serviceid.serviceType : ""}</TableCell>
                         <TableCell>{(service && service.serviceid) ? service.serviceid.servicename : ""}</TableCell>
                         <TableCell>
                           <TextField
@@ -442,16 +463,47 @@ export default function VisitCreation() {
                       </TableRow>
                     ))}
                     <TableRow key={"12111"}>
-                      <TableCell>{
-                      }</TableCell>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
+                      <TableCell>Total Amount</TableCell>
+                      <TableCell>{totalAmount}</TableCell>
+                    </TableRow>
+                    <TableRow key={"323"}>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
+                      <TableCell>Discount Amount</TableCell>
+                      <TableCell><TextField
+                        fullWidth
+                        variant="outlined"
+                        className='input_background'
+                        type="text"
+                        label={"Discount"}
+                        onChange={(e) => {
+                          setVisitdiscount(e.target.value);
+                          setTotalAmountAfterDiscountFun(e.target.value)
+                        }}
+                        value={visitdiscount}
+                        size="small"
+                      /></TableCell>
+                    </TableRow>
+                    <TableRow key={"123545111"}>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
+                      <TableCell></TableCell>
+                      <TableCell>Total Amount</TableCell>
+                      <TableCell>{visittotalamount}</TableCell>
                     </TableRow>
                   </TableBody>
 
                 </Table>
               </TableContainer>
             </Grid>
-          </DemoPaper>
-        </Box>
+
+          </Box>
+        </CardComponent>
+
         <FormButtonComponent button1={"Save"} button2={"Clear"} />
       </form>
     </Box>

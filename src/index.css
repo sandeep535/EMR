@@ -72,3 +72,11 @@ body,
 .MuiCardContent-root{
   padding: 0 !important;
 }
+.visit-cards-div{
+  height: 585px;
+  overflow-y: scroll;
+}
+.relativeCSS{
+  margin: 5px;
+  width: '100%';
+}

@@ -124,6 +124,24 @@ const APIS={
         METHOD:"GET",
         ACTION:""
     },
+    GET_ROLES_TASKS:{
+        URL:"common/getRolesAndTasksMasterData/{0}",
+        METHOD:"GET",
+        ACTION:""
+    },
+    GET_ROLES_TASKS_TRANS_ROLEID:{
+        URL:"common/getRolesAndTasksTrans/{0}",
+        METHOD:"GET",
+        ACTION:""
+    },
+    SAVE_ROLES_TASKS:{
+        URL:"common/saveRolesTasks",
+        METHOD:"POST",
+        ACTION:""
+    },
+
+    
+    
 
     
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext,useRef } from 'react';
 import { Box } from '@mui/material'
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
@@ -37,22 +37,24 @@ export default function VisitDasboard() {
     const [toDate, setTodate] = useState(dayjs(moment(new Date()).format("YYYY-MM-DD")));
     const [visitList, setVisitList] = useState([]);
     const appContextValue = useContext(AppContext);
+    const listInnerRef = useRef();
+    const [count,setCount] = useState(0);
 
     const navigate = useNavigate();
     useEffect(() => {
         getVisitDetails();
-    }, [toDate,fromDate]);
-
+    }, [toDate, fromDate]);
+    useEffect(() => {
+        getVisitDetails();
+    },[count])
+  
     async function getVisitDetails() {
-
         let localfromDate = fromDate ? new Date(fromDate).setHours(0, 0, 0) : new Date().setHours(0, 0, 0);
         let localtoDate = toDate ? new Date(toDate).setHours(23, 59, 59) : new Date().setHours(23, 59, 59);
-        console.log(new Date(fromDate));
-        console.log(new Date(toDate));
         var payLoad = {
             method: APIS.GET_VISITS.METHOD,
             url: APIS.GET_VISITS.URL,
-            paramas: [new Date(localfromDate), new Date(localtoDate), 1, 20]
+            paramas: [new Date(localfromDate), new Date(localtoDate), count, 25]
         }
         let result = await sendRequest(payLoad);
         if (result && result.size != 0) {
@@ -65,8 +67,8 @@ export default function VisitDasboard() {
     function gotoActivitiesPage(visit) {
         appContextValue.setSelectedVisitDeatils(visit);
         var copyData = [...appContextValue.leftMenuList];
-        copyData.map(item=>{
-            if(item.hasOwnProperty("isPatientSpecific")){
+        copyData.map(item => {
+            if (item.hasOwnProperty("isPatientSpecific")) {
                 item.isPatientSpecific = true;
             }
         });
@@ -89,7 +91,7 @@ export default function VisitDasboard() {
                                     fullWidth
                                 />
                             </Grid>
-                            <Grid item xs={2} spacing={1} sx={{ml:1}}>
+                            <Grid item xs={2} spacing={1} sx={{ ml: 1 }}>
                                 <DatePicker
                                     label="To Date"
                                     value={toDate}
@@ -105,14 +107,13 @@ export default function VisitDasboard() {
                     </DemoContainer>
                 </LocalizationProvider>
             </Box>
-            <Box sx={{ flexGrow: 1, m: 1 }}>
-                <Grid container spacing={1}>
+            <Box sx={{ m: 1 }} className='visit-cards-div' ref={listInnerRef}>
+                <Grid container spacing={1}  >
                     {visitList && visitList.map(visit => {
                         return (
-                            <Grid item xs={3}>
+                            <Grid item xs={3} >
                                 <Card sx={styles[borderColor[visit.status]]}>
-                                    <CardContent>
-
+                                    <CardContent sx={{ m: 1 }}>
                                         <Box sx={styles.wrapper}>
                                             <Typography sx={{ fontSize: 14, fontWeight: 900 }} color="text.secondary" gutterBottom>
                                                 {visit.clientid.firstname}
@@ -131,21 +132,20 @@ export default function VisitDasboard() {
                                                 {visitStatus[visit.status]}
                                             </Typography>
                                             <Typography sx={{ fontSize: 14, fontWeight: 900 }} color="text.secondary" gutterBottom>
-                                                {visit.doctor.firstname + "" +visit.doctor.lastname}
+                                                {visit.doctor.firstname + " " + visit.doctor.lastname}
                                             </Typography>
                                         </Box>
                                         <Button size="small" variant="outlined" onClick={() => { gotoActivitiesPage(visit) }}>Go to visit</Button>
 
                                     </CardContent>
-                                    {/* <CardActions>
-                                       
-                                    </CardActions> */}
+
                                 </Card>
                             </Grid>
                         )
                     })}
 
                 </Grid>
+
             </Box>
         </>
     )

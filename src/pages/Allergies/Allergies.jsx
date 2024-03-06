@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle,useContext } from 'react';
+import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle, useContext } from 'react';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -97,8 +97,8 @@ const Allergies = forwardRef((props, ref) => {
             status: status,
             indications: indications,
             severity: severity,
-            visitid:appContextValue.selectedVisitDeatils.visitid,
-            clientid:appContextValue.selectedVisitDeatils.clientid.seqid,
+            visitid: appContextValue.selectedVisitDeatils.visitid,
+            clientid: appContextValue.selectedVisitDeatils.clientid.seqid,
         }
         var copyObj = [...allergiesList];
         copyObj.push(obj);
@@ -126,122 +126,124 @@ const Allergies = forwardRef((props, ref) => {
     }
     return (
         <>
-                <form onSubmit={handleSubmit}>
-                    <Box display="grid" gap="10px">
+            <form onSubmit={handleSubmit}>
+                <Box display="grid" gap="10px">
                     <Card variant="outlined">
                         <CardContent>
-                            <Typography sx={{ fontSize: 16 }}  className='card-header' >
+                            <Typography sx={{ fontSize: 16 }} className='card-header' >
                                 Allergies
                             </Typography>
-                        <Grid container spacing={1}>
-                            <Grid item xs={3} spacing={1}>
-                                <TextField
-                                    fullWidth
-                                    type="text"
-                                    size="small"
-                                    variant="outlined"
-                                    required
-                                    label={Translations.ALLERGY.ALLERGYNAME}
-                                    name="allergy"
-                                    onChange={e => setAllergy(e.target.value)}
-                                    value={allergy}
-                                />
-                            </Grid>
-                            <Grid item xs={2} >
-                                <FormControl variant="outlined" size="small" fullWidth>
-                                    <InputLabel
-                                        style={{ disableAnimation: false }}
-                                        disableAnimation={false}
-                                        htmlFor="severity"
-                                        size="small"
+                            <Box sx={{ m: 1 }}>
+                                <Grid container spacing={1}>
+                                    <Grid item xs={3} spacing={1}>
+                                        <TextField
+                                            fullWidth
+                                            type="text"
+                                            size="small"
+                                            variant="outlined"
+                                            required
+                                            label={Translations.ALLERGY.ALLERGYNAME}
+                                            name="allergy"
+                                            onChange={e => setAllergy(e.target.value)}
+                                            value={allergy}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={2} >
+                                        <FormControl variant="outlined" size="small" fullWidth>
+                                            <InputLabel
+                                                style={{ disableAnimation: false }}
+                                                disableAnimation={false}
+                                                htmlFor="severity"
+                                                size="small"
 
-                                    >
-                                        {Translations.ALLERGY.SERVERITY}
-                                    </InputLabel>
-                                    <Select
-                                        label={Translations.ALLERGY.SERVERITY}
-                                        name="severity"
-                                        size="small"
-                                        renderValue={(o) => o.lookupvalue}
-                                        onChange={e => setSeverity(e.target.value)}
-                                        value={severity}
-                                    >
-                                        {severityList.map((severity) => (
-                                            <MenuItem key={severity.lookupid} value={severity}>
-                                                {severity.lookupvalue}
-                                            </MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
+                                            >
+                                                {Translations.ALLERGY.SERVERITY}
+                                            </InputLabel>
+                                            <Select
+                                                label={Translations.ALLERGY.SERVERITY}
+                                                name="severity"
+                                                size="small"
+                                                renderValue={(o) => o.lookupvalue}
+                                                onChange={e => setSeverity(e.target.value)}
+                                                value={severity}
+                                            >
+                                                {severityList.map((severity) => (
+                                                    <MenuItem key={severity.lookupid} value={severity}>
+                                                        {severity.lookupvalue}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
 
-                            </Grid>
-                            <Grid item xs={3} spacing={1}>
-                                <TextField
-                                    fullWidth
-                                    type="text"
-                                    size="small"
-                                    variant="outlined"
-                                    required
-                                    label={Translations.ALLERGY.INDICATIONS}
-                                    name="indications"
-                                    onChange={e => setIndications(e.target.value)}
-                                    value={indications}
-                                    multiline
-                                    rows={3}
-                                />
-                            </Grid>
-                            <Grid item xs={2} spacing={1}>
-                                <FormControl>
-                                    <FormLabel id="demo-row-radio-buttons-group-label">{Translations.ALLERGY.STATUS}</FormLabel>
-                                    <RadioGroup
-                                        row
-                                        aria-labelledby="demo-row-radio-buttons-group-label"
-                                        name="row-radio-buttons-group"
-                                    >
-                                        <FormControlLabel value="1" control={<Radio onChange={handleChange} />} label="Active" />
-                                        <FormControlLabel value="2" control={<Radio onChange={handleChange} />} label="Inactive" />
-                                    </RadioGroup>
-                                </FormControl>
-                            </Grid>
-                            <Grid item xs={2} spacing={1} >
-                                <Button variant="contained" onClick={() => {
-                                    addAllergiestoGrid();
-                                }}>Add</Button>
-                            </Grid>
-                        </Grid>
-                        <Grid xs={12} container spacing={1}>
-                            <TableContainer component={Paper} >
-                                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                                    <TableHead>
-                                        <TableRow>
-                                            {(allergiesColumns.map(header => {
-                                                return (
-                                                    <TableCell width={header.width}>{header.name}</TableCell>
-                                                )
-                                            }))}
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody className='grid-height'>
-                                        {allergiesList && allergiesList.map((callergy, index) => (
-                                            <TableRow key={callergy.id}>
-                                                <TableCell>{(callergy && callergy.allergy) ? callergy.allergy : ""}</TableCell>
-                                                <TableCell>{(callergy && callergy.severity) ? callergy.severity.lookupvalue : ""}</TableCell>
-                                                <TableCell>{(callergy && callergy.status == 1) ? "Active"  : "In-Active"}</TableCell>
-                                                <TableCell>{(callergy && callergy.indications) ? callergy.indications : ""}</TableCell>
-                                                <TableCell><ClearIcon styles={{ cursor: 'pointer' }} onClick={() => {
-                                                    //removePrescriptionFromList(index);
-                                                }} /></TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </Grid>
+                                    </Grid>
+                                    <Grid item xs={3} spacing={1}>
+                                        <TextField
+                                            fullWidth
+                                            type="text"
+                                            size="small"
+                                            variant="outlined"
+                                            required
+                                            label={Translations.ALLERGY.INDICATIONS}
+                                            name="indications"
+                                            onChange={e => setIndications(e.target.value)}
+                                            value={indications}
+                                            multiline
+                                            rows={3}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={2} spacing={1}>
+                                        <FormControl>
+                                            <FormLabel id="demo-row-radio-buttons-group-label">{Translations.ALLERGY.STATUS}</FormLabel>
+                                            <RadioGroup
+                                                row
+                                                aria-labelledby="demo-row-radio-buttons-group-label"
+                                                name="row-radio-buttons-group"
+                                            >
+                                                <FormControlLabel value="1" control={<Radio onChange={handleChange} />} label="Active" />
+                                                <FormControlLabel value="2" control={<Radio onChange={handleChange} />} label="Inactive" />
+                                            </RadioGroup>
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid item xs={2} spacing={1} >
+                                        <Button variant="contained" onClick={() => {
+                                            addAllergiestoGrid();
+                                        }}>Add</Button>
+                                    </Grid>
+                                </Grid>
+                                <Grid xs={12} container spacing={1}>
+                                    <TableContainer component={Paper} >
+                                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                                            <TableHead>
+                                                <TableRow>
+                                                    {(allergiesColumns.map(header => {
+                                                        return (
+                                                            <TableCell width={header.width}>{header.name}</TableCell>
+                                                        )
+                                                    }))}
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody className='grid-height'>
+                                                {allergiesList && allergiesList.map((callergy, index) => (
+                                                    <TableRow key={callergy.id} >
+                                                        <TableCell>{(callergy && callergy.allergy) ? callergy.allergy : ""}</TableCell>
+                                                        <TableCell>{(callergy && callergy.severity) ? callergy.severity.lookupvalue : ""}</TableCell>
+                                                        <TableCell>{(callergy && callergy.status == 1) ? "Active" : "In-Active"}</TableCell>
+                                                        <TableCell>{(callergy && callergy.indications) ? callergy.indications : ""}</TableCell>
+                                                        <TableCell><ClearIcon fontSize='10' styles={{ cursor: 'pointer' }} onClick={() => {
+                                                            //removePrescriptionFromList(index);
+                                                        }} /></TableCell>
+                                                    </TableRow>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                </Grid>
+                            </Box>
                         </CardContent>
                     </Card>
-                    </Box>
+                </Box>
 
-                </form>
+            </form>
         </>
     )
 });

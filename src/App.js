@@ -15,6 +15,7 @@ import EmployeeMaster from "./pages/EmpployeMaster/EmployeeMatser";
 import ServiceMaster from "./pages/ServiceMaster/ServiceMaster";
 import VitalsList from "./pages/Vitals/VitalsList";
 import PrescriptionsList from "./pages/Prescriptions/PrescriptionsList";
+import RoleAndTasks from "./pages/RoleAndTaks/RoleAndTasks";
 
 const App = () => {
   const [theme, colorMode] = useMode();
@@ -37,6 +38,7 @@ const App = () => {
                   <Route path='/serviceMaster' element={<ServiceMaster />} />
                   <Route path='/vitalsList' element={<VitalsList />} />
                   <Route path='/prescriptionsList' element={<PrescriptionsList />} />
+                  <Route path='/rolesAnsTasks' element={<RoleAndTasks />} />
                 </Routes>
               </main>
             </div>

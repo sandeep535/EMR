@@ -10,6 +10,7 @@
         icon:"HomeOutlinedIcon",
         isOpen:false,
         isRefreshMenu:true,
+        screencode:'VISIT_DAHSBOARD_SCREEN_VIEW'
     }]
 },{
     title:"Clinical Data",
@@ -25,12 +26,14 @@
         isPatientSpecific :false,
         isOpen:false,
         isRefreshMenu:false,
+        screencode:'VITALS_SCREEN_VIEW'
     },{
         title:"Prescriptions",
         to:"/prescriptionsList",
         icon:"HomeOutlinedIcon",
         isPatientSpecific :false,
         isRefreshMenu:false,
+        screencode:'PRESCRIPTIONS_SCREEN_VIEW'
     }]
 },
 {
@@ -45,12 +48,14 @@
         icon:"PersonOutlinedIcon",
         isOpen:false,
         isRefreshMenu:true,
+        screencode:'REGISTRATION_SCREEN_VIEW'
     },{
         title:"Visit Creation",
         to:"/visit-creation",
         icon:"HomeOutlinedIcon",
         isOpen:false,
         isRefreshMenu:true,
+        screencode:'VISIT_CREATION_SCREEN_VIEW'
     }]
 },{
     title:"Masters",
@@ -64,12 +69,21 @@
         icon:"HomeOutlinedIcon",
         isOpen:false,
         isRefreshMenu:true,
+        screencode:'EMPLOYE_MASTER_SCREEN_VIEW'
     },{
         title:"Service Master",
         to:"/serviceMaster",
         icon:"HomeOutlinedIcon",
         isOpen:false,
         isRefreshMenu:true,
+        screencode:'SERVICE_MASTER_SCREEN_VIEW'
+    },{
+        title:"Roles",
+        to:"/rolesAnsTasks",
+        icon:"HomeOutlinedIcon",
+        isOpen:false,
+        isRefreshMenu:true,
+        screencode:'ROLES_MASTER_SCREEN_VIEW'
     },]
 }];
 export default LeftMenu

@@ -29,32 +29,34 @@ const Notes = forwardRef((props, ref) => {
 
   return (
     <>
-     <Box display="grid" gap="10px">
+      <Box display="grid" gap="10px">
         <Card variant="outlined">
-            <CardContent>
-                <Typography sx={{ fontSize: 16 }}  className='card-header'>
-                {props.label}
-                </Typography>
-                <Grid container spacing={1}>
-                    <Grid item xs={12} >
-                    <TextField
-                      fullWidth
-                      type="text"
-                      size="small"
-                      variant="outlined"
-                      required
-                      multiline
-                      rows={3}
-                      label={props.label}
-                      name={props.label}
-                      onChange={e => setDescription(e.target.value)}
-                      value={description}
-                    />
-                  </Grid>
+          <CardContent>
+            <Typography sx={{ fontSize: 16 }} className='card-header'>
+              {props.label}
+            </Typography>
+            <Box sx={{ m: 1 }}>
+              <Grid container spacing={1}>
+                <Grid item xs={12} >
+                  <TextField
+                    fullWidth
+                    type="text"
+                    size="small"
+                    variant="outlined"
+                    required
+                    multiline
+                    rows={3}
+                    label={props.label}
+                    name={props.label}
+                    onChange={e => setDescription(e.target.value)}
+                    value={description}
+                  />
                 </Grid>
-              </CardContent>
-            </Card>
-        </Box>
+              </Grid>
+            </Box>
+          </CardContent>
+        </Card>
+      </Box>
     </>
   )
 });
