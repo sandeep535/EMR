@@ -24,7 +24,7 @@ function Copyright(props) {
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Easy EMR
+        Simple EMR
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -49,6 +49,9 @@ export default function LoginPage(props) {
     }
     callLogin(obj);
   };
+  // useEffect(() => {
+  //   console.log()
+  // }, [count])
   async function fetchRolesTransData(roleid) {
     let roleidcopy = (roleid) ? roleid : '';
     var payLoad = {
@@ -139,7 +142,7 @@ export default function LoginPage(props) {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              Sign in
+              User Log In
             </Typography>
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
               <TextField
@@ -162,10 +165,10 @@ export default function LoginPage(props) {
                 id="password"
                 autoComplete="current-password"
               />
-              <FormControlLabel
+              {/*<FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="Remember me"
-              />
+          />*/}
               {showError ? <ErrorMessage type="error" message="Invalid User Name and Password !"></ErrorMessage> : null}
               <Button
                 type="submit"
@@ -176,7 +179,7 @@ export default function LoginPage(props) {
                 Sign In
               </Button>
               <Grid container>
-                <Grid item xs>
+                {/* <Grid item xs>
                   <Link href="#" variant="body2">
                     Forgot password?
                   </Link>

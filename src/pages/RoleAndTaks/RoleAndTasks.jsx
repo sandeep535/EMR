@@ -13,6 +13,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import FormControl from '@mui/material/FormControl';
 import Translations from '../../resources/translations';
 import TextField from '@mui/material/TextField';
+import Radio from '@mui/material/Radio';
 
 export default function RoleAndTasks(props) {
     const [rolesState, setRolesState] = useState([]);
@@ -110,7 +111,8 @@ export default function RoleAndTasks(props) {
                         taskid: stateCopyData[i].subScreens[j].taskid,
                         roleid: role.id,
                         ispermission: stateCopyData[i].subScreens[j].ispermission,
-                        status: stateCopyData[i].subScreens[j].status
+                        status: stateCopyData[i].subScreens[j].status,
+                        defaultoptionvalue: stateCopyData[i].subScreens[j].defaultoptionvalue
                     }
                     resultData.push(obj);
                 }
@@ -131,6 +133,23 @@ export default function RoleAndTasks(props) {
         }
         debugger
     }
+    const [selectedValue, setSelectedValue] = React.useState('a');
+
+    const handleDefaluoptionChange = (mainindex,subindex) => {
+         var rolesStateCopy = [...rolesState];
+        rolesStateCopy.forEach(mainScreen => {
+            mainScreen.subScreens.forEach(subScreen =>{
+                subScreen.defaultoptionvalue = false;
+            })
+        });
+        rolesStateCopy[mainindex].subScreens[subindex].defaultoptionvalue = true;
+        // rolesStateCopy.ispermission = newValue;
+        // rolesStateCopy[index].subScreens.forEach(subScreen => {
+        //     subScreen.ispermission = newValue;
+        // });
+        setRolesState(rolesStateCopy);
+        //setSelectedValue(event.target.value);
+    };
 
     useEffect(() => {
         getRoleMasterData();
@@ -181,16 +200,32 @@ export default function RoleAndTasks(props) {
                                 {role && role.subScreens.map((subrole, subindex) => {
                                     return (
                                         <>
-                                            <FormControlLabel
-                                                label={subrole.actionname}
-                                                control={
-                                                    <Checkbox
-                                                        checked={subrole.ispermission}
-                                                        onChange={(event, newValue) => {
-                                                            handleChildpermissions(subrole, subindex, newValue, role, index);
-                                                        }} />
+                                            <Box sx ={{display:'flex',flexDirection:'row'}}>
+                                                <FormControlLabel
+                                                    label={subrole.actionname}
+                                                    control={
+                                                        <Checkbox
+                                                            checked={subrole.ispermission}
+                                                            onChange={(event, newValue) => {
+                                                                handleChildpermissions(subrole, subindex, newValue, role, index);
+                                                            }} />
+                                                    }
+                                                />
+                                                {subrole.defultoption &&
+                                                <Box sx ={{display:'flex',ml:30}}>
+                                                    <Radio
+                                                        checked={subrole.defaultoptionvalue == true}
+                                                        onChange={()=>{
+                                                            handleDefaluoptionChange(index,subindex);
+                                                        }}
+                                                        value={subrole.defaultoptionvalue}
+                                                        name="radio-buttons"
+                                                        inputProps={{ 'aria-label': 'A' }}
+                                                    />
+                                                    </Box>
                                                 }
-                                            />
+                                            </Box>
+
                                         </>
                                     )
                                 })}

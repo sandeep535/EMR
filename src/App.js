@@ -1,3 +1,4 @@
+import React, { useEffect, useState, useContext } from 'react';
 import { ColorModeContext, useMode } from "./theme";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { Routes, Route } from "react-router-dom";
@@ -16,33 +17,21 @@ import ServiceMaster from "./pages/ServiceMaster/ServiceMaster";
 import VitalsList from "./pages/Vitals/VitalsList";
 import PrescriptionsList from "./pages/Prescriptions/PrescriptionsList";
 import RoleAndTasks from "./pages/RoleAndTaks/RoleAndTasks";
+import LoginPage from "./pages/Login/LoginPage";
+import AppContext from './components/Context/AppContext';
+import MainScreen from './MainScreen';
+
 
 const App = () => {
   const [theme, colorMode] = useMode();
+ 
   return (
     <AppProvider>
       <ColorModeContext.Provider value={colorMode}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Loader />
-          <MyProSidebarProvider>
-            <div style={{ height: "100%", width: "100%" }}>
-              <main>
-                <Topbar />
-                <Routes>
-                  <Route path='/vist-dashboard' element={<VisitDasboard />} />
-                  <Route path="/registration" element={<Registration />} />
-                  <Route path='/visit-creation' element={<VisitCreation />} />
-                  <Route path='/vist-activity' element={<VisitActivity />} />
-                  <Route path='/employeeMaster' element={<EmployeeMaster />} />
-                  <Route path='/serviceMaster' element={<ServiceMaster />} />
-                  <Route path='/vitalsList' element={<VitalsList />} />
-                  <Route path='/prescriptionsList' element={<PrescriptionsList />} />
-                  <Route path='/rolesAnsTasks' element={<RoleAndTasks />} />
-                </Routes>
-              </main>
-            </div>
-          </MyProSidebarProvider>
+          <MainScreen/>
         </ThemeProvider>
       </ColorModeContext.Provider>
     </AppProvider>

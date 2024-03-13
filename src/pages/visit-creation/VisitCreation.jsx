@@ -74,6 +74,11 @@ export default function VisitCreation() {
   const [totalAmount, setTotalAmount] = React.useState();
   const [visittotalamount, setVisittotalamount] = React.useState();
   const registrationInformationRef = useRef();
+  const autoComplteSpRef = useRef();
+  const autoComplteServicesRef = useRef();
+  const autoCompltedocRef = useRef();
+  const autoComplteVisittypeRef = useRef();
+
   useEffect(() => {
     getLookUpDetails();
   }, []);
@@ -82,6 +87,31 @@ export default function VisitCreation() {
     updateTotalAmount();
   }, [visitServiceList]);
 
+  function clearVisitForm() {
+    registrationInformationRef.current.clearForm();
+    setSpecility("");
+    setVisitType("");
+    setDoctor("");
+    setVisitdate(dayjs(moment(new Date()).format("YYYY-MM-DD")));
+    setToken("");
+    setSelectedClientData([]);
+    setVisitdiscount(0);
+    setTotalAmount(0);
+    setVisittotalamount(0);
+    setVisitReason("");
+    setVisitServiceList([]);
+    setDoctorInputValueChange("")
+    setServiceInputValue('');
+    const ele = autoComplteSpRef.current.getElementsByClassName('MuiAutocomplete-clearIndicator')[0];
+    if (ele) ele.click();
+    const ele1 = autoComplteServicesRef.current.getElementsByClassName('MuiAutocomplete-clearIndicator')[0];
+    if (ele1) ele1.click();
+    const ele2 = autoCompltedocRef.current.getElementsByClassName('MuiAutocomplete-clearIndicator')[0];
+    if (ele2) ele2.click();
+    const ele3 = autoComplteVisittypeRef.current.getElementsByClassName('MuiAutocomplete-clearIndicator')[0];
+    if (ele3) ele3.click();
+
+  }
   async function getDataBasedOnMobileNumber(mobileNumber) {
     var payLoad = {
       method: APIS.CLIENT_DATA_BASED_ON_PHONENUMBER.METHOD,
@@ -190,6 +220,23 @@ export default function VisitCreation() {
 
   async function handleSubmit(event) {
     event.preventDefault();
+    debugger
+    if (!specility) {
+      EMRAlert.alertifyError("Please select specility");
+      return false;
+    }
+    if (!doctor) {
+      EMRAlert.alertifyError("Please select doctor");
+      return false;
+    }
+    if (!visitType) {
+      EMRAlert.alertifyError("Please select visit type");
+      return false;
+    }
+    if (visitServiceList.length == 0) {
+      EMRAlert.alertifyError("Please select atlease one service");
+      return false;
+    }
     var clientDeatils = "";
     if (selectedClientData && selectedClientData.seqid) {
       clientDeatils = selectedClientData;
@@ -219,6 +266,7 @@ export default function VisitCreation() {
     let result = await sendRequest(payLoad);
     if (result) {
       EMRAlert.alertifySuccess("Visit Saved Succussfully");
+      clearVisitForm()
     } else {
       EMRAlert.alertifyError("Not created")
     }
@@ -272,6 +320,7 @@ export default function VisitCreation() {
                     key={option => option.lookupid}
                     getOptionLabel={option => option.lookupvalue}
                     value={specility}
+                    ref={autoComplteSpRef}
                     onChange={(event, newValue) => {
                       setSpecility(newValue);
                     }}
@@ -297,6 +346,7 @@ export default function VisitCreation() {
                     key={option => option.id}
                     getOptionLabel={option => option.firstname}
                     inputValue={doctorInputValueChange}
+                    ref={autoCompltedocRef}
                     onInputChange={(event, newInputValue) => {
                       if (newInputValue.length != 1) {
                         getDoctorsData(newInputValue)
@@ -319,6 +369,7 @@ export default function VisitCreation() {
                     disablePortal
                     id="visitTypeList"
                     options={visiiTypeOptions}
+                    ref={autoComplteVisittypeRef}
                     key={option => option.lookupid}
                     getOptionLabel={option => option.lookupvalue}
                     value={visitType}
@@ -354,12 +405,16 @@ export default function VisitCreation() {
                     size="small"
                     value={serviceValues}
                     onChange={(event, newValue) => {
-                      setServiceValues(newValue);
-                      addServicetoList(newValue);
+                      if (newValue) {
+                        setServiceValues(newValue);
+                        addServicetoList(newValue);
+                      }
+
                     }}
                     key={option => option.serviceid}
                     getOptionLabel={option => option.servicename}
                     inputValue={serviceinputValue}
+                    ref={autoComplteServicesRef}
                     onInputChange={(event, newInputValue) => {
                       if (newInputValue.length > 3) {
                         getServiceMaterList(newInputValue)
@@ -504,7 +559,10 @@ export default function VisitCreation() {
           </Box>
         </CardComponent>
 
-        <FormButtonComponent button1={"Save"} button2={"Clear"} />
+        <FormButtonComponent button1={"Save"} button2={"Clear"} clearFormEvent={() => {
+          debugger
+          clearVisitForm();
+        }} />
       </form>
     </Box>
   );

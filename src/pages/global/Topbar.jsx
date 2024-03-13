@@ -51,8 +51,9 @@ const Topbar = () => {
   const doLogout = () => {
     setOpen(false);
     appContextValue.setIslogin(false);
-   // setIslogin(false)
-    //navigate("/login");
+    // setIslogin(false);
+
+    navigate("/login", { replace: true });
   }
 
   return (

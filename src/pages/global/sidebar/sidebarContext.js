@@ -3,6 +3,8 @@ import { ProSidebarProvider } from "react-pro-sidebar";
 import MyProSidebar from "./MyProSidebar";
 import LoginPage from "../../Login/LoginPage";
 import AppContext from '../../../components/Context/AppContext';
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SidebarContext = createContext({});
 
@@ -12,35 +14,64 @@ export const MyProSidebarProvider = ({ children }) => {
     useState(undefined);
   const [sidebarImage, setSidebarImage] = useState(undefined);
   const appContextValue = useContext(AppContext);
-  //const [isLogin ,setIslogin] = useState(false)
+  const navigate = useNavigate();
+  useEffect(() => {
+    console.log("-----------------------------------side bar", appContextValue)
+    if (appContextValue.loggedInRolesTaks && Object.keys(appContextValue.loggedInRolesTaks).length != 0) {
+      let copyRoles = [...appContextValue.loggedInRolesTaks];
+      let defaultScreenData = "";
+      copyRoles.forEach(role => {
+        if (role.defaultoptionvalue) {
+          defaultScreenData = role;
+        }
+      });
+      if (defaultScreenData) {
+        var leftmenuScreen = ""
+        let copyleftMenuList = [...appContextValue.leftMenuList];
+        copyleftMenuList.forEach(mainMenu => {
+          mainMenu.subMenu.forEach(submenu => {
+            if (submenu.screencode == defaultScreenData.actioncode) {
+             leftmenuScreen = submenu;
+            }
+          })
+        });
+        if(leftmenuScreen){
+          navigate(leftmenuScreen.to, { replace: true });
+        }else{
+          navigate('/registration', { replace: true });
+        }
+        
+      }
+
+    }
+  }, [appContextValue.loggedInRolesTaks]);
   return (
     <ProSidebarProvider>
-      {!appContextValue.isLogin && <LoginPage />}
-      {appContextValue.isLogin  && 
-      <SidebarContext.Provider
-        value={{
-          sidebarBackgroundColor,
-          setSidebarBackgroundColor,
+      {appContextValue.isLogin &&
+        <SidebarContext.Provider
+          value={{
+            sidebarBackgroundColor,
+            setSidebarBackgroundColor,
 
-          sidebarImage,
-          setSidebarImage,
+            sidebarImage,
+            setSidebarImage,
 
-          sidebarRTL,
-          setSidebarRTL,
+            sidebarRTL,
+            setSidebarRTL,
 
 
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            flexDirection: sidebarRTL ? "row-reverse" : "row",
           }}
         >
-          <MyProSidebar />
-          {children}
-        </div>
-      </SidebarContext.Provider>}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: sidebarRTL ? "row-reverse" : "row",
+            }}
+          >
+            <MyProSidebar />
+            {children}
+          </div>
+        </SidebarContext.Provider>}
     </ProSidebarProvider>
   );
 };

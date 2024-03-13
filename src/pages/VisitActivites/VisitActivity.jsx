@@ -18,6 +18,7 @@ import { ComponentToPrint, FunctionalComponentToPrint } from '../../components/P
 import PrintTableFomat from '../../common/Prints/PrintTableFomat';
 import PrintHeaders from '../../common/PrintHeaders'
 import PrintTextFormar from '../../common/Prints/PrintTextFormar';
+import { useNavigate } from "react-router-dom";
 
 export default function VisitActivity() {
     const appContextValue = useContext(AppContext);
@@ -26,6 +27,7 @@ export default function VisitActivity() {
     const diagnosissRef = useRef();
     const prescriptionRef = useRef();
     const allergiesref = useRef();
+    const navigate = useNavigate();
 
     const [enablePrint, setEnablePrint] = useState(false);
     var notesAPIData = [];
@@ -161,49 +163,66 @@ export default function VisitActivity() {
         onAfterPrint: () => {
             setEnablePrint(false);
         },
-        onBeforeGetContent:()=>{
+        onBeforeGetContent: () => {
             debugger
         }
     });
+    function backtoDashboard() {
+        navigate(-1);
+    }
     return (
         <Box sx={{ m: 1 }}>
             <ClientBanner clientData={appContextValue.selectedVisitDeatils.clientid} visitData={appContextValue.selectedVisitDeatils} />
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
-                {appContextValue && appContextValue.selectedVisitDeatils.status == 1 &&
-                    <Box
-                        mt={1}
-                        display="flex"
-                        justifyContent="flex-end"
-                        alignItems="flex-end"
-                    >
-                        <Button color="primary" variant="outlined" onClick={() => updateVisitStatus(3, "Started")}>Start Visit</Button>
-                    </Box>
-                }
-                {appContextValue && appContextValue.selectedVisitDeatils.status == 3 &&
-                    <Box
-                        mt={1}
-                        display="flex"
-                        justifyContent="flex-end"
-                        alignItems="flex-end"
-                    >
-                        <Button color="primary" variant="outlined" onClick={() => updateVisitStatus(4, "Closed")}>Close Visit</Button>
-                    </Box>
-                }
-                <Box
-                    mt={1}
-                    display="flex"
-                    justifyContent="flex-end"
-                    alignItems="flex-end"
-                >
-                    <Button color="primary" variant="outlined" onClick={() => {
-                        setEnablePrint(true)
-                        setTimeout(function () {
-                            handlePrint();
-                        }, 100)
 
-                    }}>Print</Button>
+            <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
+                    <Box
+                        mt={1}
+                        display="flex"
+                        justifyContent="flex-start"
+                        alignItems="flex-start"
+                    >
+                        <Button color="primary" variant="outlined" onClick={() => backtoDashboard()}>Back to dashboard</Button>
+                    </Box>
+                </Box>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+                    {appContextValue && appContextValue.selectedVisitDeatils.status == 1 &&
+                        <Box
+                            mt={1}
+                            display="flex"
+                            justifyContent="flex-end"
+                            alignItems="flex-end"
+                        >
+                            <Button color="primary" variant="outlined" onClick={() => updateVisitStatus(3, "Started")}>Start Visit</Button>
+                        </Box>
+                    }
+                    {appContextValue && appContextValue.selectedVisitDeatils.status == 3 &&
+                        <Box
+                            mt={1}
+                            display="flex"
+                            justifyContent="flex-end"
+                            alignItems="flex-end"
+                        >
+                            <Button color="primary" variant="outlined" onClick={() => updateVisitStatus(4, "Closed")}>Close Visit</Button>
+                        </Box>
+                    }
+                    <Box
+                        mt={1}
+                        display="flex"
+                        justifyContent="flex-end"
+                        alignItems="flex-end"
+                    >
+                        <Button color="primary" variant="outlined" onClick={() => {
+                            setEnablePrint(true)
+                            setTimeout(function () {
+                                handlePrint();
+                            }, 100)
+
+                        }}>Print</Button>
+                    </Box>
                 </Box>
             </Box>
+
             <form onSubmit={handlePrescriptionSubmit}>
                 <Grid container spacing={1} xs={12}>
                     <Grid item xs={4} spacing={4}>

@@ -55,6 +55,16 @@ const RegistrationInformation = forwardRef((props, ref) => {
                     setContact(data.contact);
                     setDOB(data.dob);
                     setEmail(data.email);
+                },
+                clearForm:()=>{
+                    setAge("");
+                    setTitle("");
+                    setFirstname("");
+                    setLastname("");
+                    setGender("");
+                    setContact("");
+                    setDOB("");
+                    setEmail("");
                 }
             }
         },
