@@ -95,7 +95,6 @@ export default function LoginPage(props) {
       data: obj
     }
     let result = await sendRequest(payLoad);
-    debugger
     if (result && result.token != "false") {
       //  props.onSusccuss(true);
       setShowError(false);

@@ -139,25 +139,7 @@ const MyProSidebar = () => {
               color: colors.grey[100],
             }}
           >
-            {!collapsed && (
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-                ml="15px"
-              >
-                <Typography variant="h3" color={colors.grey[100]}>
-                  ADMINIS
-                </Typography>
-                <IconButton
-                  onClick={
-                    broken ? () => toggleSidebar() : () => collapseSidebar()
-                  }
-                >
-                  <CloseOutlinedIcon />
-                </IconButton>
-              </Box>
-            )}
+            
           </MenuItem>
           {!collapsed && (
             <Box mb="25px">
