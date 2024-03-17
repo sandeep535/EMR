@@ -120,27 +120,6 @@ const MyProSidebar = () => {
         image={sidebarImage}
       >
         <Menu iconshape="square">
-          <MenuItem
-            icon={
-              collapsed ? (
-                <MenuOutlinedIcon onClick={() => collapseSidebar()} />
-              ) : sidebarRTL ? (
-                <SwitchLeftOutlinedIcon
-                  onClick={() => setSidebarRTL(!sidebarRTL)}
-                />
-              ) : (
-                <SwitchRightOutlinedIcon
-                  onClick={() => setSidebarRTL(!sidebarRTL)}
-                />
-              )
-            }
-            style={{
-              margin: "10px 0 20px 0",
-              color: colors.grey[100],
-            }}
-          >
-            
-          </MenuItem>
           {!collapsed && (
             <Box mb="25px">
               <Box

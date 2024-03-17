@@ -1,0 +1,22 @@
+.color-legend {
+    display: flex;
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 5px;
+  }
+  
+  .color-box {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    border: 1px solid #000; /* You can customize the border if needed */
+  }
+  
+  .label {
+    font-size: 14px;
+  }

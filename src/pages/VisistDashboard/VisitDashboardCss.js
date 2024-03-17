@@ -7,30 +7,18 @@ const styles = {
     justifyContent: 'space-between',
     borderRadius:'8px'
   },
-  /*green:{
-    border: '2px solid green' 
-  },
-  blue:{
-    border: '2px solid blue' 
-  },
-  red:{
-    border: '2px solid red' 
-  },
-  orange:{
-    border: '2px solid orange' 
-  }*/
   green:{
-    background: '#1976d270' 
+    borderLeft: '10px solid #1abc9c'
   },
   blue:{
-    background: '#19d23191' 
+    borderLeft: '10px solid #3498db'
   },
   red:{
-    background: '#d2191994' 
+    borderLeft: '10px solid #f0776c'
   },
   orange:{
-    background: '#ffb42aa3' 
+    borderLeft: '10px solid #ffd071'
   }
-
+  
 }
 export default styles;

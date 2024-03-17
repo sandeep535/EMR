@@ -37,6 +37,11 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function LoginPage(props) {
+  var currentURL = window.location.href;
+  var split = currentURL.split('/');
+  if(split[3] !== 'login'){
+    window.location.href = currentURL+'login';
+  }
   const appContextValue = useContext(AppContext);
   const [showError, setShowError] = useState(false);
 
@@ -103,6 +108,8 @@ export default function LoginPage(props) {
       appContextValue.setLoggedInUserDetails(result);
       fetchRolesTransData(result.role.id);
       console.log(result)
+      var loginUser = result.designation.lookupvalue+'.'+result.firstname+' '+result.lastname;
+      sessionStorage.setItem('logged_user',loginUser);
     }
     else {
       setShowError(true);

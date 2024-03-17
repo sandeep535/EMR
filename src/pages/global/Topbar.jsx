@@ -35,6 +35,7 @@ const Topbar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
+  const loggedUser = sessionStorage.logged_user;
   const { toggleSidebar, broken, rtl } = useProSidebar();
 
   const [open, setOpen] = React.useState(false);
@@ -57,7 +58,7 @@ const Topbar = () => {
   }
 
   return (
-    <Box display="flex" justifyContent="space-between" p={2}>
+    <Box className="top-header" display="flex" justifyContent="space-between" p={2}>
       <Dialog
         open={open}
         TransitionComponent={Transition}
@@ -77,44 +78,10 @@ const Topbar = () => {
         </DialogActions>
       </Dialog>
       <Box display="flex">
-        {broken && !rtl && (
-          <IconButton
-            sx={{ margin: "0 6 0 2" }}
-            onClick={() => toggleSidebar()}
-          >
-            <MenuOutlinedIcon />
-          </IconButton>
-        )}
-        {/* <Box
-          display="flex"
-          backgroundColor={colors.primary[400]}
-          p={0.2}
-          borderRadius={1}
-        >
-          <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search" />
-          <IconButton type="button">
-            <SearchIcon />
-          </IconButton>
-        </Box> */}
+        
       </Box>
       <Box display="flex">
-        {/* <IconButton onClick={colorMode.toggleColorMode}>
-          {theme.palette.mode === "dark" ? (
-
-            <LightModeOutlinedIcon />
-          ) : (
-            <DarkModeOutlinedIcon />
-          )}
-        </IconButton>
-        <IconButton>
-          <NotificationsOutlinedIcon />
-        </IconButton>
-        <IconButton>
-          <SettingsOutlinedIcon />
-        </IconButton>
-        <IconButton>
-          <PersonOutlinedIcon />
-        </IconButton> */}
+        <p style={{marginRight:"20px"}}>Login User : <b>{loggedUser}</b></p>
         <IconButton onClick={() => {
           handleClickOpen()
         }}>
