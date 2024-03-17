@@ -172,7 +172,11 @@ nav li:last-child a:after{ background: #eee; }
   margin-right: 0px !important;
   margin-left: 0px I !important;
 }
-.MuiInputBase-input{
-  height: 10px;
 
+.MuiTableHead-root{
+  background-color: #1976d2;
+  color: #f2f0f0;
+}
+.MuiTableBody-root tr:nth-child(odd) {
+  background-color: lightyellow;
 }

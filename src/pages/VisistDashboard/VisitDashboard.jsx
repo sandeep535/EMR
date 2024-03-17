@@ -55,7 +55,7 @@ export default function VisitDasboard() {
         setFilterStatus(parseInt(event.target.value));
     };
 
-    const filteredVisits = visitList.filter(visit => !filterStatus || visit.status === filterStatus);
+    // const filteredVisits = visitList.filter(visit => !filterStatus || visit.status === filterStatus);
 
     const navigate = useNavigate();
     useEffect(() => {
@@ -82,6 +82,7 @@ export default function VisitDasboard() {
     }
 
     function gotoActivitiesPage(visit) {
+        
         appContextValue.setSelectedVisitDeatils(visit);
         var copyData = [...appContextValue.leftMenuList];
         copyData.map(item => {
@@ -138,7 +139,7 @@ export default function VisitDasboard() {
             </Box>
             <Box sx={{ m: 1 }} className='visit-cards-div' ref={listInnerRef}>
                 <Grid container spacing={1}  >
-                    {filteredVisits && filteredVisits.map(visit => {
+                    {visitList && visitList.map(visit => {
                         return (
                             <Grid item xs={3} key={visit.id}>
                                 <Card >
@@ -159,7 +160,7 @@ export default function VisitDasboard() {
                                         <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
                                             {visit.doctor.firstname + " " + visit.doctor.lastname}
                                         </Typography>
-                                        <Button className='enter-visit' variant="outlined" startIcon={<SendIcon />}  onClick={() => { gotoActivitiesPage(visit) }}></Button>
+                                        <Button className='enter-visit' variant="outlined" startIcon={<SendIcon />}  onClick={(event) => {  event.preventDefault();gotoActivitiesPage(visit) }}></Button>
                                         
                                     </Box>
                                     </a></li>

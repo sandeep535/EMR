@@ -71,6 +71,8 @@ export default function VisitCreation() {
   const [selectedClientData, setSelectedClientData] = React.useState([]);
 
   const [visitdiscount, setVisitdiscount] = React.useState(0);
+  const [visitpercentage, setVisitpercentage] = React.useState(0);
+  
   const [totalAmount, setTotalAmount] = React.useState();
   const [visittotalamount, setVisittotalamount] = React.useState();
   const registrationInformationRef = useRef();
@@ -174,6 +176,7 @@ export default function VisitCreation() {
       serviceid: newService,
       serviceprice: newService.price,
       servicediscount: 0,
+      servicediscountInpercentage :0,
       quantity: 1,
       servicetotalamount: newService.price * 1
     }
@@ -183,13 +186,25 @@ export default function VisitCreation() {
 
   }
 
+  function calPercentage(data,index,key){
+    let copyVisitServiceData = [...visitServiceList];
+    var cuurentData = copyVisitServiceData[index];
+    var percentage = (Number(cuurentData.servicediscount)/(Number(cuurentData.quantity) * Number(cuurentData.serviceprice)))*100;
+    cuurentData.servicediscountInpercentage = percentage.toFixed(2);
+    copyVisitServiceData[index] = cuurentData;
+    return copyVisitServiceData;
+  }
+
   function setChangesToVisistServicelist(data, index, key) {
     let copyVisitServiceData = [...visitServiceList];
     copyVisitServiceData[index][key] = data;
     let totalAmount = calParticularServiceTotalAmount(copyVisitServiceData[index]);
     copyVisitServiceData[index]['servicetotalamount'] = totalAmount;
+    copyVisitServiceData = calPercentage(data, index, key);
     setVisitServiceList(copyVisitServiceData);
     updateTotalAmount();
+    
+  
   }
   function updateTotalAmount() {
     let copyVisitServiceData = [...visitServiceList];
@@ -217,10 +232,32 @@ export default function VisitCreation() {
     registrationInformationRef.current.setFormData1(clientData);
     setSelectedClientData(clientData);
   }
+  function calDiscountBasedonPercentage(data,index){
+    let copyVisitServiceData = [...visitServiceList];
+    copyVisitServiceData[index]["servicediscountInpercentage"] = data;
+    let cuurentData = copyVisitServiceData[index];
+     let discount =  (Number(cuurentData.quantity) * Number(cuurentData.serviceprice)) * (100-Number(data))/100;
+     discount =  (Number(cuurentData.quantity) * Number(cuurentData.serviceprice))-discount;
+     copyVisitServiceData[index]["servicediscount"] = discount;
+     setVisitServiceList(copyVisitServiceData);
+    
+  }
+  function calVisitDiscountAmountBAsedonPercentage(value){
+     let copyVisistamount = totalAmount;
+    // var percentage = (Number(visitdiscount)/(copyVisistamount))*100;
+    // cuurentData.servicediscountInpercentage = percentage.toFixed(2);
+     let discount =  (copyVisistamount) * (100-Number(value))/100;
+     discount =  copyVisistamount-discount;
+     setVisitdiscount(discount);
+  }
 
+  function calPercentageBasedOnDiscount(value){
+    let copyVisistamount = totalAmount;
+    var percentage = (Number(value)/(copyVisistamount))*100;
+     setVisitpercentage(percentage.toFixed(2));
+  }
   async function handleSubmit(event) {
     event.preventDefault();
-    debugger
     if (!specility) {
       EMRAlert.alertifyError("Please select specility");
       return false;
@@ -399,6 +436,36 @@ export default function VisitCreation() {
                   onChange={e => setVisitReason(e.target.value)}
                   value={visitreason} />
               </Grid>
+
+              <Grid item xs={3} spacing={2}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer components={['DateField', 'DateField']}>
+                    <DatePicker
+                      label="Visit Date"
+                      value={visitdate}
+                      onChange={newValue => setVisitdate(new Date(newValue))}
+                      slotProps={{ textField: { size: 'small' } }}
+                      format="DD-MM-YYYY"
+                      fullWidth
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
+              </Grid>
+              <Grid item xs={3} spacing={2}>
+                <TextField
+                  fullWidth
+                  type="text"
+                  size="small"
+                  variant="outlined"
+                  required
+                  label={Translations.visitCreation.token}
+                  name="token"
+                  onChange={e => setToken(e.target.value)}
+                  value={token}
+                />
+              </Grid>
+            </Grid>
+            <Grid xs={12} container spacing={1}>
               <Grid item xs={3} spacing={2}>
                 <FormControl variant="outlined" fullWidth>
                   <Autocomplete
@@ -429,36 +496,10 @@ export default function VisitCreation() {
                   />
                 </FormControl>
               </Grid>
-              <Grid item xs={3} spacing={2}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DemoContainer components={['DateField', 'DateField']}>
-                    <DatePicker
-                      label="From Date"
-                      value={visitdate}
-                      onChange={newValue => setVisitdate(new Date(newValue))}
-                      format="DD-MM-YYYY"
-                      fullWidth
-                    />
-                  </DemoContainer>
-                </LocalizationProvider>
-              </Grid>
-              <Grid item xs={3} spacing={2}>
-                <TextField
-                  fullWidth
-                  type="text"
-                  size="small"
-                  variant="outlined"
-                  required
-                  label={Translations.visitCreation.token}
-                  name="token"
-                  onChange={e => setToken(e.target.value)}
-                  value={token}
-                />
-              </Grid>
             </Grid>
             <Grid xs={12} container spacing={1}>
               <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <Table sx={{ minWidth: 650 }} size="small" aria-label="simple table">
                   <TableHead>
                     <TableRow>
                       {(visitServiceTableHeaders.map(header => {
@@ -501,18 +542,40 @@ export default function VisitCreation() {
                           />
                         </TableCell>
                         <TableCell >
-                          <TextField
-                            fullWidth
-                            variant="outlined"
-                            className='input_background'
-                            type="text"
-                            label={"Discount"}
-                            onChange={(e) => {
-                              setChangesToVisistServicelist(e.target.value, index, 'servicediscount')
-                            }}
-                            value={service.servicediscount}
-                            size="small"
-                          />
+                        <Box sx={{display:'flex',flexDirection:'row'}}>
+                            <TextField
+                              fullWidth
+                              variant="outlined"
+                              className='input_background'
+                              type="text"
+                              label={"Discount"}
+                              onChange={(e) => {
+                                setChangesToVisistServicelist(e.target.value, index, 'servicediscount')
+                              }}
+                              value={service.servicediscount}
+                              size="small"
+                            />
+                            <TextField
+                              fullWidth
+                              variant="outlined"
+                              className='input_background'
+                              type="text"
+                              label={"%"}
+                              sx={{ml:1}}
+                              onBlur={(e) => {
+                                let copyVisitServiceData = [...visitServiceList];
+                                let discountValue = copyVisitServiceData[index].servicediscount;
+                                setChangesToVisistServicelist(discountValue, index, 'servicediscount')
+                                //setChangesToVisistServicelist(e.target.value, index, 'servicediscountInpercentage')
+                              }}
+                              onChange={(e) => {
+                                calDiscountBasedonPercentage(e.target.value, index)
+                                //setChangesToVisistServicelist(e.target.value, index, 'servicediscountInpercentage')
+                              }}
+                              value={service.servicediscountInpercentage}
+                              size="small"
+                            />
+                          </Box>
                         </TableCell>
                         <TableCell>{service.servicetotalamount}</TableCell>
                       </TableRow>
@@ -521,7 +584,7 @@ export default function VisitCreation() {
                       <TableCell></TableCell>
                       <TableCell></TableCell>
                       <TableCell></TableCell>
-                      <TableCell>Total Amount</TableCell>
+                      <TableCell>Total Amount(before discount)</TableCell>
                       <TableCell>{totalAmount}</TableCell>
                     </TableRow>
                     <TableRow key={"323"}>
@@ -529,25 +592,47 @@ export default function VisitCreation() {
                       <TableCell></TableCell>
                       <TableCell></TableCell>
                       <TableCell>Discount Amount</TableCell>
-                      <TableCell><TextField
-                        fullWidth
-                        variant="outlined"
-                        className='input_background'
-                        type="text"
-                        label={"Discount"}
-                        onChange={(e) => {
-                          setVisitdiscount(e.target.value);
-                          setTotalAmountAfterDiscountFun(e.target.value)
-                        }}
-                        value={visitdiscount}
-                        size="small"
-                      /></TableCell>
+                      <TableCell>
+                        <Box sx={{display:'flex',flexDirection:'row'}}>
+                          <TextField
+                            fullWidth
+                            variant="outlined"
+                            className='input_background'
+                            type="text"
+                            label={"Discount"}
+                            onChange={(e) => {
+                              setVisitdiscount(e.target.value);
+                              setTotalAmountAfterDiscountFun(e.target.value);
+                              calPercentageBasedOnDiscount(e.target.value);
+                            }}
+                            value={visitdiscount}
+                            size="small"
+                          />
+                          <TextField
+                            fullWidth
+                            variant="outlined"
+                            className='input_background'
+                            type="text"
+                            label={"%"}
+                            onBlur={(e) => {
+                              setTotalAmountAfterDiscountFun(visitdiscount);
+                            }}
+                            onChange={(e) => {
+                              setVisitpercentage(e.target.value);
+                              calVisitDiscountAmountBAsedonPercentage(e.target.value);
+                              //setTotalAmountAfterDiscountFun(e.target.value)
+                            }}
+                            value={visitpercentage}
+                            size="small"
+                          />
+                        </Box>
+                       </TableCell>
                     </TableRow>
                     <TableRow key={"123545111"}>
                       <TableCell></TableCell>
                       <TableCell></TableCell>
                       <TableCell></TableCell>
-                      <TableCell>Total Amount</TableCell>
+                      <TableCell>Total Amount(after discount)</TableCell>
                       <TableCell>{visittotalamount}</TableCell>
                     </TableRow>
                   </TableBody>
