@@ -154,6 +154,11 @@ const APIS={
         METHOD:"GET",
         ACTION:""
     },
+    GET_COUNT_BASED_ON_VISITDATE:{
+        URL:"visit/countBasedonVisitDate/{0}",
+        METHOD:"GET",
+        ACTION:""
+    },
     
     
     

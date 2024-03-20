@@ -14,23 +14,22 @@
     }]
 },{
     title:"Clinical Data",
-    to:"/employeeMaster",
-    icon:"star",
+    icon:"favorite",
     isPatientSpecific :false,
     isOpen:false,
     isRefreshMenu:false,
     subMenu:[{
         title:"Visit",
         to:"/vist-activity",
-        icon:"HomeOutlinedIcon",
-        isPatientSpecific :true,
+        icon:"favorite",
+        isPatientSpecific :false,
         isOpen:false,
         isRefreshMenu:false,
         screencode:'VITALS_SCREEN_VIEW'
     },{
         title:"Vitals",
         to:"/vitalsList",
-        icon:"vital_signs",
+        icon:"favorite",
         isPatientSpecific :false,
         isOpen:false,
         isRefreshMenu:false,
@@ -38,7 +37,7 @@
     },{
         title:"Prescriptions",
         to:"/prescriptionsList",
-        icon:"prescriptions",
+        icon:"favorite",
         isPatientSpecific :false,
         isRefreshMenu:false,
         screencode:'PRESCRIPTIONS_SCREEN_VIEW'

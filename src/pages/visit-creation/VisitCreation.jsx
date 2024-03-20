@@ -302,7 +302,7 @@ export default function VisitCreation() {
     }
     let result = await sendRequest(payLoad);
     if (result) {
-      EMRAlert.alertifySuccess("Visit Saved Succussfully");
+      EMRAlert.alertifySuccess("Visit Saved Succussfully.you token number is "+result.token+"");
       clearVisitForm()
     } else {
       EMRAlert.alertifyError("Not created")
@@ -324,7 +324,9 @@ export default function VisitCreation() {
             inputValue={contact}
             renderOption={(props, option) => {
               return (
-                <li >
+                <li onClick={()=>{
+                  populateClientDatatoForm(option);
+                }}>
                   <Grid container alignItems="center">
                     <Grid item sx={{ ml: 1, width: 'calc(100% - 44px)', wordWrap: 'break-word' }}>
                       <Box
@@ -479,7 +481,6 @@ export default function VisitCreation() {
                   type="text"
                   size="small"
                   variant="outlined"
-                  required
                   label={Translations.visitCreation.token}
                   name="token"
                   onChange={e => setToken(e.target.value)}

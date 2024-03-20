@@ -34,6 +34,7 @@ export default function VisitActivity() {
     var diagnosissAPIData = [];
     useEffect(() => {
         callVisitAPis();
+        getVisitCountBasedondate();
     }, []);
     function callVisitAPis() {
         getVitalsData();
@@ -41,6 +42,18 @@ export default function VisitActivity() {
         getDig();
         getPresctiptions();
         getAllerigies();
+    }
+    
+    async function getVisitCountBasedondate() {
+        var payLoad = {
+            method: APIS.GET_COUNT_BASED_ON_VISITDATE.METHOD,
+            url: APIS.GET_COUNT_BASED_ON_VISITDATE.URL,
+            paramas: [new Date('2023-12-16')],
+        }
+        let result = await sendRequest(payLoad);
+        if (result && result.length != 0) {
+           debugger
+        }
     }
     async function getAllerigies() {
         var payLoad = {
