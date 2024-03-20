@@ -27,6 +27,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import moment from 'moment';
 import CardComponent from '../../components/Common/CardComponent';
+import Typography from '@mui/material/Typography';
 
 
 const visitServiceTableHeaders = [{
@@ -72,7 +73,7 @@ export default function VisitCreation() {
 
   const [visitdiscount, setVisitdiscount] = React.useState(0);
   const [visitpercentage, setVisitpercentage] = React.useState(0);
-  
+
   const [totalAmount, setTotalAmount] = React.useState();
   const [visittotalamount, setVisittotalamount] = React.useState();
   const registrationInformationRef = useRef();
@@ -176,7 +177,7 @@ export default function VisitCreation() {
       serviceid: newService,
       serviceprice: newService.price,
       servicediscount: 0,
-      servicediscountInpercentage :0,
+      servicediscountinpercentage: 0,
       quantity: 1,
       servicetotalamount: newService.price * 1
     }
@@ -186,11 +187,11 @@ export default function VisitCreation() {
 
   }
 
-  function calPercentage(data,index,key){
+  function calPercentage(data, index, key) {
     let copyVisitServiceData = [...visitServiceList];
     var cuurentData = copyVisitServiceData[index];
-    var percentage = (Number(cuurentData.servicediscount)/(Number(cuurentData.quantity) * Number(cuurentData.serviceprice)))*100;
-    cuurentData.servicediscountInpercentage = percentage.toFixed(2);
+    var percentage = (Number(cuurentData.servicediscount) / (Number(cuurentData.quantity) * Number(cuurentData.serviceprice))) * 100;
+    cuurentData.servicediscountinpercentage = percentage.toFixed(2);
     copyVisitServiceData[index] = cuurentData;
     return copyVisitServiceData;
   }
@@ -203,8 +204,8 @@ export default function VisitCreation() {
     copyVisitServiceData = calPercentage(data, index, key);
     setVisitServiceList(copyVisitServiceData);
     updateTotalAmount();
-    
-  
+
+
   }
   function updateTotalAmount() {
     let copyVisitServiceData = [...visitServiceList];
@@ -232,29 +233,27 @@ export default function VisitCreation() {
     registrationInformationRef.current.setFormData1(clientData);
     setSelectedClientData(clientData);
   }
-  function calDiscountBasedonPercentage(data,index){
+  function calDiscountBasedonPercentage(data, index) {
     let copyVisitServiceData = [...visitServiceList];
-    copyVisitServiceData[index]["servicediscountInpercentage"] = data;
+    copyVisitServiceData[index]["servicediscountinpercentage"] = data;
     let cuurentData = copyVisitServiceData[index];
-     let discount =  (Number(cuurentData.quantity) * Number(cuurentData.serviceprice)) * (100-Number(data))/100;
-     discount =  (Number(cuurentData.quantity) * Number(cuurentData.serviceprice))-discount;
-     copyVisitServiceData[index]["servicediscount"] = discount;
-     setVisitServiceList(copyVisitServiceData);
-    
+    let discount = (Number(cuurentData.quantity) * Number(cuurentData.serviceprice)) * (100 - Number(data)) / 100;
+    discount = (Number(cuurentData.quantity) * Number(cuurentData.serviceprice)) - discount;
+    copyVisitServiceData[index]["servicediscount"] = discount;
+    setVisitServiceList(copyVisitServiceData);
+
   }
-  function calVisitDiscountAmountBAsedonPercentage(value){
-     let copyVisistamount = totalAmount;
-    // var percentage = (Number(visitdiscount)/(copyVisistamount))*100;
-    // cuurentData.servicediscountInpercentage = percentage.toFixed(2);
-     let discount =  (copyVisistamount) * (100-Number(value))/100;
-     discount =  copyVisistamount-discount;
-     setVisitdiscount(discount);
+  function calVisitDiscountAmountBAsedonPercentage(value) {
+    let copyVisistamount = totalAmount;
+    let discount = (copyVisistamount) * (100 - Number(value)) / 100;
+    discount = copyVisistamount - discount;
+    setVisitdiscount(discount);
   }
 
-  function calPercentageBasedOnDiscount(value){
+  function calPercentageBasedOnDiscount(value) {
     let copyVisistamount = totalAmount;
-    var percentage = (Number(value)/(copyVisistamount))*100;
-     setVisitpercentage(percentage.toFixed(2));
+    var percentage = (Number(value) / (copyVisistamount)) * 100;
+    setVisitpercentage(percentage.toFixed(2));
   }
   async function handleSubmit(event) {
     event.preventDefault();
@@ -287,6 +286,7 @@ export default function VisitCreation() {
       specilaity: specility,
       visitdiscount: visitdiscount,
       visittotalamount: visittotalamount,
+      visitpercentage: visitpercentage,
       reason: visitreason,
       status: 1,
       clientid: clientDeatils,
@@ -322,8 +322,30 @@ export default function VisitCreation() {
             key={option => option.seqid}
             getOptionLabel={option => option.contact}
             inputValue={contact}
+            renderOption={(props, option) => {
+              return (
+                <li >
+                  <Grid container alignItems="center">
+                    <Grid item sx={{ ml: 1, width: 'calc(100% - 44px)', wordWrap: 'break-word' }}>
+                      <Box
+                        component="span"
+                        sx={{ fontWeight: 'bold' }}
+                      >
+                        {option.firstname}
+                        <Typography variant="body2" color="text.secondary">
+                          {option.contact}
+                        </Typography>
+                      </Box>
+                  
+                    </Grid>
+                  </Grid>
+                  <Divider variant="middle" component="li" />
+                </li>
+
+              );
+            }}
             onInputChange={(event, newInputValue) => {
-              if (newInputValue.length > 9) {
+              if (newInputValue.length > 4) {
                 getDataBasedOnMobileNumber(newInputValue)
               }
               setContact(newInputValue);
@@ -504,7 +526,7 @@ export default function VisitCreation() {
                     <TableRow>
                       {(visitServiceTableHeaders.map(header => {
                         return (
-                          <TableCell width={header.width}>{header.name}</TableCell>
+                          <TableCell key={header.name} width={header.width}>{header.name}</TableCell>
                         )
                       }))}
                     </TableRow>
@@ -542,7 +564,7 @@ export default function VisitCreation() {
                           />
                         </TableCell>
                         <TableCell >
-                        <Box sx={{display:'flex',flexDirection:'row'}}>
+                          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                             <TextField
                               fullWidth
                               variant="outlined"
@@ -561,18 +583,16 @@ export default function VisitCreation() {
                               className='input_background'
                               type="text"
                               label={"%"}
-                              sx={{ml:1}}
+                              sx={{ ml: 1 }}
                               onBlur={(e) => {
                                 let copyVisitServiceData = [...visitServiceList];
                                 let discountValue = copyVisitServiceData[index].servicediscount;
-                                setChangesToVisistServicelist(discountValue, index, 'servicediscount')
-                                //setChangesToVisistServicelist(e.target.value, index, 'servicediscountInpercentage')
+                                setChangesToVisistServicelist(discountValue, index, 'servicediscount');
                               }}
                               onChange={(e) => {
-                                calDiscountBasedonPercentage(e.target.value, index)
-                                //setChangesToVisistServicelist(e.target.value, index, 'servicediscountInpercentage')
+                                calDiscountBasedonPercentage(e.target.value, index);
                               }}
-                              value={service.servicediscountInpercentage}
+                              value={service.servicediscountinpercentage}
                               size="small"
                             />
                           </Box>
@@ -593,7 +613,7 @@ export default function VisitCreation() {
                       <TableCell></TableCell>
                       <TableCell>Discount Amount</TableCell>
                       <TableCell>
-                        <Box sx={{display:'flex',flexDirection:'row'}}>
+                        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                           <TextField
                             fullWidth
                             variant="outlined"
@@ -626,7 +646,7 @@ export default function VisitCreation() {
                             size="small"
                           />
                         </Box>
-                       </TableCell>
+                      </TableCell>
                     </TableRow>
                     <TableRow key={"123545111"}>
                       <TableCell></TableCell>

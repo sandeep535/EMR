@@ -75,6 +75,11 @@ const Translations = {
         STATUS:'Status',
         INDICATIONS:'Indication',
         SERVERITY:"severity"
+     },
+     "DRUG_MASTER":{
+        NAME:'Drug Master',
+        DRUG_NAME:'Drug Name',
+        DRUG_CODE:'Drug Code'
      }
     
 }

@@ -1,11 +1,7 @@
 import React, { useEffect, useState, useContext, forwardRef, useImperativeHandle } from 'react';
-import TextField from '@mui/material/TextField';
 import { Box } from '@mui/material'
 import Grid from '@mui/material/Grid';
 import AppContext from '../../components/Context/AppContext';
-import Translations from '../../resources/translations';
-import DemoPaper from '../../Utils/CustomCssUtil';
-import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -17,6 +13,7 @@ import TableRow from '@mui/material/TableRow';
 import { sendRequest } from '../global/DataManager';
 import APIS from '../../Utils/APIS';
 import Moment from 'react-moment';
+import ClientBanner from '../../components/ClientBanner/ClientBanner';
 
 const columns =[{
     id: 'date', label: 'Date'
@@ -54,10 +51,11 @@ export default function PrescriptionsList() {
         <Box m="10px">
             <Box m="10px">
                 <Grid xs={12} container>
+                <ClientBanner clientData={appContextValue.selectedVisitDeatils.clientid} visitData={appContextValue.selectedVisitDeatils} />
 
                 </Grid>
                 <Grid xs={12} container>
-                    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+                    <Paper sx={{ mt:2,width: '100%', overflow: 'hidden' }}>
                         <TableContainer sx={{ maxHeight: 440 }}>
                             <Table stickyHeader aria-label="sticky table">
                                 <TableHead>

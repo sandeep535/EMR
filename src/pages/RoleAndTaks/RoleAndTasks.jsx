@@ -168,7 +168,7 @@ export default function RoleAndTasks(props) {
                                 id="combo-box-demo"
                                 options={rolesList}
                                 key={option => option.id}
-                                getOptionLabel={option => option.masterdatavalue}
+                                getOptionLabel={option => option.masterdatavalue  || ""}
                                 value={role}
                                 onChange={(event, newValue) => {
                                     if(newValue){

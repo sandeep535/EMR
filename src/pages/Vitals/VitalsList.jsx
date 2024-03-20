@@ -16,7 +16,7 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { sendRequest } from '../global/DataManager';
 import APIS from '../../Utils/APIS';
-
+import ClientBanner from '../../components/ClientBanner/ClientBanner';
 
 const columns =[{
     id: 'date', label: 'Date'
@@ -58,10 +58,11 @@ export default function VisitCreation() {
         <Box m="10px">
             <Box m="10px">
                 <Grid xs={12} container>
+                <ClientBanner clientData={appContextValue.selectedVisitDeatils.clientid} visitData={appContextValue.selectedVisitDeatils} />
 
                 </Grid>
-                <Grid xs={12} container>
-                    <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+                <Grid xs={12}  container>
+                    <Paper sx={{ width: '100%', overflow: 'hidden',mt:2 }}>
                         <TableContainer sx={{ maxHeight: 440 }}>
                             <Table stickyHeader aria-label="sticky table">
                                 <TableHead>

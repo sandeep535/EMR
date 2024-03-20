@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext,useRef } from 'react';
+import React, { useEffect, useState, useContext, useRef } from 'react';
 import { Box } from '@mui/material'
 import Grid from '@mui/material/Grid';
 import Card from '@mui/material/Card';
@@ -20,6 +20,8 @@ import Moment from 'react-moment';
 import moment from 'moment';
 import styles from './VisitDashboardCss';
 import ColorLegend from '../../components/Common/ColorLegend';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 
 const borderColor = {
     1: 'blue',
@@ -34,10 +36,10 @@ const visitStatus = {
     4: 'Visit Complted'
 }
 const legendItems = [
-{ label: 'Visit Not Started', color: '#3498db' },
-  { label: 'Visit In Progress', color: '#1abc9c' },
-  { label: 'Visit Completed', color: '#ffd071' },
-  { label: 'Visit Cancelled', color: '#f0776c' },
+    { label: 'Visit Not Started', color: '#3498db' },
+    { label: 'Visit In Progress', color: '#1abc9c' },
+    { label: 'Visit Completed', color: '#ffd071' },
+    { label: 'Visit Cancelled', color: '#f0776c' },
 ];
 
 
@@ -48,23 +50,21 @@ export default function VisitDasboard() {
     const [visitList, setVisitList] = useState([]);
     const appContextValue = useContext(AppContext);
     const listInnerRef = useRef();
-    const [count,setCount] = useState(0);
-    const [filterStatus, setFilterStatus] = useState('');
+    const [count, setCount] = useState(0);
+    const [visitStatus, setVisitStatus] = useState([]);
+    const [visitStatusList, setVisitStatusList] = useState([]);
 
-    const handleChange = (event) => {
-        setFilterStatus(parseInt(event.target.value));
-    };
-
-    // const filteredVisits = visitList.filter(visit => !filterStatus || visit.status === filterStatus);
+   
 
     const navigate = useNavigate();
     useEffect(() => {
         getVisitDetails();
     }, [toDate, fromDate]);
     useEffect(() => {
+        getVisitStatusList();
         getVisitDetails();
-    },[count])
-  
+    }, [count])
+
     async function getVisitDetails() {
         let localfromDate = fromDate ? new Date(fromDate).setHours(0, 0, 0) : new Date().setHours(0, 0, 0);
         let localtoDate = toDate ? new Date(toDate).setHours(23, 59, 59) : new Date().setHours(23, 59, 59);
@@ -78,11 +78,20 @@ export default function VisitDasboard() {
             console.log(result)
             setVisitList(result);
         }
-
     }
+    async function getVisitStatusList(){
+        var payLoad = {
+            method: APIS.GET_MASTER_DATA_BASED_ON_CODE.METHOD,
+            url: APIS.GET_MASTER_DATA_BASED_ON_CODE.URL,
+            paramas: ["VISIT_STATUS"]
+        }
+        let result = await sendRequest(payLoad);
+        if (result ) {
+            setVisitStatusList(result);
+        }
+        }
 
     function gotoActivitiesPage(visit) {
-        
         appContextValue.setSelectedVisitDeatils(visit);
         var copyData = [...appContextValue.leftMenuList];
         copyData.map(item => {
@@ -106,6 +115,7 @@ export default function VisitDasboard() {
                                     value={fromDate}
                                     onChange={newValue => setFromDate(new Date(newValue))}
                                     format="DD-MM-YYYY"
+                                    slotProps={{ textField: { size: 'small' } }}
                                     fullWidth
                                 />
                             </Grid>
@@ -117,20 +127,32 @@ export default function VisitDasboard() {
                                         setTodate(new Date(newValue));
                                     }}
                                     format="DD-MM-YYYY"
+                                    slotProps={{ textField: { size: 'small' } }}
                                     fullWidth
                                 />
 
                             </Grid>
                             <Grid item xs={2} spacing={1} sx={{ ml: 1 }}>
-                                <label htmlFor="statusFilter">Filter by Status:</label>
-                                <select id="statusFilter" value={filterStatus} onChange={handleChange}>
-                                    <option value="">All</option>
-                                    <option value='1'>Visit Not Started</option>
-                                    <option value="2">Visit Cancelled</option>
-                                    <option value="3">Visit In Progress</option>
-                                    <option value="4">Visit Completed</option>
-                                {/* Add more options as needed */}
-                                </select>
+                                <Autocomplete
+                                    size="small"
+                                    disablePortal
+                                    id="visitTypeList"
+                                    options={visitStatusList}
+                                    key={option => option.id}
+                                    getOptionLabel={option => option.masterdatavalue || ""}
+                                    value={visitStatus}
+                                    onChange={(event, newValue) => {
+                                        setVisitStatus(newValue);
+                                    }}
+                                    renderOption={(props, option) => {
+                                        return (
+                                            <li {...props} key={option.id}>
+                                                {option.masterdatavalue}
+                                            </li>
+                                        );
+                                    }}
+                                    renderInput={(params) => <TextField {...params} label={'Visit Status'} />}
+                                />
                             </Grid>
                             <ColorLegend legendItems={legendItems} />
                         </Grid>
@@ -143,30 +165,30 @@ export default function VisitDasboard() {
                         return (
                             <Grid item xs={3} key={visit.id}>
                                 <Card >
-                                    <CardContent> 
-                                    <nav>
-                                    <ul style={styles.wrapper}>
-                                        <li style={styles[borderColor[visit.status]]}><a href=""><Box>
-                                        <Typography sx={{ fontSize: 12, fontWeight: 900 }} color="text.secondary" gutterBottom>
-                                            {visit.clientid.firstname}
-                                        </Typography>
-                                        <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                                            {<Moment format="DD-MMM-YYYY">
-                                                {new Date(visit.visitdate)}
-                                            </Moment>}
-                                        </Typography>
-                                    </Box>
-                                    <Box sx={styles.wrapper}>
-                                        <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                                            {visit.doctor.firstname + " " + visit.doctor.lastname}
-                                        </Typography>
-                                        <Button className='enter-visit' variant="outlined" startIcon={<SendIcon />}  onClick={(event) => {  event.preventDefault();gotoActivitiesPage(visit) }}></Button>
-                                        
-                                    </Box>
-                                    </a></li>
-                                    </ul>
-                                    </nav></CardContent>
-                                    </Card>
+                                    <CardContent>
+                                        <nav>
+                                            <ul style={styles.wrapper}>
+                                                <li style={styles[borderColor[visit.status]]}><a href=""><Box>
+                                                    <Typography sx={{ fontSize: 12, fontWeight: 900 }} color="text.secondary" gutterBottom>
+                                                        {visit.clientid.firstname}
+                                                    </Typography>
+                                                    <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
+                                                        {<Moment format="DD-MMM-YYYY">
+                                                            {new Date(visit.visitdate)}
+                                                        </Moment>}
+                                                    </Typography>
+                                                </Box>
+                                                    <Box sx={styles.wrapper}>
+                                                        <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
+                                                            {visit.doctor.firstname + " " + visit.doctor.lastname}
+                                                        </Typography>
+                                                        <Button className='enter-visit' variant="outlined" startIcon={<SendIcon />} onClick={(event) => { event.preventDefault(); gotoActivitiesPage(visit) }}></Button>
+
+                                                    </Box>
+                                                </a></li>
+                                            </ul>
+                                        </nav></CardContent>
+                                </Card>
                             </Grid>
                         )
                     })}
@@ -174,7 +196,7 @@ export default function VisitDasboard() {
                 </Grid>
 
             </Box>
-            
+
         </>
     )
 }

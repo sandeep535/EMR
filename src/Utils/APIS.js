@@ -139,7 +139,22 @@ const APIS={
         METHOD:"POST",
         ACTION:""
     },
-
+    SAVE_DRUG_MASTER:{
+        URL:"drugs/saveDrugMasterData",
+        METHOD:"POST",
+        ACTION:""
+    },
+    CHECK_DUPLICATE_DRUG_NAME:{
+        URL:"drugs/checkDuplicateDrugname/{0}",
+        METHOD:"GET",
+        ACTION:""
+    },
+    CHECK_DUPLICATE_DRUG_CODE:{
+        URL:"drugs/checkDuplicateDrugcode/{0}",
+        METHOD:"GET",
+        ACTION:""
+    },
+    
     
     
 

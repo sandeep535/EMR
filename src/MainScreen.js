@@ -20,24 +20,23 @@ import RoleAndTasks from "./pages/RoleAndTaks/RoleAndTasks";
 import LoginPage from "./pages/Login/LoginPage";
 import AppContext from './components/Context/AppContext';
 import { useNavigate } from "react-router-dom";
+import DrugMaster from './Masters/DrugMaster/DrugMaster';
 
 export default function MainScreen() {
     const navigate = useNavigate();
     useEffect(() => {
-        console.log("MainScreen ------------------->", appContextValue);
-        if(!appContextValue.isLogin){
+        if (!appContextValue.isLogin) {
             navigate("/login", { replace: true });
         }
 
     }, []);
     const appContextValue = useContext(AppContext);
-    
+
     return (
         <>
 
             {!appContextValue.isLogin &&
                 (<Routes>
-                    
                     <Route path='/login' element={<LoginPage />} />
                 </Routes>)}
             {appContextValue && appContextValue.isLogin &&
@@ -55,6 +54,7 @@ export default function MainScreen() {
                                 <Route path='/vitalsList' element={<VitalsList />} />
                                 <Route path='/prescriptionsList' element={<PrescriptionsList />} />
                                 <Route path='/rolesAnsTasks' element={<RoleAndTasks />} />
+                                <Route path='/drugMaster' element={<DrugMaster />} />
                             </Routes>
                         </main>
                     </div>

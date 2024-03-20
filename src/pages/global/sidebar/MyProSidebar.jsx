@@ -14,7 +14,6 @@ import LeftMenu from '../../../common/LeftMenu';
 import Paper from '@mui/material/Paper';
 import MenuList from '@mui/material/MenuList';
 import MenuItem from '@mui/material/MenuItem';
-import Icon from '@mui/material/Icon';
 import { useNavigate } from "react-router-dom";
 import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
@@ -26,6 +25,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import StarBorder from '@mui/icons-material/StarBorder';
+import Icon from '@mui/material/Icon';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -120,7 +120,7 @@ const MyProSidebar = () => {
         image={sidebarImage}
       >
         <Menu iconshape="square">
-          {!collapsed && (
+          {/* {!collapsed && (
             <Box mb="25px">
               <Box
                 display="flex"
@@ -152,7 +152,7 @@ const MyProSidebar = () => {
                 </Typography>
               </Box>
             </Box>
-          )}
+          )} */}
           <Box>
             <List
               sx={{ width: '100%', maxWidth: 360 }}
@@ -165,7 +165,7 @@ const MyProSidebar = () => {
                     <>
                       <ListItemButton onClick={() => handleClick(menu,"",index)}>
                         <ListItemIcon>
-                          <InboxIcon />
+                         <Icon>{menu.icon}</Icon>
                         </ListItemIcon>
                         <ListItemText primary={menu.title} />
                         {menu.isOpen ? <ExpandLess /> : <ExpandMore />}
@@ -176,7 +176,7 @@ const MyProSidebar = () => {
                             <List component="div" disablePadding>
                               <ListItemButton sx={{ pl: 4 }} onClick={() => handleClick(submenu, "submenu",index)}>
                                 <ListItemIcon>
-                                  <StarBorder />
+                                  <Icon>{submenu.icon}</Icon>
                                 </ListItemIcon>
                                 <ListItemText primary={submenu.title} />
                               </ListItemButton>
@@ -192,7 +192,7 @@ const MyProSidebar = () => {
                     <>
                       <ListItemButton onClick={() => handleClick(menu,"",index)}>
                         <ListItemIcon>
-                          <InboxIcon />
+                          <Icon>{menu.icon}</Icon>
                         </ListItemIcon>
                         <ListItemText primary={menu.title} />
                         {menu.isOpen ? <ExpandLess /> : <ExpandMore />}
@@ -203,7 +203,7 @@ const MyProSidebar = () => {
                             <List component="div" disablePadding>
                               <ListItemButton sx={{ pl: 4 }} onClick={() => handleClick(submenu, "submenu",index)}>
                                 <ListItemIcon>
-                                  <StarBorder />
+                                  <Icon>{submenu.icon}</Icon>
                                 </ListItemIcon>
                                 <ListItemText primary={submenu.title} />
                               </ListItemButton>
