@@ -14,6 +14,7 @@ import Translations from '../../resources/translations';
 import TextField from '@mui/material/TextField';
 import Radio from '@mui/material/Radio';
 import Grid from '@mui/material/Grid';
+import Header from "../../components/Header";
 
 export default function RoleAndTasks(props) {
     const [rolesState, setRolesState] = useState([]);
@@ -157,7 +158,8 @@ export default function RoleAndTasks(props) {
 
     }, []);
     return (
-        <>
+        <Box m="10px" >
+        <Header title={"Roles and Tasks"} />
             <Box sx={{height:'100%',ml: 3}}>
                 <Grid container spacing={1}>
                     <Grid item xs={2} spacing={1}>
@@ -277,6 +279,6 @@ export default function RoleAndTasks(props) {
 
                 </Box>
             </Box>
-        </>
+        </Box>
     )
 }

@@ -5,14 +5,8 @@ import { useSidebarContext } from "./sidebarContext";
 import { Link } from "react-router-dom";
 import { tokens } from "../../../theme";
 import { useTheme, Box, Typography, IconButton } from "@mui/material";
-import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import SwitchRightOutlinedIcon from "@mui/icons-material/SwitchRightOutlined";
-import SwitchLeftOutlinedIcon from "@mui/icons-material/SwitchLeftOutlined";
 import AppContext from '../../../components/Context/AppContext';
-import LeftMenu from '../../../common/LeftMenu';
-import Paper from '@mui/material/Paper';
-import MenuList from '@mui/material/MenuList';
+
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from "react-router-dom";
 import ListSubheader from '@mui/material/ListSubheader';
@@ -26,6 +20,7 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import StarBorder from '@mui/icons-material/StarBorder';
 import Icon from '@mui/material/Icon';
+import logo from '../../../resources/LeafSpring_Logo1.jpg';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -50,7 +45,7 @@ const MyProSidebar = () => {
   const { sidebarRTL, setSidebarRTL, sidebarImage } = useSidebarContext();
   const { collapseSidebar, toggleSidebar, collapsed, broken } = useProSidebar();
 
-  const removePatientSpecific = (copyData)=>{
+  const removePatientSpecific = (copyData) => {
     copyData.map(item => {
       if (item.hasOwnProperty("isPatientSpecific")) {
         item.isPatientSpecific = false;
@@ -58,7 +53,7 @@ const MyProSidebar = () => {
     });
     return copyData;
   }
-  const handleClick = (item, menuType,index) => {
+  const handleClick = (item, menuType, index) => {
     if (menuType) {
       var copyData = [...appContextValue.leftMenuList];
       if (item.isRefreshMenu) {
@@ -116,56 +111,40 @@ const MyProSidebar = () => {
       <Sidebar
         breakPoint="md"
         rtl={sidebarRTL}
-        backgroundColor={colors.primary[400]}
+        backgroundColor={colors.primary[100]}
         image={sidebarImage}
+
       >
         <Menu iconshape="square">
-          {/* {!collapsed && (
-            <Box mb="25px">
-              <Box
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                sx={{
-                  "& .avater-image": {
-                    backgroundColor: colors.primary[500],
-                  },
-                }}
-              >
+          <Box sx={{ height: "5vh" }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+              <Box sx={{ width: '100%', height: '100%' }}>
                 <img
-                  className="avater-image"
-                  alt="profile user"
-                  width="100px"
-                  height="100px"
-                  src={"../../assets/user.png"}
-                  style={{ cursor: "pointer", borderRadius: "50%" }}
+                  src={logo}
+                  height={50}
+                  width={'100%'}
+                  alt={"Logo"}
+                  loading="lazy"
                 />
               </Box>
-              <Box textAlign="center">
-                <Typography
-                  variant="h3"
-                  color={colors.grey[100]}
-                  fontWeight="bold"
-                  sx={{ m: "10px 0 0 0" }}
-                >
-                  {appContextValue && appContextValue.loggedInUserDetails && appContextValue.loggedInUserDetails.firstname}
-                </Typography>
-              </Box>
+              {/* <Box sx={{ background: '#5CA904', width: '60%' }}>
+                <Box sx={{ fontSize: 20, fontWeight: 900, textAlign: 'center', verticalAlign: 'center', mt: 1 }}><span style={{ color: 'white' }}>Spring Leaf</span></Box>
+              </Box> */}
             </Box>
-          )} */}
-          <Box>
+          </Box>
+          <Box sx={{ height: "87vh", color: 'white' }}>
             <List
               sx={{ width: '100%', maxWidth: 360 }}
               component="nav"
               aria-labelledby="nested-list-subheader"
             >
               {appContextValue && appContextValue.leftMenuList && appContextValue.leftMenuList.map((menu, index) => {
-                if (menu.hasOwnProperty("isPatientSpecific") == false && menu.subMenu.length!=0) {
+                if (menu.hasOwnProperty("isPatientSpecific") == false && menu.subMenu.length != 0) {
                   return (
-                    <>
-                      <ListItemButton onClick={() => handleClick(menu,"",index)}>
+                    <Box key={index}>
+                      <ListItemButton onClick={() => handleClick(menu, "", index)}>
                         <ListItemIcon>
-                         <Icon>{menu.icon}</Icon>
+                          <Icon style={{ color: 'white' }}>{menu.icon}</Icon>
                         </ListItemIcon>
                         <ListItemText primary={menu.title} />
                         {menu.isOpen ? <ExpandLess /> : <ExpandMore />}
@@ -174,9 +153,9 @@ const MyProSidebar = () => {
                         {menu.subMenu && menu.subMenu.map(submenu => {
                           return (
                             <List component="div" disablePadding>
-                              <ListItemButton sx={{ pl: 4 }} onClick={() => handleClick(submenu, "submenu",index)}>
+                              <ListItemButton sx={{ pl: 4 }} onClick={() => handleClick(submenu, "submenu", index)}>
                                 <ListItemIcon>
-                                  <Icon>{submenu.icon}</Icon>
+                                  <Icon style={{ color: 'white' }}>{submenu.icon}</Icon>
                                 </ListItemIcon>
                                 <ListItemText primary={submenu.title} />
                               </ListItemButton>
@@ -184,26 +163,26 @@ const MyProSidebar = () => {
                           )
                         })}
                       </Collapse>
-                    </>
+                    </Box>
                   )
                 }
-                if (menu.hasOwnProperty("isPatientSpecific") == true && menu.isPatientSpecific == true && menu.subMenu.length!=0) {
+                if (menu.hasOwnProperty("isPatientSpecific") == true && menu.isPatientSpecific == true && menu.subMenu.length != 0) {
                   return (
                     <>
-                      <ListItemButton onClick={() => handleClick(menu,"",index)}>
+                      <ListItemButton onClick={() => handleClick(menu, "", index)}>
                         <ListItemIcon>
-                          <Icon>{menu.icon}</Icon>
+                          <Icon style={{ color: 'white' }}>{menu.icon}</Icon>
                         </ListItemIcon>
                         <ListItemText primary={menu.title} />
                         {menu.isOpen ? <ExpandLess /> : <ExpandMore />}
                       </ListItemButton>
                       <Collapse in={menu.isOpen} timeout="auto" unmountOnExit>
-                        {menu.subMenu && menu.subMenu.map(submenu => {
+                        {menu.subMenu && menu.subMenu.map((submenu, index) => {
                           return (
-                            <List component="div" disablePadding>
-                              <ListItemButton sx={{ pl: 4 }} onClick={() => handleClick(submenu, "submenu",index)}>
+                            <List component="div" key={index} disablePadding>
+                              <ListItemButton sx={{ pl: 4 }} onClick={() => handleClick(submenu, "submenu", index)}>
                                 <ListItemIcon>
-                                  <Icon>{submenu.icon}</Icon>
+                                  <Icon style={{ color: 'white' }}>{submenu.icon}</Icon>
                                 </ListItemIcon>
                                 <ListItemText primary={submenu.title} />
                               </ListItemButton>
@@ -218,6 +197,22 @@ const MyProSidebar = () => {
               })}
             </List>
 
+          </Box>
+          <Box sx={{ height: "5vh", mt: 0, p: 0 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+              <Box sx={{ width: '100%', height: '100%', mt: 0, p: 0 }}>
+                <img
+                  src={logo}
+                  height={50}
+                  width={'100%'}
+                  alt={"Logo"}
+                  loading="lazy"
+                />
+              </Box>
+              {/* <Box sx={{ background: '#5CA904', width: '60%' }}>
+                <Box sx={{ fontSize: 20, fontWeight: 900, textAlign: 'center', verticalAlign: 'center', mt: 1 }}><span style={{ color: 'white' }}>Spring Leaf</span></Box>
+              </Box> */}
+            </Box>
           </Box>
         </Menu>
       </Sidebar>

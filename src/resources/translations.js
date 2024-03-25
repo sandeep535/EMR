@@ -66,6 +66,7 @@ const Translations = {
        sig:"SIG"
     },
     "SERVICE_MASTER":{
+        SERVICE_MASTER:"Service Master",
         SERVICE_NAME:"Service Name",
         PRICE:'Price',
         STATUS:'Status'

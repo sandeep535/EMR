@@ -92,9 +92,9 @@ const RegistrationInformation = forwardRef((props, ref) => {
     }
 
     return (
-        <Box display="grid" gap="10px">
+        <Box display="grid" >
             <Grid container spacing={1}>
-                <Grid item xs={2} spacing={1}>
+                <Grid item xs={2} spacing={0}>
                     <FormControl size="small" fullWidth>
                         <InputLabel
                             id="demo-select-small-label"
@@ -121,7 +121,7 @@ const RegistrationInformation = forwardRef((props, ref) => {
                     </FormControl>
                 </Grid>
 
-                <Grid item xs={4} spacing={1}>
+                <Grid item xs={4} spacing={0}>
                     <TextField
                         fullWidth
                         type="text"

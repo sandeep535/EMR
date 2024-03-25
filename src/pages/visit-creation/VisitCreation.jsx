@@ -46,11 +46,11 @@ const visitServiceTableHeaders = [{
   name: 'Total Amount',
   width: '15%'
 }]
-export default function VisitCreation() {
-  const [doctor, setDoctor] = React.useState();
+export default function VisitCreation(props) {
+  const [doctor, setDoctor] = React.useState((props?.visitEditData?.doctor)?props?.visitEditData?.doctor:null);
   const [contact, setContact] = React.useState();
-  const [specility, setSpecility] = React.useState();
-  const [visitType, setVisitType] = React.useState();
+  const [specility, setSpecility] = React.useState((props?.visitEditData?.specilaity) ?props?.visitEditData?.specilaity:null);
+  const [visitType, setVisitType] = React.useState((props?.visitEditData?.visittype) ? props.visitEditData.visittype : null);
 
   const [doctorInputValueChange, setDoctorInputValueChange] = React.useState('');
   const [serviceinputValue, setServiceInputValue] = React.useState('');
@@ -63,11 +63,11 @@ export default function VisitCreation() {
   const [visitServiceList, setVisitServiceList] = React.useState([]);
   const [clientsearchlist, setClientsearchlist] = React.useState([]);
 
-  const [visitreason, setVisitReason] = React.useState([]);
+  const [visitreason, setVisitReason] = React.useState((props?.visitEditData?.reason) ? props?.visitEditData?.reason :"");
   const [serviceValues, setServiceValues] = React.useState();
 
-  const [visitdate, setVisitdate] = React.useState(dayjs(moment(new Date()).format("YYYY-MM-DD")));
-  const [token, setToken] = React.useState();
+  const [visitdate, setVisitdate] = React.useState((props?.visitEditData?.visitdate) ? dayjs(moment(new Date(props?.visitEditData.visitdate)).format("YYYY-MM-DD")) : dayjs(moment(new Date()).format("YYYY-MM-DD")));
+  const [token, setToken] = React.useState((props?.visitEditData?.token) ?props?.visitEditData?.token:null);
 
   const [selectedClientData, setSelectedClientData] = React.useState([]);
 
@@ -82,8 +82,10 @@ export default function VisitCreation() {
   const autoCompltedocRef = useRef();
   const autoComplteVisittypeRef = useRef();
 
+
   useEffect(() => {
     getLookUpDetails();
+    
   }, []);
 
   useEffect(() => {
@@ -115,6 +117,13 @@ export default function VisitCreation() {
     if (ele3) ele3.click();
 
   }
+
+  function setVisitDataInEditMode(){
+    setSelectedClientData(props?.visitEditData?.clientid);
+    registrationInformationRef.current.setFormData1(props?.visitEditData?.clientid);
+    setVisitServiceList(props?.visitEditData?.services);
+  }
+
   async function getDataBasedOnMobileNumber(mobileNumber) {
     var payLoad = {
       method: APIS.CLIENT_DATA_BASED_ON_PHONENUMBER.METHOD,
@@ -155,6 +164,12 @@ export default function VisitCreation() {
     if (result && result.VISIT_TYPES) {
       setVisiiTypeOptions(result.VISIT_TYPES);
     }
+
+      if(props?.isEdit == 'true'){
+        setVisitDataInEditMode();
+      }
+    
+    
 
   }
 
@@ -291,7 +306,8 @@ export default function VisitCreation() {
       status: 1,
       clientid: clientDeatils,
       services: visitServiceList,
-      token: token
+      token: token,
+      visitid : (props?.isEdit == "true") ? props?.visitEditData?.visitid: null
     }
 
     var payLoad = {
@@ -361,17 +377,17 @@ export default function VisitCreation() {
         </Grid>
       </Box>
       <form onSubmit={handleSubmit}>
-        <Box display="grid" gap="10px">
+        <Box display="grid" >
           <CardComponent title="Client Details">
             <RegistrationInformation data={selectedClientData} ref={registrationInformationRef} />
           </CardComponent>
         </Box>
         {/* <Divider sx={{ color: "secondary.light", paddingTop: 1, fontSize: 14 }} textAlign="left">Visit Details</Divider> */}
         <CardComponent title="Visit Details">
-          <Box display="grid" gap="10px" style={{ marginTop: '10px' }}>
+          <Box display="grid" gap="10px" >
 
             <Grid xs={12} container spacing={1}>
-              <Grid item xs={3} spacing={2}>
+              <Grid item xs={2} spacing={1}>
                 <FormControl variant="outlined" fullWidth>
                   <Autocomplete
                     size="small"
@@ -396,7 +412,7 @@ export default function VisitCreation() {
                   />
                 </FormControl>
               </Grid>
-              <Grid item xs={3} spacing={2}>
+              <Grid item xs={3} spacing={1}>
                 <FormControl variant="outlined" size="small" fullWidth>
                   <Autocomplete
                     size="small"
@@ -417,13 +433,12 @@ export default function VisitCreation() {
                     }}
                     id="controllable-states-demo"
                     options={doctoroptions}
-                    sx={{ width: 300 }}
                     renderInput={(params) => <TextField {...params} label="Docor Name" />}
                   />
                 </FormControl>
               </Grid>
 
-              <Grid item xs={3} spacing={2} >
+              <Grid item xs={2} spacing={1} >
                 <FormControl variant="outlined" size="small" fullWidth>
                   <Autocomplete
                     size="small"
@@ -448,21 +463,10 @@ export default function VisitCreation() {
                   />
                 </FormControl>
               </Grid>
-              <Grid item xs={3} spacing={2}  >
-                <TextField
-                  fullWidth
-                  variant="outlined"
-                  className='input_background'
-                  type="text"
-                  size="small"
-                  label={Translations.visitCreation.visitReason}
-                  name="Reason For Visit"
-                  onChange={e => setVisitReason(e.target.value)}
-                  value={visitreason} />
-              </Grid>
+              
 
-              <Grid item xs={3} spacing={2}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <Grid item xs={3}  spacing={1}>
+                <LocalizationProvider dateAdapter={AdapterDayjs} sx={{mt:-9}}>
                   <DemoContainer components={['DateField', 'DateField']}>
                     <DatePicker
                       label="Visit Date"
@@ -475,7 +479,7 @@ export default function VisitCreation() {
                   </DemoContainer>
                 </LocalizationProvider>
               </Grid>
-              <Grid item xs={3} spacing={2}>
+              <Grid item xs={2} spacing={1}>
                 <TextField
                   fullWidth
                   type="text"
@@ -487,9 +491,24 @@ export default function VisitCreation() {
                   value={token}
                 />
               </Grid>
+
+              <Grid item xs={6} spacing={1}  >
+                <TextField
+                  fullWidth
+                  variant="outlined"
+                  className='input_background'
+                  type="text"
+                  size="small"
+                  multiline
+                  rows={2}
+                  label={Translations.visitCreation.visitReason}
+                  name="Reason For Visit"
+                  onChange={e => setVisitReason(e.target.value)}
+                  value={visitreason} />
+              </Grid>
             </Grid>
             <Grid xs={12} container spacing={1}>
-              <Grid item xs={3} spacing={2}>
+              <Grid item xs={3} spacing={1}>
                 <FormControl variant="outlined" fullWidth>
                   <Autocomplete
                     size="small"
@@ -534,7 +553,7 @@ export default function VisitCreation() {
                   </TableHead>
                   <TableBody>
                     {visitServiceList && visitServiceList.map((service, index) => (
-                      <TableRow key={service.serviceid.service}>
+                      <TableRow key={index}>
                         <TableCell>{(service && service.serviceid) ? service.serviceid.servicename : ""}</TableCell>
                         <TableCell>
                           <TextField
@@ -666,7 +685,6 @@ export default function VisitCreation() {
         </CardComponent>
 
         <FormButtonComponent button1={"Save"} button2={"Clear"} clearFormEvent={() => {
-          debugger
           clearVisitForm();
         }} />
       </form>

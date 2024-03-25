@@ -31,10 +31,8 @@ export default function MainScreen() {
 
     }, []);
     const appContextValue = useContext(AppContext);
-
     return (
         <>
-
             {!appContextValue.isLogin &&
                 (<Routes>
                     <Route path='/login' element={<LoginPage />} />

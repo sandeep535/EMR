@@ -52,9 +52,10 @@ export default function ServiceMaster() {
           }
       }
     return (
-        <>
+        <Box m="10px" >
+            <Header title={Translations.SERVICE_MASTER.SERVICE_MASTER} />
             <form onSubmit={handleSubmit}>
-                <Box display="grid" gap="10px">
+                <Box display="grid" >
                     <Grid container spacing={1}>
                         <Grid item xs={4} spacing={1}>
                             <TextField
@@ -101,7 +102,7 @@ export default function ServiceMaster() {
                 <FormButtonComponent button1={"Save"} button2={"Clear"} />
             </form>
             <ServiceMasterList/>
-        </>
+        </Box>
     )
 }
 
