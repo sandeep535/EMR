@@ -41,7 +41,6 @@ export default function EmployeeMaster(props) {
     }
     const handleSubmit = (event) => {
         event.preventDefault();
-        debugger
         if(!role){
             EMRAlert.alertifyError("Please select role");
             return false;

@@ -78,7 +78,6 @@ export default function RoleAndTasks(props) {
         }
         let result = await sendRequest(payLoad);
         if (result && result.size != 0) {
-            debugger
             let roleIds = [];
             var finalResult = [];
             for (var i = 0; i < result.length; i++) {
@@ -133,7 +132,6 @@ export default function RoleAndTasks(props) {
         } else {
             EMRAlert.alertifyError("Error");
         }
-        debugger
     }
     const [selectedValue, setSelectedValue] = React.useState('a');
 

@@ -67,7 +67,6 @@ export default function LoginPage(props) {
     let result = await sendRequest(payLoad);
     if (result && result.size != 0) {
       appContextValue.setLoggedInRolesTaks(result);
-      debugger
       var obj = {}
       for(var i=0;i<result.length;i++){
         obj[result[i].actioncode] = result[i].ispermission;

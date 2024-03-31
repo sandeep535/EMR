@@ -46,7 +46,6 @@ const Notes = forwardRef((props, ref) => {
                     required
                     multiline
                     rows={3}
-                    label={props.label}
                     name={props.label}
                     onChange={e => setDescription(e.target.value)}
                     value={description}

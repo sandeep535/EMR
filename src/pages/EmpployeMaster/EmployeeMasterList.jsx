@@ -43,7 +43,6 @@ export default function EmployeeMasterList() {
         }
         let result = await sendRequest(payLoad);
         if (result && result.size != 0) {
-           debugger
            setEmployeeList(result);
         }
     }

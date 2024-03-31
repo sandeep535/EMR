@@ -16,8 +16,8 @@ const Header = ({ title, subtitle }) => {
       >
         {title}
       </Typography>
-      <Typography variant="h5" color={colors.greenAccent[400]}>
-        {subtitle}
+      <Typography variant="h3" color={colors.greenAccent[400]}>
+        {subtitle ? subtitle.toUpperCase() : ""}
       </Typography>
     </Box>
   );

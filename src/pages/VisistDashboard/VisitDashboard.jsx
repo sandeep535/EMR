@@ -120,7 +120,8 @@ export default function VisitDasboard() {
     }
     return (
         <>
-            <Box sx={{ flexGrow: 1, m: 1 }}>
+            <Box sx={{ flexGrow: 1, m: 1, position: 'relative', zIndex: 1}}>
+                
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={['DateField', 'DateField']}>
                         <Grid container >
@@ -173,7 +174,7 @@ export default function VisitDasboard() {
                     </DemoContainer>
                 </LocalizationProvider>
             </Box>
-            <Box sx={{ m: 1 }} className='visit-cards-div' ref={listInnerRef}>
+            <Box sx={{ m: 1 , paddingTop: '80px'}} className='visit-cards-div' ref={listInnerRef}>
                 <Grid container spacing={1}  >
                     {visitList && visitList.map(visit => {
                         return (

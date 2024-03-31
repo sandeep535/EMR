@@ -52,7 +52,7 @@ export default function VisitActivity() {
         }
         let result = await sendRequest(payLoad);
         if (result && result.length != 0) {
-           debugger
+           console.log(result);
         }
     }
     async function getAllerigies() {
@@ -177,7 +177,7 @@ export default function VisitActivity() {
             setEnablePrint(false);
         },
         onBeforeGetContent: () => {
-            debugger
+           console.log("onBeforeGetContent");
         }
     });
     function backtoDashboard() {
@@ -195,7 +195,7 @@ export default function VisitActivity() {
                         justifyContent="flex-start"
                         alignItems="flex-start"
                     >
-                        <Button color="primary" variant="outlined" onClick={() => backtoDashboard()}>Back to dashboard</Button>
+                        <Button  variant="outlined" onClick={() => backtoDashboard()}>Back to dashboard</Button>
                     </Box>
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
@@ -205,8 +205,9 @@ export default function VisitActivity() {
                             display="flex"
                             justifyContent="flex-end"
                             alignItems="flex-end"
+                            
                         >
-                            <Button color="primary" variant="outlined" onClick={() => updateVisitStatus(3, "Started")}>Start Visit</Button>
+                            <Button style={{marginRight:'5px'}} variant="outlined" onClick={() => updateVisitStatus(3, "Started")}>Start Visit</Button>
                         </Box>
                     }
                     {appContextValue && appContextValue.selectedVisitDeatils.status == 3 &&
@@ -215,8 +216,9 @@ export default function VisitActivity() {
                             display="flex"
                             justifyContent="flex-end"
                             alignItems="flex-end"
+                            style={{marginRight:'5px'}}
                         >
-                            <Button color="primary" variant="outlined" onClick={() => updateVisitStatus(4, "Closed")}>Close Visit</Button>
+                            <Button  variant="outlined" style={{marginRight:'5px'}} onClick={() => updateVisitStatus(4, "Closed")}>Close Visit</Button>
                         </Box>
                     }
                     <Box
@@ -225,7 +227,7 @@ export default function VisitActivity() {
                         justifyContent="flex-end"
                         alignItems="flex-end"
                     >
-                        <Button color="primary" variant="outlined" onClick={() => {
+                        <Button  variant="outlined" onClick={() => {
                             setEnablePrint(true)
                             setTimeout(function () {
                                 handlePrint();
@@ -236,18 +238,13 @@ export default function VisitActivity() {
                 </Box>
             </Box>
 
-            <form onSubmit={handlePrescriptionSubmit}>
+            <form onSubmit={handlePrescriptionSubmit} style={{height: '500px', overflowY: 'auto', marginTop:'10px'}}>
                 <Grid container spacing={1} xs={12}>
                     <Grid item xs={4} spacing={4}>
                         <Vitals ref={vitalsRef} />
                     </Grid>
                     <Grid item xs={8}>
                         <Allergies ref={allergiesref} />
-                    </Grid>
-                </Grid>
-                <Grid container spacing={1} xs={12}>
-                    <Grid item xs={12} spacing={4}>
-                        <Prescriptions ref={prescriptionRef} />
                     </Grid>
                 </Grid>
                 <Grid container spacing={1} xs={12}>
@@ -258,6 +255,12 @@ export default function VisitActivity() {
                         <Notes label={"General Notes"} ref={notesRef} />
                     </Grid>
                 </Grid>
+                <Grid container spacing={1} xs={12}>
+                    <Grid item xs={12} spacing={4}>
+                        <Prescriptions ref={prescriptionRef} />
+                    </Grid>
+                </Grid>
+                
                 {appContextValue && appContextValue.selectedVisitDeatils && appContextValue.selectedVisitDeatils.status == 3 && <FormButtonComponent button1={"Save"} button2={"Clear"} />}
             </form>
             {enablePrint && (

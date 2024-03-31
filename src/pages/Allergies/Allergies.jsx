@@ -135,7 +135,7 @@ const Allergies = forwardRef((props, ref) => {
                             </Typography>
                             <Box sx={{ m: 1 }}>
                                 <Grid container spacing={1}>
-                                    <Grid item xs={3} spacing={1}>
+                                    <Grid item xs={2} spacing={1}>
                                         <TextField
                                             fullWidth
                                             type="text"
@@ -188,10 +188,10 @@ const Allergies = forwardRef((props, ref) => {
                                             onChange={e => setIndications(e.target.value)}
                                             value={indications}
                                             multiline
-                                            rows={3}
+                                            rows={1}
                                         />
                                     </Grid>
-                                    <Grid item xs={2} spacing={1}>
+                                    <Grid item xs={3}>
                                         <FormControl>
                                             <FormLabel id="demo-row-radio-buttons-group-label">{Translations.ALLERGY.STATUS}</FormLabel>
                                             <RadioGroup
@@ -211,25 +211,23 @@ const Allergies = forwardRef((props, ref) => {
                                     </Grid>
                                 </Grid>
                                 <Grid xs={12} container spacing={1}>
-                                    <TableContainer component={Paper} >
-                                        <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                                            <TableHead>
+                                <TableContainer  style={{maxHeight:120 }}  component={Paper} >
+                                        <Table stickyHeader aria-label="simple table">
+                                            <TableHead style={{ backgroundColor: '#1976d2',color:'#ffffff',padding: '8px', fontSize: '14px' }}>
                                                 <TableRow>
-                                                    {(allergiesColumns.map(header => {
-                                                        return (
-                                                            <TableCell width={header.width}>{header.name}</TableCell>
-                                                        )
-                                                    }))}
+                                                    {allergiesColumns.map((header, index) => (
+                                                        <TableCell key={index} style={{ minWidth: header.width }}>{header.name}</TableCell>
+                                                    ))}
                                                 </TableRow>
                                             </TableHead>
-                                            <TableBody className='grid-height'>
+                                            <TableBody  className='grid-height'>
                                                 {allergiesList && allergiesList.map((callergy, index) => (
                                                     <TableRow key={callergy.id} >
-                                                        <TableCell>{(callergy && callergy.allergy) ? callergy.allergy : ""}</TableCell>
-                                                        <TableCell>{(callergy && callergy.severity) ? callergy.severity.lookupvalue : ""}</TableCell>
-                                                        <TableCell>{(callergy && callergy.status == 1) ? "Active" : "In-Active"}</TableCell>
-                                                        <TableCell>{(callergy && callergy.indications) ? callergy.indications : ""}</TableCell>
-                                                        <TableCell><ClearIcon fontSize='10' styles={{ cursor: 'pointer' }} onClick={() => {
+                                                        <TableCell style={{ padding: '6px', fontSize: '12px' }}>{(callergy && callergy.allergy) ? callergy.allergy : ""}</TableCell>
+                                                        <TableCell style={{ padding: '6px', fontSize: '12px' }}>{(callergy && callergy.severity) ? callergy.severity.lookupvalue : ""}</TableCell>
+                                                        <TableCell style={{ padding: '6px', fontSize: '12px' }}>{(callergy && callergy.status == 1) ? "Active" : "In-Active"}</TableCell>
+                                                        <TableCell style={{ padding: '6px', fontSize: '12px' }}>{(callergy && callergy.indications) ? callergy.indications : ""}</TableCell>
+                                                        <TableCell style={{ padding: '6px', fontSize: '12px' }}><ClearIcon fontSize='small'  style={{ cursor: 'pointer' }} onClick={() => {
                                                             //removePrescriptionFromList(index);
                                                         }} /></TableCell>
                                                     </TableRow>
@@ -237,6 +235,7 @@ const Allergies = forwardRef((props, ref) => {
                                             </TableBody>
                                         </Table>
                                     </TableContainer>
+                                   
                                 </Grid>
                             </Box>
                         </CardContent>

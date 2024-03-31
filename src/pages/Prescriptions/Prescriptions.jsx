@@ -76,7 +76,6 @@ const Prescriptions = forwardRef((props, ref) => {
                     }
                 },
                 setFormData1: (data) => {
-                    debugger;
                     setPrescriptionList(data)
                 }
             }
@@ -216,12 +215,15 @@ const Prescriptions = forwardRef((props, ref) => {
                                     <Grid item xs={3} spacing={1} >
                                         <FormControl variant="outlined" fullWidth>
                                             <DatePicker
-                                                label="Start Date"
+                                                label={<span sx={{ marginTop: '-8px' }}>Start Date</span>}
                                                 value={startdate}
                                                 onChange={newValue => setStartdate(new Date(newValue))}
                                                 format="DD-MM-YYYY"
                                                 fullWidth
                                                 size="small"
+                                                InputLabelProps={{
+                                                    style: { marginTop: '-8px' }
+                                                }}
                                             />
                                         </FormControl>
                                     </Grid>
@@ -234,6 +236,9 @@ const Prescriptions = forwardRef((props, ref) => {
                                                 format="DD-MM-YYYY"
                                                 fullWidth
                                                 size="small"
+                                                InputLabelProps={{
+                                                    style: { marginTop: '-8px' }
+                                                }}
                                             />
                                         </FormControl>
                                     </Grid>
@@ -258,39 +263,35 @@ const Prescriptions = forwardRef((props, ref) => {
                                             addPrescriptionTollist();
                                         }}>Add</Button>
                                     </Grid>
-                                    <Grid xs={12} container spacing={1}>
-                                        <TableContainer component={Paper}>
-                                            <Table sx={{ minWidth: 650 }} aria-label="simple table" className='grid-height'>
-                                                <TableHead>
-                                                    <TableRow>
-                                                        {(prescriptionHeadersList.map(header => {
-                                                            return (
-                                                                <TableCell width={header.width}>{header.name}</TableCell>
-                                                            )
-                                                        }))}
-                                                    </TableRow>
-                                                </TableHead>
-                                                <TableBody >
-                                                    {prescriptionList && prescriptionList.map((prescription, index) => (
-                                                        <TableRow key={prescription.drugid}>
-                                                            <TableCell>{(prescription && prescription.drugname) ? prescription.drugname : ""}</TableCell>
-                                                            <TableCell>{(prescription && prescription.dose) ? prescription.dose + "" + prescription.doseunit : ""}</TableCell>
-                                                            <TableCell>{(prescription && prescription.sig) ? prescription.sig : ""}</TableCell>
-                                                            <TableCell>{(prescription && prescription.startdate) ? <Moment format="DD-MMM-YYYY">
-                                                                {new Date(prescription.startdate)}
-                                                            </Moment> : ""}</TableCell>
-                                                            <TableCell>{(prescription && prescription.endate) ? <Moment format="DD-MMM-YYYY">
-                                                                {new Date(prescription.endate)}
-                                                            </Moment> : ""}</TableCell>
-                                                            <TableCell><ClearIcon styles={styles.cursor} onClick={() => {
-                                                                removePrescriptionFromList(index);
-                                                            }} /></TableCell>
-                                                        </TableRow>
-                                                    ))}
-                                                </TableBody>
-                                            </Table>
-                                        </TableContainer>
-                                    </Grid>
+                                    <Table sx={{ minWidth: 650 }} aria-label="simple table" className='grid-height'>
+                                        <TableHead>
+                                            <TableRow>
+                                                {(prescriptionHeadersList.map(header => {
+                                                    return (
+                                                        <TableCell width={header.width}>{header.name}</TableCell>
+                                                    )
+                                                }))}
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody >
+                                            {prescriptionList && prescriptionList.map((prescription, index) => (
+                                                <TableRow key={prescription.drugid}>
+                                                    <TableCell>{(prescription && prescription.drugname) ? prescription.drugname : ""}</TableCell>
+                                                    <TableCell>{(prescription && prescription.dose) ? prescription.dose + "" + prescription.doseunit : ""}</TableCell>
+                                                    <TableCell>{(prescription && prescription.sig) ? prescription.sig : ""}</TableCell>
+                                                    <TableCell>{(prescription && prescription.startdate) ? <Moment format="DD-MMM-YYYY">
+                                                        {new Date(prescription.startdate)}
+                                                    </Moment> : ""}</TableCell>
+                                                    <TableCell>{(prescription && prescription.endate) ? <Moment format="DD-MMM-YYYY">
+                                                        {new Date(prescription.endate)}
+                                                    </Moment> : ""}</TableCell>
+                                                    <TableCell><ClearIcon styles={styles.cursor} onClick={() => {
+                                                        removePrescriptionFromList(index);
+                                                    }} /></TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
                                 </Grid>
                             </LocalizationProvider>
                         </Box>

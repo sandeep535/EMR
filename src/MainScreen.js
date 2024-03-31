@@ -4,10 +4,10 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { Routes, Route } from "react-router-dom";
 import { MyProSidebarProvider } from "./pages/global/sidebar/sidebarContext";
 
-import Topbar from "./pages/global/Topbar";
 import VisitCreation from "./pages/visit-creation/VisitCreation";
 import Dashboard from "./pages/dashboard";
 import Registration from "./pages/registration-form/ClientRegistration";
+import Topbar from './pages/global/Topbar';
 import Loader from './components/Loader/Loader';
 import AppProvider from "./components/Context/AppProvider";
 import VisitDasboard from "./pages/VisistDashboard/VisitDashboard";
@@ -39,9 +39,11 @@ export default function MainScreen() {
                 </Routes>)}
             {appContextValue && appContextValue.isLogin &&
                 <MyProSidebarProvider>
+                    
                     <div style={{ height: "100%", width: "100%" }}>
+                    <Topbar/>
                         <main>
-                            <Topbar />
+                        
                             <Routes>
                                 <Route path='/vist-dashboard' element={<VisitDasboard />} />
                                 <Route path="/registration" element={<Registration />} />

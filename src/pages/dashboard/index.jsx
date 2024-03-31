@@ -38,7 +38,7 @@ const Dashboard = () => {
     },
   ]
   return (
-    <Box m="20px">
+    <Box m="20px" style={{marginTop: '5%'}}>
        <Box
         display={smScreen ? "flex" : "block"}
         flexDirection={smScreen ? "row" : "column"}
