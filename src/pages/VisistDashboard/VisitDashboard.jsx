@@ -9,7 +9,7 @@ import APIS from '../../Utils/APIS';
 import { useNavigate } from "react-router-dom";
 import AppContext from '../../components/Context/AppContext';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -20,7 +20,6 @@ import ColorLegend from '../../components/Common/ColorLegend';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Icon from '@mui/material/Icon';
-import ModelPopUp from '../../common/ModelPopup/ModelPopUp';
 import VisitCreation from '../visit-creation/VisitCreation';
 import FullScreenModelPopup from '../../common/ModelPopup/FullScreenModelPopup';
 

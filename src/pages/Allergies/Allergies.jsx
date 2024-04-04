@@ -1,21 +1,18 @@
-import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle, useContext } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle, useContext } from 'react';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import APIS from '../../Utils/APIS';
 import { sendRequest } from '../global/DataManager';
 import Translations from '../../resources/translations';
-import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
 import FormControl from '@mui/material/FormControl';
-import EMRAlert from '../../Utils/CustomAlert';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
-import Select, { SelectChangeEvent } from '@mui/material/Select'
+import Select from '@mui/material/Select'
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import DemoPaper from '../../Utils/CustomCssUtil';
 import Button from '@mui/material/Button';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -225,7 +222,7 @@ const Allergies = forwardRef((props, ref) => {
                                                     <TableRow key={callergy.id} >
                                                         <TableCell style={{ padding: '6px', fontSize: '12px' }}>{(callergy && callergy.allergy) ? callergy.allergy : ""}</TableCell>
                                                         <TableCell style={{ padding: '6px', fontSize: '12px' }}>{(callergy && callergy.severity) ? callergy.severity.lookupvalue : ""}</TableCell>
-                                                        <TableCell style={{ padding: '6px', fontSize: '12px' }}>{(callergy && callergy.status == 1) ? "Active" : "In-Active"}</TableCell>
+                                                        <TableCell style={{ padding: '6px', fontSize: '12px' }}>{(callergy && callergy.status === 1) ? "Active" : "In-Active"}</TableCell>
                                                         <TableCell style={{ padding: '6px', fontSize: '12px' }}>{(callergy && callergy.indications) ? callergy.indications : ""}</TableCell>
                                                         <TableCell style={{ padding: '6px', fontSize: '12px' }}><ClearIcon fontSize='small'  style={{ cursor: 'pointer' }} onClick={() => {
                                                             //removePrescriptionFromList(index);

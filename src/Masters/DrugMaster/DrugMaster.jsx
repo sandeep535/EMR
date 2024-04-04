@@ -1,15 +1,12 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import APIS from '../../Utils/APIS';
 import { sendRequest } from '../../pages/global/DataManager';
-import RegistrationInformation from '../../components/RegistrationInformation/RegistrationInformation';
 import Translations from '../../resources/translations';
 import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
 import Header from "../../components/Header";
-import Autocomplete from '@mui/material/Autocomplete';
-import FormControl from '@mui/material/FormControl';
 import EMRAlert from '../../Utils/CustomAlert';
 
 export default function DrugMaster(props) {

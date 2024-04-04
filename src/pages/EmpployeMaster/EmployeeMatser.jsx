@@ -45,12 +45,8 @@ export default function EmployeeMaster(props) {
             EMRAlert.alertifyError("Please select role");
             return false;
         }
-        // if(!designation){
-        //     EMRAlert.alertifyError("Please select designation");
-        //     return false;
-        // }
         const regFormData = registrationInformationRef.current.getFormData();
-        const data = new FormData(event.currentTarget);
+        //const data = new FormData(event.currentTarget);
         
         var obj = {
             firstname:regFormData.firstname,

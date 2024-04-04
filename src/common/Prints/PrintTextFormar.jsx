@@ -1,22 +1,21 @@
 
-import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
-import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import FormLabel from "@mui/material/FormLabel";
-import InputLabel from '@mui/material/InputLabel';
 
 export default function PrintTextFormar(props) {
     function normalStringValue(data, headers) {
         var splitString = headers.split(".");
-        if (splitString.length == 1) {
+        if (splitString.length === 1) {
             return data[headers];
         }
         if (splitString.length > 1) {
             var obj = data;
             splitString.map(item => {
                 obj = obj[item];
+                
             });
             return obj;
         }

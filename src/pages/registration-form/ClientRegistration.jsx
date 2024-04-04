@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Box } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import Alert from '@mui/material/Alert';
@@ -14,7 +14,6 @@ import EMRAlert from '../../Utils/CustomAlert';
 
 const ClientRegistration = () => {
   const [isAlertVisible, setIsAlertVisible] = React.useState(false);
-  const [open, setOpen] = React.useState(false);
   const addrssComponentRef = useRef();
   const registrationInformationRef = useRef();
 

@@ -1,15 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { ColorModeContext, useMode } from "./theme";
-import { CssBaseline, ThemeProvider } from "@mui/material";
 import { Routes, Route } from "react-router-dom";
 import { MyProSidebarProvider } from "./pages/global/sidebar/sidebarContext";
 
 import VisitCreation from "./pages/visit-creation/VisitCreation";
-import Dashboard from "./pages/dashboard";
 import Registration from "./pages/registration-form/ClientRegistration";
 import Topbar from './pages/global/Topbar';
-import Loader from './components/Loader/Loader';
-import AppProvider from "./components/Context/AppProvider";
 import VisitDasboard from "./pages/VisistDashboard/VisitDashboard";
 import VisitActivity from "./pages/VisitActivites/VisitActivity";
 import EmployeeMaster from "./pages/EmpployeMaster/EmployeeMatser";

@@ -1,10 +1,9 @@
 
-import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import { sendRequest } from '../global/DataManager';
-import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import APIS from '../../Utils/APIS';
 import EMRAlert from '../../Utils/CustomAlert';
@@ -77,12 +76,12 @@ export default function RoleAndTasks(props) {
             paramas: [roleidcopy]
         }
         let result = await sendRequest(payLoad);
-        if (result && result.size != 0) {
+        if (result && result.size !== 0) {
             let roleIds = [];
             var finalResult = [];
             for (var i = 0; i < result.length; i++) {
-                var obj = [];
-                if (roleIds.indexOf(result[i]["screencode"]) == -1) {
+                //var obj = [];
+                if (roleIds.indexOf(result[i]["screencode"]) === -1) {
                     var obj = {
                         screenName: result[i].screenname,
                         screencode: result[i].screencode,
@@ -105,7 +104,7 @@ export default function RoleAndTasks(props) {
         let stateCopyData = [...rolesState];
         let resultData = [];
         for (var i = 0; i < stateCopyData.length; i++) {
-            if (stateCopyData[i].subScreens.length != 0) {
+            if (stateCopyData[i].subScreens.length !== 0) {
                 for (var j = 0; j < stateCopyData[i].subScreens.length; j++) {
                     var obj = {
                         roletaskactionid: stateCopyData[i].subScreens[j].roletaskactionid,
@@ -133,7 +132,7 @@ export default function RoleAndTasks(props) {
             EMRAlert.alertifyError("Error");
         }
     }
-    const [selectedValue, setSelectedValue] = React.useState('a');
+    //const [selectedValue, setSelectedValue] = React.useState('a');
 
     const handleDefaluoptionChange = (mainindex,subindex) => {
          var rolesStateCopy = [...rolesState];
@@ -242,7 +241,7 @@ export default function RoleAndTasks(props) {
                                                                 {subrole.defultoption &&
                                                                     <Box sx={{ display: 'flex', ml: 30 }}>
                                                                         <Radio
-                                                                            checked={subrole.defaultoptionvalue == true}
+                                                                            checked={subrole.defaultoptionvalue === true}
                                                                             onChange={() => {
                                                                                 handleDefaluoptionChange(index, subindex);
                                                                             }}

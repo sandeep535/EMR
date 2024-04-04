@@ -1,24 +1,19 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import { Menu, Sidebar } from "react-pro-sidebar";
-import { useProSidebar } from "react-pro-sidebar";
 import { useSidebarContext } from "./sidebarContext";
 import { Link } from "react-router-dom";
 import { tokens } from "../../../theme";
-import { useTheme, Box, Typography, IconButton } from "@mui/material";
+import { useTheme, Box, Typography } from "@mui/material";
 import AppContext from '../../../components/Context/AppContext';
-
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from "react-router-dom";
-import ListSubheader from '@mui/material/ListSubheader';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
-import StarBorder from '@mui/icons-material/StarBorder';
 import Icon from '@mui/material/Icon';
 import logo from '../../../resources/LeafSpring_Logo1.jpg';
 
@@ -43,7 +38,6 @@ const MyProSidebar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const { sidebarRTL, setSidebarRTL, sidebarImage } = useSidebarContext();
-  const { collapseSidebar, toggleSidebar, collapsed, broken } = useProSidebar();
 
   const removePatientSpecific = (copyData) => {
     copyData.map(item => {
@@ -127,19 +121,16 @@ const MyProSidebar = () => {
                   loading="lazy"
                 />
               </Box>
-              {/* <Box sx={{ background: '#5CA904', width: '60%' }}>
-                <Box sx={{ fontSize: 20, fontWeight: 900, textAlign: 'center', verticalAlign: 'center', mt: 1 }}><span style={{ color: 'white' }}>Spring Leaf</span></Box>
-              </Box> */}
             </Box>
           </Box>
-          <Box sx={{ height: "87vh", color: 'white' }}>
+          <Box sx={{ height: "75vh", color: 'white' }}>
             <List
               sx={{ width: '100%', maxWidth: 360,marginTop:'15px' }}
               component="nav"
               aria-labelledby="nested-list-subheader"
             >
               {appContextValue && appContextValue.leftMenuList && appContextValue.leftMenuList.map((menu, index) => {
-                if (menu.hasOwnProperty("isPatientSpecific") == false && menu.subMenu.length != 0) {
+                if (menu.hasOwnProperty("isPatientSpecific") === false && menu.subMenu.length !== 0) {
                   return (
                     <Box key={index}>
                       <ListItemButton onClick={() => handleClick(menu, "", index)}>
@@ -166,7 +157,7 @@ const MyProSidebar = () => {
                     </Box>
                   )
                 }
-                if (menu.hasOwnProperty("isPatientSpecific") == true && menu.isPatientSpecific == true && menu.subMenu.length != 0) {
+                if (menu.hasOwnProperty("isPatientSpecific") === true && menu.isPatientSpecific === true && menu.subMenu.length !== 0) {
                   return (
                     <>
                       <ListItemButton onClick={() => handleClick(menu, "", index)}>
@@ -209,9 +200,6 @@ const MyProSidebar = () => {
                   loading="lazy"
                 />
               </Box>
-              {/* <Box sx={{ background: '#5CA904', width: '60%' }}>
-                <Box sx={{ fontSize: 20, fontWeight: 900, textAlign: 'center', verticalAlign: 'center', mt: 1 }}><span style={{ color: 'white' }}>Spring Leaf</span></Box>
-              </Box> */}
             </Box>
           </Box>
         </Menu>

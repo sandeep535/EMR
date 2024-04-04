@@ -1,15 +1,8 @@
 import React from "react";
 import { useContext } from "react";
-import { ColorModeContext, tokens } from "../../theme";
-import { useTheme, Box, IconButton, InputBase } from "@mui/material";
-import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
-import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
-import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
+import {  Box, IconButton } from "@mui/material";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import LogoutIcon from '@mui/icons-material/Logout';
-import SearchIcon from "@mui/icons-material/Search";
 import { useProSidebar } from "react-pro-sidebar";
 
 import Button from '@mui/material/Button';
@@ -19,9 +12,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
-import { TransitionProps } from '@mui/material/transitions';
 import { useNavigate } from "react-router-dom";
-import { useSidebarContext } from "./sidebar/sidebarContext";
 import AppContext from '../../components/Context/AppContext';
 
 const Transition = React.forwardRef(function Transition(
@@ -32,9 +23,6 @@ const Transition = React.forwardRef(function Transition(
 });
 
 const Topbar = () => {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
-  const colorMode = useContext(ColorModeContext);
   const loggedUser = sessionStorage.logged_user;
   const { toggleSidebar, broken, rtl } = useProSidebar();
 

@@ -1,7 +1,6 @@
 import React, { useState, createContext, useContext } from "react";
 import { ProSidebarProvider } from "react-pro-sidebar";
 import MyProSidebar from "./MyProSidebar";
-import LoginPage from "../../Login/LoginPage";
 import AppContext from '../../../components/Context/AppContext';
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";

@@ -1,16 +1,12 @@
-import React, { useEffect, forwardRef, useState, useImperativeHandle, useContext } from 'react';
+import React, { useEffect, forwardRef, useImperativeHandle, useContext } from 'react';
 import TextField from '@mui/material/TextField';
 import { Box } from '@mui/material'
 import Grid from '@mui/material/Grid';
 import { sendRequest } from '../global/DataManager';
 import Button from '@mui/material/Button';
 import APIS from '../../Utils/APIS';
-import { useNavigate } from "react-router-dom";
 import AppContext from '../../components/Context/AppContext';
-import Container from '@mui/material/Container';
 import Translations from '../../resources/translations';
-import DemoPaper from '../../Utils/CustomCssUtil';
-import Divider from '@mui/material/Divider';
 import FormControl from '@mui/material/FormControl';
 import Autocomplete from '@mui/material/Autocomplete';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -19,10 +15,8 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
 import Moment from 'react-moment';
 import ClearIcon from '@mui/icons-material/Clear';
 import styles from './PrescriptionStyles';

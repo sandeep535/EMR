@@ -1,14 +1,5 @@
-import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
-import { Box } from '@mui/material';
-import FormControl from '@mui/material/FormControl';
+import React, { useEffect } from 'react';
 import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField';
-import Select, { SelectChangeEvent } from '@mui/material/Select'
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Translations from '../../resources/translations';
-import APIS from '../../Utils/APIS';
-import { sendRequest } from '../../pages/global/DataManager';
 import Typography from '@mui/material/Typography';
 import styles from './ClientBannerCss';
 import userIcon from '../../resources/image-icon.png';
@@ -38,7 +29,7 @@ export default function ClientBanner(props) {
             {props.clientData &&
                 <Grid container spacing={2} className='client-banner'>
                     <Grid item xs={1} className='grid-item' style={{border:`5px solid ${getBorderColor()}`}}>
-                    <img src={userIcon} style={{height:'65px',width:'90px',margin:'-5px',marginBottom:'-10px'}}></img>
+                    <img alt="User Image" src={userIcon} style={{height:'65px',width:'90px',margin:'-5px',marginBottom:'-10px'}}></img>
                     </Grid>
                     <Grid item xs={11} className='grid-item' style={{border:`5px solid ${getBorderColor()}`}}>
                         <Grid container spacing={2} style={{ marginTop: '-10px' ,marginLeft:'0px'}}>

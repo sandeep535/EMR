@@ -1,8 +1,6 @@
 import * as React from 'react';
-
 import Autocomplete from '@mui/material/Autocomplete';
-import CircularProgress from '@mui/material/CircularProgress';
-import { FormControl, InputLabel, Select, MenuItem, Grid, Button } from "@material-ui/core";
+import { FormControl } from "@material-ui/core";
 import TextField from '@mui/material/TextField';
 import APIS from '../../Utils/APIS';
 import { sendRequest } from '../../pages/global/DataManager';
@@ -10,7 +8,6 @@ import { sendRequest } from '../../pages/global/DataManager';
 export default function ClientSearchComponent() {
     const [open, setOpen] = React.useState(false);
     const [options, setOptions] = React.useState([]);
-    const loading = open && options.length === 0;
 
     React.useEffect(() => {
        // getDataBasedOnPhoneNumber();
@@ -22,6 +19,7 @@ export default function ClientSearchComponent() {
             paramas: [phoneNumber]
           }
           let result = await sendRequest(payLoad);
+          console.log(result);
           
     }
     return (

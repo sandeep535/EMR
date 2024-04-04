@@ -1,18 +1,13 @@
-import React, { useEffect, useState, useContext, forwardRef, useImperativeHandle } from 'react';
-import TextField from '@mui/material/TextField';
+import React, { useEffect, useContext } from 'react';
 import { Box } from '@mui/material'
 import Grid from '@mui/material/Grid';
 import AppContext from '../../components/Context/AppContext';
-import Translations from '../../resources/translations';
-import DemoPaper from '../../Utils/CustomCssUtil';
-import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { sendRequest } from '../global/DataManager';
 import APIS from '../../Utils/APIS';

@@ -1,10 +1,8 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
@@ -15,7 +13,6 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import APIS from '../../Utils/APIS';
 import { sendRequest } from '../global/DataManager';
 import AppContext from '../../components/Context/AppContext';
-import { useSidebarContext } from "../global/sidebar/sidebarContext";
 import ErrorMessage from '../../components/ErrorMessage/Errormsg';
 import LeftMenu from '../../common/LeftMenu';
 
@@ -65,7 +62,7 @@ export default function LoginPage(props) {
       paramas: [roleidcopy]
     }
     let result = await sendRequest(payLoad);
-    if (result && result.size != 0) {
+    if (result && result.size !== 0) {
       appContextValue.setLoggedInRolesTaks(result);
       var obj = {}
       for(var i=0;i<result.length;i++){
@@ -82,7 +79,7 @@ export default function LoginPage(props) {
     for(var i=0;i<copyLeftMenu.length;i++){
       var submentList = [];
       for(var j=0;j<copyLeftMenu[i].subMenu.length;j++){
-        if(copyLeftMenu[i].subMenu[j].hasOwnProperty("screencode") && permissions[copyLeftMenu[i].subMenu[j].screencode] == 1){
+        if(copyLeftMenu[i].subMenu[j].hasOwnProperty("screencode") && permissions[copyLeftMenu[i].subMenu[j].screencode] === 1){
           submentList.push(copyLeftMenu[i].subMenu[j]);
         }
       }
@@ -99,7 +96,7 @@ export default function LoginPage(props) {
       data: obj
     }
     let result = await sendRequest(payLoad);
-    if (result && result.token != "false") {
+    if (result && result.token !== "false") {
       //  props.onSusccuss(true);
       setShowError(false);
       appContextValue.setIslogin(true);

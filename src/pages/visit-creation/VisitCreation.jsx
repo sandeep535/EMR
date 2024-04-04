@@ -2,7 +2,7 @@
 import React, { useRef, useEffect } from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import { Box, InputLabel } from '@mui/material'
+import { Box } from '@mui/material'
 import Grid from '@mui/material/Grid';
 import FormControl from '@mui/material/FormControl';
 import Translations from '../../resources/translations';
@@ -18,10 +18,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
 import EMRAlert from '../../Utils/CustomAlert';
-import DemoPaper from '../../Utils/CustomCssUtil';
 import Divider from '@mui/material/Divider';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
