@@ -21,6 +21,7 @@ import LoginPage from "./pages/Login/LoginPage";
 import AppContext from './components/Context/AppContext';
 import { useNavigate } from "react-router-dom";
 import DrugMaster from './Masters/DrugMaster/DrugMaster';
+import AllergyMaster from './Masters/AllergyMaster/AllergyMaster';
 
 export default function MainScreen() {
     const navigate = useNavigate();
@@ -55,6 +56,7 @@ export default function MainScreen() {
                                 <Route path='/prescriptionsList' element={<PrescriptionsList />} />
                                 <Route path='/rolesAnsTasks' element={<RoleAndTasks />} />
                                 <Route path='/drugMaster' element={<DrugMaster />} />
+                                <Route path='/allergyMaster' element={<AllergyMaster />} />
                             </Routes>
                         </main>
                     </div>

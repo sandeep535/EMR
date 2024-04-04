@@ -159,7 +159,16 @@ const APIS={
         METHOD:"GET",
         ACTION:""
     },
-    
+    SAVE_ALLERIES_MASTER:{
+        URL:"masters/saveAllergiesMatser",
+        METHOD:"POST",
+        ACTION:""
+    },
+    GET_ALLERIES_MASTER_LIST:{
+        URL:"masters/getAllergiesMatser",
+        METHOD:"POST",
+        ACTION:""
+    },
     
     
 

@@ -98,6 +98,13 @@
         isOpen:false,
         isRefreshMenu:true,
         screencode:'DRUG_MASTER_SCREEN_VIEW'
-    },]
+    },{
+        title:"Allergy Master",
+        to:"/allergyMaster",
+        icon:"medication",
+        isOpen:false,
+        isRefreshMenu:true,
+        screencode:'DRUG_MASTER_SCREEN_VIEW'
+    }]
 }];
 export default LeftMenu

@@ -85,11 +85,11 @@ const Topbar = () => {
         <IconButton onClick={() => {
           handleClickOpen()
         }}>
-          <LogoutIcon />
+          <LogoutIcon  sx={{color:'white'}}/>
         </IconButton>
         {broken && rtl && (
           <IconButton
-            sx={{ margin: "0 6 0 2" }}
+            sx={{ margin: "0 6 0 2" ,color:'white'}}
             onClick={() => toggleSidebar()}
           >
             <MenuOutlinedIcon />

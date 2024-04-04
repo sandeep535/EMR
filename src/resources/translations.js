@@ -81,6 +81,14 @@ const Translations = {
         NAME:'Drug Master',
         DRUG_NAME:'Drug Name',
         DRUG_CODE:'Drug Code'
+     },
+     "ALLERGY_MASTER":{
+        NAME:'Allergy Master',
+        ALLERGY_TYPE:'Allergy Type',
+        ALLERGY_CODE:'Allergy Code',
+        ALLERGY_NAME:'Allergy Name',
+        STATUS:'Status',
+        ACTIONS:'Actions'
      }
     
 }

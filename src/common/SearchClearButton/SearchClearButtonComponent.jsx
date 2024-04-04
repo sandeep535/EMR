@@ -4,14 +4,14 @@ import { Box } from '@mui/material';
 import Translations from '../../resources/translations';
 import Button from '@mui/material/Button';
 
-const FormButtonComponent = (props) => {
+const SearchClearButtonComponent = (props) => {
     
     return (
-        <Box display="flex" justifyContent="center" >
-            <Button type="submit" color="primary" variant="contained">
+        <Box display="flex" justifyContent="center">
+            <Button type="submit" color="primary" variant="contained" onClick={() => { props.clickbtton1()}}>
                 {props.button1}
             </Button>
-            <Button color="secondary" variant="contained" onClick={() => { props.clearFormEvent()}}>
+            <Button color="secondary" variant="contained" onClick={() => { props.clickbtton2()}}>
                 {props.button2}
             </Button>
 
@@ -19,4 +19,4 @@ const FormButtonComponent = (props) => {
     );
 
 }
-export default FormButtonComponent;
+export default SearchClearButtonComponent;
