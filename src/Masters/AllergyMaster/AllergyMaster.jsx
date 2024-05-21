@@ -26,6 +26,7 @@ export default function AllergyMaster(props) {
     const [status, setStatus] = useState("1");
     const [mode, setMode] = useState();
     const [editModeData, setEditModeData] = useState(null);
+    const [totalcount,setTotalcount] = useState(0);
 
     const [searchObj, setSearchObj] = useState({ status: "1" });
     const [showAddForm, setShowAddForm] = useState(false);
@@ -126,6 +127,7 @@ export default function AllergyMaster(props) {
     };
 
     async function getAllergiesList() {
+        
         let data = {
             allergyid: searchObj.allergyid,
             allergyname: (searchObj.allergyname) ? searchObj.allergyname : "",
@@ -133,15 +135,23 @@ export default function AllergyMaster(props) {
             allergycode: (searchObj.allergycode) ? searchObj.allergycode : '',
             allergytype: searchObj.allergyType
         }
+        var mainDTO = {
+            pagenumber:0,
+            pagesize:20,
+            allergieslist:[data]
+        }
         var payLoad = {
             method: APIS.GET_ALLERIES_MASTER_LIST.METHOD,
             url: APIS.GET_ALLERIES_MASTER_LIST.URL,
             paramas: [],
-            data: data
+            data: mainDTO
         }
         let result = await sendRequest(payLoad);
-        if (result) {
-            setTableData(result);
+        if (result && result.allergieslist.length!=0) {
+            setTableData(result.allergieslist);
+            setTotalcount(result.totalcount);
+        }else{
+            setTableData([]);
         }
         debugger
     }
@@ -333,7 +343,9 @@ export default function AllergyMaster(props) {
                     </Grid>
                 </Box>
                 <Box >
-                    <CustomDataGrid tableHeaders={allergiesListHeaders} tableData={tableData} triggerEvent={(row, action) => {
+                    <CustomDataGrid tableHeaders={allergiesListHeaders} tableData={tableData} totalcount ={totalcount} rowsPerPage = {20} paginationChangeEvent ={(number)=>{
+                        debugger
+                    }}triggerEvent={(row, action) => {
                         openEditmode(row, action);
                     }}></CustomDataGrid>
                 </Box>

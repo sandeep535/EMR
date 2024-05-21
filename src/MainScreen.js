@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route,useNavigate,useParams } from "react-router-dom";
 import { MyProSidebarProvider } from "./pages/global/sidebar/sidebarContext";
 
 import VisitCreation from "./pages/visit-creation/VisitCreation";
@@ -14,16 +14,23 @@ import PrescriptionsList from "./pages/Prescriptions/PrescriptionsList";
 import RoleAndTasks from "./pages/RoleAndTaks/RoleAndTasks";
 import LoginPage from "./pages/Login/LoginPage";
 import AppContext from './components/Context/AppContext';
-import { useNavigate } from "react-router-dom";
+
 import DrugMaster from './Masters/DrugMaster/DrugMaster';
 import AllergyMaster from './Masters/AllergyMaster/AllergyMaster';
+import VistStatistics from './pages/DashBoards/VistStatistics';
+import Allergies from './pages/Allergies/Allergies';
 
-export default function MainScreen() {
+// import LeftMenu from './common/LeftMenu';
+
+export default function MainScreen(props) {
     const navigate = useNavigate();
+    const params= useParams()
+    console.log("ssss----------",params)
     useEffect(() => {
-        if (!appContextValue.isLogin) {
-            navigate("/login", { replace: true });
-        }
+        debugger
+        // if (!appContextValue.isLogin) {
+        //     navigate("/login/emr", { replace: true });
+        // }
 
     }, []);
     const appContextValue = useContext(AppContext);
@@ -31,15 +38,13 @@ export default function MainScreen() {
         <>
             {!appContextValue.isLogin &&
                 (<Routes>
-                    <Route path='/login' element={<LoginPage />} />
+                    <Route path='/login/:tenant' element={<LoginPage />} />
                 </Routes>)}
             {appContextValue && appContextValue.isLogin &&
                 <MyProSidebarProvider>
-                    
                     <div style={{ height: "100%", width: "100%" }}>
-                    <Topbar/>
+                        <Topbar />
                         <main>
-                        
                             <Routes>
                                 <Route path='/vist-dashboard' element={<VisitDasboard />} />
                                 <Route path="/registration" element={<Registration />} />
@@ -52,6 +57,9 @@ export default function MainScreen() {
                                 <Route path='/rolesAnsTasks' element={<RoleAndTasks />} />
                                 <Route path='/drugMaster' element={<DrugMaster />} />
                                 <Route path='/allergyMaster' element={<AllergyMaster />} />
+                                <Route path='/vist-statistics' element={<VistStatistics />} />
+                                <Route path='/allergy' element={<Allergies isSaveDirect={true} />} />
+                                
                             </Routes>
                         </main>
                     </div>

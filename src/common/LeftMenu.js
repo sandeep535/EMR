@@ -11,6 +11,13 @@
         isOpen:false,
         isRefreshMenu:true,
         screencode:'VISIT_DAHSBOARD_SCREEN_VIEW'
+    },{
+        title:"Visits Statistics",
+        to:"/vist-statistics",
+        icon:"dashboard_customize",
+        isOpen:false,
+        isRefreshMenu:true,
+        screencode:'VISIT_DAHSBOARD_SCREEN_VIEW'
     }]
 },{
     title:"Clinical Data",
@@ -26,6 +33,13 @@
         isOpen:false,
         isRefreshMenu:false,
         screencode:'VITALS_SCREEN_VIEW'
+    },{
+        title:"Allergies",
+        to:"/allergy",
+        icon:"favorite",
+        isPatientSpecific :true,
+        isRefreshMenu:false,
+        screencode:'PRESCRIPTIONS_SCREEN_VIEW'
     },{
         title:"Vitals",
         to:"/vitalsList",

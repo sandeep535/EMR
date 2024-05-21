@@ -120,8 +120,8 @@ const APIS={
         ACTION:""
     },
     GET_ALLERIGIES_DATA:{
-        URL:"visit/getAllergies/{0}/{1}",
-        METHOD:"GET",
+        URL:"visit/getAllergies",
+        METHOD:"POST",
         ACTION:""
     },
     GET_ROLES_TASKS:{
@@ -161,6 +161,11 @@ const APIS={
     },
     SAVE_ALLERIES_MASTER:{
         URL:"masters/saveAllergiesMatser",
+        METHOD:"POST",
+        ACTION:""
+    },
+    SAVE_ALLERIES:{
+        URL:"visit/saveAllergies",
         METHOD:"POST",
         ACTION:""
     },

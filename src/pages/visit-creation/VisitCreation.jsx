@@ -46,9 +46,9 @@ const visitServiceTableHeaders = [{
   width: '15%'
 }]
 export default function VisitCreation(props) {
-  const [doctor, setDoctor] = React.useState((props?.visitEditData?.doctor)?props?.visitEditData?.doctor:null);
+  const [doctor, setDoctor] = React.useState((props?.visitEditData?.doctor) ? props?.visitEditData?.doctor : null);
   const [contact, setContact] = React.useState();
-  const [specility, setSpecility] = React.useState((props?.visitEditData?.specilaity) ?props?.visitEditData?.specilaity:null);
+  const [specility, setSpecility] = React.useState((props?.visitEditData?.specilaity) ? props?.visitEditData?.specilaity : null);
   const [visitType, setVisitType] = React.useState((props?.visitEditData?.visittype) ? props.visitEditData.visittype : null);
 
   const [doctorInputValueChange, setDoctorInputValueChange] = React.useState('');
@@ -62,11 +62,11 @@ export default function VisitCreation(props) {
   const [visitServiceList, setVisitServiceList] = React.useState([]);
   const [clientsearchlist, setClientsearchlist] = React.useState([]);
 
-  const [visitreason, setVisitReason] = React.useState((props?.visitEditData?.reason) ? props?.visitEditData?.reason :"");
+  const [visitreason, setVisitReason] = React.useState((props?.visitEditData?.reason) ? props?.visitEditData?.reason : "");
   const [serviceValues, setServiceValues] = React.useState();
 
   const [visitdate, setVisitdate] = React.useState((props?.visitEditData?.visitdate) ? dayjs(moment(new Date(props?.visitEditData.visitdate)).format("YYYY-MM-DD")) : dayjs(moment(new Date()).format("YYYY-MM-DD")));
-  const [token, setToken] = React.useState((props?.visitEditData?.token) ?props?.visitEditData?.token:null);
+  const [token, setToken] = React.useState((props?.visitEditData?.token) ? props?.visitEditData?.token : null);
 
   const [selectedClientData, setSelectedClientData] = React.useState([]);
 
@@ -80,11 +80,12 @@ export default function VisitCreation(props) {
   const autoComplteServicesRef = useRef();
   const autoCompltedocRef = useRef();
   const autoComplteVisittypeRef = useRef();
+  const searchAutoCompleteRef = useRef();
 
 
   useEffect(() => {
     getLookUpDetails();
-    
+
   }, []);
 
   useEffect(() => {
@@ -117,7 +118,7 @@ export default function VisitCreation(props) {
 
   }
 
-  function setVisitDataInEditMode(){
+  function setVisitDataInEditMode() {
     setSelectedClientData(props?.visitEditData?.clientid);
     registrationInformationRef.current.setFormData1(props?.visitEditData?.clientid);
     setVisitServiceList(props?.visitEditData?.services);
@@ -164,11 +165,11 @@ export default function VisitCreation(props) {
       setVisiiTypeOptions(result.VISIT_TYPES);
     }
 
-      if(props?.isEdit == 'true'){
-        setVisitDataInEditMode();
-      }
-    
-    
+    if (props?.isEdit == 'true') {
+      setVisitDataInEditMode();
+    }
+
+
 
   }
 
@@ -306,7 +307,7 @@ export default function VisitCreation(props) {
       clientid: clientDeatils,
       services: visitServiceList,
       token: token,
-      visitid : (props?.isEdit == "true") ? props?.visitEditData?.visitid: null
+      visitid: (props?.isEdit == "true") ? props?.visitEditData?.visitid : null
     }
 
     var payLoad = {
@@ -317,7 +318,7 @@ export default function VisitCreation(props) {
     }
     let result = await sendRequest(payLoad);
     if (result) {
-      EMRAlert.alertifySuccess("Visit Saved Succussfully.you token number is "+result.token+"");
+      EMRAlert.alertifySuccess("Visit Saved Succussfully.you token number is " + result.token + "");
       clearVisitForm()
     } else {
       EMRAlert.alertifyError("Not created")
@@ -329,18 +330,25 @@ export default function VisitCreation(props) {
         <Grid xs={6} container>
           <Autocomplete
             size="small"
+            ref={searchAutoCompleteRef}
             value={contact}
             onChange={(event, newValue) => {
-              setContact(newValue.contact);
-              populateClientDatatoForm(newValue);
+              console.log("sssss")
+              if (newValue) {
+                setContact(newValue.contact);
+                populateClientDatatoForm(newValue);
+              }
+
             }}
             key={option => option.seqid}
             getOptionLabel={option => option.contact}
             inputValue={contact}
+            disableCloseOnSelect={false}
             renderOption={(props, option) => {
               return (
-                <li onClick={()=>{
+                <li onClick={() => {
                   populateClientDatatoForm(option);
+                  searchAutoCompleteRef.current.blur();
                 }}>
                   <Grid container alignItems="center">
                     <Grid item sx={{ ml: 1, width: 'calc(100% - 44px)', wordWrap: 'break-word' }}>
@@ -353,7 +361,7 @@ export default function VisitCreation(props) {
                           {option.contact}
                         </Typography>
                       </Box>
-                  
+
                     </Grid>
                   </Grid>
                   <Divider variant="middle" component="li" />
@@ -462,10 +470,10 @@ export default function VisitCreation(props) {
                   />
                 </FormControl>
               </Grid>
-              
 
-              <Grid item xs={3}  spacing={1}>
-                <LocalizationProvider dateAdapter={AdapterDayjs} sx={{mt:-9}}>
+
+              <Grid item xs={3} spacing={1}>
+                <LocalizationProvider dateAdapter={AdapterDayjs} sx={{ mt: -9 }}>
                   <DemoContainer components={['DateField', 'DateField']}>
                     <DatePicker
                       label="Visit Date"

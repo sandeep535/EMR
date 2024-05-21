@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext,useEffect } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -15,6 +15,7 @@ import { sendRequest } from '../global/DataManager';
 import AppContext from '../../components/Context/AppContext';
 import ErrorMessage from '../../components/ErrorMessage/Errormsg';
 import LeftMenu from '../../common/LeftMenu';
+import { useParams } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -34,14 +35,14 @@ function Copyright(props) {
 const defaultTheme = createTheme();
 
 export default function LoginPage(props) {
-  var currentURL = window.location.href;
-  var split = currentURL.split('/');
-  if(split[3] !== 'login'){
-    window.location.href = currentURL+'login';
-  }
+  // var currentURL = window.location.href;
+  // var split = currentURL.split('/');
+  // if(split[3] !== 'login'){
+  //   window.location.href = currentURL+'login';
+  // }
   const appContextValue = useContext(AppContext);
   const [showError, setShowError] = useState(false);
-
+  const params= useParams()
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -51,9 +52,12 @@ export default function LoginPage(props) {
     }
     callLogin(obj);
   };
-  // useEffect(() => {
-  //   console.log()
-  // }, [count])
+  useEffect(() => {
+    debugger
+    console.log("ssssssssssssssssss",params)
+    sessionStorage.setItem("tenant",params.tenant)
+    appContextValue.setTenant(params.tenant);
+  }, [])
   async function fetchRolesTransData(roleid) {
     let roleidcopy = (roleid) ? roleid : '';
     var payLoad = {

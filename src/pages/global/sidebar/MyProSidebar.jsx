@@ -15,7 +15,7 @@ import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Icon from '@mui/material/Icon';
-import logo from '../../../resources/LeafSpring_Logo1.jpg';
+import logo from '../../../resources/LeafSpring_Logo1.jpeg';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -123,7 +123,7 @@ const MyProSidebar = () => {
               </Box>
             </Box>
           </Box>
-          <Box sx={{ height: "75vh", color: 'white' }}>
+          <Box sx={{ height: "85.5vh", color: 'white' }}>
             <List
               sx={{ width: '100%', maxWidth: 360,marginTop:'15px' }}
               component="nav"

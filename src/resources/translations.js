@@ -80,7 +80,15 @@ const Translations = {
      "DRUG_MASTER":{
         NAME:'Drug Master',
         DRUG_NAME:'Drug Name',
-        DRUG_CODE:'Drug Code'
+        DRUG_TYPE:'Drug Type',
+        DRUG_ALERT:'Drug Alert',
+        DRUG_FORM:'Drug Form',
+        DRUG_CODE:'Drug Code',
+        DRUG_DOSAGE:'Drug Dosage',
+        DRUG_UNIT:'Drug Unit',
+        STATUS:'Status',
+        ACTIVE:'Active',
+        IN_ACTIVE:'In active',
      },
      "ALLERGY_MASTER":{
         NAME:'Allergy Master',

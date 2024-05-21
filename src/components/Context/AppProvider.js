@@ -10,6 +10,8 @@ export default function AppProvider(props) {
     const [isLogin, setIslogin] = useState(false);
     const [leftMenuList, setLeftMenuList] = useState([]);
 
+    const [tenant, setTenant] = useState("");
+
     return (
         <AppContext.Provider value={
             {
@@ -36,6 +38,10 @@ export default function AppProvider(props) {
                 leftMenuList:leftMenuList,
                 setLeftMenuList:(data)=>{
                     setLeftMenuList(data)
+                },
+                tenant:tenant,
+                setTenant:(data)=>{
+                    setTenant(data);
                 }
             }
         }>

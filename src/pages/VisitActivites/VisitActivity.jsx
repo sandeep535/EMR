@@ -10,11 +10,9 @@ import Vitals from '../Vitals/Vitals';
 import Grid from '@mui/material/Grid';
 import Notes from '../Notes/Notes';
 import Prescriptions from '../Prescriptions/Prescriptions';
-import Divider from '@mui/material/Divider';
 import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
-import Allergies from '../Allergies/Allergies';
 import { useReactToPrint } from 'react-to-print';
-import { ComponentToPrint, FunctionalComponentToPrint } from '../../components/Print/ComponentToPrint';
+import {  FunctionalComponentToPrint } from '../../components/Print/ComponentToPrint';
 import PrintTableFomat from '../../common/Prints/PrintTableFomat';
 import PrintHeaders from '../../common/PrintHeaders'
 import PrintTextFormar from '../../common/Prints/PrintTextFormar';
@@ -33,6 +31,7 @@ export default function VisitActivity() {
     var notesAPIData = [];
     var diagnosissAPIData = [];
     useEffect(() => {
+        // eslint-disable-next-line
         callVisitAPis();
         getVisitCountBasedondate();
     }, []);
@@ -41,7 +40,7 @@ export default function VisitActivity() {
         getNotes();
         getDig();
         getPresctiptions();
-        getAllerigies();
+        //getAllerigies();
     }
     
     async function getVisitCountBasedondate() {
@@ -51,21 +50,11 @@ export default function VisitActivity() {
             paramas: [new Date('2023-12-16')],
         }
         let result = await sendRequest(payLoad);
-        if (result && result.length != 0) {
+        if (result && result.length !== 0) {
            console.log(result);
         }
     }
-    async function getAllerigies() {
-        var payLoad = {
-            method: APIS.GET_ALLERIGIES_DATA.METHOD,
-            url: APIS.GET_ALLERIGIES_DATA.URL,
-            paramas: [appContextValue.selectedVisitDeatils.visitid, 0],
-        }
-        let result = await sendRequest(payLoad);
-        if (result && result.length != 0) {
-            allergiesref.current.setFormData1(result);
-        }
-    }
+   
     async function getVitalsData() {
         var payLoad = {
             method: APIS.GET_VITALS_DATA.METHOD,
@@ -73,7 +62,7 @@ export default function VisitActivity() {
             paramas: [appContextValue.selectedVisitDeatils.visitid, 0],
         }
         let result = await sendRequest(payLoad);
-        if (result && result.length != 0) {
+        if (result && result.length !== 0) {
             vitalsRef.current.setFormData1(result[0]);
         }
     }
@@ -240,12 +229,12 @@ export default function VisitActivity() {
 
             <form onSubmit={handlePrescriptionSubmit} style={{height: '500px', overflowY: 'auto', marginTop:'10px'}}>
                 <Grid container spacing={1} xs={12}>
-                    <Grid item xs={4} spacing={4}>
+                    <Grid item xs={12} spacing={4}>
                         <Vitals ref={vitalsRef} />
                     </Grid>
-                    <Grid item xs={8}>
+                    {/* <Grid item xs={8}>
                         <Allergies ref={allergiesref} />
-                    </Grid>
+                    </Grid> */}
                 </Grid>
                 <Grid container spacing={1} xs={12}>
                     <Grid item xs={6} spacing={4}>

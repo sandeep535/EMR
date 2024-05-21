@@ -22,6 +22,8 @@ import Autocomplete from '@mui/material/Autocomplete';
 import Icon from '@mui/material/Icon';
 import VisitCreation from '../visit-creation/VisitCreation';
 import FullScreenModelPopup from '../../common/ModelPopup/FullScreenModelPopup';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
 
 const borderColor = {
     1: 'blue',
@@ -50,14 +52,16 @@ export default function VisitDasboard() {
     const [visitList, setVisitList] = useState([]);
     const appContextValue = useContext(AppContext);
     const listInnerRef = useRef();
-    const [count, setCount] = useState(0);
+    const [count, setCount] = useState(1);
     const [visitStatus, setVisitStatus] = useState([]);
     const [visitStatusList, setVisitStatusList] = useState([]);
     const [isOpenEditPopup, setIsOpenEditPopup] = useState(false);
     const [visitEditData, setVisitEditData] = useState({});
+    const [totalRecords, setTotalRecords] = useState(0);
 
     const navigate = useNavigate();
     useEffect(() => {
+        setCount(1);
         getVisitDetails();
     }, [toDate, fromDate]);
     useEffect(() => {
@@ -67,8 +71,9 @@ export default function VisitDasboard() {
         getVisitDetails();
     }, [count])
     useEffect(() => {
+        setCount(1);
         getVisitDetails();
-        
+
     }, [visitStatus]);
     async function getVisitDetails() {
         let localfromDate = fromDate ? new Date(fromDate).setHours(0, 0, 0) : new Date().setHours(0, 0, 0);
@@ -76,12 +81,16 @@ export default function VisitDasboard() {
         var payLoad = {
             method: APIS.GET_VISITS.METHOD,
             url: APIS.GET_VISITS.URL,
-            paramas: [new Date(localfromDate), new Date(localtoDate), visitStatus.id, count, 25]
+            paramas: [new Date(localfromDate), new Date(localtoDate), visitStatus.id, count-1, 10]
         }
         let result = await sendRequest(payLoad);
-        if (result && result.size != 0) {
-            setVisitList(result);
-            
+        debugger
+        if (result && result.visitDetailsDTO.length != 0) {
+            setVisitList(result.visitDetailsDTO);
+            setTotalRecords(result.totalcount)
+        }else{
+            setVisitList([]);
+          
         }
     }
     async function getVisitStatusList() {
@@ -117,10 +126,13 @@ export default function VisitDasboard() {
     function closeModelPopup() {
         setIsOpenEditPopup(false);
     }
+    const handlePaginationChange = (event, value) => {
+        setCount(value);
+      };
     return (
         <>
-            <Box sx={{ flexGrow: 1, m: 1, position: 'relative', zIndex: 1}}>
-                
+            <Box sx={{ flexGrow: 1, m: 1, position: 'relative', zIndex: 1 }}>
+
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={['DateField', 'DateField']}>
                         <Grid container >
@@ -169,11 +181,12 @@ export default function VisitDasboard() {
                                 />
                             </Grid>
                             <ColorLegend legendItems={legendItems} />
+                            <Box sx={{mt:1,fontSize:14,fontWeight:900}}>{"Total Records: " + totalRecords}</Box>
                         </Grid>
                     </DemoContainer>
                 </LocalizationProvider>
             </Box>
-            <Box sx={{ m: 1 , paddingTop: '80px'}} className='visit-cards-div' ref={listInnerRef}>
+            <Box sx={{ m: 1, paddingTop: '80px' }} className='visit-cards-div' ref={listInnerRef}>
                 <Grid container spacing={1}  >
                     {visitList && visitList.map(visit => {
                         return (
@@ -182,7 +195,7 @@ export default function VisitDasboard() {
                                     <CardContent>
                                         <nav>
                                             <ul style={styles.wrapper}>
-                                                <li style={styles[borderColor[visit.status]]}><a href=""><Box>
+                                                <li style={styles[borderColor[visit.status]]} style={{width:'100%'}}><a href=""><Box>
                                                     <Typography sx={{ fontSize: 12, fontWeight: 900 }} color="text.secondary" gutterBottom>
                                                         {visit.clientid.firstname + " " + visit.clientid.lastname + "(Token no:" + visit.token + ")"}
                                                     </Typography>
@@ -212,6 +225,11 @@ export default function VisitDasboard() {
 
                 </Grid>
 
+            </Box>
+            <Box >
+                <Stack spacing={2}>
+                    <Pagination count={Math.ceil(totalRecords/5)} color="primary"  page={count} onChange={handlePaginationChange} />
+                </Stack>
             </Box>
             <Box>
                 <FullScreenModelPopup title={"Edit Visit"} isOpen={isOpenEditPopup} handleClose={() => closeModelPopup()}>

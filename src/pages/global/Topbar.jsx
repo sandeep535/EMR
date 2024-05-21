@@ -42,7 +42,7 @@ const Topbar = () => {
     appContextValue.setIslogin(false);
     // setIslogin(false);
 
-    navigate("/login", { replace: true });
+    navigate("/login/"+sessionStorage.getItem("tenant"), { replace: true });
   }
 
   return (

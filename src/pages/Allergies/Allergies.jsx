@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle, useContext } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle, useContext,useDeferredValue  } from 'react';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -26,6 +26,10 @@ import AppContext from '../../components/Context/AppContext';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
+import Autocomplete from '@mui/material/Autocomplete';
+import EMRAlert from '../../Utils/CustomAlert';
+import CustomDataGrid from '../../common/DataGrid/CustomDataGrid';
+import AllergiesList from './AllergiesList';
 
 const allergiesColumns = [{
     name: 'Allergy',
@@ -43,18 +47,61 @@ const allergiesColumns = [{
     name: 'Actions',
     width: '10%'
 }]
+
+const allergiesListHeaders = [{
+    name: "Allergy",
+    datakey: 'allergytype.lookupvalue',
+    width: '20%'
+},]
 const Allergies = forwardRef((props, ref) => {
-    const [allergy, setAllergy] = useState("");
-    const [status, setStatus] = useState([]);
+    const [allergyInputValue, setAllergyInputValue] = useState("");
+    const [allergy, setAllergy] = useState([]);
+    const [status, setStatus] = useState("1");
     const [indications, setIndications] = useState("");
-    const [severity, setSeverity] = useState();
+    const [severity, setSeverity] = useState({});
     const [severityList, setSeverityList] = useState([]);
 
     const [allergiesList, setAllergiesList] = useState([]);
     const appContextValue = useContext(AppContext);
+    const [allergyTypeOptions, setAllergyTypeOptions] = useState([]);
+    const [mode,setMode] = useState("");
+    const [selectedRow,setSelectedRow] = useState("");
     useEffect(() => {
         getLookUpDetails();
+        getAllergiesMasterList();
+        setMode("new")
     }, []);
+
+    async function getAllergiesMasterList(name) {
+        let data = {
+            allergyid: "",
+            allergyname: name,
+            status: 1,
+            allergycode: null,
+            allergytype: null
+        }
+        var mainDTO = {
+            pagenumber: 0,
+            pagesize: 1000,
+            allergieslist: [data]
+        }
+        var payLoad = {
+            method: APIS.GET_ALLERIES_MASTER_LIST.METHOD,
+            url: APIS.GET_ALLERIES_MASTER_LIST.URL,
+            paramas: [],
+            data: mainDTO
+        }
+        let result = await sendRequest(payLoad);
+        if (result && result.allergieslist.length != 0) {
+            setAllergyTypeOptions(result.allergieslist);
+            // setTableData(result.allergieslist);
+            //setTotalcount(result.totalcount);
+        } else {
+            // setTableData([]);
+        }
+        debugger
+    }
+
     useImperativeHandle(
         ref,
         () => {
@@ -88,38 +135,57 @@ const Allergies = forwardRef((props, ref) => {
             setSeverityList(result.ALLERGY_SEVERITY);
         }
     }
-    function addAllergiestoGrid() {
+    async function addAllergiestoGrid() {
         var obj = {
-            allergy: allergy,
+            allergy: allergy.allergyname,
             status: status,
             indications: indications,
             severity: severity,
             visitid: appContextValue.selectedVisitDeatils.visitid,
             clientid: appContextValue.selectedVisitDeatils.clientid.seqid,
+            allergymaster: {
+                allergyid: allergy.allergyid,
+                allergyname: allergy.allergyname
+            }
         }
-        var copyObj = [...allergiesList];
-        copyObj.push(obj);
-        setAllergiesList(copyObj);
+        if(mode == "edit"){
+            obj["allergyid"] = selectedRow.allergyid;
+            obj["visitid"] = selectedRow.visitid;
+        }
+     
+       
+        if (props.isSaveDirect) {
+            var payLoad = {
+                method: APIS.SAVE_ALLERIES.METHOD,
+                url: APIS.SAVE_ALLERIES.URL,
+                paramas: [],
+                data: [obj]
+            }
+            let result = await sendRequest(payLoad);
+            if (result) {
+                EMRAlert.alertifySuccess("Allergy Saved Succussfully");
+            } else {
+                EMRAlert.alertifyError("Not Saved");
+            }
+        } else {
+            var copyObj = [...allergiesList];
+            copyObj.push(obj);
+            setAllergiesList(copyObj);
+        }
+
     }
+    function setDatatoForm(row){
+        debugger
+        setAllergy(row.allergymaster);
+        setStatus(row.status);
+        setIndications(row.indications);
+        setSeverity(row.severity);
+        setMode("edit");
+        setSelectedRow(row);
+    }
+    
     async function handleSubmit(event) {
         event.preventDefault();
-        // var sendingobj = {
-        //     servicename: servicename,
-        //     price: price,
-        //     active: active
-        // }
-        // var payLoad = {
-        //     method: APIS.SAVE_MASTER_DATA.METHOD,
-        //     url: APIS.SAVE_MASTER_DATA.URL,
-        //     paramas: [],
-        //     data: sendingobj
-        // }
-        // let result = await sendRequest(payLoad);
-        // if (result) {
-        //     EMRAlert.alertifySuccess("Service Saved Succussfully");
-        // } else {
-        //     EMRAlert.alertifyError("Not created");
-        // }
     }
     return (
         <>
@@ -128,12 +194,42 @@ const Allergies = forwardRef((props, ref) => {
                     <Card variant="outlined">
                         <CardContent>
                             <Typography sx={{ fontSize: 16 }} className='card-header' >
-                                Allergies
+                                Add Allergies
                             </Typography>
                             <Box sx={{ m: 1 }}>
                                 <Grid container spacing={1}>
                                     <Grid item xs={2} spacing={1}>
-                                        <TextField
+                                        <FormControl variant="outlined" fullWidth>
+                                            <Autocomplete
+                                                size="small"
+                                                disablePortal
+                                                id="Allergy-combo-box-demo"
+                                                options={allergyTypeOptions}
+                                                key={option => option.allergyid}
+                                                getOptionLabel={option => option.allergyname || ""}
+                                                value={allergy}
+                                                inputValue={allergyInputValue}
+                                                onInputChange={(event, newInputValue) => {
+                                                    if (newInputValue.length > 1) {
+                                                        getAllergiesMasterList(newInputValue)
+                                                    }
+                                                    setAllergyInputValue(newInputValue);
+                                                }}
+                                                onChange={(event, newValue) => {
+                                                    console.log("------------", newValue);
+                                                    setAllergy(newValue);
+                                                }}
+                                                renderOption={(props, option) => {
+                                                    return (
+                                                        <li {...props} key={option.allergyid}>
+                                                            {option.allergyname}
+                                                        </li>
+                                                    );
+                                                }}
+                                                renderInput={(params) => <TextField {...params} label={Translations.ALLERGY.ALLERGYNAME} />}
+                                            />
+                                        </FormControl>
+                                        {/* <TextField
                                             fullWidth
                                             type="text"
                                             size="small"
@@ -143,7 +239,7 @@ const Allergies = forwardRef((props, ref) => {
                                             name="allergy"
                                             onChange={e => setAllergy(e.target.value)}
                                             value={allergy}
-                                        />
+                                        /> */}
                                     </Grid>
                                     <Grid item xs={2} >
                                         <FormControl variant="outlined" size="small" fullWidth>
@@ -160,8 +256,8 @@ const Allergies = forwardRef((props, ref) => {
                                                 label={Translations.ALLERGY.SERVERITY}
                                                 name="severity"
                                                 size="small"
-                                                renderValue={(o) => o.lookupvalue}
-                                                onChange={e => setSeverity(e.target.value)}
+                                                renderValue={(o) => o.lookupvalue || ''}
+                                                onChange={e => {console.log(e.target.value); setSeverity(e.target.value)}}
                                                 value={severity}
                                             >
                                                 {severityList.map((severity) => (
@@ -195,6 +291,7 @@ const Allergies = forwardRef((props, ref) => {
                                                 row
                                                 aria-labelledby="demo-row-radio-buttons-group-label"
                                                 name="row-radio-buttons-group"
+                                                value={status}
                                             >
                                                 <FormControlLabel value="1" control={<Radio onChange={handleChange} />} label="Active" />
                                                 <FormControlLabel value="2" control={<Radio onChange={handleChange} />} label="Inactive" />
@@ -207,39 +304,51 @@ const Allergies = forwardRef((props, ref) => {
                                         }}>Add</Button>
                                     </Grid>
                                 </Grid>
-                                <Grid xs={12} container spacing={1}>
-                                <TableContainer  style={{maxHeight:120 }}  component={Paper} >
-                                        <Table stickyHeader aria-label="simple table">
-                                            <TableHead style={{ backgroundColor: '#1976d2',color:'#ffffff',padding: '8px', fontSize: '14px' }}>
-                                                <TableRow>
-                                                    {allergiesColumns.map((header, index) => (
-                                                        <TableCell key={index} style={{ minWidth: header.width }}>{header.name}</TableCell>
-                                                    ))}
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody  className='grid-height'>
-                                                {allergiesList && allergiesList.map((callergy, index) => (
-                                                    <TableRow key={callergy.id} >
-                                                        <TableCell style={{ padding: '6px', fontSize: '12px' }}>{(callergy && callergy.allergy) ? callergy.allergy : ""}</TableCell>
-                                                        <TableCell style={{ padding: '6px', fontSize: '12px' }}>{(callergy && callergy.severity) ? callergy.severity.lookupvalue : ""}</TableCell>
-                                                        <TableCell style={{ padding: '6px', fontSize: '12px' }}>{(callergy && callergy.status === 1) ? "Active" : "In-Active"}</TableCell>
-                                                        <TableCell style={{ padding: '6px', fontSize: '12px' }}>{(callergy && callergy.indications) ? callergy.indications : ""}</TableCell>
-                                                        <TableCell style={{ padding: '6px', fontSize: '12px' }}><ClearIcon fontSize='small'  style={{ cursor: 'pointer' }} onClick={() => {
-                                                            //removePrescriptionFromList(index);
-                                                        }} /></TableCell>
+                                {props && !props.isSaveDirect &&
+                                    <Grid xs={12} container spacing={1}>
+                                        <TableContainer component={Paper} >
+                                            <Table stickyHeader aria-label="simple table">
+                                                <TableHead style={{ backgroundColor: '#1976d2', color: '#ffffff', padding: '8px', fontSize: '14px' }}>
+                                                    <TableRow>
+                                                        {allergiesColumns.map((header, index) => (
+                                                            <TableCell key={index} style={{ minWidth: header.width }}>{header.name}</TableCell>
+                                                        ))}
                                                     </TableRow>
-                                                ))}
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
-                                   
-                                </Grid>
+                                                </TableHead>
+                                                <TableBody className='grid-height'>
+                                                    {allergiesList && allergiesList.map((callergy, index) => (
+                                                        <TableRow key={callergy.id} >
+                                                            <TableCell style={{ padding: '6px', fontSize: '12px' }}>{(callergy && callergy.allergy) ? callergy.allergy : ""}</TableCell>
+                                                            <TableCell style={{ padding: '6px', fontSize: '12px' }}>{(callergy && callergy.severity) ? callergy.severity.lookupvalue : ""}</TableCell>
+                                                            <TableCell style={{ padding: '6px', fontSize: '12px' }}>{(callergy && callergy.status === 1) ? "Active" : "In-Active"}</TableCell>
+                                                            <TableCell style={{ padding: '6px', fontSize: '12px' }}>{(callergy && callergy.indications) ? callergy.indications : ""}</TableCell>
+                                                            <TableCell style={{ padding: '6px', fontSize: '12px' }}><ClearIcon fontSize='small' style={{ cursor: 'pointer' }} onClick={() => {
+                                                                //removePrescriptionFromList(index);
+                                                            }} /></TableCell>
+                                                        </TableRow>
+                                                    ))}
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
+
+                                    </Grid>
+                                }
+                                {/* {props && props.isSaveDirect && <CustomDataGrid tableHeaders={allergiesListHeaders} tableData={tableData} totalcount={totalcount} rowsPerPage={20} paginationChangeEvent={(number) => {
+                                    debugger
+                                }} triggerEvent={(row, action) => {
+                                    openEditmode(row, action);
+                                }}></CustomDataGrid>
+                                } */}
                             </Box>
                         </CardContent>
                     </Card>
                 </Box>
 
             </form>
+            <AllergiesList selectedRecord = {(row,action)=>{
+                debugger
+                setDatatoForm(row)
+            }}/>
         </>
     )
 });

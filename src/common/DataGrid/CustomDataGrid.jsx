@@ -1,16 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import APIS from '../../Utils/APIS';
-import { sendRequest } from '../../pages/global/DataManager';
-import RegistrationInformation from '../../components/RegistrationInformation/RegistrationInformation';
-import Translations from '../../resources/translations';
-import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
-import Header from "../../components/Header";
-import Autocomplete from '@mui/material/Autocomplete';
-import FormControl from '@mui/material/FormControl';
-import EMRAlert from '../../Utils/CustomAlert';
+
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -22,11 +11,12 @@ import TablePagination from '@mui/material/TablePagination';
 import Icon from '@mui/material/Icon';
 
 export default function CustomDataGrid(props) {
-    const [page, setPage] = React.useState(2);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [page, setPage] = React.useState(0);
+    const [rowsPerPage, setRowsPerPage] = React.useState(props.rowsPerPage);
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
+        props.paginationChangeEvent(newPage);
     };
 
     const handleChangeRowsPerPage = (event) => {
@@ -83,8 +73,8 @@ export default function CustomDataGrid(props) {
                                 {props.tableHeaders.map((rowHeader) => (
                                     <TableCell component="th" scope="row">
                                         {rowHeader.isActions && rowHeader.actions.map(action => {
-                                            return <Icon style={{ color: 'black',cursor:'pointer' }} onClick={()=>{
-                                                props.triggerEvent(row,action)
+                                            return <Icon style={{ color: 'black', cursor: 'pointer' }} onClick={() => {
+                                                props.triggerEvent(row, action)
                                             }}>{action.icon}</Icon>
                                         })}
                                         {!rowHeader.isActions && getValueFromObj(row, rowHeader)}
@@ -97,14 +87,17 @@ export default function CustomDataGrid(props) {
                     </TableBody>
                 </Table>
             </TableContainer>
-            <TablePagination
-                component="div"
-                count={100}
-                page={page}
-                onPageChange={handleChangePage}
-                rowsPerPage={rowsPerPage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-            />
+            {props.rowsPerPage && (
+                <TablePagination
+                    component="div"
+                    count={props.totalcount ? props.totalcount : 100}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    rowsPerPage={rowsPerPage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
+            )}
+
         </>
     )
 }

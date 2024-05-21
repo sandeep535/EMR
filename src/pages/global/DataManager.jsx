@@ -15,7 +15,7 @@ export const sendRequest = async payload => {
         'content-type': 'application/json', 
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
-        
+        "X-TenantID" : sessionStorage.getItem("tenant"),
      }
     if(payload.url != 'auth/signin'){
         headers.Authorization="Bearer "+sessionStorage.getItem("token");
