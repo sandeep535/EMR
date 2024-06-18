@@ -1,10 +1,7 @@
 import React from "react";
 import { useContext } from "react";
-import {  Box, IconButton } from "@mui/material";
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import { Box, IconButton } from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
-import { useProSidebar } from "react-pro-sidebar";
-
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -14,6 +11,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { useNavigate } from "react-router-dom";
 import AppContext from '../../components/Context/AppContext';
+import { tokens } from "../../theme";
 
 const Transition = React.forwardRef(function Transition(
   props,
@@ -24,8 +22,7 @@ const Transition = React.forwardRef(function Transition(
 
 const Topbar = () => {
   const loggedUser = sessionStorage.logged_user;
-  const { toggleSidebar, broken, rtl } = useProSidebar();
-
+  const colors = tokens().themecolor.color;
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
   const appContextValue = useContext(AppContext);
@@ -42,16 +39,15 @@ const Topbar = () => {
     appContextValue.setIslogin(false);
     // setIslogin(false);
 
-    navigate("/login/"+sessionStorage.getItem("tenant"), { replace: true });
+    navigate("/login/" + sessionStorage.getItem("tenant"), { replace: true });
   }
 
   return (
-    <Box className="top-header" position="fixed" style={{width:'100%'}}>
+    <Box position="fixed" style={{ background: colors, width: '100%', height: '8%' }}>
       <Dialog
         open={open}
         TransitionComponent={Transition}
         keepMounted
-        // onClose={handleClose}
         aria-describedby="alert-dialog-slide-description"
       >
         <DialogTitle>{"Logout"}</DialogTitle>
@@ -65,24 +61,15 @@ const Topbar = () => {
           <Button onClick={handleClose}>No</Button>
         </DialogActions>
       </Dialog>
+
       <Box display="flex">
-        
-      </Box>
-      <Box display="flex">
-        <p style={{marginLeft:'68%',marginRight:"1%",color:'#fff'}}>Login User : <b>{loggedUser}</b></p>
+        <p style={{ marginLeft: '68%', marginRight: "1%", color: '#fff' }}>Login User : <b>{loggedUser}</b></p>
         <IconButton onClick={() => {
           handleClickOpen()
         }}>
-          <LogoutIcon  sx={{color:'white'}}/>
+          <LogoutIcon sx={{ color: 'white' }} />
         </IconButton>
-        {broken && rtl && (
-          <IconButton
-            sx={{ margin: "0 6 0 2" ,color:'white'}}
-            onClick={() => toggleSidebar()}
-          >
-            <MenuOutlinedIcon />
-          </IconButton>
-        )}
+
       </Box>
     </Box>
   );

@@ -17,6 +17,10 @@ import PrintTableFomat from '../../common/Prints/PrintTableFomat';
 import PrintHeaders from '../../common/PrintHeaders'
 import PrintTextFormar from '../../common/Prints/PrintTextFormar';
 import { useNavigate } from "react-router-dom";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import StartIcon from '@mui/icons-material/Start';
+import PrintIcon from '@mui/icons-material/Print';
+import BlindsClosedIcon from '@mui/icons-material/BlindsClosed';
 
 export default function VisitActivity() {
     const appContextValue = useContext(AppContext);
@@ -184,7 +188,8 @@ export default function VisitActivity() {
                         justifyContent="flex-start"
                         alignItems="flex-start"
                     >
-                        <Button  variant="outlined" onClick={() => backtoDashboard()}>Back to dashboard</Button>
+                        <ArrowBackIosIcon onClick={() => backtoDashboard()}/>
+                        {/* <Button  variant="outlined" onClick={() => backtoDashboard()}>Back to dashboard</Button> */}
                     </Box>
                 </Box>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
@@ -196,7 +201,8 @@ export default function VisitActivity() {
                             alignItems="flex-end"
                             
                         >
-                            <Button style={{marginRight:'5px'}} variant="outlined" onClick={() => updateVisitStatus(3, "Started")}>Start Visit</Button>
+                            <StartIcon onClick={() => updateVisitStatus(3, "Started")}/>
+                            
                         </Box>
                     }
                     {appContextValue && appContextValue.selectedVisitDeatils.status == 3 &&
@@ -207,7 +213,8 @@ export default function VisitActivity() {
                             alignItems="flex-end"
                             style={{marginRight:'5px'}}
                         >
-                            <Button  variant="outlined" style={{marginRight:'5px'}} onClick={() => updateVisitStatus(4, "Closed")}>Close Visit</Button>
+                            <BlindsClosedIcon onClick={() => updateVisitStatus(4, "Closed")}/>
+                            {/* <Button  variant="outlined" style={{marginRight:'5px'}} >Close Visit</Button> */}
                         </Box>
                     }
                     <Box
@@ -216,31 +223,38 @@ export default function VisitActivity() {
                         justifyContent="flex-end"
                         alignItems="flex-end"
                     >
-                        <Button  variant="outlined" onClick={() => {
+                        <PrintIcon onClick={() => {
                             setEnablePrint(true)
                             setTimeout(function () {
                                 handlePrint();
                             }, 100)
 
-                        }}>Print</Button>
+                        }}/>
+                        {/* <Button  variant="outlined" onClick={() => {
+                            setEnablePrint(true)
+                            setTimeout(function () {
+                                handlePrint();
+                            }, 100)
+
+                        }}>Print</Button> */}
                     </Box>
                 </Box>
             </Box>
 
-            <form onSubmit={handlePrescriptionSubmit} style={{height: '500px', overflowY: 'auto', marginTop:'10px'}}>
+            <form onSubmit={handlePrescriptionSubmit} style={{height: '530px', overflowY: 'auto', marginTop:'10px'}}>
                 <Grid container spacing={1} xs={12}>
-                    <Grid item xs={12} spacing={4}>
+                    <Grid item xs={6} spacing={4}>
                         <Vitals ref={vitalsRef} />
+                    </Grid>
+                    <Grid item xs={6} spacing={4}>
+                        <Notes label={"Diagnosis"} ref={diagnosissRef} />
                     </Grid>
                     {/* <Grid item xs={8}>
                         <Allergies ref={allergiesref} />
                     </Grid> */}
                 </Grid>
                 <Grid container spacing={1} xs={12}>
-                    <Grid item xs={6} spacing={4}>
-                        <Notes label={"Diagnosis"} ref={diagnosissRef} />
-                    </Grid>
-                    <Grid item xs={6} spacing={4}>
+                    <Grid item xs={12} spacing={4}>
                         <Notes label={"General Notes"} ref={notesRef} />
                     </Grid>
                 </Grid>

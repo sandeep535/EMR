@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle, useContext,useDeferredValue  } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle, useContext, useDeferredValue } from 'react';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -23,13 +23,12 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import ClearIcon from '@mui/icons-material/Clear';
 import AppContext from '../../components/Context/AppContext';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
 import Autocomplete from '@mui/material/Autocomplete';
 import EMRAlert from '../../Utils/CustomAlert';
 import CustomDataGrid from '../../common/DataGrid/CustomDataGrid';
 import AllergiesList from './AllergiesList';
+import CommonCard from '../../common/CommonCard';
+import ClientBanner from '../../components/ClientBanner/ClientBanner';
 
 const allergiesColumns = [{
     name: 'Allergy',
@@ -64,8 +63,8 @@ const Allergies = forwardRef((props, ref) => {
     const [allergiesList, setAllergiesList] = useState([]);
     const appContextValue = useContext(AppContext);
     const [allergyTypeOptions, setAllergyTypeOptions] = useState([]);
-    const [mode,setMode] = useState("");
-    const [selectedRow,setSelectedRow] = useState("");
+    const [mode, setMode] = useState("");
+    const [selectedRow, setSelectedRow] = useState("");
     useEffect(() => {
         getLookUpDetails();
         getAllergiesMasterList();
@@ -148,12 +147,12 @@ const Allergies = forwardRef((props, ref) => {
                 allergyname: allergy.allergyname
             }
         }
-        if(mode == "edit"){
+        if (mode == "edit") {
             obj["allergyid"] = selectedRow.allergyid;
             obj["visitid"] = selectedRow.visitid;
         }
-     
-       
+
+
         if (props.isSaveDirect) {
             var payLoad = {
                 method: APIS.SAVE_ALLERIES.METHOD,
@@ -174,7 +173,7 @@ const Allergies = forwardRef((props, ref) => {
         }
 
     }
-    function setDatatoForm(row){
+    function setDatatoForm(row) {
         debugger
         setAllergy(row.allergymaster);
         setStatus(row.status);
@@ -183,53 +182,52 @@ const Allergies = forwardRef((props, ref) => {
         setMode("edit");
         setSelectedRow(row);
     }
-    
+
     async function handleSubmit(event) {
         event.preventDefault();
     }
     return (
         <>
+            <Box >
+                <ClientBanner clientData={appContextValue.selectedVisitDeatils.clientid} visitData={appContextValue.selectedVisitDeatils} />
+
+            </Box>
             <form onSubmit={handleSubmit}>
-                <Box display="grid" gap="10px">
-                    <Card variant="outlined">
-                        <CardContent>
-                            <Typography sx={{ fontSize: 16 }} className='card-header' >
-                                Add Allergies
-                            </Typography>
-                            <Box sx={{ m: 1 }}>
-                                <Grid container spacing={1}>
-                                    <Grid item xs={2} spacing={1}>
-                                        <FormControl variant="outlined" fullWidth>
-                                            <Autocomplete
-                                                size="small"
-                                                disablePortal
-                                                id="Allergy-combo-box-demo"
-                                                options={allergyTypeOptions}
-                                                key={option => option.allergyid}
-                                                getOptionLabel={option => option.allergyname || ""}
-                                                value={allergy}
-                                                inputValue={allergyInputValue}
-                                                onInputChange={(event, newInputValue) => {
-                                                    if (newInputValue.length > 1) {
-                                                        getAllergiesMasterList(newInputValue)
-                                                    }
-                                                    setAllergyInputValue(newInputValue);
-                                                }}
-                                                onChange={(event, newValue) => {
-                                                    console.log("------------", newValue);
-                                                    setAllergy(newValue);
-                                                }}
-                                                renderOption={(props, option) => {
-                                                    return (
-                                                        <li {...props} key={option.allergyid}>
-                                                            {option.allergyname}
-                                                        </li>
-                                                    );
-                                                }}
-                                                renderInput={(params) => <TextField {...params} label={Translations.ALLERGY.ALLERGYNAME} />}
-                                            />
-                                        </FormControl>
-                                        {/* <TextField
+                <CommonCard title={"Add Allergies"}>
+                    <Box sx={{ m: 1 }}>
+                        <Grid container spacing={1}>
+                            <Grid item xs={2} spacing={1}>
+                                <FormControl variant="outlined" fullWidth>
+                                    <Autocomplete
+                                        size="small"
+                                        disablePortal
+                                        id="Allergy-combo-box-demo"
+                                        options={allergyTypeOptions}
+                                        key={option => option.allergyid}
+                                        getOptionLabel={option => option.allergyname || ""}
+                                        value={allergy}
+                                        inputValue={allergyInputValue}
+                                        onInputChange={(event, newInputValue) => {
+                                            if (newInputValue.length > 1) {
+                                                getAllergiesMasterList(newInputValue)
+                                            }
+                                            setAllergyInputValue(newInputValue);
+                                        }}
+                                        onChange={(event, newValue) => {
+                                            console.log("------------", newValue);
+                                            setAllergy(newValue);
+                                        }}
+                                        renderOption={(props, option) => {
+                                            return (
+                                                <li {...props} key={option.allergyid}>
+                                                    {option.allergyname}
+                                                </li>
+                                            );
+                                        }}
+                                        renderInput={(params) => <TextField {...params} label={Translations.ALLERGY.ALLERGYNAME} />}
+                                    />
+                                </FormControl>
+                                {/* <TextField
                                             fullWidth
                                             type="text"
                                             size="small"
@@ -240,115 +238,115 @@ const Allergies = forwardRef((props, ref) => {
                                             onChange={e => setAllergy(e.target.value)}
                                             value={allergy}
                                         /> */}
-                                    </Grid>
-                                    <Grid item xs={2} >
-                                        <FormControl variant="outlined" size="small" fullWidth>
-                                            <InputLabel
-                                                style={{ disableAnimation: false }}
-                                                disableAnimation={false}
-                                                htmlFor="severity"
-                                                size="small"
+                            </Grid>
+                            <Grid item xs={2} >
+                                <FormControl variant="outlined" size="small" fullWidth>
+                                    <InputLabel
+                                        style={{ disableAnimation: false }}
+                                        disableAnimation={false}
+                                        htmlFor="severity"
+                                        size="small"
 
-                                            >
-                                                {Translations.ALLERGY.SERVERITY}
-                                            </InputLabel>
-                                            <Select
-                                                label={Translations.ALLERGY.SERVERITY}
-                                                name="severity"
-                                                size="small"
-                                                renderValue={(o) => o.lookupvalue || ''}
-                                                onChange={e => {console.log(e.target.value); setSeverity(e.target.value)}}
-                                                value={severity}
-                                            >
-                                                {severityList.map((severity) => (
-                                                    <MenuItem key={severity.lookupid} value={severity}>
-                                                        {severity.lookupvalue}
-                                                    </MenuItem>
+                                    >
+                                        {Translations.ALLERGY.SERVERITY}
+                                    </InputLabel>
+                                    <Select
+                                        label={Translations.ALLERGY.SERVERITY}
+                                        name="severity"
+                                        size="small"
+                                        renderValue={(o) => o.lookupvalue || ''}
+                                        onChange={e => { console.log(e.target.value); setSeverity(e.target.value) }}
+                                        value={severity}
+                                    >
+                                        {severityList.map((severity) => (
+                                            <MenuItem key={severity.lookupid} value={severity}>
+                                                {severity.lookupvalue}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+
+                            </Grid>
+                            <Grid item xs={3} spacing={1}>
+                                <TextField
+                                    fullWidth
+                                    type="text"
+                                    size="small"
+                                    variant="outlined"
+                                    required
+                                    label={Translations.ALLERGY.INDICATIONS}
+                                    name="indications"
+                                    onChange={e => setIndications(e.target.value)}
+                                    value={indications}
+                                    multiline
+                                    rows={1}
+                                />
+                            </Grid>
+                            
+                            <Grid item xs={3}>
+                                <FormControl>
+                                    <FormLabel id="demo-row-radio-buttons-group-label">{Translations.ALLERGY.STATUS}</FormLabel>
+                                    <RadioGroup
+                                        row
+                                        aria-labelledby="demo-row-radio-buttons-group-label"
+                                        name="row-radio-buttons-group"
+                                        value={status}
+                                    >
+                                        <FormControlLabel value="1" control={<Radio onChange={handleChange} />} label="Active" />
+                                        <FormControlLabel value="2" control={<Radio onChange={handleChange} />} label="Inactive" />
+                                    </RadioGroup>
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={2} spacing={1} >
+                                <Button variant="contained" onClick={() => {
+                                    addAllergiestoGrid();
+                                }}>Add</Button>
+                            </Grid>
+                        </Grid>
+                        {props && !props.isSaveDirect &&
+                            <Grid xs={12} container spacing={1}>
+                                <TableContainer component={Paper} >
+                                    <Table stickyHeader aria-label="simple table">
+                                        <TableHead style={{ backgroundColor: '#1976d2', color: '#ffffff', padding: '8px', fontSize: '14px' }}>
+                                            <TableRow>
+                                                {allergiesColumns.map((header, index) => (
+                                                    <TableCell key={index} style={{ minWidth: header.width }}>{header.name}</TableCell>
                                                 ))}
-                                            </Select>
-                                        </FormControl>
+                                            </TableRow>
+                                        </TableHead>
+                                        <TableBody className='grid-height'>
+                                            {allergiesList && allergiesList.map((callergy, index) => (
+                                                <TableRow key={callergy.id} >
+                                                    <TableCell style={{ padding: '6px', fontSize: '12px' }}>{(callergy && callergy.allergy) ? callergy.allergy : ""}</TableCell>
+                                                    <TableCell style={{ padding: '6px', fontSize: '12px' }}>{(callergy && callergy.severity) ? callergy.severity.lookupvalue : ""}</TableCell>
+                                                    <TableCell style={{ padding: '6px', fontSize: '12px' }}>{(callergy && callergy.status === 1) ? "Active" : "In-Active"}</TableCell>
+                                                    <TableCell style={{ padding: '6px', fontSize: '12px' }}>{(callergy && callergy.indications) ? callergy.indications : ""}</TableCell>
+                                                    <TableCell style={{ padding: '6px', fontSize: '12px' }}><ClearIcon fontSize='small' style={{ cursor: 'pointer' }} onClick={() => {
+                                                        //removePrescriptionFromList(index);
+                                                    }} /></TableCell>
+                                                </TableRow>
+                                            ))}
+                                        </TableBody>
+                                    </Table>
+                                </TableContainer>
 
-                                    </Grid>
-                                    <Grid item xs={3} spacing={1}>
-                                        <TextField
-                                            fullWidth
-                                            type="text"
-                                            size="small"
-                                            variant="outlined"
-                                            required
-                                            label={Translations.ALLERGY.INDICATIONS}
-                                            name="indications"
-                                            onChange={e => setIndications(e.target.value)}
-                                            value={indications}
-                                            multiline
-                                            rows={1}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={3}>
-                                        <FormControl>
-                                            <FormLabel id="demo-row-radio-buttons-group-label">{Translations.ALLERGY.STATUS}</FormLabel>
-                                            <RadioGroup
-                                                row
-                                                aria-labelledby="demo-row-radio-buttons-group-label"
-                                                name="row-radio-buttons-group"
-                                                value={status}
-                                            >
-                                                <FormControlLabel value="1" control={<Radio onChange={handleChange} />} label="Active" />
-                                                <FormControlLabel value="2" control={<Radio onChange={handleChange} />} label="Inactive" />
-                                            </RadioGroup>
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item xs={2} spacing={1} >
-                                        <Button variant="contained" onClick={() => {
-                                            addAllergiestoGrid();
-                                        }}>Add</Button>
-                                    </Grid>
-                                </Grid>
-                                {props && !props.isSaveDirect &&
-                                    <Grid xs={12} container spacing={1}>
-                                        <TableContainer component={Paper} >
-                                            <Table stickyHeader aria-label="simple table">
-                                                <TableHead style={{ backgroundColor: '#1976d2', color: '#ffffff', padding: '8px', fontSize: '14px' }}>
-                                                    <TableRow>
-                                                        {allergiesColumns.map((header, index) => (
-                                                            <TableCell key={index} style={{ minWidth: header.width }}>{header.name}</TableCell>
-                                                        ))}
-                                                    </TableRow>
-                                                </TableHead>
-                                                <TableBody className='grid-height'>
-                                                    {allergiesList && allergiesList.map((callergy, index) => (
-                                                        <TableRow key={callergy.id} >
-                                                            <TableCell style={{ padding: '6px', fontSize: '12px' }}>{(callergy && callergy.allergy) ? callergy.allergy : ""}</TableCell>
-                                                            <TableCell style={{ padding: '6px', fontSize: '12px' }}>{(callergy && callergy.severity) ? callergy.severity.lookupvalue : ""}</TableCell>
-                                                            <TableCell style={{ padding: '6px', fontSize: '12px' }}>{(callergy && callergy.status === 1) ? "Active" : "In-Active"}</TableCell>
-                                                            <TableCell style={{ padding: '6px', fontSize: '12px' }}>{(callergy && callergy.indications) ? callergy.indications : ""}</TableCell>
-                                                            <TableCell style={{ padding: '6px', fontSize: '12px' }}><ClearIcon fontSize='small' style={{ cursor: 'pointer' }} onClick={() => {
-                                                                //removePrescriptionFromList(index);
-                                                            }} /></TableCell>
-                                                        </TableRow>
-                                                    ))}
-                                                </TableBody>
-                                            </Table>
-                                        </TableContainer>
-
-                                    </Grid>
-                                }
-                                {/* {props && props.isSaveDirect && <CustomDataGrid tableHeaders={allergiesListHeaders} tableData={tableData} totalcount={totalcount} rowsPerPage={20} paginationChangeEvent={(number) => {
+                            </Grid>
+                        }
+                        {/* {props && props.isSaveDirect && <CustomDataGrid tableHeaders={allergiesListHeaders} tableData={tableData} totalcount={totalcount} rowsPerPage={20} paginationChangeEvent={(number) => {
                                     debugger
                                 }} triggerEvent={(row, action) => {
                                     openEditmode(row, action);
                                 }}></CustomDataGrid>
                                 } */}
-                            </Box>
-                        </CardContent>
-                    </Card>
-                </Box>
+                    </Box>
+                </CommonCard>
+
 
             </form>
-            <AllergiesList selectedRecord = {(row,action)=>{
+            <AllergiesList selectedRecord={(row, action) => {
                 debugger
                 setDatatoForm(row)
-            }}/>
+            }} />
         </>
     )
 });

@@ -11,6 +11,7 @@
     "@fullcalendar/list": "5.11.3",
     "@fullcalendar/react": "^5.11.2",
     "@fullcalendar/timegrid": "5.11.3",
+    "@hookform/resolvers": "^3.6.0",
     "@mui/base": "^5.0.0-beta.28",
     "@mui/icons-material": "5.10.9",
     "@mui/material": "5.15.14",
@@ -32,6 +33,7 @@
     "react": "^18.2.0",
     "react-country-state-city": "^1.1.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.51.5",
     "react-loader-spinner": "^6.1.0",
     "react-moment": "^1.1.3",
     "react-pro-sidebar": "1.0.0-alpha.7",
@@ -39,7 +41,7 @@
     "react-scripts": "5.0.1",
     "react-to-print": "^2.14.15",
     "web-vitals": "^2.1.4",
-    "yup": "0.32.11"
+    "yup": "^0.32.11"
   },
   "scripts": {
     "start": "react-scripts start",

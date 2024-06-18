@@ -74,10 +74,10 @@ const MyProSidebar = () => {
       sx={{
         position: "sticky",
         display: "flex",
-        height: "100vh",
         top: 0,
         bottom: 0,
         zIndex: 10000,
+        height:'100%',
         "& .sidebar": {
           border: "none",
         },
@@ -102,30 +102,17 @@ const MyProSidebar = () => {
         },
       }}
     >
+     
       <Sidebar
         breakPoint="md"
         rtl={sidebarRTL}
-        backgroundColor={colors.primary[100]}
+        backgroundColor={colors.themecolor.color}
         image={sidebarImage}
-
       >
         <Menu iconshape="square">
-          <Box sx={{ height: "5vh" }}>
-            <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-              <Box sx={{ width: '100%', height: '100%' }}>
-                <img
-                  src={logo}
-                  height={50}
-                  width={'100%'}
-                  alt={"Logo"}
-                  loading="lazy"
-                />
-              </Box>
-            </Box>
-          </Box>
-          <Box sx={{ height: "85.5vh", color: 'white' }}>
+          <Box sx={{ color: 'white' }}>
             <List
-              sx={{ width: '100%', maxWidth: 360,marginTop:'15px' }}
+              sx={{ width: '100%', maxWidth: 360 ,height:'83vh',paddingBottom:0}}
               component="nav"
               aria-labelledby="nested-list-subheader"
             >
@@ -189,21 +176,10 @@ const MyProSidebar = () => {
             </List>
 
           </Box>
-          <Box sx={{ height: "5vh", mt: 0, p: 0 }}>
-            <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-              <Box sx={{ width: '100%', height: '100%', mt: 0, p: 0 }}>
-                <img
-                  src={logo}
-                  height={50}
-                  width={'100%'}
-                  alt={"Logo"}
-                  loading="lazy"
-                />
-              </Box>
-            </Box>
-          </Box>
+
         </Menu>
       </Sidebar>
+      
     </Box>
   );
 };

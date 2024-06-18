@@ -97,6 +97,14 @@ const Translations = {
         ALLERGY_NAME:'Allergy Name',
         STATUS:'Status',
         ACTIONS:'Actions'
+     },
+     "DIAGNOSIS_MASTER":{
+        TITLE:'Diagnosis Master',
+        CODE_SET:'Diagnosis Code Set',
+        CODE:'Diagnosis Code',
+        NAME:'Diagnosis Name',
+        STATUS:'Status',
+        ACTIONS:'Actions'
      }
     
 }

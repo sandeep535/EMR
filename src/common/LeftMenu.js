@@ -119,6 +119,13 @@
         isOpen:false,
         isRefreshMenu:true,
         screencode:'DRUG_MASTER_SCREEN_VIEW'
+    },{
+        title:"Diagnosis Master",
+        to:"/diagnosismaster",
+        icon:"medication",
+        isOpen:false,
+        isRefreshMenu:true,
+        screencode:'DRUG_MASTER_SCREEN_VIEW'
     }]
 }];
 export default LeftMenu

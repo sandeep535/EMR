@@ -24,12 +24,14 @@ import VisitCreation from '../visit-creation/VisitCreation';
 import FullScreenModelPopup from '../../common/ModelPopup/FullScreenModelPopup';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import CommonCard from '../../common/CommonCard';
+import Badge from '@mui/material/Badge';
 
 const borderColor = {
-    1: 'blue',
-    2: 'red',
-    3: 'green',
-    4: 'orange'
+    1: '#3498db',
+    2: '#f0776c',
+    3: '#1abc9c',
+    4: '#ffd071'
 }
 const visitStatus = {
     1: "Visit Not Started",
@@ -81,16 +83,16 @@ export default function VisitDasboard() {
         var payLoad = {
             method: APIS.GET_VISITS.METHOD,
             url: APIS.GET_VISITS.URL,
-            paramas: [new Date(localfromDate), new Date(localtoDate), visitStatus.id, count-1, 10]
+            paramas: [new Date(localfromDate), new Date(localtoDate), visitStatus.id, count - 1, 10]
         }
         let result = await sendRequest(payLoad);
         debugger
         if (result && result.visitDetailsDTO.length != 0) {
             setVisitList(result.visitDetailsDTO);
             setTotalRecords(result.totalcount)
-        }else{
+        } else {
             setVisitList([]);
-          
+
         }
     }
     async function getVisitStatusList() {
@@ -128,11 +130,11 @@ export default function VisitDasboard() {
     }
     const handlePaginationChange = (event, value) => {
         setCount(value);
-      };
+    };
     return (
         <>
-            <Box sx={{ flexGrow: 1, m: 1, position: 'relative', zIndex: 1 }}>
 
+            <Box sx={{ flexGrow: 1, m: 1, position: 'relative', zIndex: 1 }}>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={['DateField', 'DateField']}>
                         <Grid container >
@@ -181,43 +183,41 @@ export default function VisitDasboard() {
                                 />
                             </Grid>
                             <ColorLegend legendItems={legendItems} />
-                            <Box sx={{mt:1,fontSize:14,fontWeight:900}}>{"Total Records: " + totalRecords}</Box>
+                            <Box sx={{ mt: 1, fontSize: 14, fontWeight: 900 }}>{"Total Records: " + totalRecords}</Box>
                         </Grid>
                     </DemoContainer>
                 </LocalizationProvider>
             </Box>
+
             <Box sx={{ m: 1, paddingTop: '80px' }} className='visit-cards-div' ref={listInnerRef}>
                 <Grid container spacing={1}  >
                     {visitList && visitList.map(visit => {
                         return (
                             <Grid item xs={3} key={visit.id}>
-                                <Card >
+                                <Card sx={{ border: '2px solid #d3d3d3',borderLeftColor:borderColor[visit.status] }}>
                                     <CardContent>
-                                        <nav>
-                                            <ul style={styles.wrapper}>
-                                                <li style={styles[borderColor[visit.status]]} style={{width:'100%'}}><a href=""><Box>
-                                                    <Typography sx={{ fontSize: 12, fontWeight: 900 }} color="text.secondary" gutterBottom>
-                                                        {visit.clientid.firstname + " " + visit.clientid.lastname + "(Token no:" + visit.token + ")"}
-                                                    </Typography>
-                                                    <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                                                        {<Moment format="DD-MMM-YYYY">
-                                                            {new Date(visit.visitdate)}
-                                                        </Moment>}
-                                                    </Typography>
-                                                </Box>
-                                                    <Box sx={styles.wrapper}>
-                                                        <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                                                            {visit.doctor.firstname + " " + visit.doctor.lastname}
-                                                        </Typography>
-                                                        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                                                            <Icon sx={{ fontSize: 16, color: 'rgb(52, 152, 219)' }} onClick={(event) => { event.preventDefault(); gotoActivitiesPage(visit) }}>{"send"}</Icon>
-                                                            {/* <Button className='enter-visit' variant="outlined" startIcon={<SendIcon />} onClick={(event) => { event.preventDefault(); gotoActivitiesPage(visit) }}></Button> */}
-                                                            <Icon sx={{ fontSize: 16, color: 'rgb(52, 152, 219)', ml: 1 }} onClick={(event) => { event.preventDefault(); openEditPopup(visit) }}>{"edit"}</Icon>
-                                                        </Box>
-                                                    </Box>
-                                                </a></li>
-                                            </ul>
-                                        </nav></CardContent>
+                                        <Box>
+                                            <Typography  sx={{ display:'flex',flexDirection:'row',justifyContent :'space-between'}} gutterBottom>
+                                                <Typography sx={{ fontSize: 14, fontWeight: 700 }} >{visit.clientid.firstname + " " + visit.clientid.lastname }</Typography>
+                                               
+                                                <Badge badgeContent={visit.token} color="success" ></Badge>
+                                            </Typography>
+                                            <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
+                                                {<Moment format="DD-MMM-YYYY">
+                                                    {new Date(visit.visitdate)}
+                                                </Moment>}
+                                            </Typography>
+                                        </Box>
+                                        <Box sx={styles.wrapper}>
+                                            <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
+                                                {visit.doctor.firstname + " " + visit.doctor.lastname}
+                                            </Typography>
+                                            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                                                <Icon sx={{ fontSize: 16, color: 'rgb(52, 152, 219)' }} onClick={(event) => { event.preventDefault(); gotoActivitiesPage(visit) }}>{"send"}</Icon>
+                                                <Icon sx={{ fontSize: 16, color: 'rgb(52, 152, 219)', ml: 1 }} onClick={(event) => { event.preventDefault(); openEditPopup(visit) }}>{"edit"}</Icon>
+                                            </Box>
+                                        </Box>
+                                    </CardContent>
                                 </Card>
                             </Grid>
                         )
@@ -228,7 +228,7 @@ export default function VisitDasboard() {
             </Box>
             <Box >
                 <Stack spacing={2}>
-                    <Pagination count={Math.ceil(totalRecords/5)} color="primary"  page={count} onChange={handlePaginationChange} />
+                    <Pagination count={Math.ceil(totalRecords / 5)} color="primary" page={count} onChange={handlePaginationChange} />
                 </Stack>
             </Box>
             <Box>

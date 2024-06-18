@@ -10,7 +10,17 @@ import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
 import Icon from '@mui/material/Icon';
 
-export default function CustomDataGrid(props) {
+
+const styles ={
+    headerCell: {
+      // Add your custom styles here
+      backgroundColor: '#f0f0f0', // Example background color
+      fontWeight: 'bold', // Example font weight
+    },
+  };
+  
+
+ function CustomDataGrid(props) {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(props.rowsPerPage);
 
@@ -60,7 +70,7 @@ export default function CustomDataGrid(props) {
         <>
             <TableContainer component={Paper}>
                 <Table size="small" aria-label="a dense table">
-                    <TableHead>
+                    <TableHead className={styles.headerCell}>
                         <TableRow>
                             {props.tableHeaders.map((headerColumn) => (
                                 <TableCell width={headerColumn.width}>{headerColumn.name}</TableCell>
@@ -82,7 +92,7 @@ export default function CustomDataGrid(props) {
                                 ))}
                             </TableRow>
                         ))}
-                        {props.tableData.length == 0 && <TableRow> <TableCell colSpan={6}>No records found</TableCell>
+                        {props.tableData.length == 0 && <TableRow> <TableCell colSpan={6} ><p style={{fontWeight:'normal'}}>No records found</p></TableCell>
                         </TableRow>}
                     </TableBody>
                 </Table>
@@ -101,3 +111,4 @@ export default function CustomDataGrid(props) {
         </>
     )
 }
+export default CustomDataGrid;

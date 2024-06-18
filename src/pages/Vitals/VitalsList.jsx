@@ -12,6 +12,7 @@ import TableRow from '@mui/material/TableRow';
 import { sendRequest } from '../global/DataManager';
 import APIS from '../../Utils/APIS';
 import ClientBanner from '../../components/ClientBanner/ClientBanner';
+import CommonCard from '../../common/CommonCard';
 
 const columns =[{
     id: 'date', label: 'Date'
@@ -50,45 +51,45 @@ export default function VisitCreation() {
     }
 
     return (
-        <Box m="10px">
-            <Box m="10px">
+        <Box >
+            <Box sx={{m:0}}>
                 <Grid xs={12} container>
-                <ClientBanner clientData={appContextValue.selectedVisitDeatils.clientid} visitData={appContextValue.selectedVisitDeatils} />
-
+                    <ClientBanner clientData={appContextValue.selectedVisitDeatils.clientid} visitData={appContextValue.selectedVisitDeatils} />
                 </Grid>
-                <Grid xs={12}  container>
-                    <Paper sx={{ width: '100%', overflow: 'hidden',mt:2 }}>
-                        <TableContainer sx={{ maxHeight: 440 }}>
-                            <Table stickyHeader aria-label="sticky table">
-                                <TableHead>
-                                    <TableRow>
-                                        {columns.map((column) => (
-                                            <TableCell
-                                                key={column.id}
-                                            >
-                                                {column.label}
-                                            </TableCell>
-                                        ))}
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {vitalsList && vitalsList.map((vital, index) => (
-                                        <TableRow key={vital.id}>
-                                            <TableCell>{(vital.date) ? vital.date : ''}</TableCell>
-                                            <TableCell>{(vital.height) ? vital.height : ''}</TableCell>
-                                            <TableCell>{(vital.weight) ? vital.weight : ''}</TableCell>
-                                            <TableCell>{(vital.bmi) ? vital.bmi : ''}</TableCell>
-                                            <TableCell>{(vital.systolic) ? vital.systolic +"/"+vital.diastolic : ''}</TableCell>
-                                            <TableCell>{(vital.pulse) ? vital.pulse : ''}</TableCell>
-                                            <TableCell>{(vital.respiratoryrate) ? vital.respiratoryrate : ''}</TableCell>
-                                            <TableCell>{(vital.temperature) ? vital.temperature : ''}</TableCell>
+                <CommonCard title={"Vitals List"}>
+                    <Grid xs={12} container>
+                        <Paper sx={{ width: '100%', overflow: 'hidden', mt: 2 }}>
+                            <TableContainer sx={{ maxHeight: 440 }}>
+                                <Table stickyHeader aria-label="sticky table">
+                                    <TableHead>
+                                        <TableRow>
+                                            {columns.map((column) => (
+                                                <TableCell
+                                                    key={column.id}
+                                                >
+                                                    {column.label}
+                                                </TableCell>
+                                            ))}
                                         </TableRow>
-                                    ))}
-                                    
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                        {/* <TablePagination
+                                    </TableHead>
+                                    <TableBody>
+                                        {vitalsList && vitalsList.map((vital, index) => (
+                                            <TableRow key={vital.id}>
+                                                <TableCell>{(vital.date) ? vital.date : ''}</TableCell>
+                                                <TableCell>{(vital.height) ? vital.height : ''}</TableCell>
+                                                <TableCell>{(vital.weight) ? vital.weight : ''}</TableCell>
+                                                <TableCell>{(vital.bmi) ? vital.bmi : ''}</TableCell>
+                                                <TableCell>{(vital.systolic) ? vital.systolic + "/" + vital.diastolic : ''}</TableCell>
+                                                <TableCell>{(vital.pulse) ? vital.pulse : ''}</TableCell>
+                                                <TableCell>{(vital.respiratoryrate) ? vital.respiratoryrate : ''}</TableCell>
+                                                <TableCell>{(vital.temperature) ? vital.temperature : ''}</TableCell>
+                                            </TableRow>
+                                        ))}
+
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                            {/* <TablePagination
                             rowsPerPageOptions={[10, 25, 100]}
                             component="div"
                             count={employeeList.length}
@@ -97,8 +98,10 @@ export default function VisitCreation() {
                             onPageChange={handleChangePage}
                             onRowsPerPageChange={handleChangeRowsPerPage}
                         /> */}
-                    </Paper>
-                </Grid>
+                        </Paper>
+                    </Grid>
+                </CommonCard>
+               
             </Box>
         </Box>
     )

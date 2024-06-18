@@ -23,6 +23,7 @@ import styles from './PrescriptionStyles';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
+import CommonCard from '../../common/CommonCard';
 
 const prescriptionHeadersList = [{
     name: 'Drug Name',
@@ -128,13 +129,8 @@ const Prescriptions = forwardRef((props, ref) => {
 
     return (
         <>
-            <Box m="10px">
-                <Card variant="outlined">
-                    <CardContent>
-                        <Typography sx={{ fontSize: 16 }} className='card-header' >
-                            Prescriptions
-                        </Typography>
-                        <Box sx={{ m: 1 }}>
+        <CommonCard title={"Prescriptions"}>
+        <Box sx={{ m: 1 }}>
                             <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <Grid container spacing={1}>
                                     <Grid item xs={6} spacing={1} >
@@ -289,9 +285,8 @@ const Prescriptions = forwardRef((props, ref) => {
                                 </Grid>
                             </LocalizationProvider>
                         </Box>
-                    </CardContent>
-                </Card>
-            </Box>
+        </CommonCard>
+           
         </>
     )
 });

@@ -4,6 +4,8 @@ import MyProSidebar from "./MyProSidebar";
 import AppContext from '../../../components/Context/AppContext';
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import logo from '../../../resources/LeafSpring_Logo1.jpeg';
+import { useTheme, Box, Typography } from "@mui/material";
 
 const SidebarContext = createContext({});
 
@@ -30,16 +32,16 @@ export const MyProSidebarProvider = ({ children }) => {
         copyleftMenuList.forEach(mainMenu => {
           mainMenu.subMenu.forEach(submenu => {
             if (submenu.screencode == defaultScreenData.actioncode) {
-             leftmenuScreen = submenu;
+              leftmenuScreen = submenu;
             }
           })
         });
-        if(leftmenuScreen){
+        if (leftmenuScreen) {
           navigate(leftmenuScreen.to, { replace: true });
-        }else{
+        } else {
           navigate('/registration', { replace: true });
         }
-        
+
       }
 
     }
@@ -67,7 +69,43 @@ export const MyProSidebarProvider = ({ children }) => {
               flexDirection: sidebarRTL ? "row-reverse" : "row",
             }}
           >
-            <MyProSidebar />
+            <div style={{
+              display: "flex",
+              flexDirection: sidebarRTL ? "row-reverse" : "column",
+            }}>
+
+              <Box style={{ zIndex: 100000 }} >
+                <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+                  <Box sx={{ width: '100%', height: '100%' }}>
+                    <img
+                      src={logo}
+                      height={50}
+                      width={'100%'}
+                      alt={"Logo"}
+                      loading="lazy"
+                    />
+                  </Box>
+                </Box>
+              </Box>
+              <Box style={{overflowY:'scroll'}}>
+                <MyProSidebar/>
+              </Box>
+
+              <Box style={{ zIndex: 10000 }} >
+                <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
+                  <Box sx={{ width: '100%', height: '100%' }}>
+                    <img
+                      src={logo}
+                      height={50}
+                      width={'100%'}
+                      alt={"Logo"}
+                      loading="lazy"
+                    />
+                  </Box>
+                </Box>
+              </Box>
+            </div>
+
             {children}
           </div>
         </SidebarContext.Provider>}

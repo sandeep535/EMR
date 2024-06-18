@@ -94,7 +94,7 @@ const RegistrationInformation = forwardRef((props, ref) => {
     return (
         <Box display="grid" >
             <Grid container spacing={1}>
-                <Grid item xs={2} spacing={0}>
+                <Grid item xs={1} spacing={0}>
                     <FormControl size="small" fullWidth>
                         <InputLabel
                             id="demo-select-small-label"
@@ -121,7 +121,7 @@ const RegistrationInformation = forwardRef((props, ref) => {
                     </FormControl>
                 </Grid>
 
-                <Grid item xs={4} spacing={0}>
+                <Grid item xs={2} spacing={0}>
                     <TextField
                         fullWidth
                         type="text"
@@ -134,7 +134,7 @@ const RegistrationInformation = forwardRef((props, ref) => {
                         value={firstname}
                     />
                 </Grid>
-                <Grid item xs={4} spacing={1}>
+                <Grid item xs={2} spacing={1}>
                     <TextField
                         fullWidth
                         type="text"
@@ -147,7 +147,7 @@ const RegistrationInformation = forwardRef((props, ref) => {
                         value={lastname}
                     />
                 </Grid>
-                <Grid item xs={2} >
+                <Grid item xs={1} >
                     <FormControl variant="outlined" size="small" fullWidth>
                         <InputLabel
                             style={{ disableAnimation: false }}
@@ -176,9 +176,9 @@ const RegistrationInformation = forwardRef((props, ref) => {
                     </FormControl>
 
                 </Grid>
-            </Grid>
-            <Grid container spacing={1}>
-                <Grid item xs={3} >
+          
+          
+                <Grid item xs={2} >
                     <TextField
                         type="date"
                         size="small"
@@ -189,7 +189,7 @@ const RegistrationInformation = forwardRef((props, ref) => {
                         required
                     />
                 </Grid>
-                <Grid item xs={3} >
+                <Grid item xs={1} >
                     <TextField
                         fullWidth
                         type="number"
@@ -199,6 +199,19 @@ const RegistrationInformation = forwardRef((props, ref) => {
                         name="age"
                         onChange={e => setAge(e.target.value)}
                         value={age}
+                    />
+                </Grid>
+                <Grid item xs={2}>
+                    <TextField
+                        fullWidth
+                        type="text"
+                        size="small"
+                        variant="outlined"
+                        label={Translations.patientRegistration.contact}
+                        name="contact"
+                        required
+                        onChange={e => setContact(e.target.value)}
+                        value={contact}
                     />
                 </Grid>
                 <Grid item xs={3}>
@@ -213,19 +226,7 @@ const RegistrationInformation = forwardRef((props, ref) => {
                         value={email}
                     />
                 </Grid>
-                <Grid item xs={3}>
-                    <TextField
-                        fullWidth
-                        type="text"
-                        size="small"
-                        variant="outlined"
-                        label={Translations.patientRegistration.contact}
-                        name="contact"
-                        required
-                        onChange={e => setContact(e.target.value)}
-                        value={contact}
-                    />
-                </Grid>
+                
             </Grid>
         </Box>
     );

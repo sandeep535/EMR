@@ -27,6 +27,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import moment from 'moment';
 import CardComponent from '../../components/Common/CardComponent';
 import Typography from '@mui/material/Typography';
+import CommonCard from '../../common/CommonCard';
 
 
 const visitServiceTableHeaders = [{
@@ -325,272 +326,323 @@ export default function VisitCreation(props) {
     }
   };
   return (
-    <Box m="10px">
+    <>
+
       <Box m="10px">
-        <Grid xs={6} container>
-          <Autocomplete
-            size="small"
-            ref={searchAutoCompleteRef}
-            value={contact}
-            onChange={(event, newValue) => {
-              console.log("sssss")
-              if (newValue) {
-                setContact(newValue.contact);
-                populateClientDatatoForm(newValue);
-              }
+        <Box m="10px">
+          <Grid xs={6} container>
+            <Autocomplete
+              size="small"
+              ref={searchAutoCompleteRef}
+              value={contact}
+              onChange={(event, newValue) => {
+                console.log("sssss")
+                if (newValue) {
+                  setContact(newValue.contact);
+                  populateClientDatatoForm(newValue);
+                }
 
-            }}
-            key={option => option.seqid}
-            getOptionLabel={option => option.contact}
-            inputValue={contact}
-            disableCloseOnSelect={false}
-            renderOption={(props, option) => {
-              return (
-                <li onClick={() => {
-                  populateClientDatatoForm(option);
-                  searchAutoCompleteRef.current.blur();
-                }}>
-                  <Grid container alignItems="center">
-                    <Grid item sx={{ ml: 1, width: 'calc(100% - 44px)', wordWrap: 'break-word' }}>
-                      <Box
-                        component="span"
-                        sx={{ fontWeight: 'bold' }}
-                      >
-                        {option.firstname}
-                        <Typography variant="body2" color="text.secondary">
-                          {option.contact}
-                        </Typography>
-                      </Box>
+              }}
+              key={option => option.seqid}
+              getOptionLabel={option => option.contact}
+              inputValue={contact}
+              disableCloseOnSelect={false}
+              renderOption={(props, option) => {
+                return (
+                  <li onClick={() => {
+                    populateClientDatatoForm(option);
+                    searchAutoCompleteRef.current.blur();
+                  }}>
+                    <Grid container alignItems="center">
+                      <Grid item sx={{ ml: 1, width: 'calc(100% - 44px)', wordWrap: 'break-word' }}>
+                        <Box
+                          component="span"
+                          sx={{ fontWeight: 'bold' }}
+                        >
+                          {option.firstname}
+                          <Typography variant="body2" color="text.secondary">
+                            {option.contact}
+                          </Typography>
+                        </Box>
 
+                      </Grid>
                     </Grid>
-                  </Grid>
-                  <Divider variant="middle" component="li" />
-                </li>
+                    <Divider variant="middle" component="li" />
+                  </li>
 
-              );
-            }}
-            onInputChange={(event, newInputValue) => {
-              if (newInputValue.length > 4) {
-                getDataBasedOnMobileNumber(newInputValue)
-              }
-              setContact(newInputValue);
+                );
+              }}
+              onInputChange={(event, newInputValue) => {
+                if (newInputValue.length > 4) {
+                  getDataBasedOnMobileNumber(newInputValue)
+                }
+                setContact(newInputValue);
 
-            }}
-            id="service-controllable-states-demo11"
-            options={clientsearchlist}
-            sx={{ width: 300 }}
-            renderInput={(params) => <TextField {...params} label="Search client" />}
-          />
-        </Grid>
-      </Box>
-      <form onSubmit={handleSubmit}>
-        <Box display="grid" >
-          <CardComponent title="Client Details">
-            <RegistrationInformation data={selectedClientData} ref={registrationInformationRef} />
-          </CardComponent>
+              }}
+              id="service-controllable-states-demo11"
+              options={clientsearchlist}
+              sx={{ width: 300 }}
+              renderInput={(params) => <TextField {...params} label="Search client" />}
+            />
+          </Grid>
         </Box>
-        {/* <Divider sx={{ color: "secondary.light", paddingTop: 1, fontSize: 14 }} textAlign="left">Visit Details</Divider> */}
-        <CardComponent title="Visit Details">
-          <Box display="grid" gap="10px" >
+        <form onSubmit={handleSubmit}>
+          <CommonCard title="Client Details">
+            <RegistrationInformation data={selectedClientData} ref={registrationInformationRef} />
+          </CommonCard>
+          <CommonCard title="Visit Details">
+            <Box display="grid" gap="10px" >
 
-            <Grid xs={12} container spacing={1}>
-              <Grid item xs={2} spacing={1}>
-                <FormControl variant="outlined" fullWidth>
-                  <Autocomplete
-                    size="small"
-                    disablePortal
-                    id="combo-box-demo"
-                    options={specialityListOptions}
-                    key={option => option.lookupid}
-                    getOptionLabel={option => option.lookupvalue}
-                    value={specility}
-                    ref={autoComplteSpRef}
-                    onChange={(event, newValue) => {
-                      setSpecility(newValue);
-                    }}
-                    renderOption={(props, option) => {
-                      return (
-                        <li {...props} key={option.lookupid}>
-                          {option.lookupvalue}
-                        </li>
-                      );
-                    }}
-                    renderInput={(params) => <TextField {...params} label={Translations.visitCreation.speciality} />}
-                  />
-                </FormControl>
-              </Grid>
-              <Grid item xs={3} spacing={1}>
-                <FormControl variant="outlined" size="small" fullWidth>
-                  <Autocomplete
-                    size="small"
-                    value={doctor}
-                    onChange={(event, newValue) => {
-                      setDoctor(newValue);
-                    }}
-                    key={option => option.id}
-                    getOptionLabel={option => option.firstname}
-                    inputValue={doctorInputValueChange}
-                    ref={autoCompltedocRef}
-                    onInputChange={(event, newInputValue) => {
-                      if (newInputValue.length != 1) {
-                        getDoctorsData(newInputValue)
-                      }
-                      setDoctorInputValueChange(newInputValue);
-
-                    }}
-                    id="controllable-states-demo"
-                    options={doctoroptions}
-                    renderInput={(params) => <TextField {...params} label="Docor Name" />}
-                  />
-                </FormControl>
-              </Grid>
-
-              <Grid item xs={2} spacing={1} >
-                <FormControl variant="outlined" size="small" fullWidth>
-                  <Autocomplete
-                    size="small"
-                    disablePortal
-                    id="visitTypeList"
-                    options={visiiTypeOptions}
-                    ref={autoComplteVisittypeRef}
-                    key={option => option.lookupid}
-                    getOptionLabel={option => option.lookupvalue}
-                    value={visitType}
-                    onChange={(event, newValue) => {
-                      setVisitType(newValue);
-                    }}
-                    renderOption={(props, option) => {
-                      return (
-                        <li {...props} key={option.lookupid}>
-                          {option.lookupvalue}
-                        </li>
-                      );
-                    }}
-                    renderInput={(params) => <TextField {...params} label={Translations.visitCreation.visitType} />}
-                  />
-                </FormControl>
-              </Grid>
-
-
-              <Grid item xs={3} spacing={1}>
-                <LocalizationProvider dateAdapter={AdapterDayjs} sx={{ mt: -9 }}>
-                  <DemoContainer components={['DateField', 'DateField']}>
-                    <DatePicker
-                      label="Visit Date"
-                      value={visitdate}
-                      onChange={newValue => setVisitdate(new Date(newValue))}
-                      slotProps={{ textField: { size: 'small' } }}
-                      format="DD-MM-YYYY"
-                      fullWidth
-                    />
-                  </DemoContainer>
-                </LocalizationProvider>
-              </Grid>
-              <Grid item xs={2} spacing={1}>
-                <TextField
-                  fullWidth
-                  type="text"
-                  size="small"
-                  variant="outlined"
-                  label={Translations.visitCreation.token}
-                  name="token"
-                  onChange={e => setToken(e.target.value)}
-                  value={token}
-                />
-              </Grid>
-
-              <Grid item xs={6} spacing={1}  >
-                <TextField
-                  fullWidth
-                  variant="outlined"
-                  className='input_background'
-                  type="text"
-                  size="small"
-                  multiline
-                  rows={2}
-                  label={Translations.visitCreation.visitReason}
-                  name="Reason For Visit"
-                  onChange={e => setVisitReason(e.target.value)}
-                  value={visitreason} />
-              </Grid>
-            </Grid>
-            <Grid xs={12} container spacing={1}>
-              <Grid item xs={3} spacing={1}>
-                <FormControl variant="outlined" fullWidth>
-                  <Autocomplete
-                    size="small"
-                    value={serviceValues}
-                    onChange={(event, newValue) => {
-                      if (newValue) {
-                        setServiceValues(newValue);
-                        addServicetoList(newValue);
-                      }
-
-                    }}
-                    key={option => option.serviceid}
-                    getOptionLabel={option => option.servicename}
-                    inputValue={serviceinputValue}
-                    ref={autoComplteServicesRef}
-                    onInputChange={(event, newInputValue) => {
-                      if (newInputValue.length > 3) {
-                        getServiceMaterList(newInputValue)
-                      }
-                      setServiceInputValue(newInputValue);
-
-                    }}
-                    id="service-controllable-states-demo"
-                    options={serviceoptions}
-                    sx={{ width: 300 }}
-                    renderInput={(params) => <TextField {...params} label="Add Services" />}
-                  />
-                </FormControl>
-              </Grid>
-            </Grid>
-            <Grid xs={12} container spacing={1}>
-              <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} size="small" aria-label="simple table">
-                  <TableHead>
-                    <TableRow>
-                      {(visitServiceTableHeaders.map(header => {
+              <Grid xs={12} container spacing={1}>
+                <Grid item xs={2} spacing={1}>
+                  <FormControl variant="outlined" fullWidth>
+                    <Autocomplete
+                      size="small"
+                      disablePortal
+                      id="combo-box-demo"
+                      options={specialityListOptions}
+                      key={option => option.lookupid}
+                      getOptionLabel={option => option.lookupvalue}
+                      value={specility}
+                      ref={autoComplteSpRef}
+                      onChange={(event, newValue) => {
+                        setSpecility(newValue);
+                      }}
+                      renderOption={(props, option) => {
                         return (
-                          <TableCell key={header.name} width={header.width}>{header.name}</TableCell>
-                        )
-                      }))}
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {visitServiceList && visitServiceList.map((service, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{(service && service.serviceid) ? service.serviceid.servicename : ""}</TableCell>
+                          <li {...props} key={option.lookupid}>
+                            {option.lookupvalue}
+                          </li>
+                        );
+                      }}
+                      renderInput={(params) => <TextField {...params} label={Translations.visitCreation.speciality} />}
+                    />
+                  </FormControl>
+                </Grid>
+                <Grid item xs={2} spacing={1}>
+                  <FormControl variant="outlined" size="small" fullWidth>
+                    <Autocomplete
+                      size="small"
+                      value={doctor}
+                      onChange={(event, newValue) => {
+                        setDoctor(newValue);
+                      }}
+                      key={option => option.id}
+                      getOptionLabel={option => option.firstname}
+                      inputValue={doctorInputValueChange}
+                      ref={autoCompltedocRef}
+                      onInputChange={(event, newInputValue) => {
+                        if (newInputValue.length != 1) {
+                          getDoctorsData(newInputValue)
+                        }
+                        setDoctorInputValueChange(newInputValue);
+
+                      }}
+                      id="controllable-states-demo"
+                      options={doctoroptions}
+                      renderInput={(params) => <TextField {...params} label="Docor Name" />}
+                    />
+                  </FormControl>
+                </Grid>
+
+                <Grid item xs={2} spacing={1} >
+                  <FormControl variant="outlined" size="small" fullWidth>
+                    <Autocomplete
+                      size="small"
+                      disablePortal
+                      id="visitTypeList"
+                      options={visiiTypeOptions}
+                      ref={autoComplteVisittypeRef}
+                      key={option => option.lookupid}
+                      getOptionLabel={option => option.lookupvalue}
+                      value={visitType}
+                      onChange={(event, newValue) => {
+                        setVisitType(newValue);
+                      }}
+                      renderOption={(props, option) => {
+                        return (
+                          <li {...props} key={option.lookupid}>
+                            {option.lookupvalue}
+                          </li>
+                        );
+                      }}
+                      renderInput={(params) => <TextField {...params} label={Translations.visitCreation.visitType} />}
+                    />
+                  </FormControl>
+                </Grid>
+
+
+                <Grid item xs={2} spacing={1}>
+                <FormControl variant="outlined" size="small" fullWidth>
+                  <LocalizationProvider dateAdapter={AdapterDayjs} >
+                    <DemoContainer components={['DateField', 'DateField']}>
+                      <DatePicker
+                        label="Visit Date"
+                        value={visitdate}
+                        onChange={newValue => setVisitdate(new Date(newValue))}
+                        slotProps={{ textField: { size: 'small' } }}
+                        format="DD-MM-YYYY"
+                        fullWidth
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={2} spacing={1}>
+                  <TextField
+                    fullWidth
+                    type="text"
+                    size="small"
+                    variant="outlined"
+                    label={Translations.visitCreation.token}
+                    name="token"
+                    onChange={e => setToken(e.target.value)}
+                    value={token}
+                    disabled
+                  />
+                </Grid>
+
+                <Grid item xs={6} spacing={1}  >
+                  <TextField
+                    fullWidth
+                    variant="outlined"
+                    className='input_background'
+                    type="text"
+                    size="small"
+                    multiline
+                    rows={2}
+                    label={Translations.visitCreation.visitReason}
+                    name="Reason For Visit"
+                    onChange={e => setVisitReason(e.target.value)}
+                    value={visitreason} />
+                </Grid>
+              </Grid>
+              <Grid xs={12} container spacing={1}>
+                <Grid item xs={3} spacing={1}>
+                  <FormControl variant="outlined" fullWidth>
+                    <Autocomplete
+                      size="small"
+                      value={serviceValues}
+                      onChange={(event, newValue) => {
+                        if (newValue) {
+                          setServiceValues(newValue);
+                          addServicetoList(newValue);
+                        }
+
+                      }}
+                      key={option => option.serviceid}
+                      getOptionLabel={option => option.servicename}
+                      inputValue={serviceinputValue}
+                      ref={autoComplteServicesRef}
+                      onInputChange={(event, newInputValue) => {
+                        if (newInputValue.length > 3) {
+                          getServiceMaterList(newInputValue)
+                        }
+                        setServiceInputValue(newInputValue);
+
+                      }}
+                      id="service-controllable-states-demo"
+                      options={serviceoptions}
+                      sx={{ width: 300 }}
+                      renderInput={(params) => <TextField {...params} label="Add Services" />}
+                    />
+                  </FormControl>
+                </Grid>
+              </Grid>
+              <Grid xs={12} container spacing={1}>
+                <TableContainer component={Paper}>
+                  <Table sx={{ minWidth: 650 }} size="small" aria-label="simple table">
+                    <TableHead>
+                      <TableRow>
+                        {(visitServiceTableHeaders.map(header => {
+                          return (
+                            <TableCell key={header.name} width={header.width}>{header.name}</TableCell>
+                          )
+                        }))}
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {visitServiceList && visitServiceList.map((service, index) => (
+                        <TableRow key={index}>
+                          <TableCell>{(service && service.serviceid) ? service.serviceid.servicename : ""}</TableCell>
+                          <TableCell>
+                            <TextField
+                              fullWidth
+                              variant="outlined"
+                              className='input_background'
+                              type="text"
+                              onChange={(e) => {
+                                setChangesToVisistServicelist(e.target.value, index, 'serviceprice')
+                              }}
+                              label={"Price"}
+                              size="small"
+                              value={service.serviceprice}
+                            />
+                          </TableCell>
+                          <TableCell >
+                            <TextField
+                              fullWidth
+                              variant="outlined"
+                              className='input_background'
+                              type="text"
+                              label={"Qty"}
+                              onChange={(e) => {
+                                setChangesToVisistServicelist(e.target.value, index, 'quantity')
+                              }}
+                              value={service.quantity}
+                              size="small"
+                            />
+                          </TableCell>
+                          <TableCell >
+                            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                              <TextField
+                                fullWidth
+                                variant="outlined"
+                                className='input_background'
+                                type="text"
+                                label={"Discount"}
+                                onChange={(e) => {
+                                  setChangesToVisistServicelist(e.target.value, index, 'servicediscount')
+                                }}
+                                value={service.servicediscount}
+                                size="small"
+                              />
+                              <TextField
+                                fullWidth
+                                variant="outlined"
+                                className='input_background'
+                                type="text"
+                                label={"%"}
+                                sx={{ ml: 1 }}
+                                onBlur={(e) => {
+                                  let copyVisitServiceData = [...visitServiceList];
+                                  let discountValue = copyVisitServiceData[index].servicediscount;
+                                  setChangesToVisistServicelist(discountValue, index, 'servicediscount');
+                                }}
+                                onChange={(e) => {
+                                  calDiscountBasedonPercentage(e.target.value, index);
+                                }}
+                                value={service.servicediscountinpercentage}
+                                size="small"
+                              />
+                            </Box>
+                          </TableCell>
+                          <TableCell>{service.servicetotalamount}</TableCell>
+                        </TableRow>
+                      ))}
+                      <TableRow key={"12111"}>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell>Total Amount(before discount)</TableCell>
+                        <TableCell>{totalAmount}</TableCell>
+                      </TableRow>
+                      <TableRow key={"323"}>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell>Discount Amount</TableCell>
                         <TableCell>
-                          <TextField
-                            fullWidth
-                            variant="outlined"
-                            className='input_background'
-                            type="text"
-                            onChange={(e) => {
-                              setChangesToVisistServicelist(e.target.value, index, 'serviceprice')
-                            }}
-                            label={"Price"}
-                            size="small"
-                            value={service.serviceprice}
-                          />
-                        </TableCell>
-                        <TableCell >
-                          <TextField
-                            fullWidth
-                            variant="outlined"
-                            className='input_background'
-                            type="text"
-                            label={"Qty"}
-                            onChange={(e) => {
-                              setChangesToVisistServicelist(e.target.value, index, 'quantity')
-                            }}
-                            value={service.quantity}
-                            size="small"
-                          />
-                        </TableCell>
-                        <TableCell >
                           <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                             <TextField
                               fullWidth
@@ -599,9 +651,11 @@ export default function VisitCreation(props) {
                               type="text"
                               label={"Discount"}
                               onChange={(e) => {
-                                setChangesToVisistServicelist(e.target.value, index, 'servicediscount')
+                                setVisitdiscount(e.target.value);
+                                setTotalAmountAfterDiscountFun(e.target.value);
+                                calPercentageBasedOnDiscount(e.target.value);
                               }}
-                              value={service.servicediscount}
+                              value={visitdiscount}
                               size="small"
                             />
                             <TextField
@@ -610,91 +664,41 @@ export default function VisitCreation(props) {
                               className='input_background'
                               type="text"
                               label={"%"}
-                              sx={{ ml: 1 }}
                               onBlur={(e) => {
-                                let copyVisitServiceData = [...visitServiceList];
-                                let discountValue = copyVisitServiceData[index].servicediscount;
-                                setChangesToVisistServicelist(discountValue, index, 'servicediscount');
+                                setTotalAmountAfterDiscountFun(visitdiscount);
                               }}
                               onChange={(e) => {
-                                calDiscountBasedonPercentage(e.target.value, index);
+                                setVisitpercentage(e.target.value);
+                                calVisitDiscountAmountBAsedonPercentage(e.target.value);
+                                //setTotalAmountAfterDiscountFun(e.target.value)
                               }}
-                              value={service.servicediscountinpercentage}
+                              value={visitpercentage}
                               size="small"
                             />
                           </Box>
                         </TableCell>
-                        <TableCell>{service.servicetotalamount}</TableCell>
                       </TableRow>
-                    ))}
-                    <TableRow key={"12111"}>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell>Total Amount(before discount)</TableCell>
-                      <TableCell>{totalAmount}</TableCell>
-                    </TableRow>
-                    <TableRow key={"323"}>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell>Discount Amount</TableCell>
-                      <TableCell>
-                        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                          <TextField
-                            fullWidth
-                            variant="outlined"
-                            className='input_background'
-                            type="text"
-                            label={"Discount"}
-                            onChange={(e) => {
-                              setVisitdiscount(e.target.value);
-                              setTotalAmountAfterDiscountFun(e.target.value);
-                              calPercentageBasedOnDiscount(e.target.value);
-                            }}
-                            value={visitdiscount}
-                            size="small"
-                          />
-                          <TextField
-                            fullWidth
-                            variant="outlined"
-                            className='input_background'
-                            type="text"
-                            label={"%"}
-                            onBlur={(e) => {
-                              setTotalAmountAfterDiscountFun(visitdiscount);
-                            }}
-                            onChange={(e) => {
-                              setVisitpercentage(e.target.value);
-                              calVisitDiscountAmountBAsedonPercentage(e.target.value);
-                              //setTotalAmountAfterDiscountFun(e.target.value)
-                            }}
-                            value={visitpercentage}
-                            size="small"
-                          />
-                        </Box>
-                      </TableCell>
-                    </TableRow>
-                    <TableRow key={"123545111"}>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell></TableCell>
-                      <TableCell>Total Amount(after discount)</TableCell>
-                      <TableCell>{visittotalamount}</TableCell>
-                    </TableRow>
-                  </TableBody>
+                      <TableRow key={"123545111"}>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell></TableCell>
+                        <TableCell>Total Amount(after discount)</TableCell>
+                        <TableCell>{visittotalamount}</TableCell>
+                      </TableRow>
+                    </TableBody>
 
-                </Table>
-              </TableContainer>
-            </Grid>
+                  </Table>
+                </TableContainer>
+              </Grid>
 
-          </Box>
-        </CardComponent>
+            </Box>
+          </CommonCard>
 
-        <FormButtonComponent button1={"Save"} button2={"Clear"} clearFormEvent={() => {
-          clearVisitForm();
-        }} />
-      </form>
-    </Box>
+          <FormButtonComponent button1={"Save"} button2={"Clear"} clearFormEvent={() => {
+            clearVisitForm();
+          }} />
+        </form>
+      </Box>
+    </>
   );
 }

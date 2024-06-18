@@ -174,6 +174,17 @@ const APIS={
         METHOD:"POST",
         ACTION:""
     },
+    SAVE_DIADNOSIS_MASTER:{
+        URL:"masters/saveDiagnosisMatser",
+        METHOD:"POST",
+        ACTION:""
+    },
+    GET_DIADNOSIS_MASTER:{
+        URL:"masters/getDiagnosisMatser",
+        METHOD:"POST",
+        ACTION:""
+    },
+    
     
     
 

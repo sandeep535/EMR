@@ -9,6 +9,7 @@ import Divider from '@mui/material/Divider';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
+import CommonCard from '../../common/CommonCard';
 
 const Vitals = forwardRef((props, ref) => {
     const [height, setHeight] = useState("");
@@ -57,128 +58,114 @@ const Vitals = forwardRef((props, ref) => {
     );
 
     return (
-        <>
-            {/* <Divider sx={{ color: "secondary.light", fontSize: 14 }} textAlign="left">Vitals Sign</Divider>
-            <DemoPaper square={false}>
-                <form >*/}
-            <Box display="grid" gap="10px">
-                <Card variant="outlined">
-                    <CardContent>
-                        <Typography sx={{ fontSize: 16 }} className='card-header' >
-                            Vitals
-                        </Typography>
-                        <Box sx={{ m: 1 }}>
-                            <Grid container spacing={1}>
-                                <Grid item xs={6} spacing={4}>
-                                    <TextField
-                                        fullWidth
-                                        type="text"
-                                        size="small"
-                                        variant="outlined"
-                                        label={Translations.vitalsForm.height}
-                                        name="height"
-                                        onChange={e => setHeight(e.target.value)}
-                                        value={height}
-                                    />
-                                </Grid>
-                                <Grid item xs={6} spacing={4}>
-                                    <TextField
-                                        fullWidth
-                                        type="text"
-                                        size="small"
-                                        variant="outlined"
-                                        label={Translations.vitalsForm.weight}
-                                        name="weight"
-                                        onChange={e => setWeight(e.target.value)}
-                                        value={weight}
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Grid container spacing={1}>
-                                <Grid item xs={6} spacing={4}>
-                                    <TextField
-                                        fullWidth
-                                        type="text"
-                                        size="small"
-                                        variant="outlined"
-                                        label={Translations.vitalsForm.bmi}
-                                        name="bmi"
-                                        onChange={e => setBmi(e.target.value)}
-                                        value={bmi}
-                                    />
-                                </Grid>
-                                <Grid item xs={3} spacing={4}>
-                                    <TextField
-                                        fullWidth
-                                        type="text"
-                                        size="small"
-                                        variant="outlined"
-                                        label={Translations.vitalsForm.systolic}
-                                        name="systolic"
-                                        onChange={e => setSystolic(e.target.value)}
-                                        value={systolic}
-                                    />
-                                </Grid>
-                                <Grid item xs={3} spacing={4}>
-                                    <TextField
-                                        fullWidth
-                                        type="text"
-                                        size="small"
-                                        variant="outlined"
-                                        label={Translations.vitalsForm.diastolic}
-                                        name="diastolic"
-                                        onChange={e => setDiastolic(e.target.value)}
-                                        value={diastolic}
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Grid container spacing={1}>
-                                <Grid item xs={6} spacing={4}>
-                                    <TextField
-                                        fullWidth
-                                        type="text"
-                                        size="small"
-                                        variant="outlined"
-                                        label={Translations.vitalsForm.pulse}
-                                        name="pulse"
-                                        onChange={e => setPulse(e.target.value)}
-                                        value={pulse}
-                                    />
-                                </Grid>
-                                <Grid item xs={6} spacing={4}>
-                                    <TextField
-                                        fullWidth
-                                        type="text"
-                                        size="small"
-                                        variant="outlined"
-                                        label={Translations.vitalsForm.respiratoryrate}
-                                        name="respiratoryrate"
-                                        onChange={e => setRespiratoryrate(e.target.value)}
-                                        value={respiratoryrate}
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Grid container spacing={1}>
-                                <Grid item xs={6} spacing={4}>
-                                    <TextField
-                                        fullWidth
-                                        type="text"
-                                        size="small"
-                                        variant="outlined"
-                                        label={Translations.vitalsForm.temperature}
-                                        name="temperature"
-                                        onChange={e => setTemperature(e.target.value)}
-                                        value={temperature}
-                                    />
-                                </Grid>
-                            </Grid>
-                        </Box>
-                    </CardContent>
-                </Card>
+        <> <CommonCard title={"Vitals"}>
+            <Box sx={{ m: 1 }}>
+                <Grid container spacing={1}>
+                    <Grid item xs={6} spacing={4}>
+                        <TextField
+                            fullWidth
+                            type="text"
+                            size="small"
+                            variant="outlined"
+                            label={Translations.vitalsForm.height}
+                            name="height"
+                            onChange={e => setHeight(e.target.value)}
+                            value={height}
+                        />
+                    </Grid>
+                    <Grid item xs={6} spacing={4}>
+                        <TextField
+                            fullWidth
+                            type="text"
+                            size="small"
+                            variant="outlined"
+                            label={Translations.vitalsForm.weight}
+                            name="weight"
+                            onChange={e => setWeight(e.target.value)}
+                            value={weight}
+                        />
+                    </Grid>
+                </Grid>
+                <Grid container spacing={1}>
+                    <Grid item xs={6} spacing={4}>
+                        <TextField
+                            fullWidth
+                            type="text"
+                            size="small"
+                            variant="outlined"
+                            label={Translations.vitalsForm.bmi}
+                            name="bmi"
+                            onChange={e => setBmi(e.target.value)}
+                            value={bmi}
+                        />
+                    </Grid>
+                    <Grid item xs={3} spacing={4}>
+                        <TextField
+                            fullWidth
+                            type="text"
+                            size="small"
+                            variant="outlined"
+                            label={Translations.vitalsForm.systolic}
+                            name="systolic"
+                            onChange={e => setSystolic(e.target.value)}
+                            value={systolic}
+                        />
+                    </Grid>
+                    <Grid item xs={3} spacing={4}>
+                        <TextField
+                            fullWidth
+                            type="text"
+                            size="small"
+                            variant="outlined"
+                            label={Translations.vitalsForm.diastolic}
+                            name="diastolic"
+                            onChange={e => setDiastolic(e.target.value)}
+                            value={diastolic}
+                        />
+                    </Grid>
+                </Grid>
+                <Grid container spacing={1}>
+                    <Grid item xs={6} spacing={4}>
+                        <TextField
+                            fullWidth
+                            type="text"
+                            size="small"
+                            variant="outlined"
+                            label={Translations.vitalsForm.pulse}
+                            name="pulse"
+                            onChange={e => setPulse(e.target.value)}
+                            value={pulse}
+                        />
+                    </Grid>
+                    <Grid item xs={6} spacing={4}>
+                        <TextField
+                            fullWidth
+                            type="text"
+                            size="small"
+                            variant="outlined"
+                            label={Translations.vitalsForm.respiratoryrate}
+                            name="respiratoryrate"
+                            onChange={e => setRespiratoryrate(e.target.value)}
+                            value={respiratoryrate}
+                        />
+                    </Grid>
+                </Grid>
+                <Grid container spacing={1}>
+                    <Grid item xs={6} spacing={4}>
+                        <TextField
+                            fullWidth
+                            type="text"
+                            size="small"
+                            variant="outlined"
+                            label={Translations.vitalsForm.temperature}
+                            name="temperature"
+                            onChange={e => setTemperature(e.target.value)}
+                            value={temperature}
+                        />
+                    </Grid>
+                </Grid>
             </Box>
-            {/* <FormButtonComponent button1={"Save"} button2={"Clear"} /> */}
-            {/* </form>
-            </DemoPaper >*/}
+        </CommonCard>
         </>
     )
 });

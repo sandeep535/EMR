@@ -1,10 +1,11 @@
-import React, {  forwardRef, useImperativeHandle, useState } from 'react';
+import React, { forwardRef, useImperativeHandle, useState } from 'react';
 import TextField from '@mui/material/TextField';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import { Box } from '@mui/material'
+import CommonCard from '../../common/CommonCard';
 
 
 const Notes = forwardRef((props, ref) => {
@@ -28,33 +29,27 @@ const Notes = forwardRef((props, ref) => {
 
   return (
     <>
-      <Box display="grid" gap="10px">
-        <Card variant="outlined">
-          <CardContent>
-            <Typography sx={{ fontSize: 16 }} className='card-header'>
-              {props.label}
-            </Typography>
-            <Box sx={{ m: 1 }}>
-              <Grid container spacing={1}>
-                <Grid item xs={12} >
-                  <TextField
-                    fullWidth
-                    type="text"
-                    size="small"
-                    variant="outlined"
-                    required
-                    multiline
-                    rows={3}
-                    name={props.label}
-                    onChange={e => setDescription(e.target.value)}
-                    value={description}
-                  />
-                </Grid>
-              </Grid>
-            </Box>
-          </CardContent>
-        </Card>
-      </Box>
+      <CommonCard title={props.label}>
+        <Box sx={{ m: 1 }}>
+          <Grid container spacing={1}>
+            <Grid item xs={12} >
+              <TextField
+                fullWidth
+                type="text"
+                size="small"
+                variant="outlined"
+                required
+                multiline
+                rows={3}
+                name={props.label}
+                onChange={e => setDescription(e.target.value)}
+                value={description}
+              />
+            </Grid>
+          </Grid>
+        </Box>
+      </CommonCard>
+
     </>
   )
 });

@@ -1,4 +1,4 @@
-import React, { useEffect, useContext} from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Box } from '@mui/material'
 import Grid from '@mui/material/Grid';
 import AppContext from '../../components/Context/AppContext';
@@ -13,48 +13,47 @@ import { sendRequest } from '../global/DataManager';
 import APIS from '../../Utils/APIS';
 import Moment from 'react-moment';
 import ClientBanner from '../../components/ClientBanner/ClientBanner';
+import CommonCard from '../../common/CommonCard';
 
-const columns =[{
+const columns = [{
     id: 'date', label: 'Date'
-},{
-   id: 'drugname', label: 'Drug Name'
-},{
-   id: 'dose', label: 'Dose'
-},{
+}, {
+    id: 'drugname', label: 'Drug Name'
+}, {
+    id: 'dose', label: 'Dose'
+}, {
     id: 'sig', label: 'SIG'
- },{
+}, {
     id: 'startdate', label: 'Start Date'
- },{
+}, {
     id: 'enddate', label: 'End Date'
- }]
+}]
 export default function PrescriptionsList() {
-    const [prescriptionlist,setPrescriptionlist] = React.useState([]);
+    const [prescriptionlist, setPrescriptionlist] = React.useState([]);
     const appContextValue = useContext(AppContext);
     useEffect(() => {
         getprescriptionlist();
     }, []);
 
-    async function getprescriptionlist(){
+    async function getprescriptionlist() {
         var payLoad = {
             method: APIS.GET_PRESCRIPTIONS.METHOD,
             url: APIS.GET_PRESCRIPTIONS.URL,
-            paramas: [0,appContextValue.selectedVisitDeatils.clientid.seqid],
+            paramas: [0, appContextValue.selectedVisitDeatils.clientid.seqid],
         }
         let result = await sendRequest(payLoad);
-        if (result && result.length!=0) {
+        if (result && result.length != 0) {
             setPrescriptionlist(result);
         }
     }
 
     return (
-        <Box m="10px">
-            <Box m="10px">
-                <Grid xs={12} container>
-                <ClientBanner clientData={appContextValue.selectedVisitDeatils.clientid} visitData={appContextValue.selectedVisitDeatils} />
+        <Box>
+            <ClientBanner clientData={appContextValue.selectedVisitDeatils.clientid} visitData={appContextValue.selectedVisitDeatils} />
 
-                </Grid>
+            <CommonCard title={"Prescription List"} >
                 <Grid xs={12} container>
-                    <Paper sx={{ mt:2,width: '100%', overflow: 'hidden' }}>
+                    <Paper sx={{ mt: 2, width: '100%', overflow: 'hidden' }}>
                         <TableContainer sx={{ maxHeight: 440 }}>
                             <Table stickyHeader aria-label="sticky table">
                                 <TableHead>
@@ -76,29 +75,21 @@ export default function PrescriptionsList() {
                                             <TableCell>{(prescription && prescription.dose) ? prescription.dose + "" + prescription.doseunit : ""}</TableCell>
                                             <TableCell>{(prescription && prescription.sig) ? prescription.sig : ""}</TableCell>
                                             <TableCell>{(prescription && prescription.startdate) ? <Moment format="DD-MMM-YYYY">
-                                                        {new Date(prescription.startdate)}
+                                                {new Date(prescription.startdate)}
                                             </Moment> : ""}</TableCell>
                                             <TableCell>{(prescription && prescription.endate) ? <Moment format="DD-MMM-YYYY">
-                                                        {new Date(prescription.endate)}
+                                                {new Date(prescription.endate)}
                                             </Moment> : ""}</TableCell>
                                         </TableRow>
                                     ))}
-                                    
+
                                 </TableBody>
                             </Table>
                         </TableContainer>
-                        {/* <TablePagination
-                            rowsPerPageOptions={[10, 25, 100]}
-                            component="div"
-                            count={employeeList.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                        /> */}
                     </Paper>
                 </Grid>
-            </Box>
+            </CommonCard>
+
         </Box>
     )
 }

@@ -6,9 +6,9 @@ import { Box } from '@mui/material'
 const CardComponent = (props, ref) => {
     return (
         <>
-            <Card variant="outlined">
+            <Card >
                 <CardContent>
-                    <Typography sx={{ fontSize: 16 }} className='card-header'>
+                    <Typography sx={{ fontSize: 16 }} >
                         {props.title}
                     </Typography>
                     <Box sx={{ m: 1 }}>

@@ -30,6 +30,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import EMRAlert from '../../Utils/CustomAlert';
 import CustomDataGrid from '../../common/DataGrid/CustomDataGrid';
 import { act } from 'react-dom/test-utils';
+import CommonCard from '../../common/CommonCard';
 
 const allergiesListHeaders = [{
     name: Translations.ALLERGY.ALLERGYNAME,
@@ -89,24 +90,17 @@ export default function AllergiesList(props) {
     }
     function triggerEventActions(row, action) {
         debugger
-        props.selectedRecord(row,action)
+        props.selectedRecord(row, action)
     }
     return (
         <>
-            <Box display="grid" gap="10px">
-                <Card variant="outlined">
-                    <CardContent>
-                        <Typography sx={{ fontSize: 16 }} className='card-header' >
-                            Allergies List
-                        </Typography>
-                        <Box sx={{ m: 1 }}>
-                            <CustomDataGrid tableHeaders={allergiesListHeaders} tableData={tableData} triggerEvent={(row, action) => {
-                                triggerEventActions(row, action)
-                            }}></CustomDataGrid>
-                        </Box>
-                    </CardContent>
-                </Card>
-            </Box>
+            <CommonCard title={"Allergies List"}>
+                <Box sx={{ m: 1 }}>
+                    <CustomDataGrid tableHeaders={allergiesListHeaders} tableData={tableData} triggerEvent={(row, action) => {
+                        triggerEventActions(row, action)
+                    }}></CustomDataGrid>
+                </Box>
+            </CommonCard>
         </>
     )
 }
