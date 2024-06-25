@@ -113,6 +113,7 @@ export default function VisitDasboard() {
         var copyData = [...appContextValue.leftMenuList];
         copyData.map(item => {
             if (item.hasOwnProperty("isPatientSpecific")) {
+                item.isOpen = true;
                 item.isPatientSpecific = true;
             }
         });

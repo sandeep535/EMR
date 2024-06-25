@@ -1,35 +1,49 @@
 import React, { useEffect, useContext } from 'react';
 import { Box } from '@mui/material'
-import Grid from '@mui/material/Grid';
 import AppContext from '../../components/Context/AppContext';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import { sendRequest } from '../global/DataManager';
 import APIS from '../../Utils/APIS';
-import Moment from 'react-moment';
 import ClientBanner from '../../components/ClientBanner/ClientBanner';
 import CommonCard from '../../common/CommonCard';
+import CustomDataGrid from '../../common/DataGrid/CustomDataGrid';
+import ModelPopUp from '../../common/ModelPopup/ModelPopUp';
+import Prescriptions from './Prescriptions';
+import Grid from '@mui/material/Grid';
 
-const columns = [{
-    id: 'date', label: 'Date'
+const prescriptionTableData = [{
+    name: 'Date',
+    datakey: 'date',
+    width: '10%'
 }, {
-    id: 'drugname', label: 'Drug Name'
+    name: 'Drug Name',
+    width: '20%',
+    datakey: 'drugname'
 }, {
-    id: 'dose', label: 'Dose'
+    name: 'Dose',
+    width: '10%',
+    datakey: 'dose'
 }, {
-    id: 'sig', label: 'SIG'
+    name: 'Dose Unit',
+    width: '10%',
+    datakey: 'doseunit'
 }, {
-    id: 'startdate', label: 'Start Date'
+    name: 'SIG',
+    width: '20%',
+    datakey: 'sig',
 }, {
-    id: 'enddate', label: 'End Date'
+    name: 'Start Date',
+    width: '10%',
+    datakey: 'startdate',
+    isDateFiled: true
+}, {
+    name: 'End Date',
+    width: '10%',
+    datakey: 'endate',
+    isDateFiled: true
 }]
 export default function PrescriptionsList() {
     const [prescriptionlist, setPrescriptionlist] = React.useState([]);
+    const [isOpen, setIsOpen] = React.useState(false);
     const appContextValue = useContext(AppContext);
     useEffect(() => {
         getprescriptionlist();
@@ -44,52 +58,24 @@ export default function PrescriptionsList() {
         let result = await sendRequest(payLoad);
         if (result && result.length != 0) {
             setPrescriptionlist(result);
+
         }
     }
 
     return (
-        <Box>
-            <ClientBanner clientData={appContextValue.selectedVisitDeatils.clientid} visitData={appContextValue.selectedVisitDeatils} />
-
-            <CommonCard title={"Prescription List"} >
-                <Grid xs={12} container>
-                    <Paper sx={{ mt: 2, width: '100%', overflow: 'hidden' }}>
-                        <TableContainer sx={{ maxHeight: 440 }}>
-                            <Table stickyHeader aria-label="sticky table">
-                                <TableHead>
-                                    <TableRow>
-                                        {columns.map((column) => (
-                                            <TableCell
-                                                key={column.id}
-                                            >
-                                                {column.label}
-                                            </TableCell>
-                                        ))}
-                                    </TableRow>
-                                </TableHead>
-                                <TableBody>
-                                    {prescriptionlist && prescriptionlist.map((prescription, index) => (
-                                        <TableRow key={prescription.drugid}>
-                                            <TableCell>{(prescription.date) ? prescription.date : ''}</TableCell>
-                                            <TableCell>{(prescription && prescription.drugname) ? prescription.drugname : ""}</TableCell>
-                                            <TableCell>{(prescription && prescription.dose) ? prescription.dose + "" + prescription.doseunit : ""}</TableCell>
-                                            <TableCell>{(prescription && prescription.sig) ? prescription.sig : ""}</TableCell>
-                                            <TableCell>{(prescription && prescription.startdate) ? <Moment format="DD-MMM-YYYY">
-                                                {new Date(prescription.startdate)}
-                                            </Moment> : ""}</TableCell>
-                                            <TableCell>{(prescription && prescription.endate) ? <Moment format="DD-MMM-YYYY">
-                                                {new Date(prescription.endate)}
-                                            </Moment> : ""}</TableCell>
-                                        </TableRow>
-                                    ))}
-
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
-                    </Paper>
-                </Grid>
+        <Box sx={{ m: 1 }}>
+            <Grid xs={12} container>
+                <ClientBanner clientData={appContextValue.selectedVisitDeatils.clientid} visitData={appContextValue.selectedVisitDeatils} />
+            </Grid>
+            <CommonCard title={"Prescription List"} iconsList={[{ title: 'Add Presxription', icon: 'add_icon' }]} catchCliedEvent={(clickedEvent) => {
+                setIsOpen(true);
+            }}>
+                <CustomDataGrid tableHeaders={prescriptionTableData} tableData={prescriptionlist}></CustomDataGrid>
             </CommonCard>
-
+            <ModelPopUp isOpen={isOpen} size={'md'} handleClose={() => { setIsOpen(false) }} >
+                <Prescriptions isActionButtonReq={true} refreshPrescriptionList={() => { setIsOpen(false); getprescriptionlist() }} />
+            </ModelPopUp>
         </Box>
+
     )
 }

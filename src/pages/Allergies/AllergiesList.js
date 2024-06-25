@@ -14,20 +14,9 @@ import Select from '@mui/material/Select'
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import ClearIcon from '@mui/icons-material/Clear';
 import AppContext from '../../components/Context/AppContext';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import Autocomplete from '@mui/material/Autocomplete';
-import EMRAlert from '../../Utils/CustomAlert';
 import CustomDataGrid from '../../common/DataGrid/CustomDataGrid';
 import { act } from 'react-dom/test-utils';
 import CommonCard from '../../common/CommonCard';
@@ -93,14 +82,14 @@ export default function AllergiesList(props) {
         props.selectedRecord(row, action)
     }
     return (
-        <>
+        <Box >
             <CommonCard title={"Allergies List"}>
-                <Box sx={{ m: 1 }}>
-                    <CustomDataGrid tableHeaders={allergiesListHeaders} tableData={tableData} triggerEvent={(row, action) => {
-                        triggerEventActions(row, action)
-                    }}></CustomDataGrid>
-                </Box>
+
+                <CustomDataGrid tableHeaders={allergiesListHeaders} tableData={tableData} triggerEvent={(row, action) => {
+                    triggerEventActions(row, action)
+                }}></CustomDataGrid>
+
             </CommonCard>
-        </>
+        </Box>
     )
 }

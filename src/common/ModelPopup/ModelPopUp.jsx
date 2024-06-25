@@ -18,7 +18,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 export default function ModelPopUp(props) {
- 
+
   const handleClose = () => {
     props.handleClose()
   };
@@ -26,13 +26,15 @@ export default function ModelPopUp(props) {
   return (
     <React.Fragment>
       <BootstrapDialog
+        fullWidth
+        maxWidth={props.size ? props.size :'sm'}
         onClose={handleClose}
         aria-labelledby="customized-dialog-title"
-        open={(props)?props.isOpen : false}
+        open={(props) ? props.isOpen : false}
       >
-        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+        {props.title && <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
           {props.title}
-        </DialogTitle>
+        </DialogTitle>}
         <IconButton
           aria-label="close"
           onClick={handleClose}
@@ -46,13 +48,15 @@ export default function ModelPopUp(props) {
           <CloseIcon />
         </IconButton>
         <DialogContent dividers>
-            {props.children}
+          {props.children}
         </DialogContent>
-        <DialogActions>
-          <Button autoFocus onClick={handleClose}>
-            Save changes
-          </Button>
-        </DialogActions>
+        {props.isActons &&
+          <DialogActions>
+            <Button autoFocus onClick={handleClose}>
+              Save changes
+            </Button>
+
+          </DialogActions>}
       </BootstrapDialog>
     </React.Fragment>
   );

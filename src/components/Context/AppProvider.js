@@ -11,6 +11,7 @@ export default function AppProvider(props) {
     const [leftMenuList, setLeftMenuList] = useState([]);
 
     const [tenant, setTenant] = useState("");
+    const [selectedLeftMenuItem, setSelectedLeftMenuItem] = useState("");
 
     return (
         <AppContext.Provider value={
@@ -42,7 +43,11 @@ export default function AppProvider(props) {
                 tenant:tenant,
                 setTenant:(data)=>{
                     setTenant(data);
-                }
+                },
+                selectedLeftMenuItem:selectedLeftMenuItem,
+                setSelectedLeftMenuItem:(data)=>{
+                    setSelectedLeftMenuItem(data);
+                },
             }
         }>
             {props.children}

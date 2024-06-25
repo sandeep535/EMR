@@ -43,7 +43,7 @@ const Topbar = () => {
   }
 
   return (
-    <Box position="fixed" style={{ background: colors, width: '100%', height: '8%' }}>
+    <Box position="fixed" style={{ background: colors, width: '100%', height: '8%',borderRadius:"5px" }}>
       <Dialog
         open={open}
         TransitionComponent={Transition}
@@ -62,7 +62,7 @@ const Topbar = () => {
         </DialogActions>
       </Dialog>
 
-      <Box display="flex">
+      <Box display="flex" >
         <p style={{ marginLeft: '68%', marginRight: "1%", color: '#fff' }}>Login User : <b>{loggedUser}</b></p>
         <IconButton onClick={() => {
           handleClickOpen()

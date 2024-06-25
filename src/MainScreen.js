@@ -43,13 +43,15 @@ export default function MainScreen(props) {
                     <Route path='/login/:tenant' element={<LoginPage />} />
                 </Routes>)}
             {appContextValue && appContextValue.isLogin &&
-                <Box style={{ display: "flex", flexDirection: "row",  }}>
+                <Box style={{ display: "flex", flexDirection: "row", }}>
                     <Box>
-                        <MyProSidebarProvider/>
+                        <MyProSidebarProvider />
                     </Box>
-                    <Box style={{width:'100%'}}>
-                         <Topbar/>
-                        <main >
+                    <Box style={{ width: '100%' }}>
+                        <Box sx={{ height: '8%' }}>
+                            <Topbar />
+                        </Box>
+                        <Box sx={{ height: '92%',overflowY:'scroll' }}>
                             <Routes>
                                 <Route path='/vist-dashboard' element={<VisitDasboard />} />
                                 <Route path="/registration" element={<Registration />} />
@@ -67,7 +69,9 @@ export default function MainScreen(props) {
                                 <Route path='/diagnosismaster' element={<DiagnosisMaster />} />
 
                             </Routes>
-                        </main>
+                        </Box>
+
+
 
                     </Box>
                 </Box>

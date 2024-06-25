@@ -9,7 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
 import Icon from '@mui/material/Icon';
-
+import Moment from 'react-moment';
 
 const styles ={
     headerCell: {
@@ -87,7 +87,11 @@ const styles ={
                                                 props.triggerEvent(row, action)
                                             }}>{action.icon}</Icon>
                                         })}
-                                        {!rowHeader.isActions && getValueFromObj(row, rowHeader)}
+                                        {rowHeader.isDateFiled && <Moment format="DD-MMM-YYYY">
+                                                {new Date(getValueFromObj(row, rowHeader))}
+                                            </Moment>}
+                                        {!rowHeader.isActions && !rowHeader.isDateFiled && getValueFromObj(row, rowHeader)}
+                                        
                                     </TableCell>
                                 ))}
                             </TableRow>

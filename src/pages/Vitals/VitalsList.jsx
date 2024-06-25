@@ -1,108 +1,92 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { Box } from '@mui/material'
 import Grid from '@mui/material/Grid';
 import AppContext from '../../components/Context/AppContext';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import { sendRequest } from '../global/DataManager';
 import APIS from '../../Utils/APIS';
 import ClientBanner from '../../components/ClientBanner/ClientBanner';
 import CommonCard from '../../common/CommonCard';
+import CustomDataGrid from '../../common/DataGrid/CustomDataGrid';
+import ModelPopUp from '../../common/ModelPopup/ModelPopUp';
+import Vitals from './Vitals';
 
-const columns =[{
-    id: 'date', label: 'Date'
-},{
-   id: 'height', label: 'Height'
-},{
-   id: 'weight', label: 'Weight'
-},{
-    id: 'bmi', label: 'BMI'
- },{
-    id: 'BP', label: 'BP'
- },{
-    id: 'pulse', label: 'Pulse'
- },{
-    id: 'respiratoryrate', label: 'Respiratory Rate'
- },{
-    id: 'temp', label: 'Temerature'
- }]
+
+const vitalsListTableData = [{
+    name: "Date",
+    datakey: 'date',
+    width: '20%'
+}, {
+    name: "Height",
+    width: '20%',
+    datakey: 'height'
+}, {
+    name: 'Weight',
+    width: '10%',
+    datakey: 'weight'
+}, {
+    name: 'BMI',
+    width: '10%',
+    datakey: 'bmi',
+}, {
+    name: 'Systolic',
+    width: '10%',
+    datakey: 'systolic',
+}, {
+    name: 'Diastolic',
+    width: '10%',
+    datakey: 'diastolic',
+}, {
+    name: 'Pulse',
+    width: '10%',
+    datakey: 'pulse',
+}, {
+    name: 'Respiratory Rate',
+    width: '10%',
+    datakey: 'respiratoryrate',
+}, {
+    name: 'Temerature',
+    width: '10%',
+    datakey: 'temperature',
+}]
+
 export default function VisitCreation() {
-    const [vitalsList,setVitalsList] = React.useState([]);
+    const [vitalsList, setVitalsList] = React.useState([]);
+    const [isOpen, setIsOpen] = useState(false);
     const appContextValue = useContext(AppContext);
     useEffect(() => {
         getVitalsData();
     }, []);
 
-    async function getVitalsData(){
+    async function getVitalsData() {
         var payLoad = {
             method: APIS.GET_VITALS_DATA.METHOD,
             url: APIS.GET_VITALS_DATA.URL,
-            paramas: [0,appContextValue.selectedVisitDeatils.clientid.seqid],
+            paramas: [0, appContextValue.selectedVisitDeatils.clientid.seqid],
         }
         let result = await sendRequest(payLoad);
-        if (result && result.length!=0) {
+        if (result && result.length != 0) {
             setVitalsList(result);
         }
     }
 
     return (
-        <Box >
-            <Box sx={{m:0}}>
+        <Box sx={{ m: 1 }}>
+            <Box >
                 <Grid xs={12} container>
                     <ClientBanner clientData={appContextValue.selectedVisitDeatils.clientid} visitData={appContextValue.selectedVisitDeatils} />
                 </Grid>
-                <CommonCard title={"Vitals List"}>
+                <CommonCard title={"Vitals List"} iconsList={[{ title: 'Add Vitals', icon: 'add_icon' }]} catchCliedEvent={(clickedEvent) => {
+                    setIsOpen(true);
+                }}>
                     <Grid xs={12} container>
-                        <Paper sx={{ width: '100%', overflow: 'hidden', mt: 2 }}>
-                            <TableContainer sx={{ maxHeight: 440 }}>
-                                <Table stickyHeader aria-label="sticky table">
-                                    <TableHead>
-                                        <TableRow>
-                                            {columns.map((column) => (
-                                                <TableCell
-                                                    key={column.id}
-                                                >
-                                                    {column.label}
-                                                </TableCell>
-                                            ))}
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {vitalsList && vitalsList.map((vital, index) => (
-                                            <TableRow key={vital.id}>
-                                                <TableCell>{(vital.date) ? vital.date : ''}</TableCell>
-                                                <TableCell>{(vital.height) ? vital.height : ''}</TableCell>
-                                                <TableCell>{(vital.weight) ? vital.weight : ''}</TableCell>
-                                                <TableCell>{(vital.bmi) ? vital.bmi : ''}</TableCell>
-                                                <TableCell>{(vital.systolic) ? vital.systolic + "/" + vital.diastolic : ''}</TableCell>
-                                                <TableCell>{(vital.pulse) ? vital.pulse : ''}</TableCell>
-                                                <TableCell>{(vital.respiratoryrate) ? vital.respiratoryrate : ''}</TableCell>
-                                                <TableCell>{(vital.temperature) ? vital.temperature : ''}</TableCell>
-                                            </TableRow>
-                                        ))}
-
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                            {/* <TablePagination
-                            rowsPerPageOptions={[10, 25, 100]}
-                            component="div"
-                            count={employeeList.length}
-                            rowsPerPage={rowsPerPage}
-                            page={page}
-                            onPageChange={handleChangePage}
-                            onRowsPerPageChange={handleChangeRowsPerPage}
-                        /> */}
-                        </Paper>
+                        <CustomDataGrid tableHeaders={vitalsListTableData} tableData={vitalsList}></CustomDataGrid>
                     </Grid>
                 </CommonCard>
-               
+
             </Box>
+            <ModelPopUp isOpen={isOpen} handleClose={() => { setIsOpen(false) }} >
+                <Vitals isActionButtonReq={true} refreshVitalsList={() => { setIsOpen(false); getVitalsData() }} />
+            </ModelPopUp>
         </Box>
     )
 }

@@ -64,6 +64,11 @@ const APIS={
         METHOD:"POST",
         ACTION:"Save Vitals"
     },
+    SAVE_PRESCRIPTIONS:{
+        URL:"drugs/savePrescriptions",
+        METHOD:"POST",
+        ACTION:"Save Prescriptions"
+    },
     GET_DRUG_MASTER_DATA:{
         URL:"drugs/getDrugMasterData/{0}",
         METHOD:"GET",

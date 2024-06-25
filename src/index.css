@@ -6,8 +6,8 @@ body,
 .content {
 
   margin: 0;
-  font-family: "-apple-system, BlinkMacSystemFont, segoe ui, Roboto, helvetica neue, Arial, noto sans, sans-serif, apple color emoji, segoe ui emoji, segoe ui symbol, noto color emoji" !important;
-  font-size: .88rem;
+  /* font-family: "-apple-system, BlinkMacSystemFont, segoe ui, Roboto, helvetica neue, Arial, noto sans, sans-serif, apple color emoji, segoe ui emoji, segoe ui symbol, noto color emoji" !important;
+ */ font-size: .88rem; 
   font-weight: 400;
   line-height: 1.5;
   color: #495057;
@@ -52,7 +52,7 @@ body,
   background: white;
 }
 main {
-  margin-top: 5%;
+  /* margin-top: 5%; */
   margin-right: 5px;
 }
 .error{
@@ -78,21 +78,11 @@ main {
     padding: 5px;
     color: white;
 }
-.grid-height{
-  height: 150px;
-  margin-left: 10px !important;
-  overflow-y: scroll;
-}
+
 .MuiCard-root{
   margin-bottom: 5px;
 }
-/* .MuiCardContent-root{
-  padding: 0 !important;
-} */
-/* .css-1wnc2au-MuiCardContent-root {
-  padding: 0 !important;
-  margin: 10px !important;
-} */
+
 .visit-cards-div{
   height: 520px;
   overflow-y: scroll;
@@ -172,9 +162,8 @@ main {
 
 .client-banner{
   margin: 0px !important;
-  width: 100% !important;
-  border-radius: 3px;
   background-color: #fff;
+  margin-bottom: 5px !important;
 }
 
 .grid-item{
@@ -218,7 +207,23 @@ border-radius: 3px;
 }
 .common-card-header{
   border-bottom: 2px solid #dee2e6;
+  /* background-color:#673AB7 ;
+  color: white; */
 }
 .common-card-bottom{
   border-top: 2px solid #dee2e6;
+}
+.custom-grid-img{
+  border-right: none;
+  border-top-right-radius: 0%;
+  border-bottom-right-radius: 0%;
+}
+.custom-grid-client{
+  border-left: none;
+  border-top-left-radius: 0%;
+  border-bottom-left-radius: 0%;
+}
+.is-active{
+  background-color: #6870fa;
+  
 }

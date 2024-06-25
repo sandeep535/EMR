@@ -17,21 +17,21 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import Icon from '@mui/material/Icon';
 import logo from '../../../resources/LeafSpring_Logo1.jpeg';
 
-const Item = ({ title, to, icon, selected, setSelected }) => {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
-  return (
-    <MenuItem
-      active={selected === title}
-      style={{ color: colors.grey[100] }}
-      onClick={() => setSelected(title)}
-      icon={icon}
-      routerLink={<Link to={to} />}
-    >
-      <Typography>{title}</Typography>
-    </MenuItem>
-  );
-};
+// const Item = ({ title, to, icon, selected, setSelected }) => {
+//   const theme = useTheme();
+//   const colors = tokens(theme.palette.mode);
+//   return (
+//     <MenuItem
+//       active={selected === title}
+//       style={{ color: colors.grey[100] }}
+//       onClick={() => setSelected(title)}
+//       icon={icon}
+//       routerLink={<Link to={to} />}
+//     >
+//       <Typography>{title}</Typography>
+//     </MenuItem>
+//   );
+// };
 
 const MyProSidebar = () => {
   const appContextValue = useContext(AppContext);
@@ -55,6 +55,7 @@ const MyProSidebar = () => {
         appContextValue.setLeftMenuList(copyData);
         appContextValue.setSelectedVisitDeatils([]);
       }
+      appContextValue.setSelectedLeftMenuItem(item);
       navigate(item.to);
     } else {
       var copyData = [...appContextValue.leftMenuList];
@@ -107,6 +108,7 @@ const MyProSidebar = () => {
         breakPoint="md"
         rtl={sidebarRTL}
         backgroundColor={colors.themecolor.color}
+        borderRaduis={'3px'}
         image={sidebarImage}
       >
         <Menu iconshape="square">
@@ -130,7 +132,8 @@ const MyProSidebar = () => {
                       <Collapse in={menu.isOpen} timeout="auto" unmountOnExit>
                         {menu.subMenu && menu.subMenu.map(submenu => {
                           return (
-                            <List component="div" disablePadding>
+                            <List component="div" disablePadding className = { appContextValue && appContextValue.selectedLeftMenuItem.title == submenu.title && 'is-active' }>
+                              {appContextValue.title}
                               <ListItemButton sx={{ pl: 4 }} onClick={() => handleClick(submenu, "submenu", index)}>
                                 <ListItemIcon>
                                   <Icon style={{ color: 'white' }}>{submenu.icon}</Icon>
@@ -157,7 +160,7 @@ const MyProSidebar = () => {
                       <Collapse in={menu.isOpen} timeout="auto" unmountOnExit>
                         {menu.subMenu && menu.subMenu.map((submenu, index) => {
                           return (
-                            <List component="div" key={index} disablePadding>
+                            <List component="div" key={index} disablePadding className = { appContextValue && appContextValue.selectedLeftMenuItem.title == submenu.title && 'is-active' }>
                               <ListItemButton sx={{ pl: 4 }} onClick={() => handleClick(submenu, "submenu", index)}>
                                 <ListItemIcon>
                                   <Icon style={{ color: 'white' }}>{submenu.icon}</Icon>

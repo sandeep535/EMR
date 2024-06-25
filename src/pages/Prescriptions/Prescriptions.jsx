@@ -20,11 +20,21 @@ import TableRow from '@mui/material/TableRow';
 import Moment from 'react-moment';
 import ClearIcon from '@mui/icons-material/Clear';
 import styles from './PrescriptionStyles';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
 import CommonCard from '../../common/CommonCard';
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
+import EMRAlert from '../../Utils/CustomAlert';
 
+const schema = yup
+    .object({
+        selectedDrugValues: yup.object().required("Select Drug"),
+        dose: yup.string().required("Select Dose"),
+        doseunit: yup.string().required("Select Unit"),
+        sig: yup.string().required("Select SIG"),
+    })
+    .required()
 const prescriptionHeadersList = [{
     name: 'Drug Name',
     width: '30%'
@@ -47,17 +57,14 @@ const prescriptionHeadersList = [{
 const Prescriptions = forwardRef((props, ref) => {
     const [drugListOptions, setDrugListOptions] = React.useState([]);
     const [drugListinputValue, setDrugListinputValue] = React.useState('');
-
-    const [selectedDrugValues, setSelectedDrugValues] = React.useState();
-    const [dose, setDose] = React.useState();
-    const [doseunit, setDoseunit] = React.useState();
-    const [sig, setSig] = React.useState();
-    const [startdate, setStartdate] = React.useState();
-    const [todate, setTodate] = React.useState();
-    const [instructions, setInstructions] = React.useState();
-
     const [prescriptionList, setPrescriptionList] = React.useState([]);
     const appContextValue = useContext(AppContext);
+
+    const { control, handleSubmit, reset, formState: { errors } } = useForm({
+        defaultValues: {},
+        mode: 'onChange',
+        resolver: yupResolver(schema),
+    })
     useEffect(() => {
         // getDrugMasterData();
     }, []);
@@ -70,38 +77,38 @@ const Prescriptions = forwardRef((props, ref) => {
                         prescriptionList
                     }
                 },
-                setFormData1: (data) => {
+                setFormData: (data) => {
                     setPrescriptionList(data)
+                },
+                submitFormmData: () => {
+                    handleSubmit(addPrescriptionTollist)();
                 }
             }
         },
         [prescriptionList],
     );
-    function clearPrescriptonFormData() {
-        setDrugListinputValue("");
-        setSelectedDrugValues("")
-        setDose("")
-        setDoseunit("")
-        setSig("");
-        setStartdate("");
-        setTodate("");
-        setInstructions("")
 
+    // const prescriptionHandle = async (data) => {
+
+
+    // }
+    function clearPrescriptonFormData() {
+        reset();
     }
-    async function addPrescriptionTollist() {
+    async function addPrescriptionTollist(data) {
         var obj = {
-            drugid: selectedDrugValues.drugid,
-            drugname: selectedDrugValues.drugname,
-            dose: dose,
-            doseunit: doseunit,
-            sig: sig,
-            startdate: startdate,
-            endate: todate,
+            drugid: data.selectedDrugValues.drugid,
+            drugname: data.selectedDrugValues.drugname,
+            dose: data.dose,
+            doseunit: data.doseunit,
+            sig: data.sig,
+            startdate: data.startdate ? new Date(data.startdate) : null,
+            endate: data.todate ? new Date(data.todate) : null,
             status: 1,
             clientid: appContextValue.selectedVisitDeatils.clientid.seqid,
             visitid: appContextValue.selectedVisitDeatils.visitid,
             capturedby: 1,
-            instructions: instructions
+            instructions: data.instructions
         }
         var copySelectedList = [...prescriptionList];
         copySelectedList.push(obj);
@@ -120,6 +127,22 @@ const Prescriptions = forwardRef((props, ref) => {
             setDrugListOptions(result);
         }
     }
+    async function savePrescriptions() {
+        var payLoad = {
+            method: APIS.SAVE_PRESCRIPTIONS.METHOD,
+            url: APIS.SAVE_PRESCRIPTIONS.URL,
+            paramas: [],
+            data: prescriptionList
+        }
+        let result = await sendRequest(payLoad);
+        console.log(result);
+        if (result) {
+            EMRAlert.alertifySuccess("Vital data saved succussfully");
+            props.refreshPrescriptionList();
+        } else {
+            EMRAlert.alertifyError("Not created");
+        }
+    }
 
     function removePrescriptionFromList(index) {
         var copyPrescriptionList = [...prescriptionList];
@@ -129,18 +152,20 @@ const Prescriptions = forwardRef((props, ref) => {
 
     return (
         <>
-        <CommonCard title={"Prescriptions"}>
-        <Box sx={{ m: 1 }}>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <Grid container spacing={1}>
-                                    <Grid item xs={6} spacing={1} >
-                                        <FormControl variant="outlined" fullWidth>
+            <CommonCard title={"Prescriptions"}>
+                <form onSubmit={handleSubmit(data => addPrescriptionTollist(data, "isFrom"))} >
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <Grid container spacing={1}>
+                            <Grid item xs={3} spacing={1} >
+                                <FormControl variant="outlined" fullWidth>
+                                    <Controller
+                                        name="selectedDrugValues"
+                                        control={control}
+                                        render={({ field: { onChange } }) =>
                                             <Autocomplete
                                                 size="small"
-                                                value={selectedDrugValues}
-                                                onChange={(event, newValue) => {
-                                                    setSelectedDrugValues(newValue);
-                                                    // addServicetoList(newValue);
+                                                onChange={(event, item) => {
+                                                    onChange(item);
                                                 }}
                                                 key={option => option.drugcode}
                                                 getOptionLabel={option => option.drugname}
@@ -154,139 +179,184 @@ const Prescriptions = forwardRef((props, ref) => {
                                                 }}
                                                 id="drug-controllable-states-demo"
                                                 options={drugListOptions}
-                                                //  sx={{ width: 300 }}
-                                                renderInput={(params) => <TextField {...params} label="Search Drug" />}
+                                                renderInput={(params) => <TextField {...params} error={errors.selectedDrugValues?.message}
+                                                    helperText={errors.selectedDrugValues?.message} label="Search Drug" />}
                                             />
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item xs={3} spacing={1} >
-                                        <FormControl variant="outlined" fullWidth>
-                                            <TextField
-                                                fullWidth
-                                                type="text"
-                                                size="small"
-                                                variant="outlined"
-                                                label={Translations.Prescriptions.dose}
-                                                name="Dose"
-                                                onChange={e => setDose(e.target.value)}
-                                                value={dose}
-                                            />
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item xs={3} spacing={1} >
-                                        <FormControl variant="outlined" fullWidth>
-                                            <TextField
-                                                fullWidth
-                                                type="text"
-                                                size="small"
-                                                variant="outlined"
-                                                label={Translations.Prescriptions.doseunit}
-                                                name="doseunit"
-                                                onChange={e => setDoseunit(e.target.value)}
-                                                value={doseunit}
-                                            />
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item xs={6} spacing={1} >
-                                        <FormControl variant="outlined" fullWidth>
-                                            <TextField
-                                                fullWidth
-                                                type="text"
-                                                size="small"
-                                                variant="outlined"
-                                                label={Translations.Prescriptions.sig}
-                                                name="sig"
-                                                onChange={e => setSig(e.target.value)}
-                                                value={sig}
+                                        }
+                                    />
 
-                                            />
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item xs={3} spacing={1} >
-                                        <FormControl variant="outlined" fullWidth>
-                                            <DatePicker
-                                                label={<span sx={{ marginTop: '-8px' }}>Start Date</span>}
-                                                value={startdate}
-                                                onChange={newValue => setStartdate(new Date(newValue))}
-                                                format="DD-MM-YYYY"
-                                                fullWidth
-                                                size="small"
-                                                InputLabelProps={{
-                                                    style: { marginTop: '-8px' }
-                                                }}
-                                            />
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item xs={3} spacing={1} >
-                                        <FormControl variant="outlined" fullWidth>
-                                            <DatePicker
-                                                label="To Date"
-                                                value={todate}
-                                                onChange={newValue => setTodate(new Date(newValue))}
-                                                format="DD-MM-YYYY"
-                                                fullWidth
-                                                size="small"
-                                                InputLabelProps={{
-                                                    style: { marginTop: '-8px' }
-                                                }}
-                                            />
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item xs={10} spacing={1} >
-                                        <FormControl variant="outlined" fullWidth>
-                                            <TextField
-                                                fullWidth
-                                                type="text"
-                                                size="small"
-                                                variant="outlined"
-                                                multiline
-                                                rows={3}
-                                                label={"Instructions"}
-                                                name={props.label}
-                                                onChange={e => setInstructions(e.target.value)}
-                                                value={instructions}
-                                            />
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item xs={2} spacing={1} >
-                                        <Button variant="contained" onClick={() => {
-                                            addPrescriptionTollist();
-                                        }}>Add</Button>
-                                    </Grid>
-                                    <Table sx={{ minWidth: 650 }} aria-label="simple table" className='grid-height'>
-                                        <TableHead>
-                                            <TableRow>
-                                                {(prescriptionHeadersList.map(header => {
-                                                    return (
-                                                        <TableCell width={header.width}>{header.name}</TableCell>
-                                                    )
-                                                }))}
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody >
-                                            {prescriptionList && prescriptionList.map((prescription, index) => (
-                                                <TableRow key={prescription.drugid}>
-                                                    <TableCell>{(prescription && prescription.drugname) ? prescription.drugname : ""}</TableCell>
-                                                    <TableCell>{(prescription && prescription.dose) ? prescription.dose + "" + prescription.doseunit : ""}</TableCell>
-                                                    <TableCell>{(prescription && prescription.sig) ? prescription.sig : ""}</TableCell>
-                                                    <TableCell>{(prescription && prescription.startdate) ? <Moment format="DD-MMM-YYYY">
-                                                        {new Date(prescription.startdate)}
-                                                    </Moment> : ""}</TableCell>
-                                                    <TableCell>{(prescription && prescription.endate) ? <Moment format="DD-MMM-YYYY">
-                                                        {new Date(prescription.endate)}
-                                                    </Moment> : ""}</TableCell>
-                                                    <TableCell><ClearIcon styles={styles.cursor} onClick={() => {
-                                                        removePrescriptionFromList(index);
-                                                    }} /></TableCell>
-                                                </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </Grid>
-                            </LocalizationProvider>
+                                </FormControl>
+
+                            </Grid>
+                            <Grid item xs={1} spacing={1} >
+                                <Controller
+                                    name="dose"
+                                    control={control}
+                                    render={({ field }) =>
+                                        <TextField
+                                            {...field}
+                                            fullWidth
+                                            type="text"
+                                            size="small"
+                                            variant="outlined"
+                                            label={Translations.Prescriptions.dose}
+                                            error={errors.dose?.message}
+                                            helperText={errors.dose?.message}
+                                        />
+                                    }
+                                />
+
+                            </Grid>
+                            <Grid item xs={1} spacing={1} >
+                                <Controller
+                                    name="doseunit"
+                                    control={control}
+                                    render={({ field }) =>
+                                        <TextField
+                                            {...field}
+                                            fullWidth
+                                            type="text"
+                                            size="small"
+                                            variant="outlined"
+                                            label={Translations.Prescriptions.doseunit}
+                                            error={errors.doseunit?.message}
+                                            helperText={errors.doseunit?.message}
+                                        />
+                                    }
+                                />
+                            </Grid>
+                            <Grid item xs={3} spacing={1} >
+                                <Controller
+                                    name="sig"
+                                    control={control}
+                                    render={({ field }) =>
+                                        <TextField
+                                            {...field}
+                                            fullWidth
+                                            type="text"
+                                            size="small"
+                                            variant="outlined"
+                                            label={Translations.Prescriptions.sig}
+                                            error={errors.sig?.message}
+                                            helperText={errors.sig?.message}
+                                        />
+                                    }
+                                />
+                            </Grid>
+                            <Grid item xs={2} spacing={1} >
+                                <Controller
+                                    name="startdate"
+                                    control={control}
+                                    render={({ field }) =>
+                                        <DatePicker
+                                            {...field}
+                                            label={<span sx={{ marginTop: '-8px' }}>Start Date</span>}
+                                            format="DD-MM-YYYY"
+                                            fullWidth
+                                            slotProps={{ textField: { size: 'small' } }}
+                                            InputLabelProps={{
+                                                style: { marginTop: '-8px' }
+                                            }}
+                                        />
+
+                                    }
+                                />
+                            </Grid>
+                            <Grid item xs={2} spacing={1} >
+                                <Controller
+                                    name="todate"
+                                    control={control}
+                                    render={({ field }) =>
+                                        <DatePicker
+                                            {...field}
+                                            label="To Date"
+
+                                            format="DD-MM-YYYY"
+                                            fullWidth
+                                            size="small"
+                                            slotProps={{ textField: { size: 'small' } }}
+                                            InputLabelProps={{
+                                                style: { marginTop: '-8px' }
+                                            }}
+                                        />
+
+                                    }
+                                />
+
+                            </Grid>
+                            <Grid item xs={10} spacing={1} >
+                                <Controller
+                                    name="instructions"
+                                    control={control}
+                                    render={({ field }) =>
+                                        <TextField
+                                            {...field}
+                                            fullWidth
+                                            type="text"
+                                            size="small"
+                                            variant="outlined"
+                                            multiline
+                                            rows={3}
+                                            label={"Instructions"}
+                                            name={props.label}
+                                            error={errors.instructions?.message}
+                                            helperText={errors.instructions?.message}
+                                        />
+                                    }
+                                />
+                            </Grid>
+                            <Grid item xs={2} spacing={1} >
+                                <Button type="submit" color="primary" variant="contained">
+                                    Add
+                                </Button>
+                            </Grid>
+                            <Table size="small" aria-label="simple table" className='grid-height'>
+                                <TableHead>
+                                    <TableRow>
+                                        {(prescriptionHeadersList.map(header => {
+                                            return (
+                                                <TableCell width={header.width}>{header.name}</TableCell>
+                                            )
+                                        }))}
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody >
+                                    {prescriptionList && prescriptionList.map((prescription, index) => (
+                                        <TableRow key={prescription.drugid}>
+                                            <TableCell>{(prescription && prescription.drugname) ? prescription.drugname : ""}</TableCell>
+                                            <TableCell>{(prescription && prescription.dose) ? prescription.dose + "" + prescription.doseunit : ""}</TableCell>
+                                            <TableCell>{(prescription && prescription.sig) ? prescription.sig : ""}</TableCell>
+                                            <TableCell>{(prescription && prescription.startdate) ? <Moment format="DD-MMM-YYYY">
+                                                {new Date(prescription.startdate)}
+                                            </Moment> : ""}</TableCell>
+                                            <TableCell>{(prescription && prescription.endate) ? <Moment format="DD-MMM-YYYY">
+                                                {new Date(prescription.endate)}
+                                            </Moment> : ""}</TableCell>
+                                            <TableCell><ClearIcon styles={styles.cursor} onClick={() => {
+                                                removePrescriptionFromList(index);
+                                            }} /></TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </Grid>
+                    </LocalizationProvider>
+
+                </form>
+                {props.isActionButtonReq &&
+                    <Box display="flex" justifyContent="flex-end" marginTop="5px" borderTop="2px solid #dee2e6;" >
+                        <Box marginTop="5px"  >
+                            <Button color="primary" variant="contained" onClick={() => { savePrescriptions() }}>
+                                {"Save"}
+                            </Button>
+                            <Button color="secondary" variant="contained" onClick={() => { console.log("ss") }}>
+                                {"Clear"}
+                            </Button>
                         </Box>
-        </CommonCard>
-           
+                    </Box>
+                }
+            </CommonCard>
+
         </>
     )
 });

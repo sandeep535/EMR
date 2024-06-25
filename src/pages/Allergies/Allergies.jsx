@@ -187,14 +187,13 @@ const Allergies = forwardRef((props, ref) => {
         event.preventDefault();
     }
     return (
-        <>
-            <Box >
+        <Box sx={{ m: 1 }}>
+            <Grid xs={12} container>
                 <ClientBanner clientData={appContextValue.selectedVisitDeatils.clientid} visitData={appContextValue.selectedVisitDeatils} />
-
-            </Box>
-            <form onSubmit={handleSubmit}>
-                <CommonCard title={"Add Allergies"}>
-                    <Box sx={{ m: 1 }}>
+            </Grid>
+            <CommonCard title={"Add Allergies"}>
+                <form onSubmit={handleSubmit}>
+                    <Box >
                         <Grid container spacing={1}>
                             <Grid item xs={2} spacing={1}>
                                 <FormControl variant="outlined" fullWidth>
@@ -282,7 +281,7 @@ const Allergies = forwardRef((props, ref) => {
                                     rows={1}
                                 />
                             </Grid>
-                            
+
                             <Grid item xs={3}>
                                 <FormControl>
                                     <FormLabel id="demo-row-radio-buttons-group-label">{Translations.ALLERGY.STATUS}</FormLabel>
@@ -339,15 +338,16 @@ const Allergies = forwardRef((props, ref) => {
                                 }}></CustomDataGrid>
                                 } */}
                     </Box>
-                </CommonCard>
+                </form>
+            </CommonCard>
 
 
-            </form>
+
             <AllergiesList selectedRecord={(row, action) => {
                 debugger
                 setDatatoForm(row)
             }} />
-        </>
+        </Box>
     )
 });
 export default Allergies;

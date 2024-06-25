@@ -3,17 +3,12 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import styles from './ClientBannerCss';
 import userIcon from '../../resources/image-icon.png';
+import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
 
 export default function ClientBanner(props) {
     useEffect(() => {
-        // Assuming status is received through props
-
     }, []);
-
-    
-
     const status = props.visitData.status;
-    // Function to determine the border color based on status
     const getBorderColor = () => {
         switch (status) {
             case 1:
@@ -29,29 +24,30 @@ export default function ClientBanner(props) {
     return (
         <>
             {props.clientData &&
-                <Grid container spacing={2} className='client-banner'>
-                    <Grid item xs={1} className='grid-item' >
-                        <img alt="User Image" src={userIcon} style={{ height: '65px', width: '90px', margin: '-5px', marginBottom: '-10px' }}></img>
+                <Grid container spacing={1} className='client-banner'>
+                    <Grid item xs={1} className='grid-item custom-grid-img' >
+                        <PersonAddAltIcon style={{ fontSize: 50 }} />
+                        {/* <img alt="User Image" src={userIcon} style={{ height: '65px', width: '90px', margin: '-5px', marginBottom: '-10px' }}></img> */}
                     </Grid>
-                    <Grid item xs={11} className='grid-item'>
-                        <Grid container spacing={2} style={{ marginTop: '-10px', marginLeft: '0px' }}>
+                    <Grid item xs={11} className='grid-item  custom-grid-client'>
+                        <Grid container spacing={1}>
                             <Grid item xs={4} container alignItems="center">
-                                <Typography sx={styles.div} variant="h6" style={{ marginRight: '1rem' }}> Name:</Typography>
-                                <Typography sx={styles.div} variant="h6" component="div"><strong>{(props.clientData.firstname + " " + props.clientData.lastname).toUpperCase()}</strong></Typography>
+                                <Typography sx={styles.div}> Name:</Typography>
+                                <Typography sx={styles.div}><strong>{(props.clientData.firstname + " " + props.clientData.lastname)}</strong></Typography>
                             </Grid>
                             <Grid item xs={4} container alignItems="center">
-                                <Typography sx={styles.div} variant="h6" style={{ marginRight: '1rem' }}> Age:</Typography>
-                                <Typography sx={styles.div} variant="h6" component="div"> <strong>{props.clientData.age}</strong></Typography>
+                                <Typography sx={styles.div}> Age:</Typography>
+                                <Typography sx={styles.div}> <strong>{props.clientData.age}</strong></Typography>
                             </Grid>
                             <Grid item xs={4} container alignItems="center">
-                                <Typography sx={styles.div} variant="h6" style={{ marginRight: '1rem' }}> Gender:</Typography>
-                                <Typography sx={styles.div} variant="h6" component="div"> <strong>{(props.clientData.gender.lookupvalue).toUpperCase()}</strong></Typography>
+                                <Typography sx={styles.div}> Gender:</Typography>
+                                <Typography sx={styles.div}> <strong>{(props.clientData.gender.lookupvalue)}</strong></Typography>
                             </Grid>
                         </Grid>
-                        <Grid container spacing={2} >
-                            <Grid item xs={12} container alignItems="center" style={{ marginTop: '5px', marginLeft: '15px' }}>
-                                <Typography sx={styles.div} variant="h6" style={{ marginRight: '1rem' }}> Visit Reason:</Typography>
-                                <Typography sx={styles.div} variant="h6" component="div"> <strong>{props.visitData.reason}</strong></Typography>
+                        <Grid container spacing={1} >
+                            <Grid item xs={12} container alignItems="center">
+                                <Typography sx={styles.div}> Visit Reason:</Typography>
+                                <Typography sx={styles.div}> <strong>{props.visitData.reason}</strong></Typography>
                             </Grid>
                         </Grid>
                     </Grid>
