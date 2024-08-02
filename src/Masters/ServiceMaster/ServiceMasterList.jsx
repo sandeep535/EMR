@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import APIS from '../../Utils/APIS';
-import { sendRequest } from '../global/DataManager';
+import { sendRequest } from '../../pages/global/DataManager';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';

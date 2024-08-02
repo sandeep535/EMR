@@ -8,7 +8,7 @@ const Dashboard = () => {
   const smScreen = useMediaQuery(theme.breakpoints.up("sm"));
   const colors = tokens(theme.palette.mode);
   function HandleMenuClick(e) {
-    console.log(e.target.innerText);
+  
   }
   const DashboardMenuItems =[
     {

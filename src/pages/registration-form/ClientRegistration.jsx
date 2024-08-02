@@ -22,7 +22,6 @@ const ClientRegistration = () => {
     const regFormData = registrationInformationRef.current.getFormData();
     event.preventDefault();
     regFormData.address = childData;
-    console.log(regFormData);
     saveClientRegistration(regFormData);
   }
   useEffect(() => {

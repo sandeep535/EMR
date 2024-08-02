@@ -7,7 +7,6 @@ export const sendRequest = async payload => {
     if (payload.method == "GET") {
         let subURL = appendGetVariblesToUrl(payload.url, payload.paramas);
         serverUrl = serverUrl + subURL;
-        console.log("--------------",serverUrl);
     }else{
          serverUrl = serviceDetails.SERVICE_URL + payload.url;
     }
@@ -29,7 +28,6 @@ export const sendRequest = async payload => {
         });
         return response.data;
     } catch (error) {
-        console.log("----------------error",error)
        // throw error;
     }
 };

@@ -17,7 +17,6 @@ export const MyProSidebarProvider = ({ children }) => {
   const appContextValue = useContext(AppContext);
   const navigate = useNavigate();
   useEffect(() => {
-    console.log("-----------------------------------side bar", appContextValue)
     if (appContextValue.loggedInRolesTaks && Object.keys(appContextValue.loggedInRolesTaks).length != 0) {
       let copyRoles = [...appContextValue.loggedInRolesTaks];
       let defaultScreenData = "";

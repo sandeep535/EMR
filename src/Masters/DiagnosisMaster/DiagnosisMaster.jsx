@@ -64,7 +64,7 @@ export default function DiagnosisMaster(props) {
         status: "1"
     }
     const { control, handleSubmit, reset, formState: { errors } } = useForm({
-        defaultValues: { status: "1" },
+        defaultValues: defaultobj,
         resolver: yupResolver(schema),
     })
 
@@ -103,7 +103,6 @@ export default function DiagnosisMaster(props) {
             data: obj
         }
         let result = await sendRequest(payLoad);
-        console.log(result);
         if (result && result.diagnosisMasterModel) {
             setTableData(result.diagnosisMasterModel);
         } else {
@@ -130,6 +129,7 @@ export default function DiagnosisMaster(props) {
         if (result) {
             EMRAlert.alertifySuccess("Diagnosis Saved Succussfully");
             reset();
+            getMasterDataList();
         } else {
             EMRAlert.alertifyError("Not Saved");
         }
@@ -254,7 +254,7 @@ export default function DiagnosisMaster(props) {
             </CommonCard>
             <CommonCard title="Diagnosis List">
                 <CustomDataGrid tableHeaders={diagnosisListHeaders} tableData={tableData} totalcount={totalcount} rowsPerPage={20} paginationChangeEvent={(number) => {
-                    debugger
+                    
                 }} triggerEvent={(row, action) => {
                     //openEditmode(row, action);
                 }}></CustomDataGrid>

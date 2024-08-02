@@ -189,6 +189,17 @@ const APIS={
         METHOD:"POST",
         ACTION:""
     },
+    SAVE_LAB_MASTER:{
+        URL:"masters/saveLabMatser",
+        METHOD:"POST",
+        ACTION:""
+    },
+    GET_LAB_MASTER_LIST:{
+        URL:"masters/getLabMatser",
+        METHOD:"POST",
+        ACTION:""
+    },
+    
     
     
     

@@ -6,7 +6,7 @@ import Button from '@mui/material/Button';
 const FormButtonComponent = (props) => {
 
     return (
-        <Box display="flex" justifyContent="flex-end"  marginTop="5px" borderTop="2px solid #dee2e6;" >
+        <Box display="flex" justifyContent="flex-end" marginTop="5px"  >
             <Box marginTop="5px"  >
                 <Button type="submit" color="primary" variant="contained">
                     {props.button1}

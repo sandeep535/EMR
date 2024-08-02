@@ -7,8 +7,8 @@ import Registration from "./pages/registration-form/ClientRegistration";
 import Topbar from './pages/global/Topbar';
 import VisitDasboard from "./pages/VisistDashboard/VisitDashboard";
 import VisitActivity from "./pages/VisitActivites/VisitActivity";
-import EmployeeMaster from "./pages/EmpployeMaster/EmployeeMatser";
-import ServiceMaster from "./pages/ServiceMaster/ServiceMaster";
+import EmployeeMaster from "./Masters/EmpployeMaster/EmployeeMatser";
+import ServiceMaster from "./Masters/ServiceMaster/ServiceMaster";
 import VitalsList from "./pages/Vitals/VitalsList";
 import PrescriptionsList from "./pages/Prescriptions/PrescriptionsList";
 import RoleAndTasks from "./pages/RoleAndTaks/RoleAndTasks";
@@ -21,15 +21,13 @@ import VistStatistics from './pages/DashBoards/VistStatistics';
 import Allergies from './pages/Allergies/Allergies';
 import DiagnosisMaster from './Masters/DiagnosisMaster/DiagnosisMaster';
 import { useTheme, Box, Typography } from "@mui/material";
+import LabMaster from './Masters/LabMaster/LabMaster';
 // import LeftMenu from './common/LeftMenu';
 
 export default function MainScreen(props) {
     const navigate = useNavigate();
     const params = useParams()
-    console.log("ssss----------", params)
     useEffect(() => {
-
-        debugger
         // if (!appContextValue.isLogin) {
         //     navigate("/login/emr", { replace: true });
         // }
@@ -67,7 +65,7 @@ export default function MainScreen(props) {
                                 <Route path='/vist-statistics' element={<VistStatistics />} />
                                 <Route path='/allergy' element={<Allergies isSaveDirect={true} />} />
                                 <Route path='/diagnosismaster' element={<DiagnosisMaster />} />
-
+                                <Route path='/labMaster' element={<LabMaster />} />
                             </Routes>
                         </Box>
 

@@ -53,6 +53,11 @@ export default function AllergiesList(props) {
     useEffect(() => {
         getAllerigies();
     }, []);
+    useEffect(() => {
+        if (props.isRefresh) {
+            getAllerigies();
+        }
+    }, [props.isRefresh]);
     async function getAllerigies() {
         var obj = {
             pagenumber: 0,
@@ -78,17 +83,14 @@ export default function AllergiesList(props) {
         }
     }
     function triggerEventActions(row, action) {
-        debugger
         props.selectedRecord(row, action)
     }
     return (
         <Box >
             <CommonCard title={"Allergies List"}>
-
                 <CustomDataGrid tableHeaders={allergiesListHeaders} tableData={tableData} triggerEvent={(row, action) => {
                     triggerEventActions(row, action)
                 }}></CustomDataGrid>
-
             </CommonCard>
         </Box>
     )

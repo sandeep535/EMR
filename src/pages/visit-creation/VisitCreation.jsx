@@ -336,7 +336,6 @@ export default function VisitCreation(props) {
               ref={searchAutoCompleteRef}
               value={contact}
               onChange={(event, newValue) => {
-                console.log("sssss")
                 if (newValue) {
                   setContact(newValue.contact);
                   populateClientDatatoForm(newValue);
@@ -346,13 +345,13 @@ export default function VisitCreation(props) {
               key={option => option.seqid}
               getOptionLabel={option => option.contact}
               inputValue={contact}
-              disableCloseOnSelect={false}
               renderOption={(props, option) => {
+                const { key, ...optionProps } = props;
                 return (
-                  <li onClick={() => {
-                    populateClientDatatoForm(option);
-                    searchAutoCompleteRef.current.blur();
-                  }}>
+                  <Box
+                    key={key}
+                    component="li"
+                    {...optionProps}>
                     <Grid container alignItems="center">
                       <Grid item sx={{ ml: 1, width: 'calc(100% - 44px)', wordWrap: 'break-word' }}>
                         <Box
@@ -368,8 +367,7 @@ export default function VisitCreation(props) {
                       </Grid>
                     </Grid>
                     <Divider variant="middle" component="li" />
-                  </li>
-
+                  </Box>
                 );
               }}
               onInputChange={(event, newInputValue) => {
@@ -377,10 +375,16 @@ export default function VisitCreation(props) {
                   getDataBasedOnMobileNumber(newInputValue)
                 }
                 setContact(newInputValue);
-
+                registrationInformationRef.current.setFormData1(
+                  {
+                    contact : newInputValue,
+                    age:0
+                  }
+                );
               }}
               id="service-controllable-states-demo11"
               options={clientsearchlist}
+              autoHighlight
               sx={{ width: 300 }}
               renderInput={(params) => <TextField {...params} label="Search client" />}
             />
@@ -473,19 +477,19 @@ export default function VisitCreation(props) {
 
 
                 <Grid item xs={2} spacing={1}>
-                <FormControl variant="outlined" size="small" fullWidth>
-                  <LocalizationProvider dateAdapter={AdapterDayjs} >
-                    <DemoContainer components={['DateField', 'DateField']}>
-                      <DatePicker
-                        label="Visit Date"
-                        value={visitdate}
-                        onChange={newValue => setVisitdate(new Date(newValue))}
-                        slotProps={{ textField: { size: 'small' } }}
-                        format="DD-MM-YYYY"
-                        fullWidth
-                      />
-                    </DemoContainer>
-                  </LocalizationProvider>
+                  <FormControl variant="outlined" size="small" fullWidth>
+                    <LocalizationProvider dateAdapter={AdapterDayjs} >
+                      <DemoContainer components={['DateField', 'DateField']}>
+                        <DatePicker
+                          label="Visit Date"
+                          value={visitdate}
+                          onChange={newValue => setVisitdate(new Date(newValue))}
+                          slotProps={{ textField: { size: 'small' } }}
+                          format="DD-MM-YYYY"
+                          fullWidth
+                        />
+                      </DemoContainer>
+                    </LocalizationProvider>
                   </FormControl>
                 </Grid>
                 <Grid item xs={2} spacing={1}>

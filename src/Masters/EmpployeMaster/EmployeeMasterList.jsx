@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { sendRequest } from '../global/DataManager';
+import { sendRequest } from '../../pages/global/DataManager';
 import APIS from '../../Utils/APIS';
 
 const columns =[{

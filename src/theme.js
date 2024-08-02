@@ -2,6 +2,19 @@ import { createContext, useState, useMemo } from "react";
 
 import { createTheme } from "@mui/material/styles";
 
+
+const fontFamilyGlobal = [
+  '-apple-system',
+  'BlinkMacSystemFont',
+  '"Segoe UI"',
+  'Roboto',
+  '"Helvetica Neue"',
+  'Arial',
+  'sans-serif',
+  '"Apple Color Emoji"',
+  '"Segoe UI Emoji"',
+  '"Segoe UI Symbol"',
+];
 // color design tokens export
 export const tokens = (mode) => ({
         themecolor:{
@@ -64,6 +77,7 @@ export const tokens = (mode) => ({
         }
       });
 
+      
 
 // mui theme settings
 export const themeSettings = (mode) => {
@@ -108,33 +122,47 @@ export const themeSettings = (mode) => {
           })
     },
     typography: {
-     // fontFamily: ["Lato", "sans-serif"].join(","),
-      fontSize: 12,
+      fontFamily: fontFamilyGlobal.join(','),
+      fontSize: 14,
       h1: {
-       // fontFamily: ["Lato", "sans-serif"].join(","),
+        fontFamily: fontFamilyGlobal.join(','),
         fontSize: 40
       },
       h2: {
-       // fontFamily: ["Lato", "sans-serif"].join(","),
+        fontFamily: fontFamilyGlobal.join(','),
         fontSize: 32
       },
       h3: {
-        //fontFamily: ["Lato", "sans-serif"].join(","),
+        fontFamily: fontFamilyGlobal.join(','),
         fontSize: 24
       },
       h4: {
-        //fontFamily: ["Lato", "sans-serif"].join(","),
+        fontFamily: fontFamilyGlobal.join(','),
         fontSize: 20
       },
       h5: {
-        //fontFamily: ["Lato", "sans-serif"].join(","),
+        fontFamily: fontFamilyGlobal.join(','),
         fontSize: 16
       },
       h6: {
-        //fontFamily: ["Lato", "sans-serif"].join(","),
+        fontFamily: fontFamilyGlobal.join(','),
         fontSize: 14
       }
-    }
+    },
+    // components: {
+    //   MuiCssBaseline: {
+    //     styleOverrides: `
+    //       @font-face {
+    //         font-family: 'Raleway';
+    //         font-style: normal;
+    //         font-display: swap;
+    //         font-weight: 400;
+    //         src: local('Raleway'), local('Raleway-Regular'), url(${RalewayWoff2}) format('woff2');
+    //         unicodeRange: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF;
+    //       }
+    //     `,
+    //   },
+    // },
   };
 };
 
@@ -154,6 +182,5 @@ export const useMode = () => {
   );
 
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
-
   return [theme, colorMode];
 };

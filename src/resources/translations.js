@@ -105,6 +105,12 @@ const Translations = {
         NAME:'Diagnosis Name',
         STATUS:'Status',
         ACTIONS:'Actions'
+     },
+     "LAB_MASTER":{
+        TITLE:'Lab Master',
+        NAME:'Lab Order Name',
+        STATUS:'Status',
+        ACTIONS:'Actions',
      }
     
 }

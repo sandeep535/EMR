@@ -116,7 +116,6 @@ export default function DrugMaster(props) {
         let result = await sendRequest(payLoad);
         if (result) {
             setDrugTypeListOptions(result);
-           debugger
         }
     }
 
@@ -129,7 +128,7 @@ export default function DrugMaster(props) {
         let result = await sendRequest(payLoad);
         if (result) {
             setDrugAlerListOptions(result);
-           debugger
+           
         }
     }
 
@@ -142,7 +141,7 @@ export default function DrugMaster(props) {
         let result = await sendRequest(payLoad);
         if (result) {
             setDrugFormListOptions(result);
-           debugger
+           
         }
     }
    

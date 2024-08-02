@@ -23,6 +23,7 @@ import PrintIcon from '@mui/icons-material/Print';
 import BlindsClosedIcon from '@mui/icons-material/BlindsClosed';
 import Tooltip from '@mui/material/Tooltip';
 import SaveIcon from '@mui/icons-material/Save';
+import Diagnosis from '../Diagnosis/Diagnosis';
 
 
 export default function VisitActivity() {
@@ -34,9 +35,10 @@ export default function VisitActivity() {
     const allergiesref = useRef();
     const navigate = useNavigate();
     const [enablePrint, setEnablePrint] = useState(false);
+    const [customapisData, setCustomapisData] = useState({});
     var notesAPIData = [];
-    var diagnosissAPIData = null;
-
+    
+   
     useEffect(() => {
         callVisitAPis();
         getVisitCountBasedondate();
@@ -44,7 +46,7 @@ export default function VisitActivity() {
     function callVisitAPis() {
         getVitalsData();
         getNotes();
-        getDig();
+     
         getPresctiptions();
         //getAllerigies();
     }
@@ -57,7 +59,6 @@ export default function VisitActivity() {
         }
         let result = await sendRequest(payLoad);
         if (result && result.length !== 0) {
-            console.log(result);
         }
     }
 
@@ -81,8 +82,23 @@ export default function VisitActivity() {
         let result = await sendRequest(payLoad);
         if (result) {
             notesAPIData = result;
-             notesRef.current.setFormData(notesAPIData.description)
+            // let apisDatacopy = {...apisData};
+            // apisDatacopy.notesAPIData =result;
+            // this.setApisData((prevState) => ({ count: prevState.count + 1 }), () => {
+            //     console.log('Count updated:', this.state.count);
+            //   });
+             var obj1 = {...customapisData,notesAPIData:result};
+            // setCustomapisData(obj1,()=>{
+            //     console.log("sssssssssssssss")
+            // });
+            setCustomapisData((previousState) => {
+                previousState["notesAPIData"]=result;
+                return previousState
+            })
+            
+            notesRef.current.setFormData(notesAPIData.description)
         }
+        getDig();
     }
     async function getDig() {
         var payLoad = {
@@ -92,8 +108,18 @@ export default function VisitActivity() {
         }
         let result = await sendRequest(payLoad);
         if (result) {
-            diagnosissAPIData = result;
-             diagnosissRef.current.setFormData(diagnosissAPIData.description)
+           //  diagnosissAPIData = result;
+            //  let apisDatacopy = {...apisData};
+            //  apisDatacopy.diagnosissAPIData =result;
+            //  setApisData(apisDatacopy);
+            //  var obj2 = {...customapisData,diagnosissAPIData:result};
+            //  setCustomapisData(obj2);
+            setCustomapisData((previousState) => {
+                previousState["diagnosissAPIData"]=result;
+                return previousState
+            })
+             console.log("adasdasdasd----------",customapisData)
+             diagnosissRef.current.setFormData(result.dignosismasterid)
         }
     }
     async function getPresctiptions() {
@@ -131,19 +157,25 @@ export default function VisitActivity() {
 
         setTimeout(() => {
             const notesData = notesRef.current.getFormData();
-            if (notesAPIData && notesAPIData.notesid) {
-                notesData.notesid = notesAPIData.notesid;
+            if (Object.keys(customapisData).length !=0 && customapisData.notesAPIData.notesid) {
+                notesData.notesid = customapisData.notesAPIData.notesid;
             }
+            // notesData.notesid = notesAPIData.notesid;
+            //if (notesAPIData && notesAPIData.notesid) {
+            //    notesData.notesid = notesAPIData.notesid;
+           // }
             const diagnosissData = diagnosissRef.current.getFormData();
-            if (diagnosissAPIData && diagnosissAPIData.diagnosisid) {
-                diagnosissData.diagnosisid = diagnosissAPIData.diagnosisid;
+            var diaObj ={
+                dignosismasterid: diagnosissData.description,
+                description:diagnosissData.description.dignosisname
+            }
+            if (Object.keys(customapisData).length !=0 && customapisData.diagnosissAPIData.diagnosisid) {
+                diaObj.diagnosisid = customapisData.diagnosissAPIData.diagnosisid;
             }
             const vitalData = vitalsRef.current.getFormData().vitalformData;
             const prescriptionData = prescriptionRef.current.getFormData();
-            return false;
-            saveActivityData(notesData, diagnosissData, vitalData, prescriptionData)
+            saveActivityData(notesData, diaObj, vitalData, prescriptionData)
         });
-        //const allergiesrefData = allergiesref.current.getFormData();
     }
     async function saveActivityData(notesData, diagnosissData, vitalData, prescriptionData) {
         var sendingOnj = {
@@ -179,7 +211,6 @@ export default function VisitActivity() {
             setEnablePrint(false);
         },
         onBeforeGetContent: () => {
-            console.log("onBeforeGetContent");
         }
     });
     function backtoDashboard() {
@@ -223,6 +254,7 @@ export default function VisitActivity() {
 
                         </Box>
                     }
+                  
                     {appContextValue && appContextValue.selectedVisitDeatils.status == 3 &&
                         <Box
                             mt={1}
@@ -241,7 +273,7 @@ export default function VisitActivity() {
                         display="flex"
                         justifyContent="flex-end"
                         alignItems="flex-end"
-                        style={{ color: 'red' }}
+                        style={{ color: 'red',cursor: 'pointer'  }}
                     >
                         <Tooltip title="Print">
                             <PrintIcon onClick={() => {
@@ -257,13 +289,14 @@ export default function VisitActivity() {
                 </Box>
             </Box>
             <Box style={{ height: '530px', overflowY: 'auto', marginTop: '10px' }}>
+          
                 <Grid container spacing={1} xs={12}>
                     <Grid item xs={6} spacing={4}>
                         <Vitals ref={vitalsRef} />
                     </Grid>
                     <Grid item xs={6} spacing={4}>
-                           
-                       <Notes label={"Diagnosis"} ref={diagnosissRef} /> 
+                       {/* <Notes label={"Diagnosis"} ref={diagnosissRef} />  */}
+                       <Diagnosis label={"Diagnosis"} ref={diagnosissRef} data ={customapisData.diagnosissAPIData ? customapisData.diagnosissAPIData :[]}/>
                     </Grid>
                     {/* <Grid item xs={8}>
                         <Allergies ref={allergiesref} />
@@ -285,7 +318,7 @@ export default function VisitActivity() {
                     <Box sx={{ width: '100%' }}>
                         <PrintTableFomat headers={PrintHeaders.VITALS} data={[vitalsRef.current.getFormData()]} title="Vitals" />
                         <PrintTableFomat headers={PrintHeaders.PRESCRIPTIONS} data={prescriptionRef.current.getFormData().prescriptionList} title="Medications" />
-                        <PrintTableFomat headers={PrintHeaders.ALLERIGIES} data={allergiesref.current.getFormData().allergiesList} title="Allerigies" />
+                        {/* <PrintTableFomat headers={PrintHeaders.ALLERIGIES} data={allergiesref.current.getFormData().allergiesList} title="Allerigies" /> */}
                         <PrintTextFormar headers={PrintHeaders.NOTES} data={notesRef.current.getFormData()} />
                         <PrintTextFormar headers={PrintHeaders.Diagnosis} data={diagnosissRef.current.getFormData()} />
                     </Box>

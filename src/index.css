@@ -186,10 +186,7 @@ border-radius: 3px;
 .MuiCardContent-root{
   padding: 10px !important;
 }
-.MuiTableCell-root{
-  font-size: 12px !important;
-  /* font-weight: bold !important; */
-}
+
 .MuiPopper-root-MuiAutocomplete-popper {
   z-index: 100000 !important;
 }

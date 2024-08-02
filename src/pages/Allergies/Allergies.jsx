@@ -65,6 +65,8 @@ const Allergies = forwardRef((props, ref) => {
     const [allergyTypeOptions, setAllergyTypeOptions] = useState([]);
     const [mode, setMode] = useState("");
     const [selectedRow, setSelectedRow] = useState("");
+
+    const [isRefreshData,setisRefreshData] = useState(false);
     useEffect(() => {
         getLookUpDetails();
         getAllergiesMasterList();
@@ -98,7 +100,7 @@ const Allergies = forwardRef((props, ref) => {
         } else {
             // setTableData([]);
         }
-        debugger
+        
     }
 
     useImperativeHandle(
@@ -129,7 +131,6 @@ const Allergies = forwardRef((props, ref) => {
             paramas: ["ALLERGY_SEVERITY"]
         }
         let result = await sendRequest(payLoad);
-        console.log(result);
         if (result && result.ALLERGY_SEVERITY) {
             setSeverityList(result.ALLERGY_SEVERITY);
         }
@@ -154,6 +155,7 @@ const Allergies = forwardRef((props, ref) => {
 
 
         if (props.isSaveDirect) {
+            setisRefreshData(false);
             var payLoad = {
                 method: APIS.SAVE_ALLERIES.METHOD,
                 url: APIS.SAVE_ALLERIES.URL,
@@ -162,6 +164,7 @@ const Allergies = forwardRef((props, ref) => {
             }
             let result = await sendRequest(payLoad);
             if (result) {
+                setisRefreshData(true);
                 EMRAlert.alertifySuccess("Allergy Saved Succussfully");
             } else {
                 EMRAlert.alertifyError("Not Saved");
@@ -174,7 +177,6 @@ const Allergies = forwardRef((props, ref) => {
 
     }
     function setDatatoForm(row) {
-        debugger
         setAllergy(row.allergymaster);
         setStatus(row.status);
         setIndications(row.indications);
@@ -213,7 +215,6 @@ const Allergies = forwardRef((props, ref) => {
                                             setAllergyInputValue(newInputValue);
                                         }}
                                         onChange={(event, newValue) => {
-                                            console.log("------------", newValue);
                                             setAllergy(newValue);
                                         }}
                                         renderOption={(props, option) => {
@@ -254,7 +255,7 @@ const Allergies = forwardRef((props, ref) => {
                                         name="severity"
                                         size="small"
                                         renderValue={(o) => o.lookupvalue || ''}
-                                        onChange={e => { console.log(e.target.value); setSeverity(e.target.value) }}
+                                        onChange={e => { setSeverity(e.target.value) }}
                                         value={severity}
                                     >
                                         {severityList.map((severity) => (
@@ -341,12 +342,7 @@ const Allergies = forwardRef((props, ref) => {
                 </form>
             </CommonCard>
 
-
-
-            <AllergiesList selectedRecord={(row, action) => {
-                debugger
-                setDatatoForm(row)
-            }} />
+            <AllergiesList isRefresh={isRefreshData} selectedRecord={(row, action) => {setDatatoForm(row)}} />
         </Box>
     )
 });

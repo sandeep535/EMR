@@ -3,15 +3,12 @@ import { useContext } from "react";
 import { Box, IconButton } from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
 import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { useNavigate } from "react-router-dom";
 import AppContext from '../../components/Context/AppContext';
 import { tokens } from "../../theme";
+import ModelPopUp from "../../common/ModelPopup/ModelPopUp";
+import Stack from '@mui/material/Stack';
 
 const Transition = React.forwardRef(function Transition(
   props,
@@ -43,24 +40,19 @@ const Topbar = () => {
   }
 
   return (
-    <Box position="fixed" style={{ background: colors, width: '100%', height: '8%',borderRadius:"5px" }}>
-      <Dialog
-        open={open}
-        TransitionComponent={Transition}
-        keepMounted
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <DialogTitle>{"Logout"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            Do you want logout?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={doLogout}>Yes</Button>
-          <Button onClick={handleClose}>No</Button>
-        </DialogActions>
-      </Dialog>
+    <Box position="fixed" style={{ background: colors, width: '100%', height: '8%', borderRadius: "5px" }}>
+
+      <ModelPopUp size={'sm'} isOpen={open} title="Signout" handleClose={() => { setOpen(false) }} >
+        <Stack spacing={3} direction="column" >
+          <Stack spacing={2} direction="row">
+            <Box component="div" sx={{ fontSize: 18 }}>Do you want logout?</Box>
+          </Stack>
+          <Stack spacing={2} direction="row">
+            <Button onClick={doLogout} variant="contained">Yes</Button>
+            <Button onClick={handleClose} variant="outlined">No</Button>
+          </Stack>
+        </Stack>
+      </ModelPopUp>
 
       <Box display="flex" >
         <p style={{ marginLeft: '68%', marginRight: "1%", color: '#fff' }}>Login User : <b>{loggedUser}</b></p>

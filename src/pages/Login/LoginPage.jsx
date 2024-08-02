@@ -53,10 +53,11 @@ export default function LoginPage(props) {
     callLogin(obj);
   };
   useEffect(() => {
-    debugger
-    console.log("ssssssssssssssssss",params)
     sessionStorage.setItem("tenant",params.tenant)
     appContextValue.setTenant(params.tenant);
+
+    
+    //appContextValue.setLeftMenuList(LeftMenu);
   }, [])
   async function fetchRolesTransData(roleid) {
     let roleidcopy = (roleid) ? roleid : '';
@@ -78,7 +79,6 @@ export default function LoginPage(props) {
     }
   }
   function setRolesTasksToLeftMenu(permissions){
-    console.log(LeftMenu);
     let copyLeftMenu = [...LeftMenu];
     for(var i=0;i<copyLeftMenu.length;i++){
       var submentList = [];
@@ -107,7 +107,6 @@ export default function LoginPage(props) {
       sessionStorage.setItem("token", result.token);
       appContextValue.setLoggedInUserDetails(result);
       fetchRolesTransData(result.role.id);
-      console.log(result)
       var loginUser = result.designation.lookupvalue+'.'+result.firstname+' '+result.lastname;
       sessionStorage.setItem('logged_user',loginUser);
     }

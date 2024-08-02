@@ -3,7 +3,7 @@ import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import APIS from '../../Utils/APIS';
-import { sendRequest } from '../global/DataManager';
+import { sendRequest } from '../../pages/global/DataManager';
 import RegistrationInformation from '../../components/RegistrationInformation/RegistrationInformation';
 import Translations from '../../resources/translations';
 import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';

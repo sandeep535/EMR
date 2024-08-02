@@ -11,47 +11,49 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
+import RegularExp from '../../Utils/RegularExp';
+
 const schema = yup
     .object().shape({
         height: yup.string().when({
             is: (exists) => !!exists,
             then: (rule) =>
-                rule.matches(/^\d+\.\d{1,2}$/g, "This field allow only numbers")
+                rule.matches(RegularExp.ALLOW_ONLY_NUMBERS_WITH_DICIMALS, "This field allow only numbers")
         }),
         weight: yup.string().when({
             is: (exists) => !!exists,
             then: (rule) =>
-                rule.matches(/^\d+\.\d{1,2}$/g, "This field allow only numbers")
+                rule.matches(RegularExp.ALLOW_ONLY_NUMBERS_WITH_DICIMALS, "This field allow only numbers")
         }),
         bmi: yup.string().when({
             is: (exists) => !!exists,
             then: (rule) =>
-                rule.matches(/^\d+\.\d{1,2}$/g, "This field allow only numbers")
+                rule.matches(RegularExp.ALLOW_ONLY_NUMBERS_WITH_DICIMALS, "This field allow only numbers")
         }),
         systolic: yup.string().when({
             is: (exists) => !!exists,
             then: (rule) =>
-                rule.matches(/^\d+\.\d{1,2}$/g, "This field allow only numbers")
+                rule.matches(RegularExp.ALLOW_ONLY_NUMBERS_WITH_DICIMALS, "This field allow only numbers")
         }),
         diastolic: yup.string().when({
             is: (exists) => !!exists,
             then: (rule) =>
-                rule.matches(/^\d+\.\d{1,2}$/g, "This field allow only numbers")
+                rule.matches(RegularExp.ALLOW_ONLY_NUMBERS_WITH_DICIMALS, "This field allow only numbers")
         }),
         pulse: yup.string().when({
             is: (exists) => !!exists,
             then: (rule) =>
-                rule.matches(/^\d+\.\d{1,2}$/g, "This field allow only numbers")
+                rule.matches(RegularExp.ALLOW_ONLY_NUMBERS_WITH_DICIMALS, "This field allow only numbers")
         }),
         respiratoryrate: yup.string().when({
             is: (exists) => !!exists,
             then: (rule) =>
-                rule.matches(/^\d+\.\d{1,2}$/g, "This field allow only numbers")
+                rule.matches(RegularExp.ALLOW_ONLY_NUMBERS_WITH_DICIMALS, "This field allow only numbers")
         }),
         temperature: yup.string().when({
             is: (exists) => !!exists,
             then: (rule) =>
-                rule.matches(/^\d+\.\d{1,2}$/g, "This field allow only numbers")
+                rule.matches(RegularExp.ALLOW_ONLY_NUMBERS_WITH_DICIMALS, "This field allow only numbers")
         }),
     })
 
@@ -59,7 +61,7 @@ const Vitals = forwardRef((props, ref) => {
     const [vitalformData, setVitalformData] = useState("");
     const [vitalid, setVitalId] = useState("");
     const appContextValue = useContext(AppContext);
-    const { control, handleSubmit, setValue, reset, formState: { errors } } = useForm({
+    const { control, handleSubmit, setValue,getValues , watch,reset, formState: { errors } } = useForm({
         defaultValues: {
             height: "",
             weight: "",
@@ -73,7 +75,14 @@ const Vitals = forwardRef((props, ref) => {
         mode: 'onChange',
         resolver: yupResolver(schema),
     })
-
+    const watchheight = watch("height");
+    const watchweight = watch("weight") 
+    React.useEffect(() => {
+    
+        if(watchweight && watchheight){
+            bmical();
+        }
+      }, [watchweight,watchheight])
     useImperativeHandle(
         ref,
         () => {
@@ -102,21 +111,26 @@ const Vitals = forwardRef((props, ref) => {
         },
         [vitalformData],
     );
-
-    const vitalHandle = async (data,fromWhere) => {
-        if(fromWhere){
+    function bmical(){
+        const weight = getValues("weight");
+        const height = getValues("height") 
+        let BMI = (weight) / (height * height);
+        setValue("bmi", BMI.toFixed(2));
+    }
+    const vitalHandle = async (data, fromWhere) => {
+        if (fromWhere) {
             var sendingOnj = {
-                vitalid :null,
+                vitalid: null,
                 visitid: null,
-                clientid:appContextValue.selectedVisitDeatils.clientid.seqid,
-                height : data.height,
-                weight :data.weight,
-                bmi : data.bmi,
-                systolic :data.systolic,
-                diastolic:data.diastolic,
-                pulse:data.pulse,
-                respiratoryrate : data.respiratoryrate,
-                temperature : data.temperature,
+                clientid: appContextValue.selectedVisitDeatils.clientid.seqid,
+                height: data.height,
+                weight: data.weight,
+                bmi: data.bmi,
+                systolic: data.systolic,
+                diastolic: data.diastolic,
+                pulse: data.pulse,
+                respiratoryrate: data.respiratoryrate,
+                temperature: data.temperature,
                 capturedby: 1
             }
             var payLoad = {
@@ -132,11 +146,9 @@ const Vitals = forwardRef((props, ref) => {
             } else {
                 EMRAlert.alertifyError("Not created");
             }
-        }else{
+        } else {
             setVitalformData(data);
         }
-      
-
     }
     return (
         <> <CommonCard title={"Vitals"} >
@@ -156,6 +168,7 @@ const Vitals = forwardRef((props, ref) => {
                                     label={Translations.vitalsForm.height}
                                     error={errors.height?.message}
                                     helperText={errors.height?.message}
+                                   
                                 />
                             }
                         />
@@ -174,6 +187,7 @@ const Vitals = forwardRef((props, ref) => {
                                     label={Translations.vitalsForm.weight}
                                     error={errors.weight?.message}
                                     helperText={errors.weight?.message}
+                                    
                                 />
                             }
                         />
@@ -290,14 +304,14 @@ const Vitals = forwardRef((props, ref) => {
                         />
                     </Grid>
                 </Grid>
-                {props.isActionButtonReq && 
-                <Grid item xs={2} spacing={1}>
-                    <FormButtonComponent button1={"Save"} button2={"Close"} clearFormEvent={() => {
-                        // setShowAddForm(false);
-                    }} />
-                </Grid>
+                {props.isActionButtonReq &&
+                    <Grid item xs={2} spacing={1}>
+                        <FormButtonComponent button1={"Save"} button2={"Close"} clearFormEvent={() => {
+                            // setShowAddForm(false);
+                        }} />
+                    </Grid>
                 }
-                
+
             </form>
 
         </CommonCard>

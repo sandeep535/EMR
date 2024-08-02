@@ -12,7 +12,6 @@ import { sendRequest } from '../../pages/global/DataManager';
 
 
 const RegistrationInformation = forwardRef((props, ref) => {
-    // console.log("sssssssssssssssssssddddddddd",props)
     const [title, setTitle] = useState([]);
     const [firstname, setFirstname] = useState([]);
     const [lastname, setLastname] = useState([]);
@@ -46,7 +45,6 @@ const RegistrationInformation = forwardRef((props, ref) => {
                     }
                 },
                 setFormData1: (data) => {
-                    console.log("inside form data", data)
                     setAge(data.age);
                     setTitle(data.title);
                     setFirstname(data.firstname);
@@ -80,7 +78,6 @@ const RegistrationInformation = forwardRef((props, ref) => {
             paramas: ["GENDER,SALUTATION"]
         }
         let result = await sendRequest(payLoad);
-        console.log(result);
         if (result && result.GENDER) {
             setGenderList(result.GENDER);
         }

@@ -78,6 +78,9 @@ export default function VisitDasboard() {
 
     }, [visitStatus]);
     async function getVisitDetails() {
+        if (!visitStatus) {
+            return false;
+        }
         let localfromDate = fromDate ? new Date(fromDate).setHours(0, 0, 0) : new Date().setHours(0, 0, 0);
         let localtoDate = toDate ? new Date(toDate).setHours(23, 59, 59) : new Date().setHours(23, 59, 59);
         var payLoad = {
@@ -86,7 +89,6 @@ export default function VisitDasboard() {
             paramas: [new Date(localfromDate), new Date(localtoDate), visitStatus.id, count - 1, 10]
         }
         let result = await sendRequest(payLoad);
-        debugger
         if (result && result.visitDetailsDTO.length != 0) {
             setVisitList(result.visitDetailsDTO);
             setTotalRecords(result.totalcount)
@@ -195,12 +197,12 @@ export default function VisitDasboard() {
                     {visitList && visitList.map(visit => {
                         return (
                             <Grid item xs={3} key={visit.id}>
-                                <Card sx={{ border: '2px solid #d3d3d3',borderLeftColor:borderColor[visit.status] }}>
+                                <Card sx={{ border: '2px solid #d3d3d3', borderLeftColor: borderColor[visit.status] }}>
                                     <CardContent>
                                         <Box>
-                                            <Typography  sx={{ display:'flex',flexDirection:'row',justifyContent :'space-between'}} gutterBottom>
-                                                <Typography sx={{ fontSize: 14, fontWeight: 700 }} >{visit.clientid.firstname + " " + visit.clientid.lastname }</Typography>
-                                               
+                                            <Typography sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }} gutterBottom>
+                                                <Typography sx={{ fontSize: 14, fontWeight: 700 }} >{visit.clientid.firstname + " " + visit.clientid.lastname}</Typography>
+
                                                 <Badge badgeContent={visit.token} color="success" ></Badge>
                                             </Typography>
                                             <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
@@ -214,8 +216,8 @@ export default function VisitDasboard() {
                                                 {visit.doctor.firstname + " " + visit.doctor.lastname}
                                             </Typography>
                                             <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                                                <Icon sx={{ fontSize: 16, color: 'rgb(52, 152, 219)' }} onClick={(event) => { event.preventDefault(); gotoActivitiesPage(visit) }}>{"send"}</Icon>
-                                                <Icon sx={{ fontSize: 16, color: 'rgb(52, 152, 219)', ml: 1 }} onClick={(event) => { event.preventDefault(); openEditPopup(visit) }}>{"edit"}</Icon>
+                                                <Icon sx={{ cursor: 'pointer', fontSize: 16, color: 'rgb(52, 152, 219)' }} onClick={(event) => { event.preventDefault(); gotoActivitiesPage(visit) }}>{"send"}</Icon>
+                                                <Icon sx={{ cursor: 'pointer', fontSize: 16, color: 'rgb(52, 152, 219)', ml: 1 }} onClick={(event) => { event.preventDefault(); openEditPopup(visit) }}>{"edit"}</Icon>
                                             </Box>
                                         </Box>
                                     </CardContent>

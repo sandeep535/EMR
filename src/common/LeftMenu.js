@@ -126,6 +126,13 @@
         isOpen:false,
         isRefreshMenu:true,
         screencode:'DRUG_MASTER_SCREEN_VIEW'
+    },{
+        title:"Lab Master",
+        to:"/labmaster",
+        icon:"medication",
+        isOpen:false,
+        isRefreshMenu:true,
+        screencode:'DRUG_MASTER_SCREEN_VIEW'
     }]
 }];
 export default LeftMenu

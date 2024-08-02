@@ -153,7 +153,7 @@ export default function AllergyMaster(props) {
         }else{
             setTableData([]);
         }
-        debugger
+        
     }
 
     return (
@@ -344,7 +344,7 @@ export default function AllergyMaster(props) {
                 </Box>
                 <Box >
                     <CustomDataGrid tableHeaders={allergiesListHeaders} tableData={tableData} totalcount ={totalcount} rowsPerPage = {20} paginationChangeEvent ={(number)=>{
-                        debugger
+                        
                     }}triggerEvent={(row, action) => {
                         openEditmode(row, action);
                     }}></CustomDataGrid>

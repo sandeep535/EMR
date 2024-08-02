@@ -19,7 +19,6 @@ export default function ClientSearchComponent() {
             paramas: [phoneNumber]
           }
           let result = await sendRequest(payLoad);
-          console.log(result);
           
     }
     return (

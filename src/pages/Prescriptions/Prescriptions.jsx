@@ -26,6 +26,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
 import EMRAlert from '../../Utils/CustomAlert';
+import dayjs from 'dayjs';
+import moment from 'moment';
 
 const schema = yup
     .object({
@@ -61,7 +63,10 @@ const Prescriptions = forwardRef((props, ref) => {
     const appContextValue = useContext(AppContext);
 
     const { control, handleSubmit, reset, formState: { errors } } = useForm({
-        defaultValues: {},
+        defaultValues: {
+            startdate:dayjs(moment(new Date()).format("YYYY-MM-DD")),
+            todate:dayjs(moment(new Date()).format("YYYY-MM-DD")),
+        },
         mode: 'onChange',
         resolver: yupResolver(schema),
     })
@@ -122,7 +127,6 @@ const Prescriptions = forwardRef((props, ref) => {
             paramas: [newValue]
         }
         let result = await sendRequest(payLoad);
-        console.log(result);
         if (result) {
             setDrugListOptions(result);
         }
@@ -135,7 +139,6 @@ const Prescriptions = forwardRef((props, ref) => {
             data: prescriptionList
         }
         let result = await sendRequest(payLoad);
-        console.log(result);
         if (result) {
             EMRAlert.alertifySuccess("Vital data saved succussfully");
             props.refreshPrescriptionList();
@@ -349,7 +352,7 @@ const Prescriptions = forwardRef((props, ref) => {
                             <Button color="primary" variant="contained" onClick={() => { savePrescriptions() }}>
                                 {"Save"}
                             </Button>
-                            <Button color="secondary" variant="contained" onClick={() => { console.log("ss") }}>
+                            <Button color="secondary" variant="contained" >
                                 {"Clear"}
                             </Button>
                         </Box>

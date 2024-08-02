@@ -32,7 +32,6 @@ const AddressController = forwardRef((props, ref) => {
       paramas: []
     }
     let result = await sendRequest(payLoad);
-    console.log(result);
     if (result) {
       setCountriesList(result);
     }
@@ -44,7 +43,6 @@ const AddressController = forwardRef((props, ref) => {
       paramas: [countryid]
     }
     let result = await sendRequest(payLoad);
-    console.log(result);
     if (result) {
       setStateList(result);
     }

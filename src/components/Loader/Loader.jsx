@@ -28,7 +28,7 @@ export default function Loader() {
 
     const [showLoader, setShowLoader] = useState(false);
     return (
-        <div style={{ position: 'fixed', left: '50%', top: '50%' }}>
+        <div style={{ position: 'fixed', left: '50%', top: '50%',zIndex:99999999 }}>
             <Hourglass
                 visible={showLoader}
                 height="80"
