@@ -199,6 +199,11 @@ const APIS={
         METHOD:"POST",
         ACTION:""
     },
+    GET_LAB_LIST_BASED_ON_VISITID_CLIENT_ID:{
+        URL:"visit/getLabOrders/{0}/{1}",
+        METHOD:"GET",
+        ACTION:"Get Lab order details"
+    },
     
     
     

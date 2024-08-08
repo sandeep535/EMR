@@ -17,7 +17,7 @@ const schema = yup
     .required()
 const Diagnosis = forwardRef((props, ref) => {
     const [description, setDescription] = useState("");
-    const data1 = props.data.dignosismasterid;
+    const data1 = props.data && props.data.dignosismasterid;
     const [diagnosisMasterData,setDiagnosisMasterData] =useState(data1 ? data1:[]);
    
     console.log("props.dataprops.dataprops.data",props.data);
@@ -95,7 +95,6 @@ const Diagnosis = forwardRef((props, ref) => {
                                 <Controller
                                     name="selectedDiagnosisValues"
                                     control={control}
-                                   
                                     render={({ field: { onChange } }) =>
                                         <Autocomplete
                                             size="small"
@@ -127,6 +126,7 @@ const Diagnosis = forwardRef((props, ref) => {
 
                             </FormControl>
                         </Grid>
+                        
                     </Grid>
                 </form>
             </CommonCard>

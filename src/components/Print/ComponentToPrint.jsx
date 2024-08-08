@@ -18,7 +18,92 @@ export class ComponentToPrint extends React.PureComponent {
 "}
                 </style>
                 <div className="flash" />
-                <table className="print-component" style={{ width: '100%' }}>
+                <div className="print-wrapper">
+                    <div className="header" >Header Content</div>
+                    <div className="content">{text}</div>
+                    {/* <div className="content11" >
+                        ---------------Start-----------------------
+                    11Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter contentcontentContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                  
+                    11Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter contentcontentContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                  
+
+                    11Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter contentcontentContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                  
+
+                    11Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter contentcontentContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                  
+
+                    11Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter contentcontentContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                  
+
+                    11Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter contentcontentContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                  
+                    11Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter contentcontentContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                  
+                    11Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter contentcontentContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                  
+                    11Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter contentcontentContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                  
+                    11Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter contentcontentContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                  
+                    11Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter contentcontentContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                  
+                    11Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter contentcontentContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                    Footer ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter ContentFooter Content 
+                  
+                        ---------------End-----------------------
+                        </div> */}
+                    <div className="footer">Footer Content</div>
+                </div>
+                {/* <table className="print-component" style={{ width: '100%' }}>
                     <thead >
                         <tr>
                             <div style={{ height: '50px', width: '100%', border: '2px solid blue', fontSize: 18, display: 'flex', justifyContent: 'center' }}>
@@ -38,7 +123,7 @@ export class ComponentToPrint extends React.PureComponent {
                             </td>
                         </tr>
                     </tfoot>
-                </table>
+                </table> */}
             </div>
         );
     }

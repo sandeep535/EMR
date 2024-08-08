@@ -22,15 +22,16 @@ import Allergies from './pages/Allergies/Allergies';
 import DiagnosisMaster from './Masters/DiagnosisMaster/DiagnosisMaster';
 import { useTheme, Box, Typography } from "@mui/material";
 import LabMaster from './Masters/LabMaster/LabMaster';
+import LabOrder from './pages/LabOrders/LabOrder';
 // import LeftMenu from './common/LeftMenu';
 
 export default function MainScreen(props) {
     const navigate = useNavigate();
     const params = useParams()
     useEffect(() => {
-        // if (!appContextValue.isLogin) {
-        //     navigate("/login/emr", { replace: true });
-        // }
+        if (!appContextValue.isLogin) {
+            navigate("/login/emr2", { replace: true });
+        }
 
     }, []);
     const appContextValue = useContext(AppContext);
@@ -66,6 +67,8 @@ export default function MainScreen(props) {
                                 <Route path='/allergy' element={<Allergies isSaveDirect={true} />} />
                                 <Route path='/diagnosismaster' element={<DiagnosisMaster />} />
                                 <Route path='/labMaster' element={<LabMaster />} />
+                                <Route path='/LabOrder' element={<LabOrder />} />
+                                
                             </Routes>
                         </Box>
 

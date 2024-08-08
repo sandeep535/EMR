@@ -24,6 +24,7 @@ import BlindsClosedIcon from '@mui/icons-material/BlindsClosed';
 import Tooltip from '@mui/material/Tooltip';
 import SaveIcon from '@mui/icons-material/Save';
 import Diagnosis from '../Diagnosis/Diagnosis';
+import LabOrder from '../LabOrders/LabOrder';
 
 
 export default function VisitActivity() {
@@ -33,6 +34,7 @@ export default function VisitActivity() {
     const diagnosissRef = useRef();
     const prescriptionRef = useRef();
     const allergiesref = useRef();
+    const labRef = useRef();
     const navigate = useNavigate();
     const [enablePrint, setEnablePrint] = useState(false);
     const [customapisData, setCustomapisData] = useState({});
@@ -46,7 +48,7 @@ export default function VisitActivity() {
     function callVisitAPis() {
         getVitalsData();
         getNotes();
-     
+        getLabOrders();
         getPresctiptions();
         //getAllerigies();
     }
@@ -82,15 +84,6 @@ export default function VisitActivity() {
         let result = await sendRequest(payLoad);
         if (result) {
             notesAPIData = result;
-            // let apisDatacopy = {...apisData};
-            // apisDatacopy.notesAPIData =result;
-            // this.setApisData((prevState) => ({ count: prevState.count + 1 }), () => {
-            //     console.log('Count updated:', this.state.count);
-            //   });
-             var obj1 = {...customapisData,notesAPIData:result};
-            // setCustomapisData(obj1,()=>{
-            //     console.log("sssssssssssssss")
-            // });
             setCustomapisData((previousState) => {
                 previousState["notesAPIData"]=result;
                 return previousState
@@ -99,6 +92,27 @@ export default function VisitActivity() {
             notesRef.current.setFormData(notesAPIData.description)
         }
         getDig();
+    }
+    async function getLabOrders() {
+        var payLoad = {
+            method: APIS.GET_LAB_LIST_BASED_ON_VISITID_CLIENT_ID.METHOD,
+            url: APIS.GET_LAB_LIST_BASED_ON_VISITID_CLIENT_ID.URL,
+            paramas: [appContextValue.selectedVisitDeatils.visitid,0],
+        }
+        let result = await sendRequest(payLoad);
+        if (result) {
+            debugger
+            var selectedLabList = [];
+            result.forEach(item=>{
+                selectedLabList.push(item.labmasterid)
+            })
+            setCustomapisData((previousState) => {
+                previousState["labOredersAPIdata"]=result;
+                return previousState
+            });
+            labRef.current.setFormData(selectedLabList);
+        }
+        
     }
     async function getDig() {
         var payLoad = {
@@ -149,15 +163,39 @@ export default function VisitActivity() {
             EMRAlert.alertifyError("Not created");
         }
     }
-
+    function getCommonElements(array1, array2,transType) {
+        let removedLabList = [];
+        //return array1.filter(obj1 => array2.some(obj2 => deepEqual(obj1, obj2)));
+        array1.forEach(item => {
+            const isThere = array2.some(order => 
+              item.labmasterid && item.labmasterid.labid === order.labid
+            );
+            
+            if (!isThere && transType == 'update') {
+              item.status = 2;
+              removedLabList.push(item);
+            }
+            if (!isThere && transType == 'new') {
+                var obj = {
+                    labtransid: "",
+                    labname: item.labname,
+                    status: item.status,
+                    labmasterid: item
+                }
+                removedLabList.push(obj);
+              }
+          });
+          return removedLabList;
+      }
     async function handlePrescriptionSubmit(event) {
         diagnosissRef.current.submitFormmData();
         notesRef.current.submitFormmData();
         vitalsRef.current.submitFormmData();
+        labRef.current.submitFormmData();
 
         setTimeout(() => {
             const notesData = notesRef.current.getFormData();
-            if (Object.keys(customapisData).length !=0 && customapisData.notesAPIData.notesid) {
+            if (Object.keys(customapisData).length !=0 &&customapisData.notesAPIData && customapisData.notesAPIData.notesid) {
                 notesData.notesid = customapisData.notesAPIData.notesid;
             }
             // notesData.notesid = notesAPIData.notesid;
@@ -169,15 +207,51 @@ export default function VisitActivity() {
                 dignosismasterid: diagnosissData.description,
                 description:diagnosissData.description.dignosisname
             }
-            if (Object.keys(customapisData).length !=0 && customapisData.diagnosissAPIData.diagnosisid) {
+            if (Object.keys(customapisData).length !=0 && customapisData.diagnosissAPIData && customapisData.diagnosissAPIData.diagnosisid) {
                 diaObj.diagnosisid = customapisData.diagnosissAPIData.diagnosisid;
             }
             const vitalData = vitalsRef.current.getFormData().vitalformData;
             const prescriptionData = prescriptionRef.current.getFormData();
-            saveActivityData(notesData, diaObj, vitalData, prescriptionData)
+            let labOrderData = labRef.current.getFormData();
+            let labResult = [];
+            let removedLabList = [];
+            let finalLabData =[];
+            if(labOrderData && labOrderData.description){
+                labOrderData = labOrderData.description;
+                let onloadApiResData = customapisData.labOredersAPIdata;
+
+                onloadApiResData.forEach(item => {
+                    const isThere = labOrderData.some(order =>
+                        item.labmasterid && item.labmasterid.labid === order.labid
+                    );
+                    if (!isThere) {
+                        item.status = 2;
+                        removedLabList.push(item);
+                    }
+                });
+
+                labOrderData.forEach(order => {
+                    const isAva = onloadApiResData.some(item =>
+                        item.labmasterid && item.labmasterid.labid === order.labid
+                    );
+                    if (!isAva) {
+                        labResult.push({
+                            labtransid: "",
+                            labname: order.labname,
+                            status: order.status,
+                            labmasterid: order
+                        });
+                    }
+                });
+                finalLabData = [...labResult,...removedLabList];
+            }else{
+                labOrderData =null;
+            }
+            debugger
+            saveActivityData(notesData, diaObj, vitalData, prescriptionData,finalLabData)
         });
     }
-    async function saveActivityData(notesData, diagnosissData, vitalData, prescriptionData) {
+    async function saveActivityData(notesData, diagnosissData, vitalData, prescriptionData,labOrderData) {
         var sendingOnj = {
             clientid: appContextValue.selectedVisitDeatils.clientid.seqid,
             visitid: appContextValue.selectedVisitDeatils.visitid,
@@ -187,6 +261,7 @@ export default function VisitActivity() {
             notesDTO: notesData,
             diagnosisDTO: diagnosissData,
             //   allergies: allergiesrefData.allergiesList
+            labOrders:labOrderData
         }
         var payLoad = {
             method: APIS.SAVE_VISIT_DATA.METHOD,
@@ -303,8 +378,11 @@ export default function VisitActivity() {
                     </Grid> */}
                 </Grid>
                 <Grid container spacing={1} xs={12}>
-                    <Grid item xs={12} spacing={4}>
+                    <Grid item xs={6} spacing={4}>
                         <Notes label={"General Notes"} ref={notesRef} />
+                    </Grid>
+                    <Grid item xs={6} spacing={4}>
+                        <LabOrder label={"Lab Orders"} data ={customapisData.labOredersAPIdata} ref={labRef} />
                     </Grid>
                 </Grid>
                 <Grid container spacing={1} xs={12}>
@@ -312,6 +390,7 @@ export default function VisitActivity() {
                         <Prescriptions ref={prescriptionRef} />
                     </Grid>
                 </Grid>
+                
             </Box>
             {enablePrint && (
                 <FunctionalComponentToPrint ref={componentRef} >
