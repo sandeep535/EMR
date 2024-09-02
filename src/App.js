@@ -8,19 +8,24 @@ import ErrorBoundary from './common/ErrorBoundary/ErrorBoundary';
 
 const App = () => {
   const [theme, colorMode] = useMode();
-  return (
-    <ErrorBoundary>
-    <AppProvider>
-      <ColorModeContext.Provider value={colorMode}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Loader />
-          <MainScreen />
-        </ThemeProvider>
-      </ColorModeContext.Provider>
-    </AppProvider>
-    </ErrorBoundary>
-  );
+  try{
+    return (
+      <ErrorBoundary>
+      <AppProvider>
+        <ColorModeContext.Provider value={colorMode}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <Loader />
+            <MainScreen />
+          </ThemeProvider>
+        </ColorModeContext.Provider>
+      </AppProvider>
+      </ErrorBoundary>
+    );
+  }catch(r){
+    console.log(r);
+  }
+  
 };
 
 export default App;

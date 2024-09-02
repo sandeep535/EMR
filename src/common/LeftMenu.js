@@ -5,8 +5,15 @@
     isOpen:false,
     isRefreshMenu:false,
     subMenu:[{
-        title:"Visit Dashboard",
+        title:"Doctor Dashboard",
         to:"/vist-dashboard",
+        icon:"dashboard_customize",
+        isOpen:false,
+        isRefreshMenu:true,
+        screencode:'VISIT_DAHSBOARD_SCREEN_VIEW'
+    },{
+        title:"Nurse Dashboard",
+        to:"/nurse-dashboard",
         icon:"dashboard_customize",
         isOpen:false,
         isRefreshMenu:true,
@@ -27,7 +34,7 @@
     isRefreshMenu:false,
     subMenu:[{
         title:"Visit",
-        to:"/vist-activity",
+        to:"/visit-activity",
         icon:"favorite",
         isPatientSpecific :false,
         isOpen:false,
@@ -36,6 +43,13 @@
     },{
         title:"Allergies",
         to:"/allergy",
+        icon:"favorite",
+        isPatientSpecific :true,
+        isRefreshMenu:false,
+        screencode:'PRESCRIPTIONS_SCREEN_VIEW'
+    },{
+        title:"Visit Summaries",
+        to:"/visitSummary",
         icon:"favorite",
         isPatientSpecific :true,
         isRefreshMenu:false,
@@ -129,6 +143,13 @@
     },{
         title:"Lab Master",
         to:"/labmaster",
+        icon:"medication",
+        isOpen:false,
+        isRefreshMenu:true,
+        screencode:'DRUG_MASTER_SCREEN_VIEW'
+    },{
+        title:"Favorates",
+        to:"/favorites",
         icon:"medication",
         isOpen:false,
         isRefreshMenu:true,

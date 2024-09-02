@@ -20,7 +20,7 @@ const Diagnosis = forwardRef((props, ref) => {
     const data1 = props.data && props.data.dignosismasterid;
     const [diagnosisMasterData,setDiagnosisMasterData] =useState(data1 ? data1:[]);
    
-    console.log("props.dataprops.dataprops.data",props.data);
+    
     const [diagnosisinputValue,setDiagnosisinputValue] = useState(""); 
     const { control, handleSubmit, reset, setValue, formState: { errors } } = useForm({
         mode: 'onChange',
@@ -71,8 +71,11 @@ const Diagnosis = forwardRef((props, ref) => {
                     }
                 },
                 setFormData: (data) => {
-                    setDiagnosisinputValue(data.dignosisname);
-                    setValue("selectedDiagnosisValues", data, { shouldTouch: true, shouldDirty: true });
+                    if(data){
+                        setDiagnosisinputValue(data.dignosisname);
+                        setValue("selectedDiagnosisValues", data, { shouldTouch: true, shouldDirty: true });
+                    }
+                   
                 },
                 submitFormmData: () => {
                     handleSubmit(diagnosisHandle)();

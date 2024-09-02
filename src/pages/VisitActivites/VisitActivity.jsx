@@ -25,9 +25,10 @@ import Tooltip from '@mui/material/Tooltip';
 import SaveIcon from '@mui/icons-material/Save';
 import Diagnosis from '../Diagnosis/Diagnosis';
 import LabOrder from '../LabOrders/LabOrder';
+import Invoice from '../../components/Invoice/Invoice';
 
 
-export default function VisitActivity() {
+export default function VisitActivity(props) {
     const appContextValue = useContext(AppContext);
     const vitalsRef = useRef();
     const notesRef = useRef();
@@ -39,8 +40,8 @@ export default function VisitActivity() {
     const [enablePrint, setEnablePrint] = useState(false);
     const [customapisData, setCustomapisData] = useState({});
     var notesAPIData = [];
-    
-   
+
+
     useEffect(() => {
         callVisitAPis();
         getVisitCountBasedondate();
@@ -85,10 +86,10 @@ export default function VisitActivity() {
         if (result) {
             notesAPIData = result;
             setCustomapisData((previousState) => {
-                previousState["notesAPIData"]=result;
+                previousState["notesAPIData"] = result;
                 return previousState
             })
-            
+
             notesRef.current.setFormData(notesAPIData.description)
         }
         getDig();
@@ -97,22 +98,22 @@ export default function VisitActivity() {
         var payLoad = {
             method: APIS.GET_LAB_LIST_BASED_ON_VISITID_CLIENT_ID.METHOD,
             url: APIS.GET_LAB_LIST_BASED_ON_VISITID_CLIENT_ID.URL,
-            paramas: [appContextValue.selectedVisitDeatils.visitid,0],
+            paramas: [appContextValue.selectedVisitDeatils.visitid, 0],
         }
         let result = await sendRequest(payLoad);
         if (result) {
-            debugger
+            
             var selectedLabList = [];
-            result.forEach(item=>{
+            result.forEach(item => {
                 selectedLabList.push(item.labmasterid)
             })
             setCustomapisData((previousState) => {
-                previousState["labOredersAPIdata"]=result;
+                previousState["labOredersAPIdata"] = result;
                 return previousState
             });
             labRef.current.setFormData(selectedLabList);
         }
-        
+
     }
     async function getDig() {
         var payLoad = {
@@ -122,18 +123,12 @@ export default function VisitActivity() {
         }
         let result = await sendRequest(payLoad);
         if (result) {
-           //  diagnosissAPIData = result;
-            //  let apisDatacopy = {...apisData};
-            //  apisDatacopy.diagnosissAPIData =result;
-            //  setApisData(apisDatacopy);
-            //  var obj2 = {...customapisData,diagnosissAPIData:result};
-            //  setCustomapisData(obj2);
             setCustomapisData((previousState) => {
-                previousState["diagnosissAPIData"]=result;
+                previousState["diagnosissAPIData"] = result;
                 return previousState
             })
-             console.log("adasdasdasd----------",customapisData)
-             diagnosissRef.current.setFormData(result.dignosismasterid)
+           
+            diagnosissRef.current.setFormData(result.dignosismasterid)
         }
     }
     async function getPresctiptions() {
@@ -163,17 +158,16 @@ export default function VisitActivity() {
             EMRAlert.alertifyError("Not created");
         }
     }
-    function getCommonElements(array1, array2,transType) {
+    function getCommonElements(array1, array2, transType) {
         let removedLabList = [];
-        //return array1.filter(obj1 => array2.some(obj2 => deepEqual(obj1, obj2)));
         array1.forEach(item => {
-            const isThere = array2.some(order => 
-              item.labmasterid && item.labmasterid.labid === order.labid
+            const isThere = array2.some(order =>
+                item.labmasterid && item.labmasterid.labid === order.labid
             );
-            
+
             if (!isThere && transType == 'update') {
-              item.status = 2;
-              removedLabList.push(item);
+                item.status = 2;
+                removedLabList.push(item);
             }
             if (!isThere && transType == 'new') {
                 var obj = {
@@ -183,10 +177,24 @@ export default function VisitActivity() {
                     labmasterid: item
                 }
                 removedLabList.push(obj);
-              }
-          });
-          return removedLabList;
-      }
+            }
+        });
+        return removedLabList;
+    }
+    async function handleSubmitNursedashboard() {
+        notesRef.current.submitFormmData();
+        vitalsRef.current.submitFormmData();
+        setTimeout(() => {
+
+            const notesData = notesRef.current.getFormData();
+            if (Object.keys(customapisData).length != 0 && customapisData.notesAPIData && customapisData.notesAPIData.notesid) {
+                notesData.notesid = customapisData.notesAPIData.notesid;
+            }
+            const vitalData = vitalsRef.current.getFormData().vitalformData;
+            debugger
+            saveActivityData(notesData, null, vitalData, null, null)
+        });
+    }
     async function handlePrescriptionSubmit(event) {
         diagnosissRef.current.submitFormmData();
         notesRef.current.submitFormmData();
@@ -194,20 +202,18 @@ export default function VisitActivity() {
         labRef.current.submitFormmData();
 
         setTimeout(() => {
+
             const notesData = notesRef.current.getFormData();
-            if (Object.keys(customapisData).length !=0 &&customapisData.notesAPIData && customapisData.notesAPIData.notesid) {
+            if (Object.keys(customapisData).length != 0 && customapisData.notesAPIData && customapisData.notesAPIData.notesid) {
                 notesData.notesid = customapisData.notesAPIData.notesid;
             }
-            // notesData.notesid = notesAPIData.notesid;
-            //if (notesAPIData && notesAPIData.notesid) {
-            //    notesData.notesid = notesAPIData.notesid;
-           // }
+            
             const diagnosissData = diagnosissRef.current.getFormData();
-            var diaObj ={
+            var diaObj = {
                 dignosismasterid: diagnosissData.description,
-                description:diagnosissData.description.dignosisname
+                description: diagnosissData.description.dignosisname
             }
-            if (Object.keys(customapisData).length !=0 && customapisData.diagnosissAPIData && customapisData.diagnosissAPIData.diagnosisid) {
+            if (Object.keys(customapisData).length != 0 && customapisData.diagnosissAPIData && customapisData.diagnosissAPIData.diagnosisid) {
                 diaObj.diagnosisid = customapisData.diagnosissAPIData.diagnosisid;
             }
             const vitalData = vitalsRef.current.getFormData().vitalformData;
@@ -215,8 +221,8 @@ export default function VisitActivity() {
             let labOrderData = labRef.current.getFormData();
             let labResult = [];
             let removedLabList = [];
-            let finalLabData =[];
-            if(labOrderData && labOrderData.description){
+            let finalLabData = [];
+            if (labOrderData && labOrderData.description) {
                 labOrderData = labOrderData.description;
                 let onloadApiResData = customapisData.labOredersAPIdata;
 
@@ -243,25 +249,24 @@ export default function VisitActivity() {
                         });
                     }
                 });
-                finalLabData = [...labResult,...removedLabList];
-            }else{
-                labOrderData =null;
+                finalLabData = [...labResult, ...removedLabList];
+            } else {
+                labOrderData = null;
             }
-            debugger
-            saveActivityData(notesData, diaObj, vitalData, prescriptionData,finalLabData)
+            saveActivityData(notesData, diaObj, vitalData, prescriptionData, finalLabData)
         });
     }
-    async function saveActivityData(notesData, diagnosissData, vitalData, prescriptionData,labOrderData) {
+    async function saveActivityData(notesData, diagnosissData, vitalData, prescriptionData, labOrderData) {
         var sendingOnj = {
             clientid: appContextValue.selectedVisitDeatils.clientid.seqid,
             visitid: appContextValue.selectedVisitDeatils.visitid,
             capturedby: 1,
-            prescriptions: prescriptionData.prescriptionList,
+            prescriptions: prescriptionData ? prescriptionData.prescriptionList : null,
             vitalsDTO: vitalData,
             notesDTO: notesData,
-            diagnosisDTO: diagnosissData,
+            diagnosisDTO: diagnosissData ? diagnosissData : null,
             //   allergies: allergiesrefData.allergiesList
-            labOrders:labOrderData
+            labOrders: labOrderData ? labOrderData : null
         }
         var payLoad = {
             method: APIS.SAVE_VISIT_DATA.METHOD,
@@ -294,6 +299,7 @@ export default function VisitActivity() {
     return (
         <Box sx={{ m: 1 }}>
             <ClientBanner clientData={appContextValue.selectedVisitDeatils.clientid} visitData={appContextValue.selectedVisitDeatils} />
+           
             <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'flex-start' }}>
                     <Box
@@ -315,6 +321,11 @@ export default function VisitActivity() {
                             <SaveIcon style={{ color: 'blue', cursor: 'pointer', marginRight: '5px' }} onClick={() => { handlePrescriptionSubmit() }} />
                         </Tooltip>
                     }
+                    {
+                        <Tooltip title="Save">
+                            <SaveIcon style={{ color: 'blue', cursor: 'pointer', marginRight: '5px' }} onClick={() => { handleSubmitNursedashboard() }} />
+                        </Tooltip>
+                    }
                     {appContextValue && appContextValue.selectedVisitDeatils.status == 1 &&
                         <Box
                             mt={1}
@@ -329,7 +340,7 @@ export default function VisitActivity() {
 
                         </Box>
                     }
-                  
+
                     {appContextValue && appContextValue.selectedVisitDeatils.status == 3 &&
                         <Box
                             mt={1}
@@ -348,7 +359,7 @@ export default function VisitActivity() {
                         display="flex"
                         justifyContent="flex-end"
                         alignItems="flex-end"
-                        style={{ color: 'red',cursor: 'pointer'  }}
+                        style={{ color: 'red', cursor: 'pointer' }}
                     >
                         <Tooltip title="Print">
                             <PrintIcon onClick={() => {
@@ -363,15 +374,16 @@ export default function VisitActivity() {
                     </Box>
                 </Box>
             </Box>
+            {/* <Invoice/> */}
             <Box style={{ height: '530px', overflowY: 'auto', marginTop: '10px' }}>
-          
+
                 <Grid container spacing={1} xs={12}>
                     <Grid item xs={6} spacing={4}>
                         <Vitals ref={vitalsRef} />
                     </Grid>
                     <Grid item xs={6} spacing={4}>
-                       {/* <Notes label={"Diagnosis"} ref={diagnosissRef} />  */}
-                       <Diagnosis label={"Diagnosis"} ref={diagnosissRef} data ={customapisData.diagnosissAPIData ? customapisData.diagnosissAPIData :[]}/>
+                        {/* <Notes label={"Diagnosis"} ref={diagnosissRef} />  */}
+                        <Diagnosis label={"Diagnosis"} ref={diagnosissRef} data={customapisData.diagnosissAPIData ? customapisData.diagnosissAPIData : []} />
                     </Grid>
                     {/* <Grid item xs={8}>
                         <Allergies ref={allergiesref} />
@@ -382,7 +394,7 @@ export default function VisitActivity() {
                         <Notes label={"General Notes"} ref={notesRef} />
                     </Grid>
                     <Grid item xs={6} spacing={4}>
-                        <LabOrder label={"Lab Orders"} data ={customapisData.labOredersAPIdata} ref={labRef} />
+                        <LabOrder label={"Lab Orders"} data={customapisData.labOredersAPIdata} ref={labRef} />
                     </Grid>
                 </Grid>
                 <Grid container spacing={1} xs={12}>
@@ -390,7 +402,7 @@ export default function VisitActivity() {
                         <Prescriptions ref={prescriptionRef} />
                     </Grid>
                 </Grid>
-                
+
             </Box>
             {enablePrint && (
                 <FunctionalComponentToPrint ref={componentRef} >

@@ -24,7 +24,9 @@ export default function DrugMaster(props) {
     const [drugDose, setDrugDosage] = useState("");
     const [drugDoseUnit, setDrugDosageunit] = useState("");
     const [status, setStatus] = useState("1");
-
+    const [defaultduration,setDefaultDuration] = useState("");
+    const [defaultInstruction,setDefaultInstruction] = useState("");
+    const [sig,setSig] = useState("");
 
     const [drugTypeListOptions, setDrugTypeListOptions] = useState([]);
     const [drugAlerListOptions, setDrugAlerListOptions] = useState([]);
@@ -38,6 +40,7 @@ export default function DrugMaster(props) {
         getDrugtypeMastersData();
         getDrugFormMastersData();
         getDrugAlertsMastersData();
+        getDrugUnitMastersData();
     }, []);
     
     function handleSubmit(event) {
@@ -61,7 +64,10 @@ export default function DrugMaster(props) {
             drugform:drugForm,
             drugalert:drugAlert,
             drugdose:drugDose,
-            drugunit:null
+            drugunit:drugDoseUnit,
+            defaultduration:Number(defaultduration),
+            defaultInstruction:defaultInstruction,
+            sig:sig
         }
         var payLoad = {
             method: APIS.SAVE_DRUG_MASTER.METHOD,
@@ -123,11 +129,23 @@ export default function DrugMaster(props) {
         var payLoad = {
             method: APIS.GET_MASTER_DATA_BASED_ON_CODE.METHOD,
             url: APIS.GET_MASTER_DATA_BASED_ON_CODE.URL,
-            paramas: ["DRUG_ALERTS"]
+            paramas: ["DRUG_ALERTS","DRUG_DOSE_UNIT"]
         }
         let result = await sendRequest(payLoad);
         if (result) {
             setDrugAlerListOptions(result);
+           
+        }
+    }
+    async function getDrugUnitMastersData() {
+        var payLoad = {
+            method: APIS.GET_MASTER_DATA_BASED_ON_CODE.METHOD,
+            url: APIS.GET_MASTER_DATA_BASED_ON_CODE.URL,
+            paramas: ["DRUG_DOSE_UNIT"]
+        }
+        let result = await sendRequest(payLoad);
+        if (result) {
+            setDrugDoseUnitListOptions(result);
            
         }
     }
@@ -267,6 +285,21 @@ export default function DrugMaster(props) {
                                     size="small"
                                     variant="outlined"
                                     required
+                                    label={Translations.DRUG_MASTER.SIG}
+                                    name="sig"
+                                    onChange={e => setSig(e.target.value)}
+                                    value={sig}
+
+                                />
+
+                            </Grid>
+                            <Grid item xs={2} spacing={1}>
+                                <TextField
+                                    fullWidth
+                                    type="text"
+                                    size="small"
+                                    variant="outlined"
+                                    required
                                     label={Translations.DRUG_MASTER.DRUG_DOSAGE}
                                     name="username"
                                     onChange={e => setDrugDosage(e.target.value)}
@@ -283,22 +316,46 @@ export default function DrugMaster(props) {
                                         id="drugmatserAlertId"
                                         options={drugDoseUnitListOptions}
                                         //ref={autoComplteVisittypeRef}
-                                        key={option => option.lookupid}
-                                        getOptionLabel={option => option.lookupvalue || ""}
+                                        key={option => option.id}
+                                        getOptionLabel={option => option.masterdatavalue || ""}
                                         value={drugDoseUnit}
                                         onChange={(event, newValue) => {
                                             setDrugDosageunit(newValue);
                                         }}
                                         renderOption={(props, option) => {
                                             return (
-                                                <li {...props} key={option.lookupid}>
-                                                    {option.lookupvalue}
+                                                <li {...props} key={option.id}>
+                                                    {option.masterdatavalue}
                                                 </li>
                                             );
                                         }}
                                         renderInput={(params) => <TextField {...params} label={Translations.DRUG_MASTER.DRUG_UNIT} />}
                                     />
                                 </FormControl>
+                            </Grid>
+                            <Grid item xs={2} spacing={1}>
+                                <TextField
+                                    fullWidth
+                                    type="text"
+                                    size="small"
+                                    variant="outlined"
+                                    label={Translations.LAB_MASTER.DURATION}
+                                    onChange={e => setDefaultDuration(e.target.value)}
+                                    value={defaultduration}
+                                />
+                            </Grid>
+                            <Grid item xs={4} spacing={1}>
+                                <TextField
+                                    fullWidth
+                                    type="text"
+                                    size="small"
+                                    variant="outlined"
+                                    multiline
+                                    rows={3}
+                                    label={"Instructions"}
+                                    onChange={e => setDefaultInstruction(e.target.value)}
+                                    value={defaultInstruction}
+                                />
                             </Grid>
                             <Grid item xs={2} spacing={1}>
                                     <FormControl>

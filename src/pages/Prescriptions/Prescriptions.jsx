@@ -62,10 +62,14 @@ const Prescriptions = forwardRef((props, ref) => {
     const [prescriptionList, setPrescriptionList] = React.useState([]);
     const appContextValue = useContext(AppContext);
 
-    const { control, handleSubmit, reset, formState: { errors } } = useForm({
+    const { control, handleSubmit, reset, setValue,formState: { errors } } = useForm({
         defaultValues: {
             startdate:dayjs(moment(new Date()).format("YYYY-MM-DD")),
             todate:dayjs(moment(new Date()).format("YYYY-MM-DD")),
+            dose:' ',
+            doseunit:' ',
+            instructions:' ',
+            sig:' '
         },
         mode: 'onChange',
         resolver: yupResolver(schema),
@@ -169,6 +173,10 @@ const Prescriptions = forwardRef((props, ref) => {
                                                 size="small"
                                                 onChange={(event, item) => {
                                                     onChange(item);
+                                                    setValue("instructions",item.defaultInstruction);
+                                                    setValue("sig",item.sig)
+                                                    setValue("doseunit", item.drugunit.masterdatavalue, { shouldTouch: true, shouldDirty: true });
+                                                    setValue("dose", item.drugform.masterdatavalue, { shouldTouch: true, shouldDirty: true });
                                                 }}
                                                 key={option => option.drugcode}
                                                 getOptionLabel={option => option.drugname}

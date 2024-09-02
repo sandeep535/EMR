@@ -26,6 +26,9 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 import CommonCard from '../../common/CommonCard';
 import Badge from '@mui/material/Badge';
+import VisitSummary from '../VisitSummary/VisitSummary';
+import VisitActivity from '../VisitActivites/VisitActivity';
+import { Tune } from '@mui/icons-material';
 
 const borderColor = {
     1: '#3498db',
@@ -48,7 +51,8 @@ const legendItems = [
 
 
 
-export default function VisitDasboard() {
+export default function VisitDasboard(props) {
+    console.log("asdddddddddd",props)
     const [fromDate, setFromDate] = useState(dayjs(moment(new Date()).format("YYYY-MM-DD")));
     const [toDate, setTodate] = useState(dayjs(moment(new Date()).format("YYYY-MM-DD")));
     const [visitList, setVisitList] = useState([]);
@@ -61,6 +65,9 @@ export default function VisitDasboard() {
     const [visitEditData, setVisitEditData] = useState({});
     const [totalRecords, setTotalRecords] = useState(0);
 
+    const [isVisummaryPopup,setisVisummaryPopup] = useState(false);
+    const [isVisitActivityPopUp,setIsVisitActivityPopUp] = useState(false);
+    
     const navigate = useNavigate();
     useEffect(() => {
         setCount(1);
@@ -120,16 +127,44 @@ export default function VisitDasboard() {
             }
         });
         appContextValue.setLeftMenuList(copyData);
-        navigate("/vist-activity");
+        appContextValue.setSelectedLeftMenuItem({
+            title:"Visit",
+            to:"/visit-activity",
+            icon:"favorite",
+            isPatientSpecific :false,
+            isOpen:false,
+            isRefreshMenu:false,
+            screencode:'VITALS_SCREEN_VIEW'
+        });
+        navigate("/visit-activity");
     }
 
     function openEditPopup(visitData) {
         setVisitEditData(visitData);
         setIsOpenEditPopup(true);
     }
+    function openVisummaryPop(visitData){
+        setVisitEditData(visitData);
+        setisVisummaryPopup(true);
+    }
+    function openVisitActivity(visitData){
+        appContextValue.setSelectedVisitDeatils(visitData);
+        // var copyData = [...appContextValue.leftMenuList];
+        // copyData.map(item => {
+        //     if (item.hasOwnProperty("isPatientSpecific")) {
+        //         item.isOpen = true;
+        //         item.isPatientSpecific = true;
+        //     }
+        // });
+        // appContextValue.setLeftMenuList(copyData);
+        setIsVisitActivityPopUp(true);
+    }
 
     function closeModelPopup() {
         setIsOpenEditPopup(false);
+        setisVisummaryPopup(false);
+        setIsVisitActivityPopUp(false);
+        appContextValue.setSelectedVisitDeatils([]);
     }
     const handlePaginationChange = (event, value) => {
         setCount(value);
@@ -215,9 +250,11 @@ export default function VisitDasboard() {
                                             <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
                                                 {visit.doctor.firstname + " " + visit.doctor.lastname}
                                             </Typography>
-                                            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                                            <Box sx={{ display: 'flex', flexDirection: 'row',cursor: 'pointer', fontSize: 16 }}>
                                                 <Icon sx={{ cursor: 'pointer', fontSize: 16, color: 'rgb(52, 152, 219)' }} onClick={(event) => { event.preventDefault(); gotoActivitiesPage(visit) }}>{"send"}</Icon>
                                                 <Icon sx={{ cursor: 'pointer', fontSize: 16, color: 'rgb(52, 152, 219)', ml: 1 }} onClick={(event) => { event.preventDefault(); openEditPopup(visit) }}>{"edit"}</Icon>
+                                                {visit && visit.status == 3 && <Icon sx={{ cursor: 'pointer', fontSize: 16, color: 'rgb(52, 152, 219)', ml: 1 }} onClick={(event) => { event.preventDefault(); openVisummaryPop(visit) }}>{"summarize"}</Icon>}
+                                                {props && props.isFrom == "nursedashboard" && <Icon sx={{ cursor: 'pointer', fontSize: 16, color: 'rgb(52, 152, 219)', ml: 1 }} onClick={(event) => { event.preventDefault(); openVisitActivity(visit) }}>{"tour"}</Icon>}
                                             </Box>
                                         </Box>
                                     </CardContent>
@@ -234,11 +271,27 @@ export default function VisitDasboard() {
                     <Pagination count={Math.ceil(totalRecords / 5)} color="primary" page={count} onChange={handlePaginationChange} />
                 </Stack>
             </Box>
+            {isOpenEditPopup && 
             <Box>
                 <FullScreenModelPopup title={"Edit Visit"} isOpen={isOpenEditPopup} handleClose={() => closeModelPopup()}>
                     <VisitCreation isEdit={'true'} visitEditData={visitEditData} />
                 </FullScreenModelPopup>
+            </Box>}
+            <Box>
+                {isVisummaryPopup && 
+                <FullScreenModelPopup title={"Visit Summary"} isOpen={isVisummaryPopup} handleClose={() => closeModelPopup()}>
+                    <VisitSummary visitEditData={visitEditData} isFrom ={"Nurse-dashboard"} />
+                </FullScreenModelPopup>
+                }
             </Box>
+            {isVisitActivityPopUp && 
+                <Box>
+                    <FullScreenModelPopup title={"Visit Summary"} isOpen={isVisitActivityPopUp} handleClose={() => closeModelPopup()}>
+                        <VisitActivity />
+                    </FullScreenModelPopup>
+
+                </Box>
+}
         </>
     )
 }

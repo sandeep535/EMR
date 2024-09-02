@@ -227,17 +227,6 @@ const Allergies = forwardRef((props, ref) => {
                                         renderInput={(params) => <TextField {...params} label={Translations.ALLERGY.ALLERGYNAME} />}
                                     />
                                 </FormControl>
-                                {/* <TextField
-                                            fullWidth
-                                            type="text"
-                                            size="small"
-                                            variant="outlined"
-                                            required
-                                            label={Translations.ALLERGY.ALLERGYNAME}
-                                            name="allergy"
-                                            onChange={e => setAllergy(e.target.value)}
-                                            value={allergy}
-                                        /> */}
                             </Grid>
                             <Grid item xs={2} >
                                 <FormControl variant="outlined" size="small" fullWidth>

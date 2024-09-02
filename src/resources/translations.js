@@ -45,6 +45,7 @@ const Translations = {
         pagesubtitle:'Create a visit for patient',
         visitReason:'Reason for Visit',
         visitType:'Visit Type',
+        paymenttype:'Payment Type',
         speciality:'Specilaity',
         DocName :'Doctor Name',
         token:'Token'
@@ -85,6 +86,7 @@ const Translations = {
         DRUG_FORM:'Drug Form',
         DRUG_CODE:'Drug Code',
         DRUG_DOSAGE:'Drug Dosage',
+        SIG:'SIG',
         DRUG_UNIT:'Drug Unit',
         STATUS:'Status',
         ACTIVE:'Active',
@@ -109,6 +111,8 @@ const Translations = {
      "LAB_MASTER":{
         TITLE:'Lab Master',
         NAME:'Lab Order Name',
+        DURATION:'Duration',
+        INSTRUCTION:'Instruction',
         STATUS:'Status',
         ACTIONS:'Actions',
      }

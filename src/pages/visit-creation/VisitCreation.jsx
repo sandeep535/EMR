@@ -58,10 +58,13 @@ export default function VisitCreation(props) {
   const [doctoroptions, setDoctoroptions] = React.useState([]);
   const [serviceoptions, setServiceOptions] = React.useState([]);
   const [visiiTypeOptions, setVisiiTypeOptions] = React.useState([]);
+  const [paymentTypeOptions, setPaymentTypeOptions] = React.useState([]);
   const [specialityListOptions, setSpecialityListOptions] = React.useState([]);
 
   const [visitServiceList, setVisitServiceList] = React.useState([]);
   const [clientsearchlist, setClientsearchlist] = React.useState([]);
+debugger
+  const [paymenttype,setPaymenttype] =React.useState(props?.visitEditData?.paymenttype? props.visitEditData.paymenttype :"");
 
   const [visitreason, setVisitReason] = React.useState((props?.visitEditData?.reason) ? props?.visitEditData?.reason : "");
   const [serviceValues, setServiceValues] = React.useState();
@@ -86,7 +89,7 @@ export default function VisitCreation(props) {
 
   useEffect(() => {
     getLookUpDetails();
-
+    getPaymentTypeList();
   }, []);
 
   useEffect(() => {
@@ -151,7 +154,18 @@ export default function VisitCreation(props) {
       setDoctoroptions(result)
     }
   }
-
+  async function getPaymentTypeList() {
+    var payLoad = {
+        method: APIS.GET_MASTER_DATA_BASED_ON_CODE.METHOD,
+        url: APIS.GET_MASTER_DATA_BASED_ON_CODE.URL,
+        paramas: ["PAYMENT_MODE"]
+    }
+    let result = await sendRequest(payLoad);
+    if (result) {
+      debugger
+        setPaymentTypeOptions(result);
+    }
+}
   async function getLookUpDetails() {
     var payLoad = {
       method: APIS.LOOKUP.METHOD,
@@ -308,6 +322,7 @@ export default function VisitCreation(props) {
       clientid: clientDeatils,
       services: visitServiceList,
       token: token,
+      paymenttype:paymenttype,
       visitid: (props?.isEdit == "true") ? props?.visitEditData?.visitid : null
     }
 
@@ -519,6 +534,30 @@ export default function VisitCreation(props) {
                     name="Reason For Visit"
                     onChange={e => setVisitReason(e.target.value)}
                     value={visitreason} />
+                </Grid>
+                <Grid item xs={2} spacing={1} >
+                  <FormControl variant="outlined" size="small" fullWidth>
+                    <Autocomplete
+                      size="small"
+                      disablePortal
+                      id="visitTypeList"
+                      options={paymentTypeOptions}
+                      key={option => option.id || ""}
+                      getOptionLabel={option => option.masterdatavalue || ""}
+                      value={paymenttype}
+                      onChange={(event, newValue) => {
+                        setPaymenttype(newValue);
+                      }}
+                      renderOption={(props, option) => {
+                        return (
+                          <li {...props} key={option.id}>
+                            {option.masterdatavalue}
+                          </li>
+                        );
+                      }}
+                      renderInput={(params) => <TextField {...params} label={Translations.visitCreation.paymenttype} />}
+                    />
+                  </FormControl>
                 </Grid>
               </Grid>
               <Grid xs={12} container spacing={1}>

@@ -114,28 +114,21 @@ const LabOrder = forwardRef((props, ref) => {
                                             multiple
                                             options={labOrderMasterData}
                                             onChange={(event, item) => {
-                                                debugger
-                                               // handleRemoveItem(event, item);
                                                 onChange(item);
                                             }}
                                             value ={value}
-                                           // defaultValue={labOrderMasterData}
                                             key={option => option.labid}
                                             getOptionLabel={option => option.labname}
                                             inputValue={labinputValue}
                                             onInputChange={(event, newInputValue) => {
-
                                                 if (event != null) {
                                                     if (newInputValue && newInputValue.length > 1) {
                                                         getLabOrderMasterData(newInputValue)
                                                     }
                                                     setLabinputValue(newInputValue);
                                                 }
-
-
                                             }}
                                             id="lab-controllable-states-demo"
-
                                             renderInput={(params) => <TextField {...params} error={errors.selectedLabOrder?.message}
                                                 helperText={errors.selectedLabOrder?.message} label="Search Daignosis" />}
                                         />

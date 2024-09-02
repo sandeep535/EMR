@@ -1,29 +1,12 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { Routes, Route, useNavigate, useParams } from "react-router-dom";
+import Box from '@mui/material/Box';
 import { MyProSidebarProvider } from "./pages/global/sidebar/sidebarContext";
-
-import VisitCreation from "./pages/visit-creation/VisitCreation";
-import Registration from "./pages/registration-form/ClientRegistration";
 import Topbar from './pages/global/Topbar';
-import VisitDasboard from "./pages/VisistDashboard/VisitDashboard";
-import VisitActivity from "./pages/VisitActivites/VisitActivity";
-import EmployeeMaster from "./Masters/EmpployeMaster/EmployeeMatser";
-import ServiceMaster from "./Masters/ServiceMaster/ServiceMaster";
-import VitalsList from "./pages/Vitals/VitalsList";
-import PrescriptionsList from "./pages/Prescriptions/PrescriptionsList";
-import RoleAndTasks from "./pages/RoleAndTaks/RoleAndTasks";
 import LoginPage from "./pages/Login/LoginPage";
 import AppContext from './components/Context/AppContext';
+import ApplicationRoutes from './common/Routes';
 
-import DrugMaster from './Masters/DrugMaster/DrugMaster';
-import AllergyMaster from './Masters/AllergyMaster/AllergyMaster';
-import VistStatistics from './pages/DashBoards/VistStatistics';
-import Allergies from './pages/Allergies/Allergies';
-import DiagnosisMaster from './Masters/DiagnosisMaster/DiagnosisMaster';
-import { useTheme, Box, Typography } from "@mui/material";
-import LabMaster from './Masters/LabMaster/LabMaster';
-import LabOrder from './pages/LabOrders/LabOrder';
-// import LeftMenu from './common/LeftMenu';
 
 export default function MainScreen(props) {
     const navigate = useNavigate();
@@ -32,7 +15,6 @@ export default function MainScreen(props) {
         if (!appContextValue.isLogin) {
             navigate("/login/emr2", { replace: true });
         }
-
     }, []);
     const appContextValue = useContext(AppContext);
     return (
@@ -50,30 +32,13 @@ export default function MainScreen(props) {
                         <Box sx={{ height: '8%' }}>
                             <Topbar />
                         </Box>
-                        <Box sx={{ height: '92%',overflowY:'scroll' }}>
+                        <Box sx={{ height: '92%', overflowY: 'scroll' }}>
                             <Routes>
-                                <Route path='/vist-dashboard' element={<VisitDasboard />} />
-                                <Route path="/registration" element={<Registration />} />
-                                <Route path='/visit-creation' element={<VisitCreation />} />
-                                <Route path='/vist-activity' element={<VisitActivity />} />
-                                <Route path='/employeeMaster' element={<EmployeeMaster />} />
-                                <Route path='/serviceMaster' element={<ServiceMaster />} />
-                                <Route path='/vitalsList' element={<VitalsList />} />
-                                <Route path='/prescriptionsList' element={<PrescriptionsList />} />
-                                <Route path='/rolesAnsTasks' element={<RoleAndTasks />} />
-                                <Route path='/drugMaster' element={<DrugMaster />} />
-                                <Route path='/allergyMaster' element={<AllergyMaster />} />
-                                <Route path='/vist-statistics' element={<VistStatistics />} />
-                                <Route path='/allergy' element={<Allergies isSaveDirect={true} />} />
-                                <Route path='/diagnosismaster' element={<DiagnosisMaster />} />
-                                <Route path='/labMaster' element={<LabMaster />} />
-                                <Route path='/LabOrder' element={<LabOrder />} />
-                                
+                                {ApplicationRoutes.map((route, index) => (
+                                    <Route key={index} path={route.path} element={route.element} />
+                                ))}
                             </Routes>
                         </Box>
-
-
-
                     </Box>
                 </Box>
             }
