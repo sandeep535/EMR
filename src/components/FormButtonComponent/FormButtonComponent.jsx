@@ -11,9 +11,10 @@ const FormButtonComponent = (props) => {
                 <Button type="submit" color="primary" variant="contained">
                     {props.button1}
                 </Button>
-                <Button color="secondary" variant="contained" onClick={() => { props.clearFormEvent() }}>
+                {props.button2 && <Button color="secondary" variant="contained" onClick={() => { props.clearFormEvent() }}>
                     {props.button2}
-                </Button>
+                </Button>}
+                
             </Box>
         </Box>
     );

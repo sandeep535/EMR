@@ -26,7 +26,14 @@ const RegistrationInformation = forwardRef((props, ref) => {
         getLookUpDetails();
         return () => console.log("Cleanup..");
     }, []);
-
+    function calculateDate(years) {
+        let currentDate = new Date();
+        let newDate = new Date(currentDate.setFullYear(currentDate.getFullYear() - years));
+        let month =(newDate.getMonth() >= 10)?newDate.getMonth():"0"+newDate.getMonth();
+        let foprmatedDate = newDate.getFullYear()+"-"+month+"-"+newDate.getDate();
+        setDOB(foprmatedDate);
+       
+    }
     useImperativeHandle(
         ref,
         () => {
@@ -194,7 +201,12 @@ const RegistrationInformation = forwardRef((props, ref) => {
                         variant="outlined"
                         label={Translations.patientRegistration.age}
                         name="age"
-                        onChange={e => setAge(e.target.value)}
+                        onChange={e => {
+                            setAge(e.target.value)
+                            //if(dob.length==0){
+                                calculateDate(e.target.value);
+                           // }
+                        }}
                         value={age}
                     />
                 </Grid>

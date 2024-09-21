@@ -1,58 +1,65 @@
 // components/AutocompleteField.js
 import React from "react";
 import { Controller } from "react-hook-form";
-import { Autocomplete, TextField } from "@mui/material";
+import { Autocomplete, TextField, FormHelperText } from "@mui/material";
 
 const AutocompleteField = ({
-    name,
-    control,
-    options,
-    label,
-    placeholder,
-    getOptionLabel = (option) => option,
-    optionKey
+  name,
+  control,
+  options,
+  label,
+  placeholder,
+  getOptionLabel = (option) => option,
+  mapvalues,
+  id,
+  isMultiSelect,
+  onInputChange
 }) => {
-    return (
-        <>
+  return (
+    <>
 
-            {/* <Controller
-                name="selectedLabOrder"
-                control={control}
-                render={({ field: { onChange, onBlur, value, ref }, fieldState: { error } }) =>
-                    <Autocomplete
-                        size="small"
-                        multiple={props.isMultiSelect ? props.isMultiSelect : false}
-                        id="Allergy-combo-box-demo"
-                        options={options}
-                        key={option => option.allergyid}
-                        getOptionLabel={option => option[optionKey] || ""}
-                        value={value || null}
-                        inputValue={allergyInputValue}
-                        onInputChange={(event, newInputValue) => {
-                            if (newInputValue.length > 1) {
-                                getAllergiesMasterList(newInputValue)
-                            }
-                            setAllergyInputValue(newInputValue);
-                        }}
-                        onChange={(event, item) => {
-                            onChange(item);
-                        }}
-                        // onChange={(event, newValue) => {
-                        //     setAllergy(newValue);
-                        // }}
-                        renderOption={(props, option) => {
-                            return (
-                                <li {...props} key={option.allergyid}>
-                                    {option.allergyname}
-                                </li>
-                            );
-                        }}
-                        renderInput={(params) => <TextField {...params} label={Translations.ALLERGY.ALLERGYNAME} />}
-                    />
+      <Controller
+        name={name}
+        control={control}
+        render={({ field: { onChange, onBlur, value, ref }, fieldState: { error } }) =>
+          <>
+            <Autocomplete
+              size="small"
+              multiple={isMultiSelect ? isMultiSelect : false}
+              id={id}
+              options={options}
+              key={option => option[mapvalues.id]}
+              getOptionLabel={option => option[mapvalues.value] || ""}
+              value={value || null}
+              onInputChange={(event, newInputValue) => {
+                onInputChange(newInputValue)
+              }}
+              onChange={(event, item) => {
+                onChange(item);
+              }}
+              slotProps={{
+                popper: {
+                  sx: {
+                    zIndex: 99999
+                  }
                 }
-            /> */}
-        </>
-    );
+              }}
+              renderOption={(props, option) => {
+                return (
+                  <li {...props} key={option[mapvalues.id]}>
+                    {option[mapvalues.value]}
+                  </li>
+                );
+              }}
+              renderInput={(params) => <TextField {...params} label={label} error={!!error}
+                helperText={error ? error.message : ''} />}
+            />
+
+          </>
+        }
+      />
+    </>
+  );
 };
 
 export default AutocompleteField;

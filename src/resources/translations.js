@@ -76,7 +76,7 @@ const Translations = {
         ALLERGYNAME:"Allergy",
         STATUS:'Status',
         INDICATIONS:'Indication',
-        SERVERITY:"severity"
+        SERVERITY:"Severity"
      },
      "DRUG_MASTER":{
         NAME:'Drug Master',

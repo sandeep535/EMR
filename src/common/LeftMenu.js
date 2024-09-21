@@ -69,6 +69,13 @@
         isPatientSpecific :false,
         isRefreshMenu:false,
         screencode:'PRESCRIPTIONS_SCREEN_VIEW'
+    },{
+        title:"Upload Documents",
+        to:"/uploadDocuments",
+        icon:"favorite",
+        isPatientSpecific :false,
+        isRefreshMenu:false,
+        screencode:'PRESCRIPTIONS_SCREEN_VIEW'
     }]
 },
 {
@@ -154,6 +161,14 @@
         isOpen:false,
         isRefreshMenu:true,
         screencode:'DRUG_MASTER_SCREEN_VIEW'
+    },{
+        title:"Bed Master",
+        to:"/bedMaster",
+        icon:"medication",
+        isOpen:false,
+        isRefreshMenu:true,
+        screencode:'DRUG_MASTER_SCREEN_VIEW'
     }]
+    
 }];
 export default LeftMenu

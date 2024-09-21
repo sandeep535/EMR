@@ -1,4 +1,3 @@
-
 import Registration from "../pages/registration-form/ClientRegistration";
 import VisitDasboard from "../pages/VisistDashboard/VisitDashboard";
 import VisitActivity from "../pages/VisitActivites/VisitActivity";
@@ -17,6 +16,8 @@ import LabOrder from '../pages/LabOrders/LabOrder';
 import VisitSummary from '../pages/VisitSummary/VisitSummary';
 import VisitCreation from "../pages/visit-creation/VisitCreation";
 import FavoriteMatser from "../Masters/Favorite/FavoriteMatser";
+import UploadDocuments from "../pages/UploadDocuments/UploadDocuments";
+import BedMaster from "../Masters/BedMaster/BedMaster";
 
 
 const ApplicationRoutes = [
@@ -39,6 +40,9 @@ const ApplicationRoutes = [
     { path: "/LabOrder", element: <LabOrder /> },
     { path: "/visitSummary", element: <VisitSummary /> },
     { path: "/favorites", element: <FavoriteMatser /> },
+    { path: "/uploadDocuments", element: <UploadDocuments /> },
+    { path: "/bedMaster", element: <BedMaster /> },
+    
   ];
   
   export default ApplicationRoutes;

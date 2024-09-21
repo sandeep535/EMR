@@ -376,7 +376,7 @@ export default function VisitActivity(props) {
             </Box>
             {/* <Invoice/> */}
             <Box style={{ height: '530px', overflowY: 'auto', marginTop: '10px' }}>
-
+               
                 <Grid container spacing={1} xs={12}>
                     <Grid item xs={6} spacing={4}>
                         <Vitals ref={vitalsRef} />

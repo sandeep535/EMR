@@ -17,14 +17,12 @@ import CommonCard from '../../common/CommonCard';
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import STTextField from '../../CoreComponents/STTextField';
+import { DiagnosisMasterSchema } from '../../common/YupSchema/formSchema';
+import STAutocompleteField from '../../CoreComponents/AutocompleteField';
+import AutocompleteField from '../../CoreComponents/AutocompleteField';
+import SPRadioButton from '../../CoreComponents/SPRadioButton';
 
-const schema = yup
-    .object({
-        name: yup.string().required(),
-        code: yup.string().required(),
-        codeset: yup.object().required(),
-    })
-    .required()
 
 const diagnosisListHeaders = [{
     name: Translations.DIAGNOSIS_MASTER.CODE_SET,
@@ -51,7 +49,10 @@ const diagnosisListHeaders = [{
         icon: 'edit'
     }]
 }]
-
+const activeRadioButtonOptions = [
+    { label: 'Active', value: '1' },
+    { label: 'In-active', value: '2' }
+];
 export default function DiagnosisMaster(props) {
 
     const [diagnosisCodeSetMasterData, setDiagnosisCodeSetMasterData] = useState([]);
@@ -60,12 +61,13 @@ export default function DiagnosisMaster(props) {
     const defaultobj = {
         name: "",
         code: "",
-        codeset: "",
+        codeset: {},
         status: "1"
     }
+
     const { control, handleSubmit, reset, formState: { errors } } = useForm({
         defaultValues: defaultobj,
-        resolver: yupResolver(schema),
+        resolver: yupResolver(DiagnosisMasterSchema),
     })
 
     useEffect(() => {
@@ -142,102 +144,47 @@ export default function DiagnosisMaster(props) {
                     <Grid xs={12} container spacing={1}>
                         <Grid item xs={2} spacing={1}>
                             <FormControl variant="outlined" fullWidth>
-                                <Controller
+                                <AutocompleteField
                                     name="codeset"
+                                    label={Translations.DIAGNOSIS_MASTER.CODE_SET}
                                     control={control}
-                                    render={({ field: { onChange } }) =>
-                                        <Autocomplete
-                                            size="small"
-                                            disablePortal
-                                            id="Allergy-combo-box-demo"
-                                            options={diagnosisCodeSetMasterData}
-                                            key={option => option.lookupid}
-                                            getOptionLabel={option => option.lookupvalue || ''}
-                                            onChange={(event, item) => {
-                                                onChange(item);
-                                            }}
+                                    options={diagnosisCodeSetMasterData}
+                                    placeholder={Translations.DIAGNOSIS_MASTER.CODE_SET}
+                                    mapvalues={{ id: "lookupid", value: 'lookupvalue' }}
+                                    isMultiSelect={false}
+                                    id={"Allergy-combo-box-demo"}
+                                    onInputChange={(data) => {
 
-                                            renderOption={(props, option) => {
-                                                return (
-                                                    <li {...props} key={option.lookupid}>
-                                                        {option.lookupvalue}
-                                                    </li>
-                                                );
-                                            }}
-                                            slotProps={{
-                                                popper: {
-                                                    sx: {
-                                                        zIndex: 99999
-                                                    }
-                                                }
-                                            }}
-                                            renderInput={(params) => <TextField {...params} error={errors.codeset?.message}
-                                                helperText={errors.codeset?.message} label={Translations.DIAGNOSIS_MASTER.CODE_SET} />}
-                                        />
-                                    }
+                                    }}
                                 />
-
                             </FormControl>
                         </Grid>
                         <Grid item xs={2} spacing={1}>
-
-                            <Controller
+                            <STTextField
                                 name="code"
+                                label={Translations.DIAGNOSIS_MASTER.CODE}
                                 control={control}
-                                render={({ field }) =>
-                                    <TextField
-                                        {...field}
-                                        fullWidth
-                                        type="text"
-                                        size="small"
-                                        variant="outlined"
-                                        label={Translations.DIAGNOSIS_MASTER.CODE}
-                                        error={errors.code?.message}
-                                        helperText={errors.code?.message}
-                                    />
-                                }
+                                placeholder={Translations.DIAGNOSIS_MASTER.CODE}
                             />
-
                         </Grid>
                         <Grid item xs={2} spacing={1}>
-                            <Controller
+                            <STTextField
                                 name="name"
+                                label={Translations.DIAGNOSIS_MASTER.NAME}
                                 control={control}
-                                render={({ field }) =>
-                                    <TextField
-                                        {...field}
-                                        fullWidth
-                                        type="text"
-                                        size="small"
-                                        variant="outlined"
-                                        label={Translations.DIAGNOSIS_MASTER.NAME}
-                                        error={errors.name?.message}
-                                        helperText={errors.name?.message}
-                                    />}
+                                placeholder={Translations.DIAGNOSIS_MASTER.NAME}
                             />
 
                         </Grid>
                         <Grid item xs={3} spacing={1}>
-                            <FormControl style={{ display: 'row', flexDirection: 'row' }}>
-                                <FormLabel id="demo-row-radio-buttons-group-label" style={{ paddingRight: '8px', paddingTop: '8px' }}>{Translations.DIAGNOSIS_MASTER.STATUS}</FormLabel>
-                                <Controller
-                                    name="status"
-                                    control={control}
-                                    render={({ field }) =>
-                                        <RadioGroup
-                                            {...field}
-                                            row
-                                            aria-labelledby="demo-row-radio-buttons-group-label"
-                                            name="row-radio-buttons-group"
+                            <SPRadioButton
+                                name="status"
+                                label="Status"
+                                control={control}
+                                options={activeRadioButtonOptions}
+                                error={errors.status}
+                            />
 
-                                        //   value={dignosisformData.status}
-                                        >
-                                            <FormControlLabel value="1" control={<Radio />} label="Active" />
-                                            <FormControlLabel value="2" control={<Radio />} label="Inactive" />
-                                        </RadioGroup>}
-                                />
-
-                            </FormControl>
                         </Grid>
                         <Grid item xs={2} spacing={1}>
                             <FormButtonComponent button1={"Save"} button2={"Close"} clearFormEvent={() => {
@@ -254,7 +201,6 @@ export default function DiagnosisMaster(props) {
             </CommonCard>
             <CommonCard title="Diagnosis List">
                 <CustomDataGrid tableHeaders={diagnosisListHeaders} tableData={tableData} totalcount={totalcount} rowsPerPage={20} paginationChangeEvent={(number) => {
-                    
                 }} triggerEvent={(row, action) => {
                     //openEditmode(row, action);
                 }}></CustomDataGrid>
