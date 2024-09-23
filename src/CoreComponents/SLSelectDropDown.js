@@ -3,7 +3,7 @@ import React from 'react';
 import { Controller } from 'react-hook-form';
 import { FormControl, InputLabel, Select, MenuItem, FormHelperText } from '@mui/material';
 
-const SPSelectDropDown = ({
+const SLSelectDropDown = ({
     name,
     control,
     label,
@@ -27,7 +27,7 @@ const SPSelectDropDown = ({
                             size="small"
                             onChange={onChange}
                             renderValue={(o) => {
-                                return value[mapvalues.value] || '';
+                                return (value && value[mapvalues.value]) || '';
                             }}
                             label={label}
                             {...props}>
@@ -45,4 +45,4 @@ const SPSelectDropDown = ({
     );
 };
 
-export default SPSelectDropDown;
+export default SLSelectDropDown;

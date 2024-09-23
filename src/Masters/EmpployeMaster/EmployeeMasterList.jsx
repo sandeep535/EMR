@@ -1,90 +1,49 @@
 import React, { useEffect, useState, useContext } from 'react';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
 import { sendRequest } from '../../pages/global/DataManager';
 import APIS from '../../Utils/APIS';
+import Translations from '../../resources/translations';
+import CustomDataGrid from '../../common/DataGrid/CustomDataGrid';
+import CommonCard from '../../common/CommonCard';
 
-const columns =[{
-     id: 'name', label: 'Name'
-},{
-    id: 'gnder', label: 'Gender'
-},{
-    id: 'Role', label: 'Role'
+
+const empListHeaders = [{
+    name: Translations.employeeRegistration.name,
+    datakey: 'firstname',
+    width: '20%'
+}, {
+    name: Translations.employeeRegistration.gender,
+    datakey: 'gender.lookupvalue',
+    width: '10%'
+}, {
+    name: Translations.employeeRegistration.role,
+    datakey: 'role.masterdatavalue',
+    width: '10%'
 }]
 export default function EmployeeMasterList() {
     const [employeeList, setEmployeeList] = React.useState([]);
-    const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  
-    const handleChangePage = (newPage) => {
-      setPage(newPage);
-    };
-  
-    const handleChangeRowsPerPage = (event) => {
-      setRowsPerPage(+event.target.value);
-      setPage(0);
-    };
 
     useEffect(() => {
-        getEmpData();
+        getEmpData(0);
     }, []);
 
-    async function getEmpData(){
+    async function getEmpData(pagenumber) {
         var payLoad = {
             method: APIS.GET_EMP_ALL_DATA.METHOD,
             url: APIS.GET_EMP_ALL_DATA.URL,
-            paramas: [0,20]
+            paramas: [pagenumber, 5]
         }
         let result = await sendRequest(payLoad);
         if (result && result.size != 0) {
-           setEmployeeList(result);
+            setEmployeeList(result);
         }
     }
     return (
-        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-            <TableContainer sx={{ maxHeight: 440 }}>
-                <Table stickyHeader aria-label="sticky table">
-                    <TableHead>
-                        <TableRow>
-                            {columns.map((column) => (
-                                <TableCell
-                                    key={column.id}
-                                >
-                                    {column.label}
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                    {employeeList && employeeList.map((emp, index) => (
-                      <TableRow key={emp.id}>
-                        <TableCell>{(emp) ? emp.firstname +" "+ emp.lastname :''}</TableCell>
-                        <TableCell>{(emp.gender) ? emp.gender.lookupvalue :''}</TableCell>
-                        <TableCell>{(emp.role) ? emp.role.masterdatavalue :''}</TableCell>
-                      </TableRow>
-                    ))}
-                    <TableRow key={"12111"}>
-                      <TableCell>{
-                      }</TableCell>
-                    </TableRow>
-                  </TableBody>
-                </Table>
-            </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
-                component="div"
-                count={employeeList.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-            />
-        </Paper>
+        <CommonCard title={Translations.employeeRegistration.empList}>
+            <CustomDataGrid tableHeaders={empListHeaders} tableData={employeeList} totalcount={'100'} rowsPerPage={10} paginationChangeEvent={(number) => {
+                getEmpData(number)
+            }} triggerEvent={(row, action) => {
+                //openEditmode(row, action);
+            }}></CustomDataGrid>
+        </CommonCard>
     );
 }

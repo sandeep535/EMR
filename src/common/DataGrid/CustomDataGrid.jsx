@@ -51,9 +51,9 @@ const styles ={
             } else {
                 var result = obj;
                 for (var i = 0; i < spliKey.length; i++) {
-                    result = result[spliKey[i]]
+                    result = (result)?result[spliKey[i]]:""
                 }
-                if (header.mappingData) {
+                if (header.mappingData && result) {
                     return header.mappingData[result];
                 } else {
                     return result;

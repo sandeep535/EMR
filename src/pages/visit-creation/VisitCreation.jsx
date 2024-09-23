@@ -19,16 +19,16 @@ import TableRow from '@mui/material/TableRow';
 import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
 import EMRAlert from '../../Utils/CustomAlert';
 import Divider from '@mui/material/Divider';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import dayjs from 'dayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import moment from 'moment';
-import CardComponent from '../../components/Common/CardComponent';
 import Typography from '@mui/material/Typography';
 import CommonCard from '../../common/CommonCard';
-
+import { useForm } from "react-hook-form";
+import AutocompleteField from '../../CoreComponents/AutocompleteField';
+import SLDatePicker from '../../CoreComponents/SLDatePicker';
+import SLTextField from '../../CoreComponents/SLTextField';
+import { VisitCreationSchema } from '../../common/YupSchema/formSchema';
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const visitServiceTableHeaders = [{
   name: 'Service Name',
@@ -47,49 +47,29 @@ const visitServiceTableHeaders = [{
   width: '15%'
 }]
 export default function VisitCreation(props) {
-  const [doctor, setDoctor] = React.useState((props?.visitEditData?.doctor) ? props?.visitEditData?.doctor : null);
-  const [contact, setContact] = React.useState();
-  const [specility, setSpecility] = React.useState((props?.visitEditData?.specilaity) ? props?.visitEditData?.specilaity : null);
-  const [visitType, setVisitType] = React.useState((props?.visitEditData?.visittype) ? props.visitEditData.visittype : null);
-
-  const [doctorInputValueChange, setDoctorInputValueChange] = React.useState('');
-  const [serviceinputValue, setServiceInputValue] = React.useState('');
-
   const [doctoroptions, setDoctoroptions] = React.useState([]);
   const [serviceoptions, setServiceOptions] = React.useState([]);
   const [visiiTypeOptions, setVisiiTypeOptions] = React.useState([]);
   const [paymentTypeOptions, setPaymentTypeOptions] = React.useState([]);
   const [specialityListOptions, setSpecialityListOptions] = React.useState([]);
-
   const [visitServiceList, setVisitServiceList] = React.useState([]);
   const [clientsearchlist, setClientsearchlist] = React.useState([]);
-debugger
-  const [paymenttype,setPaymenttype] =React.useState(props?.visitEditData?.paymenttype? props.visitEditData.paymenttype :"");
-
-  const [visitreason, setVisitReason] = React.useState((props?.visitEditData?.reason) ? props?.visitEditData?.reason : "");
-  const [serviceValues, setServiceValues] = React.useState();
-
-  const [visitdate, setVisitdate] = React.useState((props?.visitEditData?.visitdate) ? dayjs(moment(new Date(props?.visitEditData.visitdate)).format("YYYY-MM-DD")) : dayjs(moment(new Date()).format("YYYY-MM-DD")));
-  const [token, setToken] = React.useState((props?.visitEditData?.token) ? props?.visitEditData?.token : null);
-
   const [selectedClientData, setSelectedClientData] = React.useState([]);
-
   const [visitdiscount, setVisitdiscount] = React.useState(0);
   const [visitpercentage, setVisitpercentage] = React.useState(0);
-
   const [totalAmount, setTotalAmount] = React.useState();
   const [visittotalamount, setVisittotalamount] = React.useState();
-  const registrationInformationRef = useRef();
-  const autoComplteSpRef = useRef();
-  const autoComplteServicesRef = useRef();
-  const autoCompltedocRef = useRef();
-  const autoComplteVisittypeRef = useRef();
   const searchAutoCompleteRef = useRef();
 
+  const { control, handleSubmit, reset, setValue, formState: { errors } } = useForm({
+    defaultValues: {},
+    resolver: yupResolver(VisitCreationSchema),
+  })
 
   useEffect(() => {
     getLookUpDetails();
     getPaymentTypeList();
+
   }, []);
 
   useEffect(() => {
@@ -97,35 +77,14 @@ debugger
   }, [visitServiceList]);
 
   function clearVisitForm() {
-    registrationInformationRef.current.clearForm();
-    setSpecility("");
-    setVisitType("");
-    setDoctor("");
-    setVisitdate(dayjs(moment(new Date()).format("YYYY-MM-DD")));
-    setToken("");
-    setSelectedClientData([]);
-    setVisitdiscount(0);
-    setTotalAmount(0);
-    setVisittotalamount(0);
-    setVisitReason("");
-    setVisitServiceList([]);
-    setDoctorInputValueChange("")
-    setServiceInputValue('');
-    const ele = autoComplteSpRef.current.getElementsByClassName('MuiAutocomplete-clearIndicator')[0];
-    if (ele) ele.click();
-    const ele1 = autoComplteServicesRef.current.getElementsByClassName('MuiAutocomplete-clearIndicator')[0];
-    if (ele1) ele1.click();
-    const ele2 = autoCompltedocRef.current.getElementsByClassName('MuiAutocomplete-clearIndicator')[0];
-    if (ele2) ele2.click();
-    const ele3 = autoComplteVisittypeRef.current.getElementsByClassName('MuiAutocomplete-clearIndicator')[0];
-    if (ele3) ele3.click();
-
+    reset({})
   }
 
   function setVisitDataInEditMode() {
     setSelectedClientData(props?.visitEditData?.clientid);
-    registrationInformationRef.current.setFormData1(props?.visitEditData?.clientid);
+    setDataToRegistrationForm(props?.visitEditData?.clientid);
     setVisitServiceList(props?.visitEditData?.services);
+    setVisitDetailsInEditmode(props?.visitEditData);
   }
 
   async function getDataBasedOnMobileNumber(mobileNumber) {
@@ -141,7 +100,6 @@ debugger
   }
 
   async function getDoctorsData(value) {
-
     if (!value)
       return false;
     var payLoad = {
@@ -156,16 +114,15 @@ debugger
   }
   async function getPaymentTypeList() {
     var payLoad = {
-        method: APIS.GET_MASTER_DATA_BASED_ON_CODE.METHOD,
-        url: APIS.GET_MASTER_DATA_BASED_ON_CODE.URL,
-        paramas: ["PAYMENT_MODE"]
+      method: APIS.GET_MASTER_DATA_BASED_ON_CODE.METHOD,
+      url: APIS.GET_MASTER_DATA_BASED_ON_CODE.URL,
+      paramas: ["PAYMENT_MODE"]
     }
     let result = await sendRequest(payLoad);
     if (result) {
-      debugger
-        setPaymentTypeOptions(result);
+      setPaymentTypeOptions(result);
     }
-}
+  }
   async function getLookUpDetails() {
     var payLoad = {
       method: APIS.LOOKUP.METHOD,
@@ -179,13 +136,9 @@ debugger
     if (result && result.VISIT_TYPES) {
       setVisiiTypeOptions(result.VISIT_TYPES);
     }
-
     if (props?.isEdit == 'true') {
       setVisitDataInEditMode();
     }
-
-
-
   }
 
   async function getServiceMaterList(value) {
@@ -234,8 +187,6 @@ debugger
     copyVisitServiceData = calPercentage(data, index, key);
     setVisitServiceList(copyVisitServiceData);
     updateTotalAmount();
-
-
   }
   function updateTotalAmount() {
     let copyVisitServiceData = [...visitServiceList];
@@ -260,8 +211,29 @@ debugger
   }
 
   function populateClientDatatoForm(clientData) {
-    registrationInformationRef.current.setFormData1(clientData);
+    setDataToRegistrationForm(clientData);
     setSelectedClientData(clientData);
+  }
+  function setDataToRegistrationForm(data) {
+    setValue("title", data.title);
+    setValue("firstname", data.firstname);
+    setValue("lastname", data.lastname);
+    setValue("gender", data.gender);
+    let dob1 = dayjs(moment(data.dob).format("YYYY-MM-DD"));
+    setValue("dob", dob1);
+    setValue("age", data.age);
+    setValue("contact", data.contact);
+    setValue("email", data.email);
+  }
+  function setVisitDetailsInEditmode(data) {
+    setValue("specility", data.specilaity);
+    setValue("doctor", data.doctor);
+    setValue("visitType", data.visittype);
+    let visitdate1 = dayjs(moment(data.visitdate).format("YYYY-MM-DD"));
+    setValue("visitdate", visitdate1);
+    setValue("token", data.token);
+    setValue("visitreason", data.reason);
+    setValue("paymenttype", data.paymenttype);
   }
   function calDiscountBasedonPercentage(data, index) {
     let copyVisitServiceData = [...visitServiceList];
@@ -285,20 +257,10 @@ debugger
     var percentage = (Number(value) / (copyVisistamount)) * 100;
     setVisitpercentage(percentage.toFixed(2));
   }
-  async function handleSubmit(event) {
-    event.preventDefault();
-    if (!specility) {
-      EMRAlert.alertifyError("Please select specility");
-      return false;
-    }
-    if (!doctor) {
-      EMRAlert.alertifyError("Please select doctor");
-      return false;
-    }
-    if (!visitType) {
-      EMRAlert.alertifyError("Please select visit type");
-      return false;
-    }
+  const visitCreationhandleSubmit = async (data) => {
+    handleSubmit1(data);
+  }
+  async function handleSubmit1(data) {
     if (visitServiceList.length == 0) {
       EMRAlert.alertifyError("Please select atlease one service");
       return false;
@@ -307,25 +269,33 @@ debugger
     if (selectedClientData && selectedClientData.seqid) {
       clientDeatils = selectedClientData;
     } else {
-      clientDeatils = registrationInformationRef.current.getFormData();
+      clientDeatils = {
+        title: data.title,
+        firstname: data.firstname,
+        lastname: data.lastname,
+        gender: data.gender,
+        dob: new Date(data.dob),
+        age: data.age,
+        contact: data.contact,
+        email: data.email
+      };
     }
     let sendingObj = {
-      visitdate: new Date(visitdate),
-      doctor: doctor,
-      visittype: visitType,
-      specilaity: specility,
+      visitdate: new Date(data.visitdate),
+      doctor: data.doctor,
+      visittype: data.visitType,
+      specilaity: data.specility,
       visitdiscount: visitdiscount,
       visittotalamount: visittotalamount,
       visitpercentage: visitpercentage,
-      reason: visitreason,
+      reason: data.visitreason,
       status: 1,
       clientid: clientDeatils,
       services: visitServiceList,
-      token: token,
-      paymenttype:paymenttype,
+      token: data.token,
+      paymenttype: data.paymenttype,
       visitid: (props?.isEdit == "true") ? props?.visitEditData?.visitid : null
     }
-
     var payLoad = {
       method: APIS.SAVE_VISIT.METHOD,
       url: APIS.SAVE_VISIT.URL,
@@ -342,24 +312,20 @@ debugger
   };
   return (
     <>
-
       <Box m="10px">
         <Box m="10px">
           <Grid xs={6} container>
             <Autocomplete
               size="small"
               ref={searchAutoCompleteRef}
-              value={contact}
               onChange={(event, newValue) => {
                 if (newValue) {
-                  setContact(newValue.contact);
+                  setValue("contact", newValue.contact);
                   populateClientDatatoForm(newValue);
                 }
-
               }}
               key={option => option.seqid}
               getOptionLabel={option => option.contact}
-              inputValue={contact}
               renderOption={(props, option) => {
                 const { key, ...optionProps } = props;
                 return (
@@ -389,173 +355,114 @@ debugger
                 if (newInputValue.length > 4) {
                   getDataBasedOnMobileNumber(newInputValue)
                 }
-                setContact(newInputValue);
-                registrationInformationRef.current.setFormData1(
-                  {
-                    contact : newInputValue,
-                    age:0
-                  }
-                );
+                setValue("contact", newInputValue);
               }}
               id="service-controllable-states-demo11"
               options={clientsearchlist}
               autoHighlight
               sx={{ width: 300 }}
-              renderInput={(params) => <TextField {...params} label="Search client" />}
+              renderInput={(params) => <TextField {...params} label={Translations.visitCreation.searchCleint} />}
             />
           </Grid>
         </Box>
-        <form onSubmit={handleSubmit}>
-          <CommonCard title="Client Details">
-            <RegistrationInformation data={selectedClientData} ref={registrationInformationRef} />
+        <form onSubmit={handleSubmit(visitCreationhandleSubmit)} >
+          <CommonCard title={Translations.visitCreation.clientDetails}>
+            <RegistrationInformation control={control} errors={errors} setValue={setValue} />
           </CommonCard>
-          <CommonCard title="Visit Details">
+          <CommonCard title={Translations.visitCreation.visitDetails}>
             <Box display="grid" gap="10px" >
-
               <Grid xs={12} container spacing={1}>
                 <Grid item xs={2} spacing={1}>
                   <FormControl variant="outlined" fullWidth>
-                    <Autocomplete
-                      size="small"
-                      disablePortal
-                      id="combo-box-demo"
+                    <AutocompleteField
+                      name="specility"
+                      label={Translations.visitCreation.speciality}
+                      control={control}
                       options={specialityListOptions}
-                      key={option => option.lookupid}
-                      getOptionLabel={option => option.lookupvalue}
-                      value={specility}
-                      ref={autoComplteSpRef}
-                      onChange={(event, newValue) => {
-                        setSpecility(newValue);
+                      placeholder={Translations.visitCreation.speciality}
+                      mapvalues={{ id: "lookupid", value: 'lookupvalue' }}
+                      isMultiSelect={false}
+                      id={"specility-combo-box-demo"}
+                      onInputChange={(data) => {
+
                       }}
-                      renderOption={(props, option) => {
-                        return (
-                          <li {...props} key={option.lookupid}>
-                            {option.lookupvalue}
-                          </li>
-                        );
-                      }}
-                      renderInput={(params) => <TextField {...params} label={Translations.visitCreation.speciality} />}
                     />
+
                   </FormControl>
                 </Grid>
                 <Grid item xs={2} spacing={1}>
                   <FormControl variant="outlined" size="small" fullWidth>
-                    <Autocomplete
-                      size="small"
-                      value={doctor}
-                      onChange={(event, newValue) => {
-                        setDoctor(newValue);
-                      }}
-                      key={option => option.id}
-                      getOptionLabel={option => option.firstname}
-                      inputValue={doctorInputValueChange}
-                      ref={autoCompltedocRef}
-                      onInputChange={(event, newInputValue) => {
-                        if (newInputValue.length != 1) {
-                          getDoctorsData(newInputValue)
-                        }
-                        setDoctorInputValueChange(newInputValue);
-
-                      }}
-                      id="controllable-states-demo"
+                    <AutocompleteField
+                      name="doctor"
+                      label={Translations.visitCreation.DocName}
+                      control={control}
                       options={doctoroptions}
-                      renderInput={(params) => <TextField {...params} label="Docor Name" />}
+                      placeholder={Translations.visitCreation.DocName}
+                      mapvalues={{ id: "id", value: 'firstname' }}
+                      isMultiSelect={false}
+                      id={"doctor-combo-box-demo"}
+                      onInputChange={(data) => {
+                        getDoctorsData(data)
+                      }}
                     />
+
                   </FormControl>
                 </Grid>
 
                 <Grid item xs={2} spacing={1} >
                   <FormControl variant="outlined" size="small" fullWidth>
-                    <Autocomplete
-                      size="small"
-                      disablePortal
-                      id="visitTypeList"
+                    <AutocompleteField
+                      name="visitType"
+                      label={Translations.visitCreation.visitType}
+                      control={control}
                       options={visiiTypeOptions}
-                      ref={autoComplteVisittypeRef}
-                      key={option => option.lookupid}
-                      getOptionLabel={option => option.lookupvalue}
-                      value={visitType}
-                      onChange={(event, newValue) => {
-                        setVisitType(newValue);
-                      }}
-                      renderOption={(props, option) => {
-                        return (
-                          <li {...props} key={option.lookupid}>
-                            {option.lookupvalue}
-                          </li>
-                        );
-                      }}
-                      renderInput={(params) => <TextField {...params} label={Translations.visitCreation.visitType} />}
+                      placeholder={Translations.visitCreation.visitType}
+                      mapvalues={{ id: "lookupid", value: 'lookupvalue' }}
+                      isMultiSelect={false}
+                      id={"visitType-combo-box-demo"}
                     />
+
                   </FormControl>
                 </Grid>
 
-
                 <Grid item xs={2} spacing={1}>
-                  <FormControl variant="outlined" size="small" fullWidth>
-                    <LocalizationProvider dateAdapter={AdapterDayjs} >
-                      <DemoContainer components={['DateField', 'DateField']}>
-                        <DatePicker
-                          label="Visit Date"
-                          value={visitdate}
-                          onChange={newValue => setVisitdate(new Date(newValue))}
-                          slotProps={{ textField: { size: 'small' } }}
-                          format="DD-MM-YYYY"
-                          fullWidth
-                        />
-                      </DemoContainer>
-                    </LocalizationProvider>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={2} spacing={1}>
-                  <TextField
-                    fullWidth
-                    type="text"
-                    size="small"
-                    variant="outlined"
-                    label={Translations.visitCreation.token}
-                    name="token"
-                    onChange={e => setToken(e.target.value)}
-                    value={token}
-                    disabled
+                  <SLDatePicker
+                    name="visitdate"
+                    label={Translations.visitCreation.visitDate}
+                    control={control}
+                    error={errors.visitdate}
                   />
+
+                </Grid>
+                <Grid item xs={2} spacing={1}>
+                  <SLTextField
+                    name="token"
+                    label={Translations.visitCreation.token}
+                    control={control}
+                    placeholder={Translations.visitCreation.token}
+                  />
+
                 </Grid>
 
                 <Grid item xs={6} spacing={1}  >
-                  <TextField
-                    fullWidth
-                    variant="outlined"
-                    className='input_background'
-                    type="text"
-                    size="small"
-                    multiline
-                    rows={2}
+                  <SLTextField
+                    name="visitreason"
                     label={Translations.visitCreation.visitReason}
-                    name="Reason For Visit"
-                    onChange={e => setVisitReason(e.target.value)}
-                    value={visitreason} />
+                    control={control}
+                    placeholder={Translations.visitCreation.visitReason}
+                  />
                 </Grid>
                 <Grid item xs={2} spacing={1} >
                   <FormControl variant="outlined" size="small" fullWidth>
-                    <Autocomplete
-                      size="small"
-                      disablePortal
-                      id="visitTypeList"
+                    <AutocompleteField
+                      name="paymenttype"
+                      label={Translations.visitCreation.paymenttype}
+                      control={control}
                       options={paymentTypeOptions}
-                      key={option => option.id || ""}
-                      getOptionLabel={option => option.masterdatavalue || ""}
-                      value={paymenttype}
-                      onChange={(event, newValue) => {
-                        setPaymenttype(newValue);
-                      }}
-                      renderOption={(props, option) => {
-                        return (
-                          <li {...props} key={option.id}>
-                            {option.masterdatavalue}
-                          </li>
-                        );
-                      }}
-                      renderInput={(params) => <TextField {...params} label={Translations.visitCreation.paymenttype} />}
+                      placeholder={Translations.visitCreation.paymenttype}
+                      mapvalues={{ id: "id", value: 'masterdatavalue' }}
+                      isMultiSelect={false}
+                      id={"paymenttype-combo-box-demo"}
                     />
                   </FormControl>
                 </Grid>
@@ -563,31 +470,23 @@ debugger
               <Grid xs={12} container spacing={1}>
                 <Grid item xs={3} spacing={1}>
                   <FormControl variant="outlined" fullWidth>
-                    <Autocomplete
-                      size="small"
-                      value={serviceValues}
-                      onChange={(event, newValue) => {
-                        if (newValue) {
-                          setServiceValues(newValue);
-                          addServicetoList(newValue);
-                        }
-
-                      }}
-                      key={option => option.serviceid}
-                      getOptionLabel={option => option.servicename}
-                      inputValue={serviceinputValue}
-                      ref={autoComplteServicesRef}
-                      onInputChange={(event, newInputValue) => {
-                        if (newInputValue.length > 3) {
-                          getServiceMaterList(newInputValue)
-                        }
-                        setServiceInputValue(newInputValue);
-
-                      }}
-                      id="service-controllable-states-demo"
+                    <AutocompleteField
+                      name="serviceValues"
+                      label={Translations.visitCreation.addServices}
+                      control={control}
                       options={serviceoptions}
-                      sx={{ width: 300 }}
-                      renderInput={(params) => <TextField {...params} label="Add Services" />}
+                      placeholder={Translations.visitCreation.addServices}
+                      mapvalues={{ id: "serviceid", value: 'servicename' }}
+                      isMultiSelect={false}
+                      id={"service-controllable-states-demo"}
+                      onchangeEventCallBack={(newValue) => {
+                        addServicetoList(newValue);
+                      }}
+                      onInputChange={(data) => {
+                        if (data.length > 3) {
+                          getServiceMaterList(data)
+                        }
+                      }}
                     />
                   </FormControl>
                 </Grid>
@@ -736,7 +635,6 @@ debugger
 
             </Box>
           </CommonCard>
-
           <FormButtonComponent button1={"Save"} button2={"Clear"} clearFormEvent={() => {
             clearVisitForm();
           }} />

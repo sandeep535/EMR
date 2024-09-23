@@ -7,9 +7,6 @@ import Button from '@mui/material/Button';
 import APIS from '../../Utils/APIS';
 import AppContext from '../../components/Context/AppContext';
 import Translations from '../../resources/translations';
-import FormControl from '@mui/material/FormControl';
-import Autocomplete from '@mui/material/Autocomplete';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Table from '@mui/material/Table';
@@ -23,20 +20,15 @@ import styles from './PrescriptionStyles';
 import CommonCard from '../../common/CommonCard';
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
 import EMRAlert from '../../Utils/CustomAlert';
 import dayjs from 'dayjs';
 import moment from 'moment';
+import { PrescriptionSchema } from '../../common/YupSchema/formSchema';
+import AutocompleteField from '../../CoreComponents/AutocompleteField';
+import SLTextField from '../../CoreComponents/SLTextField';
+import SLDatePicker from '../../CoreComponents/SLDatePicker';
 
-const schema = yup
-    .object({
-        selectedDrugValues: yup.object().required("Select Drug"),
-        dose: yup.string().required("Select Dose"),
-        doseunit: yup.string().required("Select Unit"),
-        sig: yup.string().required("Select SIG"),
-    })
-    .required()
+
 const prescriptionHeadersList = [{
     name: 'Drug Name',
     width: '30%'
@@ -58,21 +50,20 @@ const prescriptionHeadersList = [{
 }]
 const Prescriptions = forwardRef((props, ref) => {
     const [drugListOptions, setDrugListOptions] = React.useState([]);
-    const [drugListinputValue, setDrugListinputValue] = React.useState('');
     const [prescriptionList, setPrescriptionList] = React.useState([]);
     const appContextValue = useContext(AppContext);
 
-    const { control, handleSubmit, reset, setValue,formState: { errors } } = useForm({
+    const { control, handleSubmit, reset, setValue, formState: { errors } } = useForm({
         defaultValues: {
-            startdate:dayjs(moment(new Date()).format("YYYY-MM-DD")),
-            todate:dayjs(moment(new Date()).format("YYYY-MM-DD")),
-            dose:' ',
-            doseunit:' ',
-            instructions:' ',
-            sig:' '
+            startdate: dayjs(moment(new Date()).format("YYYY-MM-DD")),
+            todate: dayjs(moment(new Date()).format("YYYY-MM-DD")),
+            dose: ' ',
+            doseunit: ' ',
+            instructions: ' ',
+            sig: ' '
         },
         mode: 'onChange',
-        resolver: yupResolver(schema),
+        resolver: yupResolver(PrescriptionSchema),
     })
     useEffect(() => {
         // getDrugMasterData();
@@ -96,11 +87,6 @@ const Prescriptions = forwardRef((props, ref) => {
         },
         [prescriptionList],
     );
-
-    // const prescriptionHandle = async (data) => {
-
-
-    // }
     function clearPrescriptonFormData() {
         reset();
     }
@@ -164,136 +150,68 @@ const Prescriptions = forwardRef((props, ref) => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <Grid container spacing={1}>
                             <Grid item xs={3} spacing={1} >
-                                <FormControl variant="outlined" fullWidth>
-                                    <Controller
-                                        name="selectedDrugValues"
-                                        control={control}
-                                        render={({ field: { onChange } }) =>
-                                            <Autocomplete
-                                                size="small"
-                                                onChange={(event, item) => {
-                                                    onChange(item);
-                                                    setValue("instructions",item.defaultInstruction);
-                                                    setValue("sig",item.sig)
-                                                    setValue("doseunit", item.drugunit.masterdatavalue, { shouldTouch: true, shouldDirty: true });
-                                                    setValue("dose", item.drugform.masterdatavalue, { shouldTouch: true, shouldDirty: true });
-                                                }}
-                                                key={option => option.drugcode}
-                                                getOptionLabel={option => option.drugname}
-                                                inputValue={drugListinputValue}
-                                                onInputChange={(event, newInputValue) => {
-                                                    if (newInputValue.length > 2) {
-                                                        getDrugMasterData(newInputValue)
-                                                    }
-                                                    setDrugListinputValue(newInputValue);
-
-                                                }}
-                                                id="drug-controllable-states-demo"
-                                                options={drugListOptions}
-                                                renderInput={(params) => <TextField {...params} error={errors.selectedDrugValues?.message}
-                                                    helperText={errors.selectedDrugValues?.message} label="Search Drug" />}
-                                            />
+                                <AutocompleteField
+                                    name="selectedDrugValues"
+                                    label={Translations.Prescriptions.searchDrug}
+                                    control={control}
+                                    options={drugListOptions}
+                                    placeholder={Translations.Prescriptions.searchDrug}
+                                    mapvalues={{ id: "drugcode", value: 'drugname' }}
+                                    isMultiSelect={false}
+                                    id={"drug-controllable-states-demo"}
+                                    onchangeEventCallBack={(data) => {
+                                        setValue("instructions", data.defaultInstruction);
+                                        setValue("sig", data.sig)
+                                        setValue("doseunit", data.drugunit.masterdatavalue, { shouldTouch: true, shouldDirty: true });
+                                        setValue("dose", data.drugform.masterdatavalue, { shouldTouch: true, shouldDirty: true });
+                                    }}
+                                    onInputChange={(data) => {
+                                        if (data.length > 2) {
+                                            getDrugMasterData(data)
                                         }
-                                    />
-
-                                </FormControl>
-
-                            </Grid>
-                            <Grid item xs={1} spacing={1} >
-                                <Controller
-                                    name="dose"
-                                    control={control}
-                                    render={({ field }) =>
-                                        <TextField
-                                            {...field}
-                                            fullWidth
-                                            type="text"
-                                            size="small"
-                                            variant="outlined"
-                                            label={Translations.Prescriptions.dose}
-                                            error={errors.dose?.message}
-                                            helperText={errors.dose?.message}
-                                        />
-                                    }
+                                    }}
                                 />
-
                             </Grid>
                             <Grid item xs={1} spacing={1} >
-                                <Controller
-                                    name="doseunit"
+                                <SLTextField
+                                    name="dose"
+                                    label={Translations.Prescriptions.dose}
                                     control={control}
-                                    render={({ field }) =>
-                                        <TextField
-                                            {...field}
-                                            fullWidth
-                                            type="text"
-                                            size="small"
-                                            variant="outlined"
-                                            label={Translations.Prescriptions.doseunit}
-                                            error={errors.doseunit?.message}
-                                            helperText={errors.doseunit?.message}
-                                        />
-                                    }
+                                    placeholder={Translations.Prescriptions.dose}
+                                />
+                            </Grid>
+                            <Grid item xs={1} spacing={1} >
+                                <SLTextField
+                                    name="doseunit"
+                                    label={Translations.Prescriptions.doseunit}
+                                    control={control}
+                                    placeholder={Translations.Prescriptions.doseunit}
                                 />
                             </Grid>
                             <Grid item xs={3} spacing={1} >
-                                <Controller
+                                <SLTextField
                                     name="sig"
+                                    label={Translations.Prescriptions.sig}
                                     control={control}
-                                    render={({ field }) =>
-                                        <TextField
-                                            {...field}
-                                            fullWidth
-                                            type="text"
-                                            size="small"
-                                            variant="outlined"
-                                            label={Translations.Prescriptions.sig}
-                                            error={errors.sig?.message}
-                                            helperText={errors.sig?.message}
-                                        />
-                                    }
+                                    placeholder={Translations.Prescriptions.sig}
                                 />
                             </Grid>
                             <Grid item xs={2} spacing={1} >
-                                <Controller
+                                <SLDatePicker
                                     name="startdate"
+                                    label={Translations.Prescriptions.startDate}
                                     control={control}
-                                    render={({ field }) =>
-                                        <DatePicker
-                                            {...field}
-                                            label={<span sx={{ marginTop: '-8px' }}>Start Date</span>}
-                                            format="DD-MM-YYYY"
-                                            fullWidth
-                                            slotProps={{ textField: { size: 'small' } }}
-                                            InputLabelProps={{
-                                                style: { marginTop: '-8px' }
-                                            }}
-                                        />
-
-                                    }
+                                    error={errors.startdate}
                                 />
+
                             </Grid>
                             <Grid item xs={2} spacing={1} >
-                                <Controller
+                                <SLDatePicker
                                     name="todate"
+                                    label={Translations.Prescriptions.endDate}
                                     control={control}
-                                    render={({ field }) =>
-                                        <DatePicker
-                                            {...field}
-                                            label="To Date"
-
-                                            format="DD-MM-YYYY"
-                                            fullWidth
-                                            size="small"
-                                            slotProps={{ textField: { size: 'small' } }}
-                                            InputLabelProps={{
-                                                style: { marginTop: '-8px' }
-                                            }}
-                                        />
-
-                                    }
+                                    error={errors.todate}
                                 />
-
                             </Grid>
                             <Grid item xs={10} spacing={1} >
                                 <Controller

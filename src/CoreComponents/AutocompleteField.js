@@ -13,7 +13,8 @@ const AutocompleteField = ({
   mapvalues,
   id,
   isMultiSelect,
-  onInputChange
+  onInputChange,
+  onchangeEventCallBack
 }) => {
   return (
     <>
@@ -32,10 +33,17 @@ const AutocompleteField = ({
               getOptionLabel={option => option[mapvalues.value] || ""}
               value={value || null}
               onInputChange={(event, newInputValue) => {
-                onInputChange(newInputValue)
+                if(onInputChange){
+                  onInputChange(newInputValue)
+                }
+                
               }}
               onChange={(event, item) => {
                 onChange(item);
+                if(onchangeEventCallBack){
+                  onchangeEventCallBack(item);
+                }
+               
               }}
               slotProps={{
                 popper: {

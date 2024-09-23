@@ -1,28 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import APIS from '../../Utils/APIS';
 import { sendRequest } from '../../pages/global/DataManager';
 import Translations from '../../resources/translations';
 import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
-import Autocomplete from '@mui/material/Autocomplete';
 import FormControl from '@mui/material/FormControl';
 import EMRAlert from '../../Utils/CustomAlert';
 import CustomDataGrid from '../../common/DataGrid/CustomDataGrid';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
 import CommonCard from '../../common/CommonCard';
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import STTextField from '../../CoreComponents/STTextField';
+import SLTextField from '../../CoreComponents/SLTextField';
 import { DiagnosisMasterSchema } from '../../common/YupSchema/formSchema';
-import STAutocompleteField from '../../CoreComponents/AutocompleteField';
 import AutocompleteField from '../../CoreComponents/AutocompleteField';
-import SPRadioButton from '../../CoreComponents/SPRadioButton';
-
+import SLRadioButton from '../../CoreComponents/SLRadioButton';
 
 const diagnosisListHeaders = [{
     name: Translations.DIAGNOSIS_MASTER.CODE_SET,
@@ -160,7 +151,7 @@ export default function DiagnosisMaster(props) {
                             </FormControl>
                         </Grid>
                         <Grid item xs={2} spacing={1}>
-                            <STTextField
+                            <SLTextField
                                 name="code"
                                 label={Translations.DIAGNOSIS_MASTER.CODE}
                                 control={control}
@@ -168,7 +159,7 @@ export default function DiagnosisMaster(props) {
                             />
                         </Grid>
                         <Grid item xs={2} spacing={1}>
-                            <STTextField
+                            <SLTextField
                                 name="name"
                                 label={Translations.DIAGNOSIS_MASTER.NAME}
                                 control={control}
@@ -177,7 +168,7 @@ export default function DiagnosisMaster(props) {
 
                         </Grid>
                         <Grid item xs={3} spacing={1}>
-                            <SPRadioButton
+                            <SLRadioButton
                                 name="status"
                                 label="Status"
                                 control={control}

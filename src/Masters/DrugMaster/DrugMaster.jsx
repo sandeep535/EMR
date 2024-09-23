@@ -1,32 +1,30 @@
-import React, { useEffect, useState, useContext, useRef } from 'react';
-import TextField from '@mui/material/TextField';
-import Box from '@mui/material/Box';
+import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import APIS from '../../Utils/APIS';
 import { sendRequest } from '../../pages/global/DataManager';
 import Translations from '../../resources/translations';
 import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
-import Header from "../../components/Header";
 import EMRAlert from '../../Utils/CustomAlert';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
-import FormControl from '@mui/material/FormControl';
-import Autocomplete from '@mui/material/Autocomplete';
+import AutocompleteField from '../../CoreComponents/AutocompleteField';
+import CommonCard from '../../common/CommonCard';
+import { yupResolver } from "@hookform/resolvers/yup";
+import { DrugMasterSchema } from '../../common/YupSchema/formSchema';
+import { useForm } from "react-hook-form";
+import SLTextField from '../../CoreComponents/SLTextField';
+import SLRadioButton from '../../CoreComponents/SLRadioButton';
+import DrugMasterList from './DrugMasterList';
 
+const activeRadioButtonOptions = [
+    { label: 'Active', value: '1' },
+    { label: 'In-active', value: '2' }
+];
+const defaultobj = {
+    drugType: "",
+    drugname: "",
+    drugname: "",
+    status: "1"
+}
 export default function DrugMaster(props) {
-    const [drugname, setDrugname] = useState("");
-    const [drugcode, setDrugcode] = useState("");
-    const [drugType, setDrugType] = useState("");
-    const [drugAlert, setDrugAlert] = useState("");
-    const [drugForm, setDrugForm] = useState("");
-    const [drugDose, setDrugDosage] = useState("");
-    const [drugDoseUnit, setDrugDosageunit] = useState("");
-    const [status, setStatus] = useState("1");
-    const [defaultduration,setDefaultDuration] = useState("");
-    const [defaultInstruction,setDefaultInstruction] = useState("");
-    const [sig,setSig] = useState("");
 
     const [drugTypeListOptions, setDrugTypeListOptions] = useState([]);
     const [drugAlerListOptions, setDrugAlerListOptions] = useState([]);
@@ -36,44 +34,46 @@ export default function DrugMaster(props) {
 
     const [duplicatecheck, setDuplicatecheck] = useState(false);
 
+    const { control, handleSubmit, reset, formState: { errors } } = useForm({
+        defaultValues: defaultobj,
+        resolver: yupResolver(DrugMasterSchema),
+    })
+
     useEffect(() => {
         getDrugtypeMastersData();
         getDrugFormMastersData();
         getDrugAlertsMastersData();
         getDrugUnitMastersData();
     }, []);
-    
-    function handleSubmit(event) {
-        event.preventDefault();
+
+    const drugMasterhandleSubmit = async (data) => {
         if (duplicatecheck) {
             EMRAlert.alertifySuccess("Please check drug name or drug code");
             return false;
         }
-        saveData();
+        saveData(data);
     }
-    const handleChange = (event) => {
-        setStatus(event.target.value);
-    };
-    async function saveData() {
-        let data = {
+
+    async function saveData(data) {
+        let data1 = {
             drugid: "",
-            drugname: drugname,
-            status: 1,
-            drugcode: drugcode,
-            drugtype:drugType,
-            drugform:drugForm,
-            drugalert:drugAlert,
-            drugdose:drugDose,
-            drugunit:drugDoseUnit,
-            defaultduration:Number(defaultduration),
-            defaultInstruction:defaultInstruction,
-            sig:sig
+            drugname: data.drugname,
+            status: data.status,
+            drugcode: data.drugcode,
+            drugtype: data.drugType,
+            drugform: data.drugForm,
+            drugalert: data.drugAlert,
+            drugdose: data.drugDose,
+            drugunit: data.drugDoseUnit,
+            defaultduration: data.defaultduration ? Number(data.defaultduration) : '',
+            defaultInstruction: data.defaultInstruction,
+            sig: data.sig
         }
         var payLoad = {
             method: APIS.SAVE_DRUG_MASTER.METHOD,
             url: APIS.SAVE_DRUG_MASTER.URL,
             paramas: [],
-            data: data
+            data: data1
         }
         let result = await sendRequest(payLoad);
         if (result) {
@@ -82,7 +82,7 @@ export default function DrugMaster(props) {
             EMRAlert.alertifyError("Not Saved");
         }
     }
-    async function checkduplicateDrugName() {
+    async function checkduplicateDrugName(drugname) {
         if (!drugname) {
             return false;
         }
@@ -97,7 +97,7 @@ export default function DrugMaster(props) {
             setDuplicatecheck(true);
         }
     }
-    async function checkduplicateDrugCode() {
+    async function checkduplicateDrugCode(drugcode) {
         if (!drugcode) {
             return false;
         }
@@ -129,12 +129,12 @@ export default function DrugMaster(props) {
         var payLoad = {
             method: APIS.GET_MASTER_DATA_BASED_ON_CODE.METHOD,
             url: APIS.GET_MASTER_DATA_BASED_ON_CODE.URL,
-            paramas: ["DRUG_ALERTS","DRUG_DOSE_UNIT"]
+            paramas: ["DRUG_ALERTS", "DRUG_DOSE_UNIT"]
         }
         let result = await sendRequest(payLoad);
         if (result) {
             setDrugAlerListOptions(result);
-           
+
         }
     }
     async function getDrugUnitMastersData() {
@@ -146,7 +146,7 @@ export default function DrugMaster(props) {
         let result = await sendRequest(payLoad);
         if (result) {
             setDrugDoseUnitListOptions(result);
-           
+
         }
     }
 
@@ -159,223 +159,137 @@ export default function DrugMaster(props) {
         let result = await sendRequest(payLoad);
         if (result) {
             setDrugFormListOptions(result);
-           
+
         }
     }
-   
+
 
     return (
         <>
-            <Box m="20px">
-                <Header title={Translations.DRUG_MASTER.NAME} />
-                <form onSubmit={handleSubmit}>
-                    <Box display="grid" gap="20px">
-                        <Grid container spacing={2}>
-                            <Grid item xs={3} spacing={1} >
-                                <FormControl variant="outlined" size="small" fullWidth>
-                                    <Autocomplete
-                                        size="small"
-                                        disablePortal
-                                        id="drugmatserId"
-                                        options={drugTypeListOptions}
-                                        //ref={autoComplteVisittypeRef}
-                                        key={option => option.id}
-                                        getOptionLabel={option => option.masterdatavalue || ""}
-                                        value={drugType}
-                                        onChange={(event, newValue) => {
-                                            setDrugType(newValue);
-                                        }}
-                                        renderOption={(props, option) => {
-                                            return (
-                                                <li {...props} key={option.id}>
-                                                    {option.masterdatavalue}
-                                                </li>
-                                            );
-                                        }}
-                                        renderInput={(params) => <TextField {...params} label={Translations.DRUG_MASTER.DRUG_TYPE} />}
-                                    />
-                                </FormControl>
-                            </Grid>
-                            <Grid item xs={4} spacing={1}>
-                                <TextField
-                                    fullWidth
-                                    type="text"
-                                    size="small"
-                                    variant="outlined"
-                                    required
-                                    label={Translations.DRUG_MASTER.DRUG_NAME}
-                                    name="username"
-                                    onChange={e => setDrugname(e.target.value)}
-                                    value={drugname}
-                                    onBlur={() => {
-                                        checkduplicateDrugName();
-                                    }}
-                                />
-                            </Grid>
-                            <Grid item xs={4} spacing={1}>
-                                <TextField
-                                    fullWidth
-                                    type="text"
-                                    size="small"
-                                    variant="outlined"
-                                    required
-                                    label={Translations.DRUG_MASTER.DRUG_CODE}
-                                    name="username"
-                                    onChange={e => setDrugcode(e.target.value)}
-                                    value={drugcode}
-                                    onBlur={() => {
-                                        checkduplicateDrugCode();
-                                    }}
-                                />
-                            </Grid>
-                            <Grid item xs={3} spacing={1} >
-                                <FormControl variant="outlined" size="small" fullWidth>
-                                    <Autocomplete
-                                        size="small"
-                                        disablePortal
-                                        id="drugmatserAlertId"
-                                        options={drugAlerListOptions}
-                                        //ref={autoComplteVisittypeRef}
-                                        key={option => option.id}
-                                        getOptionLabel={option => option.masterdatavalue || ""}
-                                        value={drugAlert}
-                                        onChange={(event, newValue) => {
-                                            setDrugAlert(newValue);
-                                        }}
-                                        renderOption={(props, option) => {
-                                            return (
-                                                <li {...props} key={option.id}>
-                                                    {option.masterdatavalue}
-                                                </li>
-                                            );
-                                        }}
-                                        renderInput={(params) => <TextField {...params} label={Translations.DRUG_MASTER.DRUG_ALERT} />}
-                                    />
-                                </FormControl>
-                            </Grid>
-                            <Grid item xs={3} spacing={1} >
-                                <FormControl variant="outlined" size="small" fullWidth>
-                                    <Autocomplete
-                                        size="small"
-                                        disablePortal
-                                        id="drugmatserAlertId"
-                                        options={drugFormListOptions}
-                                        //ref={autoComplteVisittypeRef}
-                                        key={option => option.id}
-                                        getOptionLabel={option => option.masterdatavalue || ""}
-                                        value={drugForm}
-                                        onChange={(event, newValue) => {
-                                            setDrugForm(newValue);
-                                        }}
-                                        renderOption={(props, option) => {
-                                            return (
-                                                <li {...props} key={option.id}>
-                                                    {option.masterdatavalue}
-                                                </li>
-                                            );
-                                        }}
-                                        renderInput={(params) => <TextField {...params} label={Translations.DRUG_MASTER.DRUG_FORM} />}
-                                    />
-                                </FormControl>
-                            </Grid>
-                            <Grid item xs={2} spacing={1}>
-                                <TextField
-                                    fullWidth
-                                    type="text"
-                                    size="small"
-                                    variant="outlined"
-                                    required
-                                    label={Translations.DRUG_MASTER.SIG}
-                                    name="sig"
-                                    onChange={e => setSig(e.target.value)}
-                                    value={sig}
+            <CommonCard title={Translations.DRUG_MASTER.NAME}>
+                <form onSubmit={handleSubmit(drugMasterhandleSubmit)} >
+                    <Grid container spacing={2}>
+                        <Grid item xs={3} spacing={1}>
+                            <AutocompleteField
+                                name="drugType"
+                                label={Translations.DRUG_MASTER.DRUG_TYPE}
+                                control={control}
+                                options={drugTypeListOptions}
+                                placeholder={Translations.DRUG_MASTER.DRUG_TYPE}
+                                mapvalues={{ id: "id", value: 'masterdatavalue' }}
+                                isMultiSelect={false}
+                                id={"Drugmaster-combo-box-demo"}
+                                onInputChange={(data) => {
 
-                                />
-
-                            </Grid>
-                            <Grid item xs={2} spacing={1}>
-                                <TextField
-                                    fullWidth
-                                    type="text"
-                                    size="small"
-                                    variant="outlined"
-                                    required
-                                    label={Translations.DRUG_MASTER.DRUG_DOSAGE}
-                                    name="username"
-                                    onChange={e => setDrugDosage(e.target.value)}
-                                    value={drugDose}
-
-                                />
-
-                            </Grid>
-                            <Grid item xs={2} spacing={1}>
-                                <FormControl variant="outlined" size="small" fullWidth>
-                                    <Autocomplete
-                                        size="small"
-                                        disablePortal
-                                        id="drugmatserAlertId"
-                                        options={drugDoseUnitListOptions}
-                                        //ref={autoComplteVisittypeRef}
-                                        key={option => option.id}
-                                        getOptionLabel={option => option.masterdatavalue || ""}
-                                        value={drugDoseUnit}
-                                        onChange={(event, newValue) => {
-                                            setDrugDosageunit(newValue);
-                                        }}
-                                        renderOption={(props, option) => {
-                                            return (
-                                                <li {...props} key={option.id}>
-                                                    {option.masterdatavalue}
-                                                </li>
-                                            );
-                                        }}
-                                        renderInput={(params) => <TextField {...params} label={Translations.DRUG_MASTER.DRUG_UNIT} />}
-                                    />
-                                </FormControl>
-                            </Grid>
-                            <Grid item xs={2} spacing={1}>
-                                <TextField
-                                    fullWidth
-                                    type="text"
-                                    size="small"
-                                    variant="outlined"
-                                    label={Translations.LAB_MASTER.DURATION}
-                                    onChange={e => setDefaultDuration(e.target.value)}
-                                    value={defaultduration}
-                                />
-                            </Grid>
-                            <Grid item xs={4} spacing={1}>
-                                <TextField
-                                    fullWidth
-                                    type="text"
-                                    size="small"
-                                    variant="outlined"
-                                    multiline
-                                    rows={3}
-                                    label={"Instructions"}
-                                    onChange={e => setDefaultInstruction(e.target.value)}
-                                    value={defaultInstruction}
-                                />
-                            </Grid>
-                            <Grid item xs={2} spacing={1}>
-                                    <FormControl>
-                                        <FormLabel id="demo-row-radio-buttons-group-label">{Translations.DRUG_MASTER.STATUS}</FormLabel>
-                                        <RadioGroup
-                                            row
-                                            aria-labelledby="demo-row-radio-buttons-group-label"
-                                            name="row-radio-buttons-group"
-                                            value={status}
-                                        >
-                                            <FormControlLabel value="1" control={<Radio onChange={handleChange} />} label={Translations.DRUG_MASTER.ACTIVE} />
-                                            <FormControlLabel value="2" control={<Radio onChange={handleChange} />} label={Translations.DRUG_MASTER.IN_ACTIVE} />
-                                        </RadioGroup>
-                                    </FormControl>
-                                </Grid>
+                                }}
+                            />
                         </Grid>
-                        <FormButtonComponent button1={"Save"} button2={"Clear"} />
-                    </Box>
+                        <Grid item xs={4} spacing={1}>
+                            <SLTextField
+                                name="drugname"
+                                label={Translations.DRUG_MASTER.DRUG_NAME}
+                                control={control}
+                                placeholder={Translations.DRUG_MASTER.DRUG_NAME}
+                                blurEvent={(item) => {
+                                    checkduplicateDrugName(item)
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={4} spacing={1}>
+                            <SLTextField
+                                name="drugcode"
+                                label={Translations.DRUG_MASTER.DRUG_CODE}
+                                control={control}
+                                placeholder={Translations.DRUG_MASTER.DRUG_CODE}
+                                blurEvent={(item) => {
+                                    checkduplicateDrugCode(item)
+                                }}
+                            />
+                        </Grid>
+                        <Grid item xs={4} spacing={1}>
+                            <AutocompleteField
+                                name="drugAlert"
+                                label={Translations.DRUG_MASTER.DRUG_ALERT}
+                                control={control}
+                                options={drugAlerListOptions}
+                                placeholder={Translations.DRUG_MASTER.DRUG_ALERT}
+                                mapvalues={{ id: "id", value: 'masterdatavalue' }}
+                                isMultiSelect={false}
+                                id={"DrugmasterdrugAlert-combo-box-demo"}
+                            />
+                        </Grid>
+                        <Grid item xs={4} spacing={1}>
+                            <AutocompleteField
+                                name="drugForm"
+                                label={Translations.DRUG_MASTER.DRUG_FORM}
+                                control={control}
+                                options={drugFormListOptions}
+                                placeholder={Translations.DRUG_MASTER.DRUG_FORM}
+                                mapvalues={{ id: "id", value: 'masterdatavalue' }}
+                                isMultiSelect={false}
+                                id={"DrugmasterdrugForm-combo-box-demo"}
+                            />
+                        </Grid>
+                        <Grid item xs={4} spacing={1}>
+                            <SLTextField
+                                name="sig"
+                                label={Translations.DRUG_MASTER.SIG}
+                                control={control}
+                                placeholder={Translations.DRUG_MASTER.SIG}
+                            />
+                        </Grid>
+                        <Grid item xs={2} spacing={1}>
+                            <SLTextField
+                                name="drugDose"
+                                label={Translations.DRUG_MASTER.DRUG_DOSAGE}
+                                control={control}
+                                placeholder={Translations.DRUG_MASTER.DRUG_DOSAGE}
+                            />
+                        </Grid>
+                        <Grid item xs={2} spacing={1}>
+                            <AutocompleteField
+                                name="drugDoseUnit"
+                                label={Translations.DRUG_MASTER.DRUG_UNIT}
+                                control={control}
+                                options={drugDoseUnitListOptions}
+                                placeholder={Translations.DRUG_MASTER.DRUG_UNIT}
+                                mapvalues={{ id: "id", value: 'masterdatavalue' }}
+                                isMultiSelect={false}
+                                id={"DrugmasterdrugDoseUnit-combo-box-demo"}
+                            />
+                        </Grid>
+                        <Grid item xs={2} spacing={1}>
+                            <SLTextField
+                                name="defaultduration"
+                                label={Translations.DRUG_MASTER.DURATION}
+                                control={control}
+                                placeholder={Translations.DRUG_MASTER.DURATION}
+                            />
+                        </Grid>
+                        <Grid item xs={4} spacing={1}>
+                            <SLTextField
+                                name="defaultInstruction"
+                                label={Translations.DRUG_MASTER.INSTRUCTIONS}
+                                control={control}
+                                placeholder={Translations.DRUG_MASTER.INSTRUCTIONS}
+                            />
+                        </Grid>
+                        <Grid item xs={3} spacing={1}>
+                            <SLRadioButton
+                                name="status"
+                                label="Status"
+                                control={control}
+                                options={activeRadioButtonOptions}
+                                error={errors.status}
+                            />
+
+                        </Grid>
+
+                    </Grid>
+                    <FormButtonComponent button1={"Save"} button2={"Clear"} />
                 </form>
-            </Box>
+            </CommonCard>
+            <DrugMasterList/>
         </>
     )
 }

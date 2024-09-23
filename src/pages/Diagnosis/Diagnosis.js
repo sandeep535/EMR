@@ -1,42 +1,34 @@
-import React, { forwardRef, useImperativeHandle, useEffect,useState } from 'react';
-import TextField from '@mui/material/TextField';
+import React, { forwardRef, useImperativeHandle, useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import CommonCard from '../../common/CommonCard';
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import Autocomplete from '@mui/material/Autocomplete';
 import FormControl from '@mui/material/FormControl';
 import APIS from '../../Utils/APIS';
 import { sendRequest } from '../../pages/global/DataManager';
+import AutocompleteField from '../../CoreComponents/AutocompleteField';
+import Translations from '../../resources/translations';
+import { DiagnosisSchema } from '../../common/YupSchema/formSchema';
 
-const schema = yup
-    .object({
-        selectedDiagnosisValues: yup.object().required("Select Diagnosis")
-    })
-    .required()
+
 const Diagnosis = forwardRef((props, ref) => {
     const [description, setDescription] = useState("");
     const data1 = props.data && props.data.dignosismasterid;
-    const [diagnosisMasterData,setDiagnosisMasterData] =useState(data1 ? data1:[]);
-   
-    
-    const [diagnosisinputValue,setDiagnosisinputValue] = useState(""); 
+    const [diagnosisMasterData, setDiagnosisMasterData] = useState(data1 ? data1 : []);
+
     const { control, handleSubmit, reset, setValue, formState: { errors } } = useForm({
         mode: 'onChange',
-        defaultValues: { selectedDiagnosisValues: ""},
-        resolver: yupResolver(schema),
+        defaultValues: { selectedDiagnosisValues: "" },
+        resolver: yupResolver(DiagnosisSchema),
     });
 
     useEffect(() => {
-        if(data1){
+        if (data1) {
             setDiagnosisMasterData([data1]);
         }
-      
-      //getDiagnosisMasterData();
     }, [props.data]);
 
-   async function getDiagnosisMasterData(newInputValue){
+    async function getDiagnosisMasterData(newInputValue) {
         var obj = {
             pagenumber: 0,
             pagesize: 100,
@@ -71,11 +63,10 @@ const Diagnosis = forwardRef((props, ref) => {
                     }
                 },
                 setFormData: (data) => {
-                    if(data){
-                        setDiagnosisinputValue(data.dignosisname);
+                    if (data) {
                         setValue("selectedDiagnosisValues", data, { shouldTouch: true, shouldDirty: true });
                     }
-                   
+
                 },
                 submitFormmData: () => {
                     handleSubmit(diagnosisHandle)();
@@ -87,7 +78,7 @@ const Diagnosis = forwardRef((props, ref) => {
     const diagnosisHandle = async (data) => {
         setDescription(data.selectedDiagnosisValues);
     }
-   
+
     return (
         <>
             <CommonCard title={props.label}>
@@ -95,41 +86,24 @@ const Diagnosis = forwardRef((props, ref) => {
                     <Grid container spacing={1}>
                         <Grid item xs={12} >
                             <FormControl variant="outlined" fullWidth>
-                                <Controller
+                                <AutocompleteField
                                     name="selectedDiagnosisValues"
+                                    label={Translations.LAB_ORDER.DID_TITLE}
                                     control={control}
-                                    render={({ field: { onChange } }) =>
-                                        <Autocomplete
-                                            size="small"
-                                            onChange={(event, item) => {
-                                                onChange(item);
-                                            }}
-                                            defaultValue={diagnosisMasterData.length !=0 && diagnosisMasterData[0]}
-                                            key={option => option.dignosisid}
-                                            getOptionLabel={option => option.dignosisname}
-                                            inputValue={diagnosisinputValue}
-                                            onInputChange={(event, newInputValue) => {
-                                                console.log(diagnosisMasterData);
-                                                if(event != null){
-                                                    if (newInputValue && newInputValue.length > 1) {
-                                                        getDiagnosisMasterData(newInputValue)
-                                                    }
-                                                    setDiagnosisinputValue(newInputValue);
-                                                }
-                                                
-
-                                            }}
-                                            id="drug-controllable-states-demo"
-                                            options={diagnosisMasterData}
-                                            renderInput={(params) => <TextField {...params} error={errors.selectedDiagnosisValues?.message}
-                                                helperText={errors.selectedDiagnosisValues?.message} label="Search Daignosis" />}
-                                        />
-                                    }
+                                    isMultiSelect={false}
+                                    options={diagnosisMasterData}
+                                    placeholder={Translations.LAB_ORDER.DID_TITLE}
+                                    mapvalues={{ id: "dignosisid", value: 'dignosisname' }}
+                                    id={"diagnosis-controllable-states-demo"}
+                                    onInputChange={(data) => {
+                                        if (data && data.length > 1) {
+                                            getDiagnosisMasterData(data)
+                                        }
+                                    }}
                                 />
-
                             </FormControl>
                         </Grid>
-                        
+
                     </Grid>
                 </form>
             </CommonCard>

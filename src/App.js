@@ -10,7 +10,7 @@ const App = () => {
   const [theme, colorMode] = useMode();
   try{
     return (
-      <ErrorBoundary>
+      // <ErrorBoundary>
       <AppProvider>
         <ColorModeContext.Provider value={colorMode}>
           <ThemeProvider theme={theme}>
@@ -20,7 +20,7 @@ const App = () => {
           </ThemeProvider>
         </ColorModeContext.Provider>
       </AppProvider>
-      </ErrorBoundary>
+      // </ErrorBoundary>
     );
   }catch(r){
     console.log(r);

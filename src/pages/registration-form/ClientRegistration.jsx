@@ -11,13 +11,14 @@ import APIS from '../../Utils/APIS';
 import RegistrationInformation from '../../components/RegistrationInformation/RegistrationInformation';
 import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
 import EMRAlert from '../../Utils/CustomAlert';
+import { useForm } from "react-hook-form";
 
 const ClientRegistration = () => {
   const [isAlertVisible, setIsAlertVisible] = React.useState(false);
   const addrssComponentRef = useRef();
   const registrationInformationRef = useRef();
 
-  function handleSubmit(event) {
+  function handleSubmit1(event) {
     const childData = addrssComponentRef.current.getAdderessData();
     const regFormData = registrationInformationRef.current.getFormData();
     event.preventDefault();
@@ -44,10 +45,14 @@ const ClientRegistration = () => {
     }
     
   }
+  const { control, handleSubmit, reset, formState: { errors } } = useForm({
+    defaultValues: {},
+    //resolver: yupResolver(DiagnosisMasterSchema),
+})
   return (
     <Box m="20px">
       <Header title={Translations.patientRegistration.pagetitle} />
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit1}>
         <Box display="grid"
           gap="20px">
           <Grid container spacing={2}>
@@ -57,7 +62,7 @@ const ClientRegistration = () => {
               </Stack>}
             </Grid>
           </Grid>
-          <RegistrationInformation ref={registrationInformationRef} />
+          <RegistrationInformation ref={registrationInformationRef} control = {control} errors = {errors}  />
           <AddressController ref={addrssComponentRef} />
         </Box>
         <FormButtonComponent button1={"Register"} button2={"Clear"} />

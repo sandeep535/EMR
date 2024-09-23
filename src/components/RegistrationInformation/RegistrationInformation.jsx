@@ -1,25 +1,17 @@
-import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useEffect, useState, forwardRef } from 'react';
 import { Box } from '@mui/material';
 import Grid from '@mui/material/Grid';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select'
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';
 import Translations from '../../resources/translations';
 import APIS from '../../Utils/APIS';
 import { sendRequest } from '../../pages/global/DataManager';
-
+import SLSelectDropDown from '../../CoreComponents/SLSelectDropDown';
+import SLTextField from '../../CoreComponents/SLTextField';
+import SLDatePicker from '../../CoreComponents/SLDatePicker';
+import dayjs from 'dayjs';
+import moment from 'moment';
 
 const RegistrationInformation = forwardRef((props, ref) => {
-    const [title, setTitle] = useState([]);
-    const [firstname, setFirstname] = useState([]);
-    const [lastname, setLastname] = useState([]);
-    const [gender, setGender] = useState([]);
-    const [dob, setDOB] = useState([]);
-    const [age, setAge] = useState(0);
-    const [email, setEmail] = useState([]);
-    const [contact, setContact] = useState([]);
+    const { control, errors } = props;
     const [titleList, setTitleList] = useState([]);
     const [genderList, setGenderList] = useState([]);
     useEffect(() => {
@@ -27,57 +19,15 @@ const RegistrationInformation = forwardRef((props, ref) => {
         return () => console.log("Cleanup..");
     }, []);
     function calculateDate(years) {
+        if (!years)
+            return false;
+        years = Number(years);
         let currentDate = new Date();
         let newDate = new Date(currentDate.setFullYear(currentDate.getFullYear() - years));
-        let month =(newDate.getMonth() >= 10)?newDate.getMonth():"0"+newDate.getMonth();
-        let foprmatedDate = newDate.getFullYear()+"-"+month+"-"+newDate.getDate();
-        setDOB(foprmatedDate);
-       
+        let finalDate = dayjs(moment(newDate).format("YYYY-MM-DD"));
+        props.setValue("dob", finalDate);
     }
-    useImperativeHandle(
-        ref,
-        () => {
-            // the return object will pass to parent ref.current, so you can add anything what you want.
-            return {
-                getFormData: () => {
-                    return {
-                        title,
-                        firstname,
-                        lastname,
-                        gender,
-                        dob,
-                        age,
-                        email,
-                        contact,
-                    }
-                },
-                setFormData1: (data) => {
-                    setAge(data.age);
-                    setTitle(data.title);
-                    setFirstname(data.firstname);
-                    setLastname(data.lastname);
-                    setGender(data.gender);
-                    setContact(data.contact);
-                    setDOB(data.dob);
-                    setEmail(data.email);
-                },
-                clearForm:()=>{
-                    setAge("");
-                    setTitle("");
-                    setFirstname("");
-                    setLastname("");
-                    setGender("");
-                    setContact("");
-                    setDOB("");
-                    setEmail("");
-                }
-            }
-        },
-        [title, firstname, lastname, gender, dob, age, email, contact],
-    );
-
-
-
+    
     async function getLookUpDetails() {
         var payLoad = {
             method: APIS.LOOKUP.METHOD,
@@ -91,151 +41,84 @@ const RegistrationInformation = forwardRef((props, ref) => {
         if (result && result.SALUTATION) {
             setTitleList(result.SALUTATION);
         }
-
-
     }
-
     return (
         <Box display="grid" >
             <Grid container spacing={1}>
                 <Grid item xs={1} spacing={0}>
-                    <FormControl size="small" fullWidth>
-                        <InputLabel
-                            id="demo-select-small-label"
-                            required
-                        >
-                            {Translations.patientRegistration.title}
-                        </InputLabel>
-
-                        <Select
-                            labelId="demo-select-small-label"
-                            id="demo-select-small"
-                            value={title}
-                            label={Translations.patientRegistration.title}
-                            name="title"
-                            renderValue={(o) => o.lookupvalue}
-                            onChange={e => setTitle(e.target.value)}>
-
-                            {titleList.map((titles) => (
-                                <MenuItem key={titles.lookupid} value={titles}>
-                                    {titles.lookupvalue}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                    <SLSelectDropDown
+                        name="title"
+                        label={Translations.patientRegistration.title}
+                        control={control}
+                        options={titleList}
+                        error={errors.title}
+                        mapvalues={{ id: "lookupid", value: 'lookupvalue' }}
+                    />
                 </Grid>
 
                 <Grid item xs={2} spacing={0}>
-                    <TextField
-                        fullWidth
-                        type="text"
-                        size="small"
-                        variant="outlined"
-                        required
-                        label={Translations.patientRegistration.firstName}
+                    <SLTextField
                         name="firstname"
-                        onChange={e => setFirstname(e.target.value)}
-                        value={firstname}
+                        label={Translations.patientRegistration.firstName}
+                        control={control}
+                        placeholder={Translations.patientRegistration.firstName}
                     />
                 </Grid>
                 <Grid item xs={2} spacing={1}>
-                    <TextField
-                        fullWidth
-                        type="text"
-                        size="small"
-                        variant="outlined"
-                        required
-                        label={Translations.patientRegistration.lastName}
+                    <SLTextField
                         name="lastname"
-                        onChange={e => setLastname(e.target.value)}
-                        value={lastname}
+                        label={Translations.patientRegistration.lastName}
+                        control={control}
+                        placeholder={Translations.patientRegistration.lastName}
                     />
                 </Grid>
                 <Grid item xs={1} >
-                    <FormControl variant="outlined" size="small" fullWidth>
-                        <InputLabel
-                            style={{ disableAnimation: false }}
-                            disableAnimation={false}
-                            htmlFor="gender"
-                            size="small"
-                            required
-
-                        >
-                            {Translations.patientRegistration.gender}
-                        </InputLabel>
-                        <Select
-                            label={Translations.patientRegistration.gender}
-                            name="gender"
-                            size="small"
-                            renderValue={(o) => o.lookupvalue}
-                            onChange={e => setGender(e.target.value)}
-                            value={gender}
-                        >
-                            {genderList.map((genders) => (
-                                <MenuItem key={genders.lookupid} value={genders}>
-                                    {genders.lookupvalue}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-
+                    <SLSelectDropDown
+                        name="gender"
+                        label={Translations.patientRegistration.gender}
+                        control={control}
+                        options={genderList}
+                        error={errors.gender}
+                        mapvalues={{ id: "lookupid", value: 'lookupvalue' }}
+                    />
                 </Grid>
-          
-          
                 <Grid item xs={2} >
-                    <TextField
-                        type="date"
-                        size="small"
-                        variant="outlined"
-                        onChange={e => setDOB(e.target.value)}
-                        value={dob}
-                        fullWidth
-                        required
+                    <SLDatePicker
+                        name="dob"
+                        label={Translations.patientRegistration.dob}
+                        control={control}
+                        error={errors.dob}
                     />
                 </Grid>
                 <Grid item xs={1} >
-                    <TextField
-                        fullWidth
-                        type="number"
-                        size="small"
-                        variant="outlined"
-                        label={Translations.patientRegistration.age}
+                    <SLTextField
                         name="age"
-                        onChange={e => {
-                            setAge(e.target.value)
-                            //if(dob.length==0){
-                                calculateDate(e.target.value);
-                           // }
+                        label={Translations.patientRegistration.age}
+                        control={control}
+                        placeholder={Translations.patientRegistration.age}
+                        blurEvent={(item) => {
+                            calculateDate(item);
                         }}
-                        value={age}
                     />
                 </Grid>
                 <Grid item xs={2}>
-                    <TextField
-                        fullWidth
-                        type="text"
-                        size="small"
-                        variant="outlined"
-                        label={Translations.patientRegistration.contact}
+                    <SLTextField
                         name="contact"
-                        required
-                        onChange={e => setContact(e.target.value)}
-                        value={contact}
+                        label={Translations.patientRegistration.contact}
+                        control={control}
+                        placeholder={Translations.patientRegistration.contact}
                     />
+
                 </Grid>
                 <Grid item xs={3}>
-                    <TextField
-                        fullWidth
-                        type="email"
-                        size="small"
-                        variant="outlined"
-                        label={Translations.patientRegistration.email}
+                    <SLTextField
                         name="email"
-                        onChange={e => setEmail(e.target.value)}
-                        value={email}
+                        label={Translations.patientRegistration.email}
+                        control={control}
+                        placeholder={Translations.patientRegistration.email}
                     />
                 </Grid>
-                
+
             </Grid>
         </Box>
     );

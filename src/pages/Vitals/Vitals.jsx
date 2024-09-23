@@ -1,5 +1,4 @@
 import React, { useState, useContext, forwardRef, useImperativeHandle } from 'react';
-import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import AppContext from '../../components/Context/AppContext';
 import Translations from '../../resources/translations';
@@ -7,61 +6,17 @@ import APIS from '../../Utils/APIS';
 import { sendRequest } from '../global/DataManager';
 import EMRAlert from '../../Utils/CustomAlert';
 import CommonCard from '../../common/CommonCard';
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
-import RegularExp from '../../Utils/RegularExp';
-
-const schema = yup
-    .object().shape({
-        height: yup.string().when({
-            is: (exists) => !!exists,
-            then: (rule) =>
-                rule.matches(RegularExp.ALLOW_ONLY_NUMBERS_WITH_DICIMALS, "This field allow only numbers")
-        }),
-        weight: yup.string().when({
-            is: (exists) => !!exists,
-            then: (rule) =>
-                rule.matches(RegularExp.ALLOW_ONLY_NUMBERS_WITH_DICIMALS, "This field allow only numbers")
-        }),
-        bmi: yup.string().when({
-            is: (exists) => !!exists,
-            then: (rule) =>
-                rule.matches(RegularExp.ALLOW_ONLY_NUMBERS_WITH_DICIMALS, "This field allow only numbers")
-        }),
-        systolic: yup.string().when({
-            is: (exists) => !!exists,
-            then: (rule) =>
-                rule.matches(RegularExp.ALLOW_ONLY_NUMBERS_WITH_DICIMALS, "This field allow only numbers")
-        }),
-        diastolic: yup.string().when({
-            is: (exists) => !!exists,
-            then: (rule) =>
-                rule.matches(RegularExp.ALLOW_ONLY_NUMBERS_WITH_DICIMALS, "This field allow only numbers")
-        }),
-        pulse: yup.string().when({
-            is: (exists) => !!exists,
-            then: (rule) =>
-                rule.matches(RegularExp.ALLOW_ONLY_NUMBERS_WITH_DICIMALS, "This field allow only numbers")
-        }),
-        respiratoryrate: yup.string().when({
-            is: (exists) => !!exists,
-            then: (rule) =>
-                rule.matches(RegularExp.ALLOW_ONLY_NUMBERS_WITH_DICIMALS, "This field allow only numbers")
-        }),
-        temperature: yup.string().when({
-            is: (exists) => !!exists,
-            then: (rule) =>
-                rule.matches(RegularExp.ALLOW_ONLY_NUMBERS_WITH_DICIMALS, "This field allow only numbers")
-        }),
-    })
+import { VitalsSchema } from '../../common/YupSchema/formSchema';
+import SLTextField from '../../CoreComponents/SLTextField';
 
 const Vitals = forwardRef((props, ref) => {
     const [vitalformData, setVitalformData] = useState("");
     const [vitalid, setVitalId] = useState("");
     const appContextValue = useContext(AppContext);
-    const { control, handleSubmit, setValue,getValues , watch,reset, formState: { errors } } = useForm({
+    const { control, handleSubmit, setValue, getValues, watch, reset, formState: { errors } } = useForm({
         defaultValues: {
             height: "",
             weight: "",
@@ -73,16 +28,15 @@ const Vitals = forwardRef((props, ref) => {
             temperature: "",
         },
         mode: 'onChange',
-        resolver: yupResolver(schema),
+        resolver: yupResolver(VitalsSchema),
     })
     const watchheight = watch("height");
-    const watchweight = watch("weight") 
+    const watchweight = watch("weight")
     React.useEffect(() => {
-    
-        if(watchweight && watchheight){
+        if (watchweight && watchheight) {
             bmical();
         }
-      }, [watchweight,watchheight])
+    }, [watchweight, watchheight])
     useImperativeHandle(
         ref,
         () => {
@@ -111,9 +65,9 @@ const Vitals = forwardRef((props, ref) => {
         },
         [vitalformData],
     );
-    function bmical(){
+    function bmical() {
         const weight = getValues("weight");
-        const height = getValues("height") 
+        const height = getValues("height")
         let BMI = (weight) / (height * height);
         setValue("bmi", BMI.toFixed(2));
     }
@@ -155,159 +109,82 @@ const Vitals = forwardRef((props, ref) => {
             <form onSubmit={handleSubmit(data => vitalHandle(data, "isFrom"))}  >
                 <Grid container spacing={1}>
                     <Grid item xs={2} >
-                        <Controller
+                        <SLTextField
                             name="height"
+                            label={Translations.vitalsForm.height}
                             control={control}
-                            render={({ field }) =>
-                                <TextField
-                                    {...field}
-                                    fullWidth
-                                    type="text"
-                                    size="small"
-                                    variant="outlined"
-                                    label={Translations.vitalsForm.height}
-                                    error={errors.height?.message}
-                                    helperText={errors.height?.message}
-                                   
-                                />
-                            }
+                            placeholder={Translations.vitalsForm.height}
                         />
+
                     </Grid>
                     <Grid item xs={2} >
-                        <Controller
+                        <SLTextField
                             name="weight"
+                            label={Translations.vitalsForm.weight}
                             control={control}
-                            render={({ field }) =>
-                                <TextField
-                                    {...field}
-                                    fullWidth
-                                    type="text"
-                                    size="small"
-                                    variant="outlined"
-                                    label={Translations.vitalsForm.weight}
-                                    error={errors.weight?.message}
-                                    helperText={errors.weight?.message}
-                                    
-                                />
-                            }
+                            placeholder={Translations.vitalsForm.weight}
                         />
+
                     </Grid>
                     <Grid item xs={2} >
-                        <Controller
+                        <SLTextField
                             name="bmi"
+                            label={Translations.vitalsForm.bmi}
                             control={control}
-                            render={({ field }) =>
-                                <TextField
-                                    {...field}
-                                    fullWidth
-                                    type="text"
-                                    size="small"
-                                    variant="outlined"
-                                    label={Translations.vitalsForm.bmi}
-                                    error={errors.bmi?.message}
-                                    helperText={errors.bmi?.message}
-                                />
-                            }
+                            placeholder={Translations.vitalsForm.bmi}
                         />
+
                     </Grid>
                     <Grid item xs={2}>
-                        <Controller
+                        <SLTextField
                             name="systolic"
+                            label={Translations.vitalsForm.systolic}
                             control={control}
-                            render={({ field }) =>
-                                <TextField
-                                    {...field}
-                                    fullWidth
-                                    type="text"
-                                    size="small"
-                                    variant="outlined"
-                                    label={Translations.vitalsForm.systolic}
-                                    error={errors.systolic?.message}
-                                    helperText={errors.systolic?.message}
-                                />
-                            }
+                            placeholder={Translations.vitalsForm.systolic}
                         />
+
                     </Grid>
                     <Grid item xs={2} >
-                        <Controller
+                        <SLTextField
                             name="diastolic"
+                            label={Translations.vitalsForm.diastolic}
                             control={control}
-                            render={({ field }) =>
-                                <TextField
-                                    {...field}
-                                    fullWidth
-                                    type="text"
-                                    size="small"
-                                    variant="outlined"
-                                    label={Translations.vitalsForm.diastolic}
-                                    error={errors.diastolic?.message}
-                                    helperText={errors.diastolic?.message}
-                                />
-                            }
+                            placeholder={Translations.vitalsForm.diastolic}
                         />
                     </Grid>
                 </Grid>
 
                 <Grid container spacing={1}>
                     <Grid item xs={2} spacing={4}>
-                        <Controller
+                        <SLTextField
                             name="pulse"
+                            label={Translations.vitalsForm.pulse}
                             control={control}
-                            render={({ field }) =>
-                                <TextField
-                                    {...field}
-                                    fullWidth
-                                    type="text"
-                                    size="small"
-                                    variant="outlined"
-                                    label={Translations.vitalsForm.pulse}
-                                    error={errors.pulse?.message}
-                                    helperText={errors.pulse?.message}
-                                />
-                            }
+                            placeholder={Translations.vitalsForm.pulse}
                         />
                     </Grid>
                     <Grid item xs={3} spacing={4}>
-                        <Controller
+                        <SLTextField
                             name="respiratoryrate"
+                            label={Translations.vitalsForm.respiratoryrate}
                             control={control}
-                            render={({ field }) =>
-                                <TextField
-                                    {...field}
-                                    fullWidth
-                                    type="text"
-                                    size="small"
-                                    variant="outlined"
-                                    label={Translations.vitalsForm.respiratoryrate}
-                                    error={errors.respiratoryrate?.message}
-                                    helperText={errors.respiratoryrate?.message}
-                                />
-                            }
+                            placeholder={Translations.vitalsForm.respiratoryrate}
                         />
                     </Grid>
                     <Grid item xs={3} spacing={4}>
-                        <Controller
+                        <SLTextField
                             name="temperature"
+                            label={Translations.vitalsForm.temperature}
                             control={control}
-                            render={({ field }) =>
-                                <TextField
-                                    {...field}
-                                    fullWidth
-                                    type="text"
-                                    size="small"
-                                    variant="outlined"
-                                    label={Translations.vitalsForm.temperature}
-                                    error={errors.temperature?.message}
-                                    helperText={errors.temperature?.message}
-                                />
-                            }
+                            placeholder={Translations.vitalsForm.temperature}
                         />
+
                     </Grid>
                 </Grid>
                 {props.isActionButtonReq &&
                     <Grid item xs={2} spacing={1}>
                         <FormButtonComponent button1={"Save"} button2={"Close"} clearFormEvent={() => {
-                            // setShowAddForm(false);
+                            
                         }} />
                     </Grid>
                 }

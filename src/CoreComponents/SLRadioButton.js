@@ -2,7 +2,7 @@ import React from 'react';
 import { Controller } from 'react-hook-form';
 import { RadioGroup, FormControl, FormControlLabel, Radio, FormLabel, FormHelperText } from '@mui/material';
 
-const SPRadioButton = ({
+const SLRadioButton = ({
     name,
     control,
     label,
@@ -38,4 +38,4 @@ const SPRadioButton = ({
     );
 };
 
-export default SPRadioButton;
+export default SLRadioButton;

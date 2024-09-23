@@ -19,11 +19,11 @@ import AllergiesList from './AllergiesList';
 import CommonCard from '../../common/CommonCard';
 import ClientBanner from '../../components/ClientBanner/ClientBanner';
 import AutocompleteField from '../../CoreComponents/AutocompleteField';
-import STTextField from '../../CoreComponents/STTextField';
+import SLTextField from '../../CoreComponents/SLTextField';
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import SPRadioButton from '../../CoreComponents/SPRadioButton';
-import SPSelectDropDown from '../../CoreComponents/SPSelectDropDown';
+import SLRadioButton from '../../CoreComponents/SLRadioButton';
+import SLSelectDropDown from '../../CoreComponents/SLSelectDropDown';
 import { AllergiesScreenSchema } from '../../common/YupSchema/formSchema';
 import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
 
@@ -218,7 +218,7 @@ const Allergies = forwardRef((props, ref) => {
                                 </FormControl>
                             </Grid>
                             <Grid item xs={2} >
-                                <SPSelectDropDown
+                                <SLSelectDropDown
                                     name="severity"
                                     label={Translations.ALLERGY.SERVERITY}
                                     control={control}
@@ -228,7 +228,7 @@ const Allergies = forwardRef((props, ref) => {
                                 />
                             </Grid>
                             <Grid item xs={3} spacing={1}>
-                                <STTextField
+                                <SLTextField
                                     name="indications"
                                     label={Translations.ALLERGY.INDICATIONS}
                                     control={control}
@@ -238,7 +238,7 @@ const Allergies = forwardRef((props, ref) => {
                             </Grid>
 
                             <Grid item xs={3}>
-                                <SPRadioButton
+                                <SLRadioButton
                                     name="status"
                                     label="Status"
                                     control={control}

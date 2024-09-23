@@ -27,7 +27,10 @@ const Translations = {
         username:'User Name',
         password:'Password',
         role:'Role',
-        designation:'Designation'
+        designation:'Designation',
+        empList:'Employe List',
+        name:'Name',
+
     },
     "Common":{
         address1: "Address 1",
@@ -48,7 +51,12 @@ const Translations = {
         paymenttype:'Payment Type',
         speciality:'Specilaity',
         DocName :'Doctor Name',
-        token:'Token'
+        token:'Token',
+        visitDate:'Visit Date',
+        addServices:'Add Services',
+        searchCleint:'Search Client',
+        clientDetails:'Client Details',
+        visitDetails:'Visit Details'
     },
     "vitalsForm":{
         height:'Height',
@@ -62,9 +70,12 @@ const Translations = {
         temperature:'Temperature'
     },
     "Prescriptions":{
+      searchDrug:"Search Drug",
        dose:"Dose",
        doseunit:"Dose Unit",
-       sig:"SIG"
+       sig:"SIG",
+       startDate:'Start Date',
+       endDate:'End Date'
     },
     "SERVICE_MASTER":{
         SERVICE_MASTER:"Service Master",
@@ -91,6 +102,9 @@ const Translations = {
         STATUS:'Status',
         ACTIVE:'Active',
         IN_ACTIVE:'In active',
+        DURATION:'Default Duration',
+        INSTRUCTIONS:'Instructions',
+        DRUG_MASTER_LIST:'Drug Master List'
      },
      "ALLERGY_MASTER":{
         NAME:'Allergy Master',
@@ -106,8 +120,12 @@ const Translations = {
         CODE:'Diagnosis Code',
         NAME:'Diagnosis Name',
         STATUS:'Status',
-        ACTIONS:'Actions'
+        ACTIONS:'Actions',
      },
+     "LAB_ORDER":{
+      TITLE:'Search Lab Order',
+      DID_TITLE:'Search Daignosis'
+   },
      "LAB_MASTER":{
         TITLE:'Lab Master',
         NAME:'Lab Order Name',

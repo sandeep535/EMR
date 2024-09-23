@@ -1,34 +1,24 @@
 import React, { forwardRef, useImperativeHandle, useEffect, useState } from 'react';
-import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import CommonCard from '../../common/CommonCard';
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import Autocomplete from '@mui/material/Autocomplete';
 import FormControl from '@mui/material/FormControl';
 import APIS from '../../Utils/APIS';
 import { sendRequest } from '../../pages/global/DataManager';
+import AutocompleteField from '../../CoreComponents/AutocompleteField';
+import Translations from '../../resources/translations';
+import { LabordersSchema } from '../../common/YupSchema/formSchema';
 
-const schema = yup
-    .object({
-        selectedLabOrder: yup.array().required("Select Lab Order")
-    })
-    .required()
-const data111 = [{
-    labname: 'lab1',
-    labid: 1
-}]
 const LabOrder = forwardRef((props, ref) => {
     const [description, setDescription] = useState("");
     const data1 = props.data;
     const [labOrderMasterData, setLabOrderMasterData] = useState(data1 ? data1 : []);
-    const [labinputValue, setLabinputValue] = useState("");
     const [removedItems, setRemovedItems] = useState([]);
-    const { control, handleSubmit, reset,watch , setValue, formState: { errors } } = useForm({
+    const { control, handleSubmit, reset, watch, setValue, formState: { errors } } = useForm({
         mode: 'onChange',
         defaultValues: { selectedLabOrder: [] },
-        resolver: yupResolver(schema),
+        resolver: yupResolver(LabordersSchema),
     });
 
     useEffect(() => {
@@ -85,17 +75,17 @@ const LabOrder = forwardRef((props, ref) => {
         setDescription(data.selectedLabOrder);
     }
     const autocompleteValue = watch('selectedLabOrder');
-    const handleRemoveItem = (event, newValue) => {
-        const localremovedItems = autocompleteValue.filter(item => !newValue.includes(item));
-        if (localremovedItems.length > 0) {
-            let copyRemovedItems = [...removedItems];
-            localremovedItems[0].status=2;
-            copyRemovedItems.push(localremovedItems[0]);
-            setRemovedItems(copyRemovedItems);
-          console.log('Removed item(s):', localremovedItems);
-        }
-        setValue('selectedLabOrder', newValue);
-      };
+    // const handleRemoveItem = (event, newValue) => {
+    //     const localremovedItems = autocompleteValue.filter(item => !newValue.includes(item));
+    //     if (localremovedItems.length > 0) {
+    //         let copyRemovedItems = [...removedItems];
+    //         localremovedItems[0].status = 2;
+    //         copyRemovedItems.push(localremovedItems[0]);
+    //         setRemovedItems(copyRemovedItems);
+    //         console.log('Removed item(s):', localremovedItems);
+    //     }
+    //     setValue('selectedLabOrder', newValue);
+    // };
     return (
 
         <>
@@ -105,36 +95,21 @@ const LabOrder = forwardRef((props, ref) => {
                     <Grid container spacing={1}>
                         <Grid item xs={12} >
                             <FormControl variant="outlined" fullWidth>
-                                <Controller
+                                <AutocompleteField
                                     name="selectedLabOrder"
+                                    label={Translations.LAB_ORDER.TITLE}
                                     control={control}
-                                    render={({ field: { onChange,value } }) =>
-                                        <Autocomplete
-                                            size="small"
-                                            multiple
-                                            options={labOrderMasterData}
-                                            onChange={(event, item) => {
-                                                onChange(item);
-                                            }}
-                                            value ={value}
-                                            key={option => option.labid}
-                                            getOptionLabel={option => option.labname}
-                                            inputValue={labinputValue}
-                                            onInputChange={(event, newInputValue) => {
-                                                if (event != null) {
-                                                    if (newInputValue && newInputValue.length > 1) {
-                                                        getLabOrderMasterData(newInputValue)
-                                                    }
-                                                    setLabinputValue(newInputValue);
-                                                }
-                                            }}
-                                            id="lab-controllable-states-demo"
-                                            renderInput={(params) => <TextField {...params} error={errors.selectedLabOrder?.message}
-                                                helperText={errors.selectedLabOrder?.message} label="Search Daignosis" />}
-                                        />
-                                    }
+                                    isMultiSelect={true}
+                                    options={labOrderMasterData}
+                                    placeholder={Translations.LAB_ORDER.TITLE}
+                                    mapvalues={{ id: "labid", value: 'labname' }}
+                                    id={"lab-controllable-states-demo"}
+                                    onInputChange={(data) => {
+                                        if (data && data.length > 1) {
+                                            getLabOrderMasterData(data)
+                                        }
+                                    }}
                                 />
-
                             </FormControl>
                         </Grid>
                     </Grid>
