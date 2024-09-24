@@ -8,7 +8,7 @@ import CommonCard from '../../common/CommonCard';
 
 const empListHeaders = [{
     name: Translations.employeeRegistration.name,
-    datakey: 'firstname',
+    datakey: 'firstname,lastname',
     width: '20%'
 }, {
     name: Translations.employeeRegistration.gender,

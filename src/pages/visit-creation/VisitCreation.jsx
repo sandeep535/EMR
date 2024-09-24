@@ -1,7 +1,5 @@
 
 import React, { useRef, useEffect } from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
 import { Box } from '@mui/material'
 import Grid from '@mui/material/Grid';
 import FormControl from '@mui/material/FormControl';
@@ -9,19 +7,10 @@ import Translations from '../../resources/translations';
 import { sendRequest } from '../global/DataManager'
 import APIS from '../../Utils/APIS';
 import RegistrationInformation from '../../components/RegistrationInformation/RegistrationInformation';
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
 import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
 import EMRAlert from '../../Utils/CustomAlert';
-import Divider from '@mui/material/Divider';
 import dayjs from 'dayjs';
 import moment from 'moment';
-import Typography from '@mui/material/Typography';
 import CommonCard from '../../common/CommonCard';
 import { useForm } from "react-hook-form";
 import AutocompleteField from '../../CoreComponents/AutocompleteField';
@@ -29,38 +18,16 @@ import SLDatePicker from '../../CoreComponents/SLDatePicker';
 import SLTextField from '../../CoreComponents/SLTextField';
 import { VisitCreationSchema } from '../../common/YupSchema/formSchema';
 import { yupResolver } from "@hookform/resolvers/yup";
+import ClientSearchComponent from '../../components/ClientSearch/ClientSearchComponent';
+import VisitServiceList from '../../components/VisitServiceList/VisitServiceList';
 
-const visitServiceTableHeaders = [{
-  name: 'Service Name',
-  width: '25%'
-}, {
-  name: 'Price',
-  width: '15%'
-}, {
-  name: 'Qty',
-  width: '15%'
-}, {
-  name: 'Discount',
-  width: '15%'
-}, {
-  name: 'Total Amount',
-  width: '15%'
-}]
 export default function VisitCreation(props) {
   const [doctoroptions, setDoctoroptions] = React.useState([]);
-  const [serviceoptions, setServiceOptions] = React.useState([]);
   const [visiiTypeOptions, setVisiiTypeOptions] = React.useState([]);
   const [paymentTypeOptions, setPaymentTypeOptions] = React.useState([]);
   const [specialityListOptions, setSpecialityListOptions] = React.useState([]);
-  const [visitServiceList, setVisitServiceList] = React.useState([]);
-  const [clientsearchlist, setClientsearchlist] = React.useState([]);
   const [selectedClientData, setSelectedClientData] = React.useState([]);
-  const [visitdiscount, setVisitdiscount] = React.useState(0);
-  const [visitpercentage, setVisitpercentage] = React.useState(0);
-  const [totalAmount, setTotalAmount] = React.useState();
-  const [visittotalamount, setVisittotalamount] = React.useState();
-  const searchAutoCompleteRef = useRef();
-
+  const visitServiceListRef = useRef();
   const { control, handleSubmit, reset, setValue, formState: { errors } } = useForm({
     defaultValues: {},
     resolver: yupResolver(VisitCreationSchema),
@@ -72,10 +39,6 @@ export default function VisitCreation(props) {
 
   }, []);
 
-  useEffect(() => {
-    updateTotalAmount();
-  }, [visitServiceList]);
-
   function clearVisitForm() {
     reset({})
   }
@@ -83,22 +46,15 @@ export default function VisitCreation(props) {
   function setVisitDataInEditMode() {
     setSelectedClientData(props?.visitEditData?.clientid);
     setDataToRegistrationForm(props?.visitEditData?.clientid);
-    setVisitServiceList(props?.visitEditData?.services);
+    let data = {
+      visitServiceList: props?.visitEditData?.services,
+      visitdiscount: props?.visitEditData?.visitdiscount,
+      visittotalamount: props?.visitEditData?.visittotalamount,
+      visitpercentage: props?.visitEditData?.visitpercentage
+    }
+    visitServiceListRef.current.setVisitServiceList(data);
     setVisitDetailsInEditmode(props?.visitEditData);
   }
-
-  async function getDataBasedOnMobileNumber(mobileNumber) {
-    var payLoad = {
-      method: APIS.CLIENT_DATA_BASED_ON_PHONENUMBER.METHOD,
-      url: APIS.CLIENT_DATA_BASED_ON_PHONENUMBER.URL,
-      paramas: [mobileNumber]
-    }
-    let result = await sendRequest(payLoad);
-    if (result && result.size != 0) {
-      setClientsearchlist(result);
-    }
-  }
-
   async function getDoctorsData(value) {
     if (!value)
       return false;
@@ -141,74 +97,6 @@ export default function VisitCreation(props) {
     }
   }
 
-  async function getServiceMaterList(value) {
-    if (!value)
-      return false;
-    var payLoad = {
-      method: APIS.GET_SERVICE_MASTER_DATA_BASED_SERVICENAME.METHOD,
-      url: APIS.GET_SERVICE_MASTER_DATA_BASED_SERVICENAME.URL,
-      paramas: [value]
-    }
-    let result = await sendRequest(payLoad);
-    if (result) {
-      setServiceOptions(result)
-    }
-  }
-
-  function addServicetoList(newService) {
-    var obj = {
-      serviceid: newService,
-      serviceprice: newService.price,
-      servicediscount: 0,
-      servicediscountinpercentage: 0,
-      quantity: 1,
-      servicetotalamount: newService.price * 1
-    }
-    let copyList = [...visitServiceList];
-    copyList.push(obj);
-    setVisitServiceList(copyList);
-
-  }
-
-  function calPercentage(data, index, key) {
-    let copyVisitServiceData = [...visitServiceList];
-    var cuurentData = copyVisitServiceData[index];
-    var percentage = (Number(cuurentData.servicediscount) / (Number(cuurentData.quantity) * Number(cuurentData.serviceprice))) * 100;
-    cuurentData.servicediscountinpercentage = percentage.toFixed(2);
-    copyVisitServiceData[index] = cuurentData;
-    return copyVisitServiceData;
-  }
-
-  function setChangesToVisistServicelist(data, index, key) {
-    let copyVisitServiceData = [...visitServiceList];
-    copyVisitServiceData[index][key] = data;
-    let totalAmount = calParticularServiceTotalAmount(copyVisitServiceData[index]);
-    copyVisitServiceData[index]['servicetotalamount'] = totalAmount;
-    copyVisitServiceData = calPercentage(data, index, key);
-    setVisitServiceList(copyVisitServiceData);
-    updateTotalAmount();
-  }
-  function updateTotalAmount() {
-    let copyVisitServiceData = [...visitServiceList];
-    let totalAmount = 0;
-    copyVisitServiceData.forEach(item => {
-      totalAmount = totalAmount + calParticularServiceTotalAmount(item);
-    });
-    let afterDiscount = totalAmount - visitdiscount;
-    setVisittotalamount(afterDiscount);
-    setTotalAmount(totalAmount);
-  }
-
-  function setTotalAmountAfterDiscountFun(discountAmount) {
-    var aftertotalAmount = totalAmount - discountAmount;
-    setVisittotalamount(aftertotalAmount);
-  }
-
-  function calParticularServiceTotalAmount(data) {
-    let totalAmount = Number(data.serviceprice) * Number(data.quantity);
-    let totalAmountAfterDiscount = totalAmount - data.servicediscount;
-    return totalAmountAfterDiscount;
-  }
 
   function populateClientDatatoForm(clientData) {
     setDataToRegistrationForm(clientData);
@@ -235,32 +123,12 @@ export default function VisitCreation(props) {
     setValue("visitreason", data.reason);
     setValue("paymenttype", data.paymenttype);
   }
-  function calDiscountBasedonPercentage(data, index) {
-    let copyVisitServiceData = [...visitServiceList];
-    copyVisitServiceData[index]["servicediscountinpercentage"] = data;
-    let cuurentData = copyVisitServiceData[index];
-    let discount = (Number(cuurentData.quantity) * Number(cuurentData.serviceprice)) * (100 - Number(data)) / 100;
-    discount = (Number(cuurentData.quantity) * Number(cuurentData.serviceprice)) - discount;
-    copyVisitServiceData[index]["servicediscount"] = discount;
-    setVisitServiceList(copyVisitServiceData);
 
-  }
-  function calVisitDiscountAmountBAsedonPercentage(value) {
-    let copyVisistamount = totalAmount;
-    let discount = (copyVisistamount) * (100 - Number(value)) / 100;
-    discount = copyVisistamount - discount;
-    setVisitdiscount(discount);
-  }
-
-  function calPercentageBasedOnDiscount(value) {
-    let copyVisistamount = totalAmount;
-    var percentage = (Number(value) / (copyVisistamount)) * 100;
-    setVisitpercentage(percentage.toFixed(2));
-  }
   const visitCreationhandleSubmit = async (data) => {
     handleSubmit1(data);
   }
   async function handleSubmit1(data) {
+    let { visitServiceList, visitdiscount, visittotalamount, visitpercentage } = visitServiceListRef.current.getVisistsList();
     if (visitServiceList.length == 0) {
       EMRAlert.alertifyError("Please select atlease one service");
       return false;
@@ -312,57 +180,19 @@ export default function VisitCreation(props) {
   };
   return (
     <>
-      <Box m="10px">
-        <Box m="10px">
+      <Box m="2px">
+        <Box m="3px">
           <Grid xs={6} container>
-            <Autocomplete
-              size="small"
-              ref={searchAutoCompleteRef}
-              onChange={(event, newValue) => {
-                if (newValue) {
-                  setValue("contact", newValue.contact);
-                  populateClientDatatoForm(newValue);
-                }
+            <ClientSearchComponent
+              label={Translations.visitCreation.searchCleint}
+              selectedPatientDetails={(data) => {
+                populateClientDatatoForm(data);
               }}
-              key={option => option.seqid}
-              getOptionLabel={option => option.contact}
-              renderOption={(props, option) => {
-                const { key, ...optionProps } = props;
-                return (
-                  <Box
-                    key={key}
-                    component="li"
-                    {...optionProps}>
-                    <Grid container alignItems="center">
-                      <Grid item sx={{ ml: 1, width: 'calc(100% - 44px)', wordWrap: 'break-word' }}>
-                        <Box
-                          component="span"
-                          sx={{ fontWeight: 'bold' }}
-                        >
-                          {option.firstname}
-                          <Typography variant="body2" color="text.secondary">
-                            {option.contact}
-                          </Typography>
-                        </Box>
-
-                      </Grid>
-                    </Grid>
-                    <Divider variant="middle" component="li" />
-                  </Box>
-                );
-              }}
-              onInputChange={(event, newInputValue) => {
-                if (newInputValue.length > 4) {
-                  getDataBasedOnMobileNumber(newInputValue)
-                }
+              onInputChangeEvent={(newInputValue) => {
                 setValue("contact", newInputValue);
               }}
-              id="service-controllable-states-demo11"
-              options={clientsearchlist}
-              autoHighlight
-              sx={{ width: 300 }}
-              renderInput={(params) => <TextField {...params} label={Translations.visitCreation.searchCleint} />}
             />
+
           </Grid>
         </Box>
         <form onSubmit={handleSubmit(visitCreationhandleSubmit)} >
@@ -468,169 +298,7 @@ export default function VisitCreation(props) {
                 </Grid>
               </Grid>
               <Grid xs={12} container spacing={1}>
-                <Grid item xs={3} spacing={1}>
-                  <FormControl variant="outlined" fullWidth>
-                    <AutocompleteField
-                      name="serviceValues"
-                      label={Translations.visitCreation.addServices}
-                      control={control}
-                      options={serviceoptions}
-                      placeholder={Translations.visitCreation.addServices}
-                      mapvalues={{ id: "serviceid", value: 'servicename' }}
-                      isMultiSelect={false}
-                      id={"service-controllable-states-demo"}
-                      onchangeEventCallBack={(newValue) => {
-                        addServicetoList(newValue);
-                      }}
-                      onInputChange={(data) => {
-                        if (data.length > 3) {
-                          getServiceMaterList(data)
-                        }
-                      }}
-                    />
-                  </FormControl>
-                </Grid>
-              </Grid>
-              <Grid xs={12} container spacing={1}>
-                <TableContainer component={Paper}>
-                  <Table sx={{ minWidth: 650 }} size="small" aria-label="simple table">
-                    <TableHead>
-                      <TableRow>
-                        {(visitServiceTableHeaders.map(header => {
-                          return (
-                            <TableCell key={header.name} width={header.width}>{header.name}</TableCell>
-                          )
-                        }))}
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {visitServiceList && visitServiceList.map((service, index) => (
-                        <TableRow key={index}>
-                          <TableCell>{(service && service.serviceid) ? service.serviceid.servicename : ""}</TableCell>
-                          <TableCell>
-                            <TextField
-                              fullWidth
-                              variant="outlined"
-                              className='input_background'
-                              type="text"
-                              onChange={(e) => {
-                                setChangesToVisistServicelist(e.target.value, index, 'serviceprice')
-                              }}
-                              label={"Price"}
-                              size="small"
-                              value={service.serviceprice}
-                            />
-                          </TableCell>
-                          <TableCell >
-                            <TextField
-                              fullWidth
-                              variant="outlined"
-                              className='input_background'
-                              type="text"
-                              label={"Qty"}
-                              onChange={(e) => {
-                                setChangesToVisistServicelist(e.target.value, index, 'quantity')
-                              }}
-                              value={service.quantity}
-                              size="small"
-                            />
-                          </TableCell>
-                          <TableCell >
-                            <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                              <TextField
-                                fullWidth
-                                variant="outlined"
-                                className='input_background'
-                                type="text"
-                                label={"Discount"}
-                                onChange={(e) => {
-                                  setChangesToVisistServicelist(e.target.value, index, 'servicediscount')
-                                }}
-                                value={service.servicediscount}
-                                size="small"
-                              />
-                              <TextField
-                                fullWidth
-                                variant="outlined"
-                                className='input_background'
-                                type="text"
-                                label={"%"}
-                                sx={{ ml: 1 }}
-                                onBlur={(e) => {
-                                  let copyVisitServiceData = [...visitServiceList];
-                                  let discountValue = copyVisitServiceData[index].servicediscount;
-                                  setChangesToVisistServicelist(discountValue, index, 'servicediscount');
-                                }}
-                                onChange={(e) => {
-                                  calDiscountBasedonPercentage(e.target.value, index);
-                                }}
-                                value={service.servicediscountinpercentage}
-                                size="small"
-                              />
-                            </Box>
-                          </TableCell>
-                          <TableCell>{service.servicetotalamount}</TableCell>
-                        </TableRow>
-                      ))}
-                      <TableRow key={"12111"}>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell>Total Amount(before discount)</TableCell>
-                        <TableCell>{totalAmount}</TableCell>
-                      </TableRow>
-                      <TableRow key={"323"}>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell>Discount Amount</TableCell>
-                        <TableCell>
-                          <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-                            <TextField
-                              fullWidth
-                              variant="outlined"
-                              className='input_background'
-                              type="text"
-                              label={"Discount"}
-                              onChange={(e) => {
-                                setVisitdiscount(e.target.value);
-                                setTotalAmountAfterDiscountFun(e.target.value);
-                                calPercentageBasedOnDiscount(e.target.value);
-                              }}
-                              value={visitdiscount}
-                              size="small"
-                            />
-                            <TextField
-                              fullWidth
-                              variant="outlined"
-                              className='input_background'
-                              type="text"
-                              label={"%"}
-                              onBlur={(e) => {
-                                setTotalAmountAfterDiscountFun(visitdiscount);
-                              }}
-                              onChange={(e) => {
-                                setVisitpercentage(e.target.value);
-                                calVisitDiscountAmountBAsedonPercentage(e.target.value);
-                                //setTotalAmountAfterDiscountFun(e.target.value)
-                              }}
-                              value={visitpercentage}
-                              size="small"
-                            />
-                          </Box>
-                        </TableCell>
-                      </TableRow>
-                      <TableRow key={"123545111"}>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell></TableCell>
-                        <TableCell>Total Amount(after discount)</TableCell>
-                        <TableCell>{visittotalamount}</TableCell>
-                      </TableRow>
-                    </TableBody>
-
-                  </Table>
-                </TableContainer>
+                <VisitServiceList ref={visitServiceListRef} />
               </Grid>
 
             </Box>

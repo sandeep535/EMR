@@ -11,7 +11,8 @@ const Translations = {
         age: 'Age',
         email: "E-mail",
         contact: "Mobile Number",
-        
+        address:'Address',
+        personalDetails:'Personal Details'
     },
     "employeeRegistration":{
         pagetitle:'EMPLOYE REGISTRATION',
@@ -81,7 +82,8 @@ const Translations = {
         SERVICE_MASTER:"Service Master",
         SERVICE_NAME:"Service Name",
         PRICE:'Price',
-        STATUS:'Status'
+        STATUS:'Status',
+        
      },
      "ALLERGY":{
         ALLERGYNAME:"Allergy",
@@ -112,7 +114,9 @@ const Translations = {
         ALLERGY_CODE:'Allergy Code',
         ALLERGY_NAME:'Allergy Name',
         STATUS:'Status',
-        ACTIONS:'Actions'
+        ACTIONS:'Actions',
+        ADD_ALLERGY_TITLE:'Add New Allergy',
+        ALLERGY_LIST_TITLE:'Allergies List'
      },
      "DIAGNOSIS_MASTER":{
         TITLE:'Diagnosis Master',
@@ -121,6 +125,7 @@ const Translations = {
         NAME:'Diagnosis Name',
         STATUS:'Status',
         ACTIONS:'Actions',
+        ADD_NEW_DIA:"Add New Diagnosis"
      },
      "LAB_ORDER":{
       TITLE:'Search Lab Order',

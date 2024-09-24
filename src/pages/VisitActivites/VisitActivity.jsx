@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState, useContext } from 'react';
 import { Box } from '@mui/material'
 import { sendRequest } from '../global/DataManager';
-import Button from '@mui/material/Button';
 import APIS from '../../Utils/APIS';
 import AppContext from '../../components/Context/AppContext';
 import EMRAlert from '../../Utils/CustomAlert';
@@ -10,7 +9,6 @@ import Vitals from '../Vitals/Vitals';
 import Grid from '@mui/material/Grid';
 import Notes from '../Notes/Notes';
 import Prescriptions from '../Prescriptions/Prescriptions';
-import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
 import { useReactToPrint } from 'react-to-print';
 import { FunctionalComponentToPrint } from '../../components/Print/ComponentToPrint';
 import PrintTableFomat from '../../common/Prints/PrintTableFomat';
@@ -376,18 +374,13 @@ export default function VisitActivity(props) {
             </Box>
             {/* <Invoice/> */}
             <Box style={{ height: '530px', overflowY: 'auto', marginTop: '10px' }}>
-               
                 <Grid container spacing={1} xs={12}>
                     <Grid item xs={6} spacing={4}>
                         <Vitals ref={vitalsRef} />
                     </Grid>
                     <Grid item xs={6} spacing={4}>
-                        {/* <Notes label={"Diagnosis"} ref={diagnosissRef} />  */}
                         <Diagnosis label={"Diagnosis"} ref={diagnosissRef} data={customapisData.diagnosissAPIData ? customapisData.diagnosissAPIData : []} />
                     </Grid>
-                    {/* <Grid item xs={8}>
-                        <Allergies ref={allergiesref} />
-                    </Grid> */}
                 </Grid>
                 <Grid container spacing={1} xs={12}>
                     <Grid item xs={6} spacing={4}>

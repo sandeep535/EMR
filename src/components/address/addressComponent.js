@@ -1,26 +1,17 @@
-import React, { useEffect, useState, forwardRef, useImperativeHandle } from 'react';
+import React, { useEffect, useState, forwardRef } from 'react';
 import { Box } from '@mui/material';
-import FormControl from '@mui/material/FormControl';
 import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField';
-import Select from '@mui/material/Select'
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
 import Translations from '../../resources/translations';
 import APIS from '../../Utils/APIS';
 import { sendRequest } from '../../pages/global/DataManager';
+import SLTextField from '../../CoreComponents/SLTextField';
+import SLSelectDropDown from '../../CoreComponents/SLSelectDropDown';
 
 const AddressController = forwardRef((props, ref) => {
+  const { control, errors } = props;
   const [countriesList, setCountriesList] = useState([]);
   const [stateList, setStateList] = useState([]);
   const [cityList, setCityList] = useState([]);
-
-  const [address1, setAddress1] = useState();
-  const [address2, setAddress2] = useState([]);
-  const [country, setCountry] = useState([]);
-  const [city, setCity] = useState([]);
-  const [state, setState] = useState([]);
-  const [pincode, setPincode] = useState([]);
 
   useEffect(() => {
     getCountries();
@@ -58,143 +49,75 @@ const AddressController = forwardRef((props, ref) => {
       setCityList(result);
     }
   }
-  useImperativeHandle(
-    ref,
-    () => {
-      return {
-        getAdderessData: () => {
-          return {
-            "address1": address1,
-            "address2": address2,
-            country,
-            state,
-            city,
-            pincode
-          }
-        },
-      }
-    },
-    [address1, address2, country, city, state, pincode],
-  );
+
 
   return (
     <Box display="grid" gap="10px">
       <Grid container spacing={1}>
         <Grid item xs={6}>
-          <TextField
-            fullWidth
-            type="text"
-            variant="outlined"
-            label={Translations.Common.address1}
+          <SLTextField
             name="address1"
-            onChange={e => setAddress1(e.target.value)}
-            value={address1}
-            size='small'
+            label={Translations.Common.address1}
+            control={control}
+            placeholder={Translations.Common.address1}
           />
         </Grid>
         <Grid item xs={6}>
-          <TextField
-            fullWidth
-            type="text"
-            variant="outlined"
-            label={Translations.Common.address2}
+          <SLTextField
             name="address2"
-            onChange={e => setAddress2(e.target.value)}
-            value={address2}
-            size='small'
+            label={Translations.Common.address2}
+            control={control}
+            placeholder={Translations.Common.address2}
           />
         </Grid>
-      </Grid>
-      <Grid container spacing={2}>
+      
+     
         <Grid item xs={3}>
-          <FormControl variant="outlined"  size='small' fullWidth>
-            <InputLabel
-              style={{ disableAnimation: false }}
-              disableAnimation={false}
-              htmlFor="country"
-            >
-              {Translations.Common.country}
-            </InputLabel>
-            <Select name="country"
-              label={Translations.Common.country}
-              onChange={(e) => {
-                setCountry(e.target.value);
-                getStateData(e.target.value.countryid);
-              }}
-              value={country.name}
-            >
-              {countriesList.map((item) => (
-                <MenuItem key={item.countryid} value={item}>
-                  {item.countryname}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <SLSelectDropDown
+            name="country"
+            label={Translations.Common.country}
+            control={control}
+            options={countriesList}
+            error={errors.country}
+            mapvalues={{ id: "countryid", value: 'countryname' }}
+            onchangeEventCallBack={(item) => {
+              getStateData(item.countryid);
+            }}
+          />
         </Grid>
         <Grid item xs={3}>
-          <FormControl variant="outlined"  size='small' fullWidth>
-            <InputLabel
-              style={{ disableAnimation: false }}
-              disableAnimation={false}
-              htmlFor="state"
-            >
-              {Translations.Common.state}
-            </InputLabel>
-            <Select name="state"
-              label={Translations.patientRegistration.state}
-              onChange={(e) => {
-                setState(e.target.value);
-                getCities(e.target.value.stateid);
-              }}
-              value={state}
-            >
-              {stateList.map((stateValue) => (
-                <MenuItem key={stateValue.stateid} value={stateValue}>
-                  {stateValue.statename}
-                </MenuItem>
-              ))}
-
-            </Select>
-          </FormControl>
+          <SLSelectDropDown
+            name="state"
+            label={Translations.Common.state}
+            control={control}
+            options={stateList}
+            error={errors.state}
+            mapvalues={{ id: "stateid", value: 'stateValue' }}
+            onchangeEventCallBack={(item) => {
+              getCities(item.stateid);
+            }}
+          />
         </Grid>
         <Grid item xs={3}>
-          <FormControl variant="outlined"  size='small' fullWidth>
-            <InputLabel
-              style={{ disableAnimation: false }}
-              disableAnimation={false}
-              htmlFor="city"
-            >
-              {Translations.Common.city}
-            </InputLabel>
-            <Select name="city"
-              label={Translations.patientRegistration.city}
-              onChange={(e) => {
-                setCity(e.target.value);
-              }}
-              value={city}
-            >
-              {cityList.map((city) => (
-                <MenuItem key={city.cityid} value={city}>
-                  {city.cityname}
-                </MenuItem>
-              ))}
-
-            </Select>
-          </FormControl>
+          <SLSelectDropDown
+            name="city"
+            label={Translations.Common.city}
+            control={control}
+            options={cityList}
+            error={errors.city}
+            mapvalues={{ id: "cityid", value: 'cityname' }}
+          />
         </Grid>
         <Grid item xs={3}>
-          <TextField
-           size='small'
-            fullWidth
-            variant="outlined"
-            type="text"
-            label={Translations.Common.pincode}
+          <SLTextField
             name="pincode"
-            onChange={e => setPincode(e.target.value)}
-            value={pincode}
+            label={Translations.Common.pincode}
+            control={control}
+            placeholder={Translations.Common.pincode}
           />
+
         </Grid>
-      </Grid>
+        </Grid>
     </Box>
   );
 });

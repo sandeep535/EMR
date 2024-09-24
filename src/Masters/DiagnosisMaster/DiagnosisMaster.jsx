@@ -130,7 +130,7 @@ export default function DiagnosisMaster(props) {
 
     return (
         <>
-            <CommonCard title="Add New Diagnosis">
+            <CommonCard title={Translations.DIAGNOSIS_MASTER.ADD_NEW_DIA}>
                 <form onSubmit={handleSubmit(diagnosisMasterhandleSubmit)} >
                     <Grid xs={12} container spacing={1}>
                         <Grid item xs={2} spacing={1}>

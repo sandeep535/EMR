@@ -11,6 +11,7 @@ const SLSelectDropDown = ({
     rules = {},
     error,
     mapvalues,
+    onchangeEventCallBack,
     ...props
 }) => {
     return (

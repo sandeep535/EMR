@@ -7,6 +7,17 @@ export const DiagnosisMasterSchema = Yup.object({
     codeset: Yup.object().required("CodeSet is required"),
 }).required()
 
+export const AllergySearchMasterSchema = Yup.object({
+    
+    status: Yup.string().required("Status is required"),
+}).required()
+export const AllergyNewMasterSchema = Yup.object({
+    allergytype: Yup.object().nullable().required('Allergy is required'),
+    allergycode: Yup.string().required("Code is required"),
+    allergyname: Yup.string().required("Allergy Name is required"),
+    status: Yup.string().required("Status is required"),
+}).required()
+
 export const AllergiesScreenSchema = Yup.object({
     allergy: Yup.object().nullable().required('Allergy is required'),
     indications: Yup.string().required("Indications is required"),
@@ -55,6 +66,19 @@ export const VisitCreationSchema = Yup
         visitdate: Yup.object().nullable().required("Visit Date Required"),
     })
     .required()
+export const PatientCreationSchema = Yup
+    .object({
+        title: Yup.object().nullable().required("Title Required"),
+        firstname: Yup.string().required("Select First Name"),
+        lastname: Yup.string().required("Select Last Name"),
+        gender: Yup.object().nullable().required("Select Gender"),
+        dob: Yup.object().nullable().required("Select DOB"),
+        age: Yup.string().required("Select Age"),
+        contact: Yup.string().required("Select contact"),
+
+    })
+    .required()
+    
 export const EmployeeCreationSchema = Yup
     .object({
         title: Yup.object().nullable().required("Title Required"),

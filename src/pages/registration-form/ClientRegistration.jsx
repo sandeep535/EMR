@@ -1,9 +1,5 @@
 import React, { useRef, useEffect } from 'react';
 import { Box } from '@mui/material';
-import Grid from '@mui/material/Grid';
-import Alert from '@mui/material/Alert';
-import Stack from '@mui/material/Stack';
-import Header from "../../components/Header";
 import Translations from '../../resources/translations';
 import AddressController from '../../components/address/addressComponent';
 import { sendRequest } from '../global/DataManager'
@@ -12,19 +8,15 @@ import RegistrationInformation from '../../components/RegistrationInformation/Re
 import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
 import EMRAlert from '../../Utils/CustomAlert';
 import { useForm } from "react-hook-form";
+import CommonCard from '../../common/CommonCard';
+import { PatientCreationSchema } from '../../common/YupSchema/formSchema';
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const ClientRegistration = () => {
-  const [isAlertVisible, setIsAlertVisible] = React.useState(false);
-  const addrssComponentRef = useRef();
-  const registrationInformationRef = useRef();
-
-  function handleSubmit1(event) {
-    const childData = addrssComponentRef.current.getAdderessData();
-    const regFormData = registrationInformationRef.current.getFormData();
-    event.preventDefault();
-    regFormData.address = childData;
-    saveClientRegistration(regFormData);
-  }
+  const { control, handleSubmit, reset,setValue, formState: { errors } } = useForm({
+    defaultValues: {},
+    resolver: yupResolver(PatientCreationSchema),
+  })
   useEffect(() => {
     return () => console.log("Cleanup..");
   }, []);
@@ -43,30 +35,34 @@ const ClientRegistration = () => {
     } else {
       EMRAlert.alertifyError("Not created");
     }
-    
+
   }
-  const { control, handleSubmit, reset, formState: { errors } } = useForm({
-    defaultValues: {},
-    //resolver: yupResolver(DiagnosisMasterSchema),
-})
+
+  const patientregistrationhandleSubmit = async (data) => {
+    //const childData = addrssComponentRef.current.getAdderessData();
+    //const regFormData = registrationInformationRef.current.getFormData();
+//regFormData.address = childData;
+debugger
+return false
+    //saveClientRegistration(regFormData);
+  }
   return (
-    <Box m="20px">
-      <Header title={Translations.patientRegistration.pagetitle} />
-      <form onSubmit={handleSubmit1}>
-        <Box display="grid"
-          gap="20px">
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              {isAlertVisible && <Stack sx={{ width: '100%' }} spacing={2} >
-                <Alert variant="filled" severity="success"><strong>Registration Success !!!</strong></Alert>
-              </Stack>}
-            </Grid>
-          </Grid>
-          <RegistrationInformation ref={registrationInformationRef} control = {control} errors = {errors}  />
-          <AddressController ref={addrssComponentRef} />
-        </Box>
-        <FormButtonComponent button1={"Register"} button2={"Clear"} />
-      </form>
+    <Box m="0px">
+      <CommonCard title={Translations.patientRegistration.pagetitle}>
+        <form onSubmit={handleSubmit(patientregistrationhandleSubmit)} >
+          <Box display="grid">
+            <CommonCard title={Translations.patientRegistration.personalDetails}>
+              <RegistrationInformation control={control} errors={errors} setValue={setValue}/>
+            </CommonCard>
+            <CommonCard title={Translations.patientRegistration.address}>
+              <AddressController control={control} errors={errors}/>
+            </CommonCard>
+
+          </Box>
+          <FormButtonComponent button1={"Register"} button2={"Clear"} />
+        </form>
+      </CommonCard>
+
 
     </Box>
   );

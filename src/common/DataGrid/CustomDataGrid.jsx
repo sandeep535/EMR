@@ -13,9 +13,8 @@ import Moment from 'react-moment';
 
 const styles ={
     headerCell: {
-      // Add your custom styles here
-      backgroundColor: '#f0f0f0', // Example background color
-      fontWeight: 'bold', // Example font weight
+      backgroundColor: '#f0f0f0', 
+      fontWeight: 'bold', 
     },
   };
   
@@ -39,30 +38,42 @@ const styles ={
 
     function getValueFromObj(obj, header) {
         let keyString = header.datakey;
-        if (keyString) {
-            let spliKey = keyString.split(".");
-            if (spliKey.length == 1) {
-                if (header.mappingData) {
-                    return header.mappingData[obj[keyString]];
+        let isMultipleKeys = header.datakey.split(",");
+        let finalResult ="";
+        for(var k=0;k<isMultipleKeys.length;k++){
+            keyString =isMultipleKeys[k];
+            if (keyString) {
+                let spliKey = keyString.split(".");
+                if (spliKey.length == 1) {
+                    if (header.mappingData) {
+                        finalResult = finalResult +" "+header.mappingData[obj[keyString]]
+                       // return header.mappingData[obj[keyString]];
+                    } else {
+                        finalResult = finalResult +" "+obj[keyString]
+                       // return obj[keyString];
+                    }
+    
                 } else {
-                    return obj[keyString];
+                    var result = obj;
+                    for (var i = 0; i < spliKey.length; i++) {
+                        result = (result)?result[spliKey[i]]:""
+                    }
+                    if (header.mappingData && result) {
+                       // return header.mappingData[result];
+                        finalResult = finalResult +" "+header.mappingData[result];
+                    } else {
+                        finalResult = finalResult +" "+result;
+                       // return result;
+                    }
+    
                 }
-
+                
             } else {
-                var result = obj;
-                for (var i = 0; i < spliKey.length; i++) {
-                    result = (result)?result[spliKey[i]]:""
-                }
-                if (header.mappingData && result) {
-                    return header.mappingData[result];
-                } else {
-                    return result;
-                }
-
+                finalResult =finalResult+ " ";
             }
-        } else {
-            return "";
         }
+        return finalResult;
+       
 
     }
 

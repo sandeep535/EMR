@@ -19,7 +19,7 @@ const drugMasterListHeaders = [{
 }, {
     name: Translations.DRUG_MASTER.DRUG_TYPE,
     width: '10%',
-    datakey: 'drugtype'
+    datakey: 'drugtyp.masterdatavalue'
 }, {
     name: Translations.DRUG_MASTER.DRUG_DOSAGE,
     width: '10%',
@@ -27,7 +27,7 @@ const drugMasterListHeaders = [{
 }, {
     name: Translations.DRUG_MASTER.DRUG_UNIT,
     width: '10%',
-    datakey: 'drugunit'
+    datakey: 'drugunit.masterdatavalue'
 }, {
     name: Translations.DRUG_MASTER.SIG,
     width: '20%',
