@@ -8,7 +8,7 @@ export const DiagnosisMasterSchema = Yup.object({
 }).required()
 
 export const AllergySearchMasterSchema = Yup.object({
-    
+
     status: Yup.string().required("Status is required"),
 }).required()
 export const AllergyNewMasterSchema = Yup.object({
@@ -45,7 +45,7 @@ export const DiagnosisSchema = Yup
     .required()
 export const DrugMasterSchema = Yup
     .object({
-        drugType: Yup.object().nullable().required("Select Drug"),
+        drugtype: Yup.object().nullable().required("Select Drug"),
         drugname: Yup.string().required("Select Drug Name"),
         drugcode: Yup.string().required("Select Drug Code")
     })
@@ -62,8 +62,7 @@ export const VisitCreationSchema = Yup
         specility: Yup.object().nullable().required("Specility Required"),
         doctor: Yup.object().nullable().required("Doctor Required"),
         visitType: Yup.object().nullable().required("Visit Type Required"),
-        visitdate: Yup.object().nullable().required("Visit Date Required"),
-        visitdate: Yup.object().nullable().required("Visit Date Required"),
+        visitdate: Yup.object().nullable().required("Visit Date Required")
     })
     .required()
 export const PatientCreationSchema = Yup
@@ -78,7 +77,7 @@ export const PatientCreationSchema = Yup
 
     })
     .required()
-    
+
 export const EmployeeCreationSchema = Yup
     .object({
         title: Yup.object().nullable().required("Title Required"),
@@ -98,7 +97,7 @@ export const ServiceCreationSchema = Yup
     .object({
         servicename: Yup.string().required("Enter Service Name"),
         price: Yup.string().required("Enter Price"),
-        status: Yup.string().nullable().required("Select DOB")
+        active: Yup.string().nullable().required("Select Status")
     })
     .required()
 export const VitalsSchema = Yup
@@ -144,3 +143,9 @@ export const VitalsSchema = Yup
                 rule.matches(RegularExp.ALLOW_ONLY_NUMBERS_WITH_DICIMALS, "This field allow only numbers")
         }),
     })
+export const BedMasterAdd = Yup
+    .object({
+        name: Yup.string().required("Enter Name"),
+        isBed: Yup.string().required("Select Is Bed")
+    })
+    .required()

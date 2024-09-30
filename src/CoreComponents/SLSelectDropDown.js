@@ -21,12 +21,17 @@ const SLSelectDropDown = ({
                 name={name}
                 control={control}
                 rules={rules}
-                render={({ field: { onChange, value }, fieldState: { error } }) => (
+                render={({ field: { onChange,onFormChange, value }, fieldState: { error } }) => (
                     <>
                         <Select
                             value={() => value?.value || ''}
                             size="small"
-                            onChange={onChange}
+                            onChange={(e) => {
+                                onChange(e); // React Hook Form's change handler
+                                if (onchangeEventCallBack) {
+                                    onchangeEventCallBack(e.target.value); // Custom change handler
+                                }
+                              }}
                             renderValue={(o) => {
                                 return (value && value[mapvalues.value]) || '';
                             }}

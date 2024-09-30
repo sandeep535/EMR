@@ -31,7 +31,7 @@ const Translations = {
         designation:'Designation',
         empList:'Employe List',
         name:'Name',
-
+        actions:'Actions',
     },
     "Common":{
         address1: "Address 1",
@@ -83,7 +83,8 @@ const Translations = {
         SERVICE_NAME:"Service Name",
         PRICE:'Price',
         STATUS:'Status',
-        
+        SERVICE_MASTER_LIST:'Services List',
+        ACTIONS:'Action'
      },
      "ALLERGY":{
         ALLERGYNAME:"Allergy",
@@ -138,7 +139,12 @@ const Translations = {
         INSTRUCTION:'Instruction',
         STATUS:'Status',
         ACTIONS:'Actions',
-     }
+     },
+     "BED_MASTER":{
+      TITLE:'Bed Master',
+      NAME:'Label',
+      IS_BED:'Is Bed'
+   }
     
 }
 export default Translations;

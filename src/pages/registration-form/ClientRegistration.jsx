@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Box } from '@mui/material';
 import Translations from '../../resources/translations';
 import AddressController from '../../components/address/addressComponent';
@@ -13,7 +13,7 @@ import { PatientCreationSchema } from '../../common/YupSchema/formSchema';
 import { yupResolver } from "@hookform/resolvers/yup";
 
 const ClientRegistration = () => {
-  const { control, handleSubmit, reset,setValue, formState: { errors } } = useForm({
+  const { control, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm({
     defaultValues: {},
     resolver: yupResolver(PatientCreationSchema),
   })
@@ -39,12 +39,23 @@ const ClientRegistration = () => {
   }
 
   const patientregistrationhandleSubmit = async (data) => {
-    //const childData = addrssComponentRef.current.getAdderessData();
-    //const regFormData = registrationInformationRef.current.getFormData();
-//regFormData.address = childData;
-debugger
-return false
-    //saveClientRegistration(regFormData);
+    let dataCopy = { ...data };
+    var obj = {
+      address1: dataCopy.address1,
+      address2: dataCopy.address2,
+      country: dataCopy.country,
+      city: dataCopy.city,
+      state: dataCopy.state,
+      pincode: dataCopy.pincode
+    }
+    dataCopy.address = obj;
+    delete dataCopy.address1;
+    delete dataCopy.address2;
+    delete dataCopy.country;
+    delete dataCopy.city;
+    delete dataCopy.state;
+    delete dataCopy.pincode;
+    saveClientRegistration(dataCopy);
   }
   return (
     <Box m="0px">
@@ -52,10 +63,10 @@ return false
         <form onSubmit={handleSubmit(patientregistrationhandleSubmit)} >
           <Box display="grid">
             <CommonCard title={Translations.patientRegistration.personalDetails}>
-              <RegistrationInformation control={control} errors={errors} setValue={setValue}/>
+              <RegistrationInformation control={control} errors={errors} setValue={setValue} />
             </CommonCard>
             <CommonCard title={Translations.patientRegistration.address}>
-              <AddressController control={control} errors={errors}/>
+              <AddressController control={control} errors={errors} watch={watch} />
             </CommonCard>
 
           </Box>

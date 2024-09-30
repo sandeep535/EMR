@@ -56,15 +56,15 @@ export default function DrugMaster(props) {
 
     async function saveData(data) {
         let data1 = {
-            drugid: "",
+            drugid: data.drugid ? data.drugid:null,
             drugname: data.drugname,
             status: data.status,
             drugcode: data.drugcode,
-            drugtype: data.drugType,
-            drugform: data.drugForm,
-            drugalert: data.drugAlert,
-            drugdose: data.drugDose,
-            drugunit: data.drugDoseUnit,
+            drugtype: data.drugtype,
+            drugform: data.drugform,
+            drugalert: data.drugalert,
+            drugdose: data.drugdose,
+            drugunit: data.drugunit,
             defaultduration: data.defaultduration ? Number(data.defaultduration) : '',
             defaultInstruction: data.defaultInstruction,
             sig: data.sig
@@ -78,6 +78,7 @@ export default function DrugMaster(props) {
         let result = await sendRequest(payLoad);
         if (result) {
             EMRAlert.alertifySuccess("Drug Saved Succussfully");
+            reset({status:'1'})
         } else {
             EMRAlert.alertifyError("Not Saved");
         }
@@ -163,6 +164,9 @@ export default function DrugMaster(props) {
         }
     }
 
+    function openDrugEditmode(row, action) {
+        reset(row);
+    }
 
     return (
         <>
@@ -171,7 +175,7 @@ export default function DrugMaster(props) {
                     <Grid container spacing={2}>
                         <Grid item xs={3} spacing={1}>
                             <AutocompleteField
-                                name="drugType"
+                                name="drugtype"
                                 label={Translations.DRUG_MASTER.DRUG_TYPE}
                                 control={control}
                                 options={drugTypeListOptions}
@@ -208,7 +212,7 @@ export default function DrugMaster(props) {
                         </Grid>
                         <Grid item xs={4} spacing={1}>
                             <AutocompleteField
-                                name="drugAlert"
+                                name="drugalert"
                                 label={Translations.DRUG_MASTER.DRUG_ALERT}
                                 control={control}
                                 options={drugAlerListOptions}
@@ -220,7 +224,7 @@ export default function DrugMaster(props) {
                         </Grid>
                         <Grid item xs={4} spacing={1}>
                             <AutocompleteField
-                                name="drugForm"
+                                name="drugform"
                                 label={Translations.DRUG_MASTER.DRUG_FORM}
                                 control={control}
                                 options={drugFormListOptions}
@@ -240,7 +244,7 @@ export default function DrugMaster(props) {
                         </Grid>
                         <Grid item xs={2} spacing={1}>
                             <SLTextField
-                                name="drugDose"
+                                name="drugdose"
                                 label={Translations.DRUG_MASTER.DRUG_DOSAGE}
                                 control={control}
                                 placeholder={Translations.DRUG_MASTER.DRUG_DOSAGE}
@@ -248,7 +252,7 @@ export default function DrugMaster(props) {
                         </Grid>
                         <Grid item xs={2} spacing={1}>
                             <AutocompleteField
-                                name="drugDoseUnit"
+                                name="drugunit"
                                 label={Translations.DRUG_MASTER.DRUG_UNIT}
                                 control={control}
                                 options={drugDoseUnitListOptions}
@@ -289,7 +293,7 @@ export default function DrugMaster(props) {
                     <FormButtonComponent button1={"Save"} button2={"Clear"} />
                 </form>
             </CommonCard>
-            <DrugMasterList/>
+            <DrugMasterList openDrugEditmode={openDrugEditmode} />
         </>
     )
 }

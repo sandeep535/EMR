@@ -24,8 +24,9 @@ import SaveIcon from '@mui/icons-material/Save';
 import Diagnosis from '../Diagnosis/Diagnosis';
 import LabOrder from '../LabOrders/LabOrder';
 import Invoice from '../../components/Invoice/Invoice';
+import SLBreadcrumbs from '../../CoreComponents/SLBreadcrumbs';
 
-
+const breadcrumbItems =[ { label: 'Go to Dashboard', link: '/vist-dashboard' },]
 export default function VisitActivity(props) {
     const appContextValue = useContext(AppContext);
     const vitalsRef = useRef();
@@ -308,7 +309,8 @@ export default function VisitActivity(props) {
                         style={{ color: 'red', cursor: 'pointer' }}
                     >
                         <Tooltip title="Back to dashboard">
-                            <ArrowBackIosIcon onClick={() => backtoDashboard()} />
+                            {/* <ArrowBackIosIcon onClick={() => backtoDashboard()} /> */}
+                            <SLBreadcrumbs items={breadcrumbItems} />
                         </Tooltip>
 
                     </Box>

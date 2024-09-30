@@ -16,10 +16,17 @@ const serviceListHeaders = [{
 }, {
   name: Translations.SERVICE_MASTER.STATUS,
   width: '10%',
-  datakey: 'status',
+  datakey: 'active',
   mappingData: { 1: "Active", 2: "In-active" }
-},]
-export default function ServiceMasterList() {
+},{
+  name: Translations.SERVICE_MASTER.ACTIONS,
+  width: '10%',
+  isActions: true,
+  actions: [{
+      icon: 'edit'
+  }]
+}]
+export default function ServiceMasterList(props) {
   const [serviceMasterList, setServiceMasterList] = useState([]);
 
   useEffect(() => {
@@ -37,14 +44,17 @@ export default function ServiceMasterList() {
       setServiceMasterList(result)
     }
   }
+  function openServiceEditmode(row, action){
+    props.openServiceEditmode(row, action);
+  }
 
   return (
     <>
-      <CommonCard title={Translations.employeeRegistration.empList}>
+      <CommonCard title={Translations.SERVICE_MASTER.SERVICE_MASTER_LIST}>
         <CustomDataGrid tableHeaders={serviceListHeaders} tableData={serviceMasterList} totalcount={'100'} rowsPerPage={10} paginationChangeEvent={(number) => {
           getAllMasterData(number)
         }} triggerEvent={(row, action) => {
-          //openEditmode(row, action);
+          openServiceEditmode(row, action);
         }}></CustomDataGrid>
       </CommonCard>
 

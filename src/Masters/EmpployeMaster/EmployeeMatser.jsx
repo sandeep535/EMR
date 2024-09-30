@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import APIS from '../../Utils/APIS';
@@ -15,13 +15,19 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import CommonCard from '../../common/CommonCard';
 import SLTextField from '../../CoreComponents/SLTextField';
 import AutocompleteField from '../../CoreComponents/AutocompleteField';
+import CommonConst from '../../Utils/CommonConst'
+import SLRadioButton from '../../CoreComponents/SLRadioButton';
+import dayjs from 'dayjs';
+import moment from 'moment';
 
 export default function EmployeeMaster(props) {
     const [rolesList, setRolesList] = useState([]);
     const [designationList, setDesignationList] = useState([]);
 
     const { control, handleSubmit, reset, setValue, formState: { errors } } = useForm({
-        defaultValues: {},
+        defaultValues: {
+            status:'1'
+        },
         resolver: yupResolver(EmployeeCreationSchema),
     });
 
@@ -50,13 +56,14 @@ export default function EmployeeMaster(props) {
         let result = await sendRequest(payLoad);
         if (result) {
             EMRAlert.alertifySuccess("Employee Saved Succussfully");
+            reset({status:'1'})
         } else {
             EMRAlert.alertifyError("Not Saved");
         }
     }
     const employeeCreationhandleSubmit = async (data) => {
-
         var obj = {
+            id:(data.id)?data.id:null,
             firstname: data.firstname,
             lastname: data.lastname,
             username: data.username,
@@ -71,6 +78,12 @@ export default function EmployeeMaster(props) {
             mobilenumber: data.contact
         }
         saveData(obj);
+    }
+    function setDatatoEditMode(row,action){
+        row.dob = dayjs(moment(new Date()).format("YYYY-MM-DD"));
+        row.contact = row.mobilenumber;
+        row.email = row.mail;
+        reset(row);
     }
     return (
         <>
@@ -131,6 +144,16 @@ export default function EmployeeMaster(props) {
                                     />
                                 </FormControl>
                             </Grid>
+                            <Grid item xs={3} spacing={1}>
+                                <SLRadioButton
+                                    name="status"
+                                    label="Status"
+                                    control={control}
+                                    options={CommonConst.activeRadioButtonOptions}
+                                    error={errors.status}
+                                />
+
+                            </Grid>
                         </Grid>
                     </Box>
                     <FormButtonComponent button1={"Register"} button2={"Clear"} />
@@ -138,7 +161,9 @@ export default function EmployeeMaster(props) {
             </CommonCard>
 
             <Box m="0px">
-                <EmployeeMasterList />
+                <EmployeeMasterList openEditmode = {(row, action)=>{
+                    setDatatoEditMode(row, action);
+                }}/>
             </Box>
         </>
     );

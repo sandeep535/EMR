@@ -1,5 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
-
+import React, { useEffect } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -46,33 +45,28 @@ const styles ={
                 let spliKey = keyString.split(".");
                 if (spliKey.length == 1) {
                     if (header.mappingData) {
-                        finalResult = finalResult +" "+header.mappingData[obj[keyString]]
-                       // return header.mappingData[obj[keyString]];
+                        finalResult = finalResult +" "+header.mappingData[obj[keyString]];
                     } else {
-                        finalResult = finalResult +" "+obj[keyString]
-                       // return obj[keyString];
+                        finalResult = finalResult +" "+obj[keyString];
                     }
     
                 } else {
                     var result = obj;
                     for (var i = 0; i < spliKey.length; i++) {
-                        result = (result)?result[spliKey[i]]:""
+                        result = (result)?result[spliKey[i]]:"";
                     }
                     if (header.mappingData && result) {
-                       // return header.mappingData[result];
                         finalResult = finalResult +" "+header.mappingData[result];
                     } else {
                         finalResult = finalResult +" "+result;
-                       // return result;
                     }
-    
                 }
                 
             } else {
                 finalResult =finalResult+ " ";
             }
         }
-        return finalResult;
+        return finalResult.trim();
        
 
     }

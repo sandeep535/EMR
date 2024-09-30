@@ -66,6 +66,9 @@ export default function DrugMasterList(props) {
             setTableData(result);
         }
     }
+    function openDrugEditmode(row, action){
+        props.openDrugEditmode(row, action);
+    }
     return (
         <>
             <CommonCard title={Translations.DRUG_MASTER.DRUG_MASTER_LIST}>
@@ -83,7 +86,7 @@ export default function DrugMasterList(props) {
                     </Grid>
                 </Grid>
                 <CustomDataGrid tableHeaders={drugMasterListHeaders} tableData={tableData} triggerEvent={(row, action) => {
-                    //openEditmode(row, action);
+                    openDrugEditmode(row, action);
                 }}></CustomDataGrid>
 
             </CommonCard>

@@ -49,8 +49,6 @@ const AddressController = forwardRef((props, ref) => {
       setCityList(result);
     }
   }
-
-
   return (
     <Box display="grid" gap="10px">
       <Grid container spacing={1}>
@@ -92,7 +90,7 @@ const AddressController = forwardRef((props, ref) => {
             control={control}
             options={stateList}
             error={errors.state}
-            mapvalues={{ id: "stateid", value: 'stateValue' }}
+            mapvalues={{ id: "stateid", value: 'statename' }}
             onchangeEventCallBack={(item) => {
               getCities(item.stateid);
             }}
@@ -115,7 +113,6 @@ const AddressController = forwardRef((props, ref) => {
             control={control}
             placeholder={Translations.Common.pincode}
           />
-
         </Grid>
         </Grid>
     </Box>

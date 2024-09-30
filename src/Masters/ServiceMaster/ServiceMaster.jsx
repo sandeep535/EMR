@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {  useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import APIS from '../../Utils/APIS';
@@ -19,9 +19,9 @@ const activeRadioButtonOptions = [
     { label: 'In-active', value: '2' }
 ];
 export default function ServiceMaster() {
-    const { control, handleSubmit, reset, setValue, formState: { errors } } = useForm({
+    const { control, handleSubmit, reset, formState: { errors } } = useForm({
         defaultValues: {
-            status:'1'
+            active:'1'
         },
         resolver: yupResolver(ServiceCreationSchema),
     });
@@ -30,6 +30,7 @@ export default function ServiceMaster() {
     }, []);
     const serviceMasterCreationhandleSubmit = async (data) => {
         var sendingobj = {
+            serviceid:data.serviceid ? data.serviceid:null,
             servicename: data.servicename,
             price: data.price,
             active: data.active
@@ -43,10 +44,15 @@ export default function ServiceMaster() {
         let result = await sendRequest(payLoad);
         if (result) {
             EMRAlert.alertifySuccess("Service Saved Succussfully");
-            reset({});
+            reset({
+                active:'1'
+            });
         } else {
             EMRAlert.alertifyError("Not created");
         }
+    }
+    function openServiceEditmode(row,action){
+        reset(row);
     }
 
     return (
@@ -55,7 +61,7 @@ export default function ServiceMaster() {
                 <form onSubmit={handleSubmit(serviceMasterCreationhandleSubmit)} >
                     <Box display="grid" >
                         <Grid container spacing={1}>
-                            <Grid item xs={4} spacing={1}>
+                            <Grid item xs={3} spacing={1}>
                                 <SLTextField
                                     name="servicename"
                                     label={Translations.SERVICE_MASTER.SERVICE_NAME}
@@ -63,7 +69,7 @@ export default function ServiceMaster() {
                                     placeholder={Translations.SERVICE_MASTER.SERVICE_NAME}
                                 />
                             </Grid>
-                            <Grid item xs={4} spacing={1}>
+                            <Grid item xs={2} spacing={1}>
                                 <SLTextField
                                     name="price"
                                     label={Translations.SERVICE_MASTER.PRICE}
@@ -71,21 +77,24 @@ export default function ServiceMaster() {
                                     placeholder={Translations.SERVICE_MASTER.PRICE}
                                 />
                             </Grid>
-                            <Grid item xs={4} spacing={1}>
+                            <Grid item xs={3} spacing={1}>
                                 <SLRadioButton
-                                    name="status"
+                                    name="active"
                                     label="Status"
                                     control={control}
                                     options={activeRadioButtonOptions}
                                     error={errors.status}
                                 />
                             </Grid>
+                            <Grid item xs={3} spacing={1}>
+                               <FormButtonComponent button1={"Save"} button2={"Clear"} />
+                            </Grid>
                         </Grid>
                     </Box>
-                    <FormButtonComponent button1={"Save"} button2={"Clear"} />
+                   
                 </form>
             </CommonCard>
-            <ServiceMasterList />
+            <ServiceMasterList  openServiceEditmode ={(row, action)=>{openServiceEditmode(row, action)}}/>
         </>
     )
 }
