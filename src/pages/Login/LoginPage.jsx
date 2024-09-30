@@ -83,7 +83,7 @@ export default function LoginPage(props) {
     for(var i=0;i<copyLeftMenu.length;i++){
       var submentList = [];
       for(var j=0;j<copyLeftMenu[i].subMenu.length;j++){
-        if(copyLeftMenu[i].subMenu[j].hasOwnProperty("screencode") && permissions[copyLeftMenu[i].subMenu[j].screencode] === 1){
+        if(Object.prototype.hasOwnProperty.call(copyLeftMenu[i].subMenu[j], "screencode") && permissions[copyLeftMenu[i].subMenu[j].screencode] === 1){
           submentList.push(copyLeftMenu[i].subMenu[j]);
         }
       }

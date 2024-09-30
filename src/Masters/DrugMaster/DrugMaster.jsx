@@ -21,7 +21,6 @@ const activeRadioButtonOptions = [
 const defaultobj = {
     drugType: "",
     drugname: "",
-    drugname: "",
     status: "1"
 }
 export default function DrugMaster(props) {

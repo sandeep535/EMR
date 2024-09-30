@@ -1,4 +1,4 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle, useContext, useDeferredValue } from 'react';
+import React, { useState, useEffect, forwardRef, useImperativeHandle, useContext } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import APIS from '../../Utils/APIS';
@@ -20,7 +20,7 @@ import CommonCard from '../../common/CommonCard';
 import ClientBanner from '../../components/ClientBanner/ClientBanner';
 import AutocompleteField from '../../CoreComponents/AutocompleteField';
 import SLTextField from '../../CoreComponents/SLTextField';
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import SLRadioButton from '../../CoreComponents/SLRadioButton';
 import SLSelectDropDown from '../../CoreComponents/SLSelectDropDown';
@@ -97,9 +97,7 @@ const Allergies = forwardRef((props, ref) => {
         let result = await sendRequest(payLoad);
         if (result && result.allergieslist.length != 0) {
             setAllergyTypeOptions(result.allergieslist);
-        } else {
-
-        }
+        } 
 
     }
 
@@ -289,5 +287,6 @@ const Allergies = forwardRef((props, ref) => {
         </Box>
     )
 });
+Allergies.displayName ="Allergies";
 export default Allergies;
 

@@ -77,18 +77,18 @@ const styles ={
                 <Table size="small" aria-label="a dense table">
                     <TableHead className={styles.headerCell}>
                         <TableRow>
-                            {props.tableHeaders.map((headerColumn) => (
-                                <TableCell width={headerColumn.width}>{headerColumn.name}</TableCell>
+                            {props.tableHeaders.map((headerColumn,index) => (
+                                <TableCell key={index.toString()} width={headerColumn.width}>{headerColumn.name}</TableCell>
                             ))}
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {props.tableData.map((row) => (
-                            <TableRow>
-                                {props.tableHeaders.map((rowHeader) => (
-                                    <TableCell component="th" scope="row">
-                                        {rowHeader.isActions && rowHeader.actions.map(action => {
-                                            return <Icon style={{ color: 'black', cursor: 'pointer' }} onClick={() => {
+                        {props.tableData.map((row,index) => (
+                            <TableRow key={index.toString()}>
+                                {props.tableHeaders.map((rowHeader,index) => (
+                                    <TableCell  key={index.toString()} component="th" scope="row">
+                                        {rowHeader.isActions && rowHeader.actions.map((action,index) => {
+                                            return <Icon key ={index.toString()} style={{ color: 'black', cursor: 'pointer' }} onClick={() => {
                                                 props.triggerEvent(row, action)
                                             }}>{action.icon}</Icon>
                                         })}

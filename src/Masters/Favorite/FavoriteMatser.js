@@ -1,14 +1,9 @@
-import React, { forwardRef, useImperativeHandle, useEffect, useState } from 'react';
-import TextField from '@mui/material/TextField';
+import React from 'react';
 import Grid from '@mui/material/Grid';
 import CommonCard from '../../common/CommonCard';
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import Autocomplete from '@mui/material/Autocomplete';
-import FormControl from '@mui/material/FormControl';
-import APIS from '../../Utils/APIS';
-import { sendRequest } from '../../pages/global/DataManager';
 
 
 import AllerigiesComponent from '../../components/Allerigies/AllerigiesComponent';
@@ -29,7 +24,7 @@ const FavoriteMatser = () => {
         resolver: yupResolver(schema),
     });
     const favoratesHandle = async (data) => {
-        debugger
+        
     }
     return (
         <Box sx={{ m: 1 }}>
@@ -58,6 +53,6 @@ const FavoriteMatser = () => {
             </form>
         </Box>
     );
-};
+}
 
 export default FavoriteMatser;

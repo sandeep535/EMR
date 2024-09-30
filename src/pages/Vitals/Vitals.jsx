@@ -195,4 +195,5 @@ const Vitals = forwardRef((props, ref) => {
         </>
     )
 });
+Vitals.displayName ="Vitals";
 export default Vitals;

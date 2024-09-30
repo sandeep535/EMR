@@ -119,7 +119,7 @@ export default function VisitDasboard(props) {
         appContextValue.setSelectedVisitDeatils(visit);
         var copyData = [...appContextValue.leftMenuList];
         copyData.map(item => {
-            if (item.hasOwnProperty("isPatientSpecific")) {
+            if (Object.prototype.hasOwnProperty.call(item, "isPatientSpecific")) {
                 item.isOpen = true;
                 item.isPatientSpecific = true;
             }

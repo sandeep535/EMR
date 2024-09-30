@@ -1,22 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
 import APIS from '../../Utils/APIS';
 import { sendRequest } from '../../pages/global/DataManager';
 import Translations from '../../resources/translations';
-import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
-import Autocomplete from '@mui/material/Autocomplete';
-import FormControl from '@mui/material/FormControl';
-import EMRAlert from '../../Utils/CustomAlert';
 import CustomDataGrid from '../../common/DataGrid/CustomDataGrid';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
 import CommonCard from '../../common/CommonCard';
-import { useForm, Controller } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 
 const diagnosisListHeaders = [{
     name: Translations.LAB_MASTER.NAME,
@@ -36,7 +23,6 @@ const diagnosisListHeaders = [{
     }]
 }]
 export default function LabMasterList(props) {
-    const [diagnosisCodeSetMasterData, setDiagnosisCodeSetMasterData] = useState([]);
     const [tableData, setTableData] = useState([]);
     const [totalcount, settotalcount] = useState(0);
 
@@ -68,16 +54,13 @@ export default function LabMasterList(props) {
             setTableData([]);
         }
     }
-    const labMasterhandleSubmit = async (data) => {
-
-    }
+    
     return (
         <>
             <CommonCard title="Lab Master List">
                 <CustomDataGrid tableHeaders={diagnosisListHeaders} tableData={tableData} totalcount={totalcount} rowsPerPage={20} paginationChangeEvent={(number) => {
 
                 }} triggerEvent={(row, action) => {
-                    debugger
                     props.openEditmode(row, action);
                 }}></CustomDataGrid>
             </CommonCard>

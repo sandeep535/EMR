@@ -73,4 +73,5 @@ const Notes = forwardRef((props, ref) => {
     </>
   )
 });
+Notes.displayName ="Notes";
 export default Notes;

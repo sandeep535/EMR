@@ -9,6 +9,9 @@ module.exports = function (_env, argv) {
         entry: {
             bundle:path.resolve(__dirname,'src/index.js')
         },
+        devServer: {
+  overlay: false,
+},
         output: {
             path: path.resolve(__dirname, "dist"),
             filename: "[name].[contenthash:8].js",

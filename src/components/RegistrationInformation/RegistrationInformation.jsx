@@ -123,5 +123,5 @@ const RegistrationInformation = forwardRef((props, ref) => {
         </Box>
     );
 })
-
+RegistrationInformation.displayName ="RegistrationInformation";
 export default RegistrationInformation;

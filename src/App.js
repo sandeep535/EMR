@@ -8,6 +8,11 @@ import ErrorBoundary from './common/ErrorBoundary/ErrorBoundary';
 
 const App = () => {
   const [theme, colorMode] = useMode();
+  window.onerror = function (message, source, lineno, colno, error) {
+    console.error(`Error: ${message} at ${source}:${lineno}:${colno}`, error);
+    // Optionally, prevent the default behavior
+    return true; 
+  };
   try{
     return (
       // <ErrorBoundary>

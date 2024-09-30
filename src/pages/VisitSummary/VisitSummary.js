@@ -24,7 +24,6 @@ import { FunctionalComponentToPrint } from '../../components/Print/ComponentToPr
 import PrintIcon from '@mui/icons-material/Print';
 
 export default function VisitSummary(props) {
-    console.log("sssssssssssssssssss", props.visitEditData)
     const appContextValue = useContext(AppContext);
 
     const [vitalsData, setVitalsData] = useState([]);
@@ -83,7 +82,6 @@ export default function VisitSummary(props) {
         }
         let result = await sendRequest(payLoad);
         if (result) {
-            debugger
             setPrescriptionData(result)
         }
     }

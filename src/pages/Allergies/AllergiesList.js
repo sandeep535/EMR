@@ -1,24 +1,10 @@
-import React, { useState, useEffect, forwardRef, useImperativeHandle, useContext } from 'react';
-import TextField from '@mui/material/TextField';
+import React, { useState, useEffect, useContext } from 'react';
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
 import APIS from '../../Utils/APIS';
 import { sendRequest } from '../global/DataManager';
 import Translations from '../../resources/translations';
-import FormControl from '@mui/material/FormControl';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
-import Select from '@mui/material/Select'
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Button from '@mui/material/Button';
-import Paper from '@mui/material/Paper';
-import ClearIcon from '@mui/icons-material/Clear';
 import AppContext from '../../components/Context/AppContext';
 import CustomDataGrid from '../../common/DataGrid/CustomDataGrid';
-import { act } from 'react-dom/test-utils';
 import CommonCard from '../../common/CommonCard';
 
 const allergiesListHeaders = [{

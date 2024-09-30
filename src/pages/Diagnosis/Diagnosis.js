@@ -111,4 +111,5 @@ const Diagnosis = forwardRef((props, ref) => {
         </>
     )
 });
+Diagnosis.displayName ="Diagnosis";
 export default Diagnosis;

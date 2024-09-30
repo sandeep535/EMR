@@ -25,8 +25,8 @@ export default function PrintTextFormar(props) {
             <Typography variant="h3" component="h3">{props.title}</Typography>
             <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={2}>
-                    {(props && props.headers.map(header => {
-                       return ( <Grid item xs={header.width}>
+                    {(props && props.headers.map((header,index) => {
+                       return ( <Grid key ={index.toString()} item xs={header.width}>
                            <Typography variant="h5" component="h5">{header.label}</Typography>
                            <FormLabel component="legend">
                                {normalStringValue(props.data, header.dataValue)}

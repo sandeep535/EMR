@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import APIS from '../../Utils/APIS';
@@ -307,4 +307,4 @@ export default function AllergyMaster(props) {
             </CommonCard>
         </>
     )
-};
+}

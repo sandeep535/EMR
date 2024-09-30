@@ -198,4 +198,4 @@ export default function DiagnosisMaster(props) {
             </CommonCard>
         </>
     )
-};
+}

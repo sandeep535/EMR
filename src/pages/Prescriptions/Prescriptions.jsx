@@ -244,7 +244,7 @@ const Prescriptions = forwardRef((props, ref) => {
                                     <TableRow>
                                         {(prescriptionHeadersList.map(header => {
                                             return (
-                                                <TableCell width={header.width}>{header.name}</TableCell>
+                                                <TableCell key ={Math.random()} width={header.width}>{header.name}</TableCell>
                                             )
                                         }))}
                                     </TableRow>
@@ -289,4 +289,5 @@ const Prescriptions = forwardRef((props, ref) => {
         </>
     )
 });
+Prescriptions.displayName="Prescriptions";
 export default Prescriptions;

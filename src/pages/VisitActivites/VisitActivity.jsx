@@ -43,7 +43,7 @@ export default function VisitActivity(props) {
 
     useEffect(() => {
         callVisitAPis();
-        getVisitCountBasedondate();
+       // getVisitCountBasedondate();
     }, []);
     function callVisitAPis() {
         getVitalsData();
@@ -53,16 +53,16 @@ export default function VisitActivity(props) {
         //getAllerigies();
     }
 
-    async function getVisitCountBasedondate() {
-        var payLoad = {
-            method: APIS.GET_COUNT_BASED_ON_VISITDATE.METHOD,
-            url: APIS.GET_COUNT_BASED_ON_VISITDATE.URL,
-            paramas: [new Date('2023-12-16')],
-        }
-        let result = await sendRequest(payLoad);
-        if (result && result.length !== 0) {
-        }
-    }
+    // async function getVisitCountBasedondate() {
+    //     var payLoad = {
+    //         method: APIS.GET_COUNT_BASED_ON_VISITDATE.METHOD,
+    //         url: APIS.GET_COUNT_BASED_ON_VISITDATE.URL,
+    //         paramas: [new Date('2023-12-16')],
+    //     }
+    //     let result = await sendRequest(payLoad);
+    //     if (result && result.length !== 0) {
+    //     }
+    // }
 
     async function getVitalsData() {
         var payLoad = {
@@ -190,7 +190,6 @@ export default function VisitActivity(props) {
                 notesData.notesid = customapisData.notesAPIData.notesid;
             }
             const vitalData = vitalsRef.current.getFormData().vitalformData;
-            debugger
             saveActivityData(notesData, null, vitalData, null, null)
         });
     }

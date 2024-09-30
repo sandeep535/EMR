@@ -45,7 +45,7 @@ export default function PrintTableFomat(props) {
                             <TableRow>
                                 {(props && props.headers.map(header => {
                                     return (
-                                        <TableCell >{header.label}</TableCell>
+                                        <TableCell key ={Math.random()}>{header.label}</TableCell>
                                     )
                                 }))}
                             </TableRow>

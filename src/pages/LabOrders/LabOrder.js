@@ -60,7 +60,7 @@ const LabOrder = forwardRef((props, ref) => {
                     }
                 },
                 setFormData: (data) => {
-                    setLabOrderMasterData(data);;
+                    setLabOrderMasterData(data);
                     setValue("selectedLabOrder", data, { shouldTouch: true, shouldDirty: true });
                 },
                 submitFormmData: () => {
@@ -120,4 +120,5 @@ const LabOrder = forwardRef((props, ref) => {
 
     )
 });
+LabOrder.displayName ="LabOrder";
 export default LabOrder;

@@ -1,6 +1,6 @@
-import React, { forwardRef, useImperativeHandle, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
-import { useForm, Controller } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import Autocomplete from '@mui/material/Autocomplete';
 import FormControl from '@mui/material/FormControl';
 import APIS from '../../Utils/APIS';
@@ -35,9 +35,7 @@ const AllerigiesComponent = (props) => {
         let result = await sendRequest(payLoad);
         if (result && result.allergieslist.length != 0) {
             setAllergyTypeOptions(result.allergieslist);
-        } else {
-
-        }
+        } 
 
     }
     
@@ -46,7 +44,7 @@ const AllerigiesComponent = (props) => {
             <Controller
                 name="selectedAllerigies"
                 control={props.control}
-                render={({ field: { onChange, onBlur, value, ref }, fieldState: { error } }) =>
+                render={({ field: { onChange, value }, fieldState: { error } }) =>
                     <Autocomplete
                         size="small"
                         multiple={props.isMultiSelect ? props.isMultiSelect : false}

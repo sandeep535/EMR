@@ -7,7 +7,7 @@ import { sendRequest } from '../../pages/global/DataManager';
 import SLTextField from '../../CoreComponents/SLTextField';
 import SLSelectDropDown from '../../CoreComponents/SLSelectDropDown';
 
-const AddressController = forwardRef((props, ref) => {
+const AddressComponent = forwardRef((props, ref) => {
   const { control, errors } = props;
   const [countriesList, setCountriesList] = useState([]);
   const [stateList, setStateList] = useState([]);
@@ -118,4 +118,5 @@ const AddressController = forwardRef((props, ref) => {
     </Box>
   );
 });
-export default AddressController;
+AddressComponent.displayName = 'AddressComponent';
+export default AddressComponent;

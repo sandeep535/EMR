@@ -41,7 +41,7 @@ const MyProSidebar = () => {
 
   const removePatientSpecific = (copyData) => {
     copyData.map(item => {
-      if (item.hasOwnProperty("isPatientSpecific")) {
+      if (Object.prototype.hasOwnProperty.call(item, "isPatientSpecific")) {
         item.isPatientSpecific = false;
       }
     });
@@ -58,7 +58,7 @@ const MyProSidebar = () => {
       appContextValue.setSelectedLeftMenuItem(item);
       navigate(item.to);
     } else {
-      var copyData = [...appContextValue.leftMenuList];
+      let copyData = [...appContextValue.leftMenuList];
       copyData[index].isOpen = !copyData[index].isOpen;
       if (item.isRefreshMenu) {
         copyData = removePatientSpecific(copyData);
@@ -119,7 +119,7 @@ const MyProSidebar = () => {
               aria-labelledby="nested-list-subheader"
             >
               {appContextValue && appContextValue.leftMenuList && appContextValue.leftMenuList.map((menu, index) => {
-                if (menu.hasOwnProperty("isPatientSpecific") === false && menu.subMenu.length !== 0) {
+                if (Object.prototype.hasOwnProperty.call(menu, "isPatientSpecific") === false && menu.subMenu.length !== 0) {
                   return (
                     <Box key={index}>
                       <ListItemButton onClick={() => handleClick(menu, "", index)}>
@@ -132,7 +132,7 @@ const MyProSidebar = () => {
                       <Collapse in={menu.isOpen} timeout="auto" unmountOnExit>
                         {menu.subMenu && menu.subMenu.map(submenu => {
                           return (
-                            <List component="div" disablePadding className = { appContextValue && appContextValue.selectedLeftMenuItem.title == submenu.title && 'is-active' }>
+                            <List key ={Math.random()} component="div" disablePadding className = { appContextValue && appContextValue.selectedLeftMenuItem.title == submenu.title && 'is-active' }>
                               {appContextValue.title}
                               <ListItemButton sx={{ pl: 4 }} onClick={() => handleClick(submenu, "submenu", index)}>
                                 <ListItemIcon>
@@ -147,7 +147,7 @@ const MyProSidebar = () => {
                     </Box>
                   )
                 }
-                if (menu.hasOwnProperty("isPatientSpecific") === true && menu.isPatientSpecific === true && menu.subMenu.length !== 0) {
+                if (Object.prototype.hasOwnProperty.call(menu, "isPatientSpecific") === true && menu.isPatientSpecific === true && menu.subMenu.length !== 0) {
                   return (
                     <>
                       <ListItemButton onClick={() => handleClick(menu, "", index)}>

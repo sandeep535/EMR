@@ -1,11 +1,10 @@
-import React, { forwardRef, useImperativeHandle, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import TextField from '@mui/material/TextField';
-import { useForm, Controller } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import Autocomplete from '@mui/material/Autocomplete';
 import FormControl from '@mui/material/FormControl';
 import APIS from '../../Utils/APIS';
 import { sendRequest } from '../../pages/global/DataManager';
-import Translations from '../../resources/translations';
 
 
 const DiagnosisComponent = (props) => {

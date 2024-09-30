@@ -121,7 +121,7 @@ const UploadDocuments = () => {
                 <Demo>
                     <List >
                         {selectedFiles.map((file, index) => (
-                            <ListItem>
+                            <ListItem key ={Math.random()}>
                                 <ListItemText
                                     primary={file.name}
 

@@ -177,7 +177,8 @@ export default function VisitCreation(props) {
     } else {
       EMRAlert.alertifyError("Not created")
     }
-  };
+  }
+  
   return (
     <>
       <Box m="2px">

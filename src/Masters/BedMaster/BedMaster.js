@@ -90,7 +90,6 @@ const BedMaster = () => {
         })
     }
     const bedMasterAddhhandleSubmit = async (data) => {
-        debugger
         if (data.isBed == "1") {
             var bedListCopy = [...bedList];
             bedListCopy.push(data);
