@@ -18,6 +18,7 @@ import VisitCreation from "../pages/visit-creation/VisitCreation";
 import FavoriteMatser from "../Masters/Favorite/FavoriteMatser";
 import UploadDocuments from "../pages/UploadDocuments/UploadDocuments";
 import BedMaster from "../Masters/BedMaster/BedMaster";
+import LabOrdersList from "../pages/LabOrders/LabOrdersList";
 
 
 const ApplicationRoutes = [
@@ -42,6 +43,8 @@ const ApplicationRoutes = [
     { path: "/favorites", element: <FavoriteMatser /> },
     { path: "/uploadDocuments", element: <UploadDocuments /> },
     { path: "/bedMaster", element: <BedMaster /> },
+    { path: "/labordersList", element: <LabOrdersList /> },
+    
     
   ];
   

@@ -130,7 +130,12 @@ const Translations = {
      },
      "LAB_ORDER":{
       TITLE:'Search Lab Order',
-      DID_TITLE:'Search Daignosis'
+      DID_TITLE:'Search Daignosis',
+      ORDER_LIST_TITLE:'Lab Orders List',
+      LAB_NAME:'Report Name',
+      LAB_TITLE:"Lab Orders",
+      ADD:'Save',
+      STATUS:'Status'
    },
      "LAB_MASTER":{
         TITLE:'Lab Master',

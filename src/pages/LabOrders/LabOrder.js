@@ -73,6 +73,9 @@ const LabOrder = forwardRef((props, ref) => {
     const labOrderisHandle = async (data) => {
         //let totalRecords = [...data.selectedLabOrder,...removedItems];
         setDescription(data.selectedLabOrder);
+        if(props.sendDataToParent){
+            props.sendDataToParent(data);
+        }
     }
     const autocompleteValue = watch('selectedLabOrder');
     // const handleRemoveItem = (event, newValue) => {

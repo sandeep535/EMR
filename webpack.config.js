@@ -7,11 +7,11 @@ module.exports = function (_env, argv) {
     return {
         devtool: isDevelopment && "cheap-module-source-map",
         entry: {
-            bundle:path.resolve(__dirname,'src/index.js')
+            bundle: path.resolve(__dirname, 'src/index.js')
         },
         devServer: {
-  overlay: false,
-},
+            overlay: false,
+        },
         output: {
             path: path.resolve(__dirname, "dist"),
             filename: "[name].[contenthash:8].js",
@@ -40,10 +40,10 @@ module.exports = function (_env, argv) {
                 }
             ]
         },
-        Plugin:[
+        Plugin: [
             new HTMLWebpackPligin({
-                title:'Web Pack',
-                filename:'index.html'
+                title: 'Web Pack',
+                filename: 'index.html'
             })
         ],
         resolve: {

@@ -70,6 +70,13 @@
         isRefreshMenu:false,
         screencode:'PRESCRIPTIONS_SCREEN_VIEW'
     },{
+        title:"Lab Orders",
+        to:"/labordersList",
+        icon:"favorite",
+        isPatientSpecific :false,
+        isRefreshMenu:false,
+        screencode:'PRESCRIPTIONS_SCREEN_VIEW'
+    },{
         title:"Upload Documents",
         to:"/uploadDocuments",
         icon:"favorite",
