@@ -1,11 +1,10 @@
-import React, { useRef, forwardRef, useImperativeHandle, useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Grid from '@mui/material/Grid';
 import APIS from '../../Utils/APIS';
 import { sendRequest } from '../../pages/global/DataManager';
 import AppContext from '../../components/Context/AppContext';
 import { Box } from '@mui/material';
 import Divider from '@mui/material/Divider';
-import Tooltip from '@mui/material/Tooltip';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
@@ -16,12 +15,8 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import dayjs from 'dayjs';
-import moment from 'moment';
 import Moment from 'react-moment';
-import { useReactToPrint } from 'react-to-print';
-import { FunctionalComponentToPrint } from '../../components/Print/ComponentToPrint';
-import PrintIcon from '@mui/icons-material/Print';
+import SLCommonPrintComponent from '../../components/Print/SLCommonPrintComponent';
 
 export default function VisitSummary(props) {
     const appContextValue = useContext(AppContext);
@@ -31,7 +26,6 @@ export default function VisitSummary(props) {
     const [notes, setNotes] = useState([]);
     const [prescriptionData, setPrescriptionData] = useState([]);
     const [labOrders, setLabOrders] = useState([]);
-    const [enablePrint, setEnablePrint] = useState(false);
 
     useEffect(() => {
         getVitalsData();
@@ -93,28 +87,20 @@ export default function VisitSummary(props) {
         }
         let result = await sendRequest(payLoad);
         if (result) {
-            console.log("sddddddddddd", result);
             setLabOrders(result);
         }
 
     }
-    const componentRef = useRef();
-    const componentRef1 = useRef();
-    const handlePrint = useReactToPrint({
-        content: () => componentRef.current,
-        onAfterPrint: () => {
-            setEnablePrint(false);
-        },
-        onBeforeGetContent: () => {
-        }
-    });
+
+    
+
     const contentDiv = (
-        <Card variant="outlined" ref={componentRef1} >
+        <Card variant="outlined"  >
             <CardContent>
                 <Stack direction="row" justifyContent='center' alignItems="center">
-                    <Typography variant="h4" component="div"> Visit Summary</Typography>
+                    <Typography variant="h4" component="div">Visit Summary</Typography>
                 </Stack>
-                <Divider />
+                <Divider className='page-beak'/>
                 <Box sx={{ p: 2 }}>
                     <Typography variant="h4" gutterBottom sx={{ textDecoration: 'underline' }}>
                         Vitals
@@ -138,7 +124,7 @@ export default function VisitSummary(props) {
                             </Grid>
                             <Grid xs={2}>
                                 <Typography variant="h5" gutterBottom >
-                                    BP :{vitalsData.systolic + "/" + vitalsData.diastolic}
+                                    BP :{vitalsData .systolic && vitalsData.systolic + "/" + vitalsData.diastolic}
                                 </Typography>
                             </Grid>
                             <Grid xs={2}>
@@ -159,17 +145,19 @@ export default function VisitSummary(props) {
                         </Grid>
                     </Box>
                 </Box>
-                <Divider />
+                <Divider className='page-beak'/>
                 <Box sx={{ p: 2 }}>
                     <Typography variant="h4" gutterBottom sx={{ textDecoration: 'underline' }}>Diagnosis</Typography>
-                    <Typography variant="body" gutterBottom >{diagnosisData.description}</Typography>
+                    <Typography variant="body" gutterBottom >{diagnosisData.description} 
+                    </Typography>
                 </Box>
-                <Divider />
+                <Divider className='page-beak'/>
                 <Box sx={{ p: 2 }}>
                     <Typography variant="h4" gutterBottom sx={{ textDecoration: 'underline' }}>Notes</Typography>
-                    <Typography variant="body" gutterBottom >{notes.description}</Typography>
+                    <Typography variant="body" gutterBottom >{notes.description}
+                    </Typography>
                 </Box>
-                <Divider />
+                <Divider className='page-beak'/>
                 <Box sx={{ p: 2 }}>
                     <Typography variant="h4" gutterBottom sx={{ textDecoration: 'underline' }}>Prescriptions</Typography>
                     <Box>
@@ -212,7 +200,7 @@ export default function VisitSummary(props) {
 
                     </Box>
                 </Box>
-                <Divider />
+                <Divider className='page-beak'/>
                 <Box sx={{ p: 2 }}>
                     <Typography variant="h4" gutterBottom sx={{ textDecoration: 'underline' }}>Lab Orders</Typography>
                     <Box>
@@ -249,31 +237,10 @@ export default function VisitSummary(props) {
 
     return (
         <>
-            <Box
-                mt={1}
-                display="flex"
-                justifyContent="flex-end"
-                alignItems="flex-end"
-                style={{ color: 'red', cursor: 'pointer' }}
-            >
-                <Tooltip title="Print">
-                    <PrintIcon onClick={() => {
-                        setEnablePrint(true);
-                        setTimeout(function () {
-                            handlePrint();
-                        }, 100)
-
-                    }} />
-                </Tooltip>
-
-            </Box>
-
-            {contentDiv}
-            {enablePrint &&
-                <FunctionalComponentToPrint ref={componentRef} >
-                    {contentDiv}
-                </FunctionalComponentToPrint>
-            }
+        <Box className="main-class-visitsummary">
+           <SLCommonPrintComponent printContent={contentDiv} />
+        </Box>
+         
         </>
 
     )

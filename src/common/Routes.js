@@ -19,6 +19,7 @@ import FavoriteMatser from "../Masters/Favorite/FavoriteMatser";
 import UploadDocuments from "../pages/UploadDocuments/UploadDocuments";
 import BedMaster from "../Masters/BedMaster/BedMaster";
 import LabOrdersList from "../pages/LabOrders/LabOrdersList";
+import DynamicFormBuilder from "./DynamicFormBuilder/DynamicFormBuilder";
 
 
 const ApplicationRoutes = [
@@ -44,6 +45,7 @@ const ApplicationRoutes = [
     { path: "/uploadDocuments", element: <UploadDocuments /> },
     { path: "/bedMaster", element: <BedMaster /> },
     { path: "/labordersList", element: <LabOrdersList /> },
+    { path: "/dynamicFormBuilder", element: <DynamicFormBuilder /> },
     
     
   ];

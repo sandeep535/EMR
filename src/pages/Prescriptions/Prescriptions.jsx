@@ -162,8 +162,8 @@ const Prescriptions = forwardRef((props, ref) => {
                                     onchangeEventCallBack={(data) => {
                                         setValue("instructions", data.defaultInstruction);
                                         setValue("sig", data.sig)
-                                        setValue("doseunit", data.drugunit.masterdatavalue, { shouldTouch: true, shouldDirty: true });
-                                        setValue("dose", data.drugform.masterdatavalue, { shouldTouch: true, shouldDirty: true });
+                                        setValue("doseunit", data.drugunit ? data.drugunit.masterdatavalue:"", { shouldTouch: true, shouldDirty: true });
+                                        setValue("dose", data.drugform ? data.drugform.masterdatavalue:'', { shouldTouch: true, shouldDirty: true });
                                     }}
                                     onInputChange={(data) => {
                                         if (data.length > 2) {

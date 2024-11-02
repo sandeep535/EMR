@@ -149,3 +149,7 @@ export const BedMasterAdd = Yup
         isBed: Yup.string().required("Select Is Bed")
     })
     .required()
+
+export const DisplayFiledProperiesSchema = Yup.object({
+       
+    }).required()

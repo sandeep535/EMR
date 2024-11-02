@@ -149,6 +149,9 @@ const Translations = {
       TITLE:'Bed Master',
       NAME:'Label',
       IS_BED:'Is Bed'
+   },
+   "DISPLAY_PROP_ITEMS":{
+      TITLE:'Properies'
    }
     
 }

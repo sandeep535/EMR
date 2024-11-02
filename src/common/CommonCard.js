@@ -14,7 +14,7 @@ export default function CommonCard({ children, title, iconsList, catchCliedEvent
         action={
           <IconButton aria-label="settings">
             {iconsList && iconsList.map((item, index) => (
-              <Icon  onClick={() => { catchCliedEvent(item) }}>{item.icon}</Icon>
+              <Icon  key ={index.toString()} onClick={() => { catchCliedEvent(item) }}>{item.icon}</Icon>
             ))}
           </IconButton>
         }

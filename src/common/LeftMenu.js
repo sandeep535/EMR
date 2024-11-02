@@ -175,6 +175,13 @@
         isOpen:false,
         isRefreshMenu:true,
         screencode:'DRUG_MASTER_SCREEN_VIEW'
+    },{
+        title:"Form Builder",
+        to:"/dynamicFormBuilder",
+        icon:"medication",
+        isOpen:false,
+        isRefreshMenu:true,
+        screencode:'DRUG_MASTER_SCREEN_VIEW'
     }]
     
 }];

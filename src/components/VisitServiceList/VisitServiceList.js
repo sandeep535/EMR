@@ -15,6 +15,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import AutocompleteField from '../../CoreComponents/AutocompleteField';
 import { useForm } from "react-hook-form";
+import SLAutocomplete from '../../CoreComponents/SLAutocomplete';
 
 const visitServiceTableHeaders = [{
     name: 'Service Name',
@@ -173,6 +174,22 @@ const VisitServiceList = forwardRef((props, ref) => {
                             }}
                         />
                     </FormControl>
+                    {/* <FormControl variant="outlined" fullWidth>
+                        <SLAutocomplete
+                            name="serviceValues1"
+                            label={Translations.visitCreation.addServices}
+                            control={control}
+                            placeholder={Translations.visitCreation.addServices}
+                            mapvalues={{ id: "serviceid", value: 'servicename' }}
+                            isMultiSelect={false}
+                            id={"service-controllable-states-demo"}
+                            onchangeEventCallBack={(newValue) => {
+                                addServicetoList(newValue);
+                            }}
+                            apiEndpoint={APIS.GET_SERVICE_MASTER_DATA_BASED_SERVICENAME}
+                           
+                        />
+                    </FormControl> */}
                 </Grid>
             </Grid>
             <TableContainer component={Paper}>
