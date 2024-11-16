@@ -16,6 +16,7 @@ import { AllergyNewMasterSchema, AllergySearchMasterSchema } from '../../common/
 import SLRadioButton from '../../CoreComponents/SLRadioButton';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import CommonConst from '../../Utils/CommonConst';
 
 const activeRadioButtonOptions = [
     { label: 'Active', value: '1' },
@@ -217,7 +218,7 @@ export default function AllergyMaster(props) {
                                             name="status"
                                             label={Translations.ALLERGY_MASTER.STATUS}
                                             control={addFormControl}
-                                            options={activeRadioButtonOptions}
+                                            options={CommonConst.activeRadioButtonOptions}
                                             error={AddformError.status}
                                         />
                                     </Grid>
@@ -281,7 +282,7 @@ export default function AllergyMaster(props) {
                                         name="status"
                                         label={Translations.ALLERGY_MASTER.STATUS}
                                         control={searchControl}
-                                        options={activeRadioButtonOptions}
+                                        options={CommonConst.activeRadioButtonOptions}
                                         error={searchFormError.status}
                                     />
                                 </Grid>

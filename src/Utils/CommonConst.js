@@ -1,8 +1,8 @@
 
 const CommonConst = {
      activeRadioButtonOptions : [
-        { label: 'Active', value: '1' },
-        { label: 'In-active', value: '2' }
+        { id: 'Active', value: '1' },
+        { id: 'In-active', value: '2' }
     ]
 }
 export default CommonConst;

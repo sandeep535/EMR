@@ -209,8 +209,16 @@ const APIS={
         METHOD:"GET",
         ACTION:"Get Lab order details"
     },
-    
-    
+    GENERATE_BILL:{
+        URL:'bill',
+        METHOD:"POST",
+        ACTION:"BILL"
+    },
+    GET_GENERATE_BILL:{
+        URL:'bill?visitId={0}',
+        METHOD:"GET",
+        ACTION:"BILL"
+    }
     
     
 

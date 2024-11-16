@@ -12,9 +12,20 @@ export default function MainScreen(props) {
     const navigate = useNavigate();
     const params = useParams()
     useEffect(() => {
-        if (!appContextValue.isLogin) {
-            navigate("/login/emr2", { replace: true });
+        let sessionToken = sessionStorage.getItem("token");
+        let sessionLoggedInUserDetails = sessionStorage.getItem("LoggedInUserDetails");
+        if(sessionToken && sessionLoggedInUserDetails){
+            appContextValue.setIslogin(true);
+            appContextValue.setLoggedInUserDetails(JSON.parse(sessionLoggedInUserDetails));
+           let leftmenu =  sessionStorage.getItem('leftMenu');
+            appContextValue.setLeftMenuList(JSON.parse(leftmenu));
+
+        }else{
+            if (!appContextValue.isLogin) {
+                navigate("/login/emr2", { replace: true });
+            }
         }
+        
     }, []);
     const appContextValue = useContext(AppContext);
     return (

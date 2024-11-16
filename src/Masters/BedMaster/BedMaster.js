@@ -16,6 +16,7 @@ import { useTreeViewApiRef } from '@mui/x-tree-view/hooks';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import SLButton from '../../CoreComponents/SLButton';
+import CommonConst from '../../Utils/CommonConst';
 
 var obj = []
 const activeRadioButtonOptions = [
@@ -167,7 +168,7 @@ const BedMaster = () => {
                                         name="isBed"
                                         label={Translations.BED_MASTER.IS_BED}
                                         control={control}
-                                        options={activeRadioButtonOptions}
+                                        options={CommonConst.activeRadioButtonOptions}
                                         error={errors.status}
                                     />
                                 </Grid>

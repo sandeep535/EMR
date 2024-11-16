@@ -79,9 +79,9 @@ main {
   padding: 5px;
 }
 
-.MuiGrid-root .MuiGrid-item {
+/* .MuiGrid-root .MuiGrid-item {
   padding: 8px !important;
-}
+} */
 
 .card-header {
   background: #1976d2;

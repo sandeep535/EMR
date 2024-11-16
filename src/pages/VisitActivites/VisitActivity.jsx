@@ -43,6 +43,8 @@ export default function VisitActivity(props) {
 
     useEffect(() => {
         callVisitAPis();
+        //generateBill();
+       
        // getVisitCountBasedondate();
     }, []);
     function callVisitAPis() {
@@ -63,7 +65,8 @@ export default function VisitActivity(props) {
     //     if (result && result.length !== 0) {
     //     }
     // }
-
+    
+    
     async function getVitalsData() {
         var payLoad = {
             method: APIS.GET_VITALS_DATA.METHOD,

@@ -20,7 +20,12 @@ import UploadDocuments from "../pages/UploadDocuments/UploadDocuments";
 import BedMaster from "../Masters/BedMaster/BedMaster";
 import LabOrdersList from "../pages/LabOrders/LabOrdersList";
 import DynamicFormBuilder from "./DynamicFormBuilder/DynamicFormBuilder";
+import ReactCodeFormBuilder from "./ReactCodeGenerater/ReactCodeFormBuilder";
+import SampleForm from "../Masters/ServiceMaster/SampleForm";
 
+
+import React, { useEffect, useContext } from 'react';
+import BillsList from "../pages/Bills/BillsList";
 
 const ApplicationRoutes = [
     { path: "/vist-dashboard", element: <VisitDasboard /> },
@@ -45,9 +50,12 @@ const ApplicationRoutes = [
     { path: "/uploadDocuments", element: <UploadDocuments /> },
     { path: "/bedMaster", element: <BedMaster /> },
     { path: "/labordersList", element: <LabOrdersList /> },
+    { path: "/bills", element: <BillsList /> },
     { path: "/dynamicFormBuilder", element: <DynamicFormBuilder /> },
     
+    { path: "/reactCodeBuilder", element: <ReactCodeFormBuilder /> },
     
+    { path: "/sampleForm", element: <SampleForm /> },
   ];
   
   export default ApplicationRoutes;

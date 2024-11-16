@@ -83,6 +83,13 @@
         isPatientSpecific :false,
         isRefreshMenu:false,
         screencode:'PRESCRIPTIONS_SCREEN_VIEW'
+    },{
+        title:"Bills",
+        to:"/bills",
+        icon:"favorite",
+        isPatientSpecific :false,
+        isRefreshMenu:false,
+        screencode:'PRESCRIPTIONS_SCREEN_VIEW'
     }]
 },
 {
@@ -182,7 +189,22 @@
         isOpen:false,
         isRefreshMenu:true,
         screencode:'DRUG_MASTER_SCREEN_VIEW'
+    },{
+        title:"React Code Builder",
+        to:"/reactCodeBuilder",
+        icon:"medication",
+        isOpen:false,
+        isRefreshMenu:true,
+        screencode:'DRUG_MASTER_SCREEN_VIEW'
+    },{
+        title:"SampleForm",
+        to:"/sampleForm",
+        icon:"medication",
+        isOpen:false,
+        isRefreshMenu:true,
+        screencode:'DRUG_MASTER_SCREEN_VIEW'
     }]
+    
     
 }];
 export default LeftMenu

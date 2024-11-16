@@ -90,7 +90,7 @@ export default function LoginPage(props) {
       copyLeftMenu[i].subMenu = submentList;
     }
     appContextValue.setLeftMenuList(copyLeftMenu);
-
+    sessionStorage.setItem('leftMenu',JSON.stringify(copyLeftMenu));
   }
   async function callLogin(obj) {
     var payLoad = {
@@ -105,6 +105,7 @@ export default function LoginPage(props) {
       setShowError(false);
       appContextValue.setIslogin(true);
       sessionStorage.setItem("token", result.token);
+      sessionStorage.setItem("LoggedInUserDetails", JSON.stringify(result));
       appContextValue.setLoggedInUserDetails(result);
       fetchRolesTransData(result.role.id);
       var loginUser = result.designation.lookupvalue+'.'+result.firstname+' '+result.lastname;

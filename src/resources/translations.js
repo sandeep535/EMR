@@ -128,6 +128,21 @@ const Translations = {
         ACTIONS:'Actions',
         ADD_NEW_DIA:"Add New Diagnosis"
      },
+     "BILLS_LIST":{
+      TITLE:'Generated Bills',
+      BILLNO:'Bill_No',
+      BILLDATE:'Bill Date',
+      BILLAMOUNT:'Bill Amount',
+      TOTALAMOUNT:'Bill(before discount)',
+      DISCOUNTINPERCENTAGE:'Discount(%)',
+      DISCOUNTAMOUNT:'Discount Amount',
+      PENDING_BILLS:'Pending Bills',
+      SERVICENAME:'Service Name',
+      PRICE:'Price',
+      QUANTITY:'Quantiy',
+      SERVICE_DISCOUNT:'Service Discount',
+      GENRATE_BILL:'Generate Bill'
+   },
      "LAB_ORDER":{
       TITLE:'Search Lab Order',
       DID_TITLE:'Search Daignosis',

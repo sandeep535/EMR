@@ -34,6 +34,7 @@ const apiCallFileds = [{
 const FiledProperitedList = {
     "SLTextField": {
         "label": 'Text filed',
+        "icon":'text_fields',
         "type": 'SLTextField',
         "props": [{
             key: 'name',
@@ -52,6 +53,7 @@ const FiledProperitedList = {
     },
     "SLTitle": {
         "label": 'Title',
+        "icon":'titlecase',
         "type": 'SLTitle',
         "props": [{
             key: 'variant',
@@ -70,6 +72,7 @@ const FiledProperitedList = {
     },
     "SLSelectDropDown": {
         "label": 'Drop Down',
+        "icon":'open_in_new',
         "type": 'SLSelectDropDown',
         "props": [{
             key: 'name',
@@ -97,6 +100,7 @@ const FiledProperitedList = {
     },
     "SLRadioButton": {
         "label": 'Radio',
+        "icon":'radio_button_checked',
         "type": 'SLRadioButton',
         "props": [{
             key: 'name',
@@ -116,6 +120,7 @@ const FiledProperitedList = {
     },
     "SLAutocomplete": {
         "label": 'Auto Complte ',
+        "icon":'library_add',
         "type": 'SLAutocomplete',
         "props": [{
             key: 'name',

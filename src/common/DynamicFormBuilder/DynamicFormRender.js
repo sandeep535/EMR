@@ -7,7 +7,8 @@ import APIS from "../../Utils/APIS";
 import { sendRequest } from "../../pages/global/DataManager";
 
 const isStateValue = ["options"];
-const convertObjectorArray = ['mapvalues'];
+const convertObjectorArray = [];
+const convertIdAndValue = ['mapvalues'];
 const functionsList = ['onInputChange', 'onchangeEventCallBack'];
 const splitWithCommaAPIObject =['apiEndpoint']
 
@@ -69,10 +70,7 @@ export default function DynamicFormRender(props) {
     }
     
     const callFunctions = (key,subZone,index,subIndex,data) => {
-        // Call all the appended functions
-        console.log("sdffffffffffffffffffffff", data,key,subZone);
        if(data != subZone.apiCall[2].value){
-        //const paraObj = apiData.find(obj => obj['key'] == "paramas");
         subZone.apiCall[2].value = data
         callApis(subZone.apiCall,subZone,index,subIndex)
        }
@@ -97,7 +95,7 @@ export default function DynamicFormRender(props) {
                                     componentProps.forEach(item => {
                                         if (isStateValue.indexOf(item.key) == -1) {
                                             propsobj[item.key] = (item.value) ? item.value : "Sample";
-                                        } else if (item.isApiCall != "NO") {
+                                        } else if (splitWithCommaAPIObject.indexOf(item.key) != -1 && item.isApiCall != "NO") {
                                             const stateObj = field.apiCall.find(obj => obj['key'] == "stateKey");
                                             propsobj[item.key] = (dynamicState[stateObj.value]) ? dynamicState[stateObj.value] : [];
                                         } else {
@@ -107,8 +105,15 @@ export default function DynamicFormRender(props) {
                                                 propsobj[item.key] = (item.value) ? item.value : "Sample";
                                             }
                                         }
-                                        if (convertObjectorArray.indexOf(item.key) != -1) {
-                                            propsobj[item.key] = (item.value) ? JSON.parse(item.value) : "Sample";
+                                        if (convertIdAndValue.indexOf(item.key) != -1) {
+                                            let orignalSplitValue = item.value;
+                                            let splitAreay = orignalSplitValue.split(",");
+                                            let mapingObj = {
+                                                id :splitAreay[0],
+                                                value:splitAreay[1]
+                                            }
+                                            propsobj[item.key] = mapingObj
+                                          //  propsobj[item.key] = (item.value) ? JSON.parse(item.value) : "Sample";
                                         }
                                         if (splitWithCommaAPIObject.indexOf(item.key) != -1) {
                                             let orignalSplitValue = item.value;

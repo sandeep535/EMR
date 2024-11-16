@@ -1,53 +1,71 @@
-const path = require("path");
-const HTMLWebpackPligin = require('html-webpack-plugin');
-module.exports = function (_env, argv) {
-    const isProduction = argv.mode === "production";
-    const isDevelopment = !isProduction;
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-    return {
-        devtool: isDevelopment && "cheap-module-source-map",
-        entry: {
-            bundle: path.resolve(__dirname, 'src/index.js')
+module.exports = {
+  entry: './src/index.js',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'bundle.js',
+    publicPath: (resourcePath, context) => {
+      // This could also inspect something in the HTML, URL, or some other dynamic source
+      if (typeof window !== 'undefined') {
+        const tenant = window.location.pathname.split('/')[2] || 'default-tenant';
+        return `/login/${tenant}/`;  // This will be applied at runtime
+      } else{
+        return `/login/emr2`;
+      }
+    },
+  },
+  ignoreWarnings: [/Critical dependency:/],
+  plugins: [
+   
+    new HtmlWebpackPlugin({
+      template: './public/index.html',
+    }),
+  ],
+  resolve: {
+    extensions: ['.js', '.jsx'],
+    alias: {
+        '@src': path.resolve(__dirname, 'src/')
+      }
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [ ["@babel/preset-react", { "runtime": "automatic" }],
+            "@babel/preset-env"]
+          },
         },
-        devServer: {
-            overlay: false,
+      },
+      {
+        test: /\.css$/, // Handles .css files
+        use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/, // Handles image files
+        use: {
+          loader: 'file-loader',
+          options: {
+            name: '[path][name].[ext]', // Preserves original file structure
+          },
         },
-        output: {
-            path: path.resolve(__dirname, "dist"),
-            filename: "[name].[contenthash:8].js",
-            publicPath: "/"
-        },
-        module: {
-            rules: [
-                {
-                    test: /\.jsx?$/,
-                    exclude: /node_modules/,
-                    use: {
-                        loader: "babel-loader",
-                        options: {
-                            cacheDirectory: true,
-                            cacheCompression: false,
-                            envName: isProduction ? "production" : "development"
-                        }
-                    }
-                },
-                {
-                    test: /\.css$/,
-                    use: [
-                        isProduction ? MiniCssExtractPlugin.loader : "style-loader",
-                        "css-loader"
-                    ]
-                }
-            ]
-        },
-        Plugin: [
-            new HTMLWebpackPligin({
-                title: 'Web Pack',
-                filename: 'index.html'
-            })
-        ],
-        resolve: {
-            extensions: [".js", ".jsx"]
-        }
-    };
+      },
+    ],
+  },
+  devServer: {
+    static: path.join(__dirname, 'dist'), 
+   // compress: true,
+    port: 3000,
+    open: true,
+    open: 'http://localhost:3000/login/emr2',
+    historyApiFallback: {
+      index: '/login/emr2', // Optional: Set a fallback route if desired
+     
+    },
+  },
 };

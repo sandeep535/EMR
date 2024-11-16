@@ -73,6 +73,7 @@ export default function VisitDasboard(props) {
     }, [toDate, fromDate]);
     useEffect(() => {
         getVisitStatusList();
+       // generateBill()
     }, []);
     useEffect(() => {
         getVisitDetails();
@@ -82,6 +83,7 @@ export default function VisitDasboard(props) {
         getVisitDetails();
 
     }, [visitStatus]);
+   
     async function getVisitDetails() {
         if (!visitStatus) {
             return false;

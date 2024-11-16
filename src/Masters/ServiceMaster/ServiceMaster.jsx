@@ -13,6 +13,7 @@ import SLTextField from '../../CoreComponents/SLTextField';
 import SLRadioButton from '../../CoreComponents/SLRadioButton';
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import CommonConst from '../../Utils/CommonConst';
 
 const activeRadioButtonOptions = [
     { label: 'Active', value: '1' },
@@ -82,7 +83,7 @@ export default function ServiceMaster() {
                                     name="active"
                                     label="Status"
                                     control={control}
-                                    options={activeRadioButtonOptions}
+                                    options={CommonConst.activeRadioButtonOptions}
                                     error={errors.status}
                                 />
                             </Grid>

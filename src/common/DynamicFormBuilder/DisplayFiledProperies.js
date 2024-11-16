@@ -21,7 +21,17 @@ export default function DisplayFiledProperies(props) {
     const { control, handleSubmit, reset, formState: { errors } } = useForm({
         defaultValues: defaultobj,
         resolver: yupResolver(DisplayFiledProperiesSchema),
+        
     });
+    function getDataFromListInEditMode(){
+        let obj ={};
+        propItems.forEach(item=>{
+            obj[item.key]=item.value
+        });
+        reset(obj)
+    }
+    getDataFromListInEditMode();
+     
     const DisplayFiledProperieshandleSubmit = async (data) => {
         props.returnedDisplayPropItems(data)
     }

@@ -14,6 +14,7 @@ import SLTextField from '../../CoreComponents/SLTextField';
 import { DiagnosisMasterSchema } from '../../common/YupSchema/formSchema';
 import AutocompleteField from '../../CoreComponents/AutocompleteField';
 import SLRadioButton from '../../CoreComponents/SLRadioButton';
+import CommonConst from '../../Utils/CommonConst';
 
 const diagnosisListHeaders = [{
     name: Translations.DIAGNOSIS_MASTER.CODE_SET,
@@ -172,7 +173,7 @@ export default function DiagnosisMaster(props) {
                                 name="status"
                                 label="Status"
                                 control={control}
-                                options={activeRadioButtonOptions}
+                                options={CommonConst.activeRadioButtonOptions}
                                 error={errors.status}
                             />
 

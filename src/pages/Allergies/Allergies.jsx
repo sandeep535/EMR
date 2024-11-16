@@ -26,6 +26,7 @@ import SLRadioButton from '../../CoreComponents/SLRadioButton';
 import SLSelectDropDown from '../../CoreComponents/SLSelectDropDown';
 import { AllergiesScreenSchema } from '../../common/YupSchema/formSchema';
 import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
+import CommonConst from '../../Utils/CommonConst';
 
 const allergiesColumns = [{
     name: 'Allergy',
@@ -240,7 +241,7 @@ const Allergies = forwardRef((props, ref) => {
                                     name="status"
                                     label="Status"
                                     control={control}
-                                    options={activeRadioButtonOptions}
+                                    options={CommonConst.activeRadioButtonOptions}
                                     error={errors.status}
                                 />
                             </Grid>

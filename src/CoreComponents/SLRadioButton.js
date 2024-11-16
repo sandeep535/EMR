@@ -26,7 +26,7 @@ const SLRadioButton = ({
                                     key={option.value}
                                     value={option.value}
                                     control={<Radio />}
-                                    label={option.label}
+                                    label={option.id}
                                 />
                             ))}
                         </RadioGroup>

@@ -6,13 +6,12 @@ import FiledProperitedList from "./FiledProperitedList";
 import DisplayFiledProperies from "./DisplayFiledProperies";
 import { ImportFormField } from "./ImportFormField";
 import { useForm } from "react-hook-form";
-import SLButton from "../../CoreComponents/SLButton";
 import FormButtonComponent from "../../components/FormButtonComponent/FormButtonComponent";
-import APIS from "../../Utils/APIS";
 import { sendRequest } from "../../pages/global/DataManager";
 import DynamicFormRender from "./DynamicFormRender";
 const ItemType = "FORM_FIELD";
 import TextField from '@mui/material/TextField';
+import Icon from '@mui/material/Icon';
 /* eslint-disable no-debugger */
 
 const DraggableField = ({ field }) => {
@@ -25,21 +24,33 @@ const DraggableField = ({ field }) => {
     }));
 
     return (
-        <Paper
-            ref={drag}
-            sx={{
-                padding: 2,
-                marginBottom: 2,
-                backgroundColor: isDragging ? "lightgray" : "white",
-                cursor: "move",
-                opacity: isDragging ? 0.5 : 1,
-            }}
-        >
-            <Typography variant="body1">{field.label}</Typography>
-        </Paper>
+        <Grid item xs={4} ref={drag} sx={{
+            cursor: "move",
+            opacity: isDragging ? 0.5 : 1,
+            marginBottom:'5px'
+        }}>
+            <Box sx={{ backgroundColor: isDragging ? "lightgray" : "white",display:'flex',flexDirection:'column',height:'100%',borderRadius:'5px',margin:'5px',padding:'5px'}}>
+                <Icon>{field.icon}</Icon>
+                <Typography variant="body3" >
+                    {field.label}
+                </Typography>
+            </Box>
+        </Grid>
+        // <Paper
+        //     ref={drag}
+        //     sx={{
+               
+        //         marginBottom: 2,
+        //         backgroundColor: isDragging ? "lightgray" : "white",
+        //         cursor: "move",
+        //         opacity: isDragging ? 0.5 : 1,
+        //     }}
+        // >
+        //     <Typography variant="body1">{field.label}</Typography>
+        // </Paper>
     );
 };
-const DropZone = ({ field, index, subIndex, onDrop, control }) => {
+const DropZone = ({ field, index, subIndex, onDrop, control,onEditModeDisplayFiled }) => {
 
     const [{ isOver }, drop] = useDrop(() => ({
         accept: ItemType,
@@ -90,6 +101,9 @@ const DropZone = ({ field, index, subIndex, onDrop, control }) => {
                 ) : (
                     <Typography>Drop here</Typography>
                 )}
+                <Icon key={index.toString()} style={{ fontSize:14, color: 'black', cursor: 'pointer' }} onClick={() => {
+                    onEditModeDisplayFiled(field, index, subIndex, control)
+                }}>{"edit"}</Icon>
             </Box>
         </Grid>
     );
@@ -138,6 +152,18 @@ const DynamicFormBuilder = () => {
         }
         setPropertyFiled(onj)
     };
+    const onEditModeDisplayFiled = (field, index, subIndex, control) => {
+        let allPops = [...field.dynamicComponentProps, ...field.props];
+        if(field.apiCall){
+            allPops = [...allPops,field.apiCall]
+        }
+        let onj = {
+            index: index,
+            subIndex: subIndex,
+            dataItem: allPops
+        }
+        setPropertyFiled(onj)
+    }
     const addRow = () => {
         const newGrid = [...formGrid];
         let newDummyRowCopy = {
@@ -172,7 +198,6 @@ const DynamicFormBuilder = () => {
             let dynamicStateCopy = { ...dynamicState };
             dynamicStateCopy[stateObj.value] = result.GENDER;
 
-            // setCountriesList(result);
         }
         callBack()
     }
@@ -193,7 +218,7 @@ const DynamicFormBuilder = () => {
         } else {
             setPreviousPropsToCurrent(previousValue, newGrid, data, selectedFiled)
         }
-
+        setPropertyFiled([])
     }
     function setPreviousPropsToCurrent(previousValue, newGrid, data, selectedFiled) {
         previousValue.props.forEach(item => {
@@ -214,6 +239,31 @@ const DynamicFormBuilder = () => {
         console.log("dataaaa", data)
     }
 
+    function getDynamicCodeContextReactJsxJson(){
+        let reactJson = {};
+        reactJson["componentname"] = "sampleForm";
+        formGrid.map(rows=>{
+            let rowEle = []
+            rows.row.forEach(column =>{
+              //  if(reactJson["elements"]){
+                    let elementColumnobj = {};
+                    elementColumnobj.type = column.type;
+                    let propsString = "";
+                    column.props(prop=>{
+                        propsString+""+prop.key +"="+ "{"+prop.value+"}"
+                    })
+                    elementColumnobj.props = propsString
+                    rowEle.push(elementColumnobj);
+               // }
+            });
+            if(!reactJson["elements"]){
+                reactJson["elements"] = []
+            }
+            reactJson["elements"].push(rowEle);
+        });
+
+    }
+
     return (
         <>
             <DndProvider backend={HTML5Backend}>
@@ -222,79 +272,65 @@ const DynamicFormBuilder = () => {
                         <Typography variant="h6" gutterBottom>
                             Form Fields
                         </Typography>
+                        <Grid container direction="row" >
                         {formFields.map((field) => (
                             <DraggableField key={Math.random().toString()} field={filedPropList[field]} />
                         ))}
+                        </Grid>
                         <Box>
                             {propertyFiled.length != 0 && <DisplayFiledProperies displyItems={propertyFiled.dataItem} returnedDisplayPropItems={returnedDisplayPropItems1}></DisplayFiledProperies>}
                         </Box>
                     </Box>
 
                     <Box sx={{ flexGrow: 1, marginLeft: 4 }}>
-                        <Typography variant="h6" gutterBottom>
-                            Build Your Form
-                        </Typography>
+                        <Box sx={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
+                            <Typography variant="h6" gutterBottom>
+                                Build Your Form
+                            </Typography>
+                            <Box sx={{mr:'15px'}}>
+                                <TextField required id="outlined-required" size="small" label="Rows" value={rows} onChange={(event) => {
+                                    setRows(event.target.value);
+                                }}
+                                />
+                                <Button variant="contained" size="small" color="primary"  onClick={addRow}>Add Row</Button>
+                            </Box>
+                           
+                        </Box>
+                        
                         <Box sx={{ minHeight: 200, backgroundColor: 'white' }}>
                             <form onSubmit={handleSubmit(DisplayFiledProperieshandleSubmit)} >
                                 {formGrid.map((zone, index) => (
-                                    <>
+                                   
                                         <Grid container direction="row" key={index}>
                                             {zone && zone.row.map((subZone, subIndex) => (
-                                                <>
-
-                                                    {/* <Grid item xs={Number(subZone.dynamicComponentProps.gridSize)} key={index}> */}
-                                                    <DropZone
-                                                        key={subIndex}
+                                               
+                                                 <DropZone
+                                                         key={Math.random().toString()}
                                                         field={subZone}
                                                         index={index}
                                                         subIndex={subIndex}
                                                         onDrop={handleDrop}
                                                         control={dynamicControl}
+                                                        onEditModeDisplayFiled={onEditModeDisplayFiled}
                                                     />
-                                                    {/* </Grid> */}
-                                                </>
-
+                                               
                                             ))}
                                         </Grid>
-                                    </>
+                                    
 
                                 ))}
                                 <FormButtonComponent button1={"Save"} button2={"Close"} />
                             </form>
                         </Box>
-                        <>
-                            <TextField
-                                required
-                                id="outlined-required"
-                                label="Rows"
-                                value={rows}
-                                onChange={(event) => {
-                                    setRows(event.target.value);
-                                  }}
-                            />
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                sx={{ marginTop: 2 }}
-                                onClick={addRow}
-                            >
-                                Add Row
-                            </Button>
-                        </>
-
+                        
                     </Box>
                 </Box>
             </DndProvider>
-            <Button
-                variant="contained"
-                color="primary"
-                sx={{ marginTop: 2 }}
-                onClick={() => {
-                    setIspreview(true)
-                }}
-            >
-                Preview
-            </Button>
+            <Button variant="contained" color="primary" sx={{ marginTop: 2 }} onClick={() => {
+                debugger
+               // setIspreview(true)
+               getDynamicCodeContextReactJsxJson()
+                }}>Preview</Button>
             {isPreview && <DynamicFormRender form={formGrid} />}
 
         </>

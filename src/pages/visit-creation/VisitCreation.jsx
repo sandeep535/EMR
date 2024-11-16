@@ -20,6 +20,8 @@ import { VisitCreationSchema } from '../../common/YupSchema/formSchema';
 import { yupResolver } from "@hookform/resolvers/yup";
 import ClientSearchComponent from '../../components/ClientSearch/ClientSearchComponent';
 import VisitServiceList from '../../components/VisitServiceList/VisitServiceList';
+import { useState } from 'react';
+import SLConfirmationPopup from '../../common/SLConfirmationPopup/SLConfirmationPopup';
 
 export default function VisitCreation(props) {
   const [doctoroptions, setDoctoroptions] = React.useState([]);
@@ -27,6 +29,9 @@ export default function VisitCreation(props) {
   const [paymentTypeOptions, setPaymentTypeOptions] = React.useState([]);
   const [specialityListOptions, setSpecialityListOptions] = React.useState([]);
   const [selectedClientData, setSelectedClientData] = React.useState([]);
+  const [isPopupOpen, setPopupOpen] = useState(false);
+  const [visitid, setVisitid] = useState("");
+
   const visitServiceListRef = useRef();
   const { control, handleSubmit, reset, setValue, formState: { errors } } = useForm({
     defaultValues: {},
@@ -173,12 +178,36 @@ export default function VisitCreation(props) {
     let result = await sendRequest(payLoad);
     if (result) {
       EMRAlert.alertifySuccess("Visit Saved Succussfully.you token number is " + result.token + "");
+      setPopupOpen(true);
+      setVisitid(result.visitid);
       clearVisitForm()
     } else {
       EMRAlert.alertifyError("Not created")
     }
   }
-  
+  const handleConfirm = () => {
+    generateBill();
+  }
+  async function generateBill() {
+    var payLoad = {
+      method: APIS.GENERATE_BILL.METHOD,
+      url: APIS.GENERATE_BILL.URL,
+      paramas: [],
+      data: {
+        visitid: visitid,
+        clientId: selectedClientData.seqid
+      }
+    }
+    let result = await sendRequest(payLoad);
+    if (result && result) {
+      EMRAlert.alertifySuccess("Bill generated Succussfully");
+      setPopupOpen(false)
+    } else {
+      setPopupOpen(false)
+    }
+  }
+  const handleClose = () => setPopupOpen(false);
+
   return (
     <>
       <Box m="2px">
@@ -308,6 +337,13 @@ export default function VisitCreation(props) {
             clearVisitForm();
           }} />
         </form>
+        <SLConfirmationPopup
+          open={isPopupOpen}
+          onClose={handleClose}
+          onConfirm={handleConfirm}
+          title="Bill Generate"
+          message="Do you want generate bill?"
+        />
       </Box>
     </>
   );

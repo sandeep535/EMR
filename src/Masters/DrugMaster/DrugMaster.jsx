@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import SLTextField from '../../CoreComponents/SLTextField';
 import SLRadioButton from '../../CoreComponents/SLRadioButton';
 import DrugMasterList from './DrugMasterList';
+import CommonConst from '../../Utils/CommonConst';
 
 const activeRadioButtonOptions = [
     { label: 'Active', value: '1' },
@@ -282,7 +283,7 @@ export default function DrugMaster(props) {
                                 name="status"
                                 label="Status"
                                 control={control}
-                                options={activeRadioButtonOptions}
+                                options={CommonConst.activeRadioButtonOptions}
                                 error={errors.status}
                             />
 

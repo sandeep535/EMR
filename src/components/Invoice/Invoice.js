@@ -20,7 +20,7 @@ const Invoice = ({ invoiceData }) => {
         ],
         totalAmount: 225.00, // Sum of all services
     };
-    const { hospitalName, hospitalAddress, patientName, patientId,phoneNumber,patientAddress, date, services, totalAmount,doctorName,invoiceNumber } = invoiceData1;
+    const { hospitalName, hospitalAddress, patientName, patientId,phoneNumber,patientAddress, date, services, totalAmount,doctorName,invoiceNumber } = invoiceData;
 
     return (
         <Box sx={{ maxWidth: 800, margin: '0 auto', padding: 4, border: '1px solid #ddd', borderRadius: '8px', backgroundColor: '#f9f9f9' }}>
@@ -72,11 +72,11 @@ const Invoice = ({ invoiceData }) => {
                     <TableBody>
                         {services.map((service, index) => (
                             <TableRow key={index}>
-                                <TableCell>{service.description}</TableCell>
-                                <TableCell >${service.cost.toFixed(2)}</TableCell>
-                                <TableCell align="right">${service.cost.toFixed(2)}</TableCell>
-                                <TableCell align="right">${service.cost.toFixed(2)}</TableCell>
-                                <TableCell align="right">${service.cost.toFixed(2)}</TableCell>
+                                <TableCell>{service.serviceid.servicename}</TableCell>
+                                <TableCell >${service.quantity}</TableCell>
+                                <TableCell align="right">${service.serviceprice.toFixed(2)}</TableCell>
+                                <TableCell align="right">${service.servicediscount.toFixed(2)}</TableCell>
+                                <TableCell align="right">${service.servicetotalamount.toFixed(2)}</TableCell>
                             </TableRow>
                         ))}
                         <TableRow>
