@@ -255,10 +255,24 @@ const ReactCodeFormBuilder = () => {
         let reactJson = {};
         reactJson["componentname"] = "sampleForm";
         reactJson["props"]=[];
-        reactJson["onLoadApiMethods"] = []
+        reactJson["onLoadApiMethods"] = [];
+        reactJson["forms"] = []
         const importCompoents = [];
-        formGrid.map(rows => {
+        formGrid.map((rows,index) => {
             let rowEle = [];
+            if(rows.form){
+                const name = rows.form[0].props.find(obj => obj['key'] == "name");
+                const forApi =   rows.form[0].props.find(obj => obj['key'] == "forapi");
+                let form = {
+                    name:name,
+                    index:index,
+                    apiData:(forApi)?forApi.value.apiCallForState:""
+                }
+                reactJson["forms"].push(form);
+            }else{
+                let emptyObj = {};
+                reactJson["forms"].push(emptyObj);
+            }
             rows.row.forEach(column => {
                 //------------Elements ----------------------
                 let elementColumnobj = {};
@@ -266,7 +280,15 @@ const ReactCodeFormBuilder = () => {
                 elementColumnobj.size= column.dynamicComponentProps[0].value;
                 let propsString = "";
                 if(column.isControl){
-                    propsString = propsString + "control=" + "{control}";
+                    console.log(rows)
+                    if(rows.form && rows.form[0]){
+                        const name = rows.form[0].props.find(obj => obj['key'] == "name");
+                        propsString = propsString + "control=" + `{${name.value}Control}`;
+                    }else{
+                        propsString = propsString + "control=" + "{control}";
+                    }
+                   
+                   
                 }
                
                 //-------------Import statements ----------------

@@ -218,6 +218,11 @@ const APIS={
         URL:'bill?visitId={0}',
         METHOD:"GET",
         ACTION:"BILL"
+    },
+    File_UPLOAD:{
+        URL:'common/uploadFile',
+        METHOD:"POST",
+        ACTION:"FIle Upload"
     }
     
     

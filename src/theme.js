@@ -3,18 +3,23 @@ import { createContext, useState, useMemo } from "react";
 import { createTheme } from "@mui/material/styles";
 
 
-const fontFamilyGlobal = [
-  '-apple-system',
-  'BlinkMacSystemFont',
-  '"Segoe UI"',
-  'Roboto',
-  '"Helvetica Neue"',
+// const fontFamilyGlobal = [
+//   '-apple-system',
+//   'BlinkMacSystemFont',
+//   '"Segoe UI"',
+//   'Roboto',
+//   '"Helvetica Neue"',
+//   'Arial',
+//   'sans-serif',
+//   '"Apple Color Emoji"',
+//   '"Segoe UI Emoji"',
+//   '"Segoe UI Symbol"',
+// ];
+const fontFamilyGlobal=[
   'Arial',
-  'sans-serif',
-  '"Apple Color Emoji"',
-  '"Segoe UI Emoji"',
-  '"Segoe UI Symbol"',
-];
+  'Arial',
+  'Verdana'
+]
 // color design tokens export
 export const tokens = (mode) => ({
         themecolor:{

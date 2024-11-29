@@ -97,7 +97,8 @@ export const ServiceCreationSchema = Yup
     .object({
         servicename: Yup.string().required("Enter Service Name"),
         price: Yup.string().required("Enter Price"),
-        active: Yup.string().nullable().required("Select Status")
+        active: Yup.string().nullable().required("Select Status"),
+        gst: Yup.string().nullable().required("Enter GST")
     })
     .required()
 export const VitalsSchema = Yup

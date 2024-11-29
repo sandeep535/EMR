@@ -55,7 +55,8 @@ export default function VisitCreation(props) {
       visitServiceList: props?.visitEditData?.services,
       visitdiscount: props?.visitEditData?.visitdiscount,
       visittotalamount: props?.visitEditData?.visittotalamount,
-      visitpercentage: props?.visitEditData?.visitpercentage
+      visitpercentage: props?.visitEditData?.visitpercentage,
+      visitId : props?.visitEditData.visitid
     }
     visitServiceListRef.current.setVisitServiceList(data);
     setVisitDetailsInEditmode(props?.visitEditData);
@@ -99,6 +100,10 @@ export default function VisitCreation(props) {
     }
     if (props?.isEdit == 'true') {
       setVisitDataInEditMode();
+    }else{
+      reset({
+        visitdate: dayjs(moment(new Date()).format("YYYY-MM-DD"))
+      })
     }
   }
 
@@ -210,7 +215,7 @@ export default function VisitCreation(props) {
 
   return (
     <>
-      <Box m="2px">
+      <Box m="2px" >
         <Box m="3px">
           <Grid xs={6} container>
             <ClientSearchComponent
@@ -225,118 +230,121 @@ export default function VisitCreation(props) {
 
           </Grid>
         </Box>
-        <form onSubmit={handleSubmit(visitCreationhandleSubmit)} >
-          <CommonCard title={Translations.visitCreation.clientDetails}>
-            <RegistrationInformation control={control} errors={errors} setValue={setValue} />
-          </CommonCard>
-          <CommonCard title={Translations.visitCreation.visitDetails}>
-            <Box display="grid" gap="10px" >
-              <Grid xs={12} container spacing={1}>
-                <Grid item xs={2} spacing={1}>
-                  <FormControl variant="outlined" fullWidth>
-                    <AutocompleteField
-                      name="specility"
-                      label={Translations.visitCreation.speciality}
-                      control={control}
-                      options={specialityListOptions}
-                      placeholder={Translations.visitCreation.speciality}
-                      mapvalues={{ id: "lookupid", value: 'lookupvalue' }}
-                      isMultiSelect={false}
-                      id={"specility-combo-box-demo"}
-                      onInputChange={(data) => {
+        <Box sx={{ width: '100%' }}>
+          <form onSubmit={handleSubmit(visitCreationhandleSubmit)} >
+            <CommonCard title={Translations.visitCreation.clientDetails}>
+              <RegistrationInformation control={control} errors={errors} setValue={setValue} />
+            </CommonCard>
+            <CommonCard title={Translations.visitCreation.visitDetails}>
+              <Box display="grid" gap="10px" sx={{width:'100%'}} >
+                <Grid xs={12} container spacing={1} style={{ width: '100%' }}>
+                  <Grid item xs={2} spacing={1}>
+                    <FormControl variant="outlined" fullWidth>
+                      <AutocompleteField
+                        name="specility"
+                        label={Translations.visitCreation.speciality}
+                        control={control}
+                        options={specialityListOptions}
+                        placeholder={Translations.visitCreation.speciality}
+                        mapvalues={{ id: "lookupid", value: 'lookupvalue' }}
+                        isMultiSelect={false}
+                        id={"specility-combo-box-demo"}
+                        onInputChange={(data) => {
 
-                      }}
+                        }}
+                      />
+
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={2} spacing={1}>
+                    <FormControl variant="outlined" size="small" fullWidth>
+                      <AutocompleteField
+                        name="doctor"
+                        label={Translations.visitCreation.DocName}
+                        control={control}
+                        options={doctoroptions}
+                        placeholder={Translations.visitCreation.DocName}
+                        mapvalues={{ id: "id", value: 'firstname' }}
+                        isMultiSelect={false}
+                        id={"doctor-combo-box-demo"}
+                        onInputChange={(data) => {
+                          getDoctorsData(data)
+                        }}
+                      />
+
+                    </FormControl>
+                  </Grid>
+
+                  <Grid item xs={2} spacing={1} >
+                    <FormControl variant="outlined" size="small" fullWidth>
+                      <AutocompleteField
+                        name="visitType"
+                        label={Translations.visitCreation.visitType}
+                        control={control}
+                        options={visiiTypeOptions}
+                        placeholder={Translations.visitCreation.visitType}
+                        mapvalues={{ id: "lookupid", value: 'lookupvalue' }}
+                        isMultiSelect={false}
+                        id={"visitType-combo-box-demo"}
+                      />
+
+                    </FormControl>
+                  </Grid>
+
+                  <Grid item xs={2} spacing={1}>
+                    <SLDatePicker
+                      name="visitdate"
+                      label={Translations.visitCreation.visitDate}
+                      control={control}
+                      error={errors.visitdate}
                     />
 
-                  </FormControl>
-                </Grid>
-                <Grid item xs={2} spacing={1}>
-                  <FormControl variant="outlined" size="small" fullWidth>
-                    <AutocompleteField
-                      name="doctor"
-                      label={Translations.visitCreation.DocName}
+                  </Grid>
+                  <Grid item xs={2} spacing={1}>
+                    <SLTextField
+                      name="token"
+                      label={Translations.visitCreation.token}
                       control={control}
-                      options={doctoroptions}
-                      placeholder={Translations.visitCreation.DocName}
-                      mapvalues={{ id: "id", value: 'firstname' }}
-                      isMultiSelect={false}
-                      id={"doctor-combo-box-demo"}
-                      onInputChange={(data) => {
-                        getDoctorsData(data)
-                      }}
+                      placeholder={Translations.visitCreation.token}
+                      disable={true}
                     />
 
-                  </FormControl>
-                </Grid>
+                  </Grid>
 
-                <Grid item xs={2} spacing={1} >
-                  <FormControl variant="outlined" size="small" fullWidth>
-                    <AutocompleteField
-                      name="visitType"
-                      label={Translations.visitCreation.visitType}
+                  <Grid item xs={6} spacing={1}  >
+                    <SLTextField
+                      name="visitreason"
+                      label={Translations.visitCreation.visitReason}
                       control={control}
-                      options={visiiTypeOptions}
-                      placeholder={Translations.visitCreation.visitType}
-                      mapvalues={{ id: "lookupid", value: 'lookupvalue' }}
-                      isMultiSelect={false}
-                      id={"visitType-combo-box-demo"}
+                      placeholder={Translations.visitCreation.visitReason}
                     />
-
-                  </FormControl>
+                  </Grid>
+                  <Grid item xs={2} spacing={1} >
+                    <FormControl variant="outlined" size="small" fullWidth>
+                      <AutocompleteField
+                        name="paymenttype"
+                        label={Translations.visitCreation.paymenttype}
+                        control={control}
+                        options={paymentTypeOptions}
+                        placeholder={Translations.visitCreation.paymenttype}
+                        mapvalues={{ id: "id", value: 'masterdatavalue' }}
+                        isMultiSelect={false}
+                        id={"paymenttype-combo-box-demo"}
+                      />
+                    </FormControl>
+                  </Grid>
+                </Grid>
+                <Grid xs={12} container spacing={1}>
+                  <VisitServiceList ref={visitServiceListRef} />
                 </Grid>
 
-                <Grid item xs={2} spacing={1}>
-                  <SLDatePicker
-                    name="visitdate"
-                    label={Translations.visitCreation.visitDate}
-                    control={control}
-                    error={errors.visitdate}
-                  />
-
-                </Grid>
-                <Grid item xs={2} spacing={1}>
-                  <SLTextField
-                    name="token"
-                    label={Translations.visitCreation.token}
-                    control={control}
-                    placeholder={Translations.visitCreation.token}
-                  />
-
-                </Grid>
-
-                <Grid item xs={6} spacing={1}  >
-                  <SLTextField
-                    name="visitreason"
-                    label={Translations.visitCreation.visitReason}
-                    control={control}
-                    placeholder={Translations.visitCreation.visitReason}
-                  />
-                </Grid>
-                <Grid item xs={2} spacing={1} >
-                  <FormControl variant="outlined" size="small" fullWidth>
-                    <AutocompleteField
-                      name="paymenttype"
-                      label={Translations.visitCreation.paymenttype}
-                      control={control}
-                      options={paymentTypeOptions}
-                      placeholder={Translations.visitCreation.paymenttype}
-                      mapvalues={{ id: "id", value: 'masterdatavalue' }}
-                      isMultiSelect={false}
-                      id={"paymenttype-combo-box-demo"}
-                    />
-                  </FormControl>
-                </Grid>
-              </Grid>
-              <Grid xs={12} container spacing={1}>
-                <VisitServiceList ref={visitServiceListRef} />
-              </Grid>
-
-            </Box>
-          </CommonCard>
-          <FormButtonComponent button1={"Save"} button2={"Clear"} clearFormEvent={() => {
-            clearVisitForm();
-          }} />
-        </form>
+              </Box>
+            </CommonCard>
+            <FormButtonComponent button1={"Save"} button2={"Clear"} clearFormEvent={() => {
+              clearVisitForm();
+            }} />
+          </form>
+        </Box>
         <SLConfirmationPopup
           open={isPopupOpen}
           onClose={handleClose}

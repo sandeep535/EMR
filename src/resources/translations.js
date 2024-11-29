@@ -82,6 +82,7 @@ const Translations = {
         SERVICE_MASTER:"Service Master",
         SERVICE_NAME:"Service Name",
         PRICE:'Price',
+        GST:'GST',
         STATUS:'Status',
         SERVICE_MASTER_LIST:'Services List',
         ACTIONS:'Action'
@@ -142,6 +143,10 @@ const Translations = {
       QUANTITY:'Quantiy',
       SERVICE_DISCOUNT:'Service Discount',
       GENRATE_BILL:'Generate Bill'
+   },
+   "PAYMENTS_SCREEN":{
+      TITLE:'Pening Payments',
+      PAID_PAYMENTS:'Paid Payments',
    },
      "LAB_ORDER":{
       TITLE:'Search Lab Order',

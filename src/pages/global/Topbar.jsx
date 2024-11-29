@@ -34,9 +34,9 @@ const Topbar = () => {
   const doLogout = () => {
     setOpen(false);
     appContextValue.setIslogin(false);
-    sessionStorage.setItem("token",null);
-    sessionStorage.setItem("LoggedInUserDetails",null);
-    sessionStorage.setItem("leftMenu",null);
+    sessionStorage.setItem("token","");
+    sessionStorage.setItem("LoggedInUserDetails","");
+    sessionStorage.setItem("leftMenu","");
     // setIslogin(false);
 
     navigate("/login/" + sessionStorage.getItem("tenant"), { replace: true });

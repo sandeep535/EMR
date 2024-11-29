@@ -19,7 +19,9 @@ export default function MainScreen(props) {
             appContextValue.setLoggedInUserDetails(JSON.parse(sessionLoggedInUserDetails));
            let leftmenu =  sessionStorage.getItem('leftMenu');
             appContextValue.setLeftMenuList(JSON.parse(leftmenu));
-
+            navigate("/nurse-dashboard", {
+                replace: true
+              });
         }else{
             if (!appContextValue.isLogin) {
                 navigate("/login/emr2", { replace: true });

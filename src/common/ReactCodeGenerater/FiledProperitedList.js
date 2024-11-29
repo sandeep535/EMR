@@ -68,6 +68,14 @@ const FiledProperitedList = {
             key: 'justifyContent',
             displaylabel: 'Allign',
             value: 'left'
+        },{
+            key: 'multiline',
+            displaylabel: 'is Multiline',
+            value: 'false'
+        },{
+            key: 'rows',
+            displaylabel: 'Rows',
+            value: '1'
         }],
         "dynamicComponentProps": dynamicComponentCommonProps
     },
@@ -76,10 +84,25 @@ const FiledProperitedList = {
         "icon": 'titlecase',
         "type": 'SLFORM',
         "props": [{
-            key: 'title',
-            displaylabel: 'Title',
+            key: 'name',
+            displaylabel: 'Name',
             value: ''
-        }, {
+        },{
+            key: 'forapi',
+            displaylabel: 'Form Submit',
+            isStateValue: true,
+            value: [],
+            apiCallForState: {
+                key: 'apiEndpoint',
+                displaylabel: 'API',
+                isDynamicObject: true,
+                onload:1,
+                value: {
+                    METHOD: "",
+                    URL: "",
+                },
+            },
+        },{
             key: 'Styles',
             displaylabel: 'Variant',
             isDynamicObject: true,
@@ -112,11 +135,11 @@ const FiledProperitedList = {
                 key: 'apiEndpoint',
                 displaylabel: 'API',
                 isDynamicObject: true,
-                onload:1,
                 value: {
                     METHOD: "",
                     URL: "",
                     PARAM:""
+                  
                 },
             },
         }, {

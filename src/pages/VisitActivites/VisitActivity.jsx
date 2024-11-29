@@ -323,11 +323,11 @@ export default function VisitActivity(props) {
                             <SaveIcon style={{ color: 'blue', cursor: 'pointer', marginRight: '5px' }} onClick={() => { handlePrescriptionSubmit() }} />
                         </Tooltip>
                     }
-                    {
+                    {/* {
                         <Tooltip title="Save">
                             <SaveIcon style={{ color: 'blue', cursor: 'pointer', marginRight: '5px' }} onClick={() => { handleSubmitNursedashboard() }} />
                         </Tooltip>
-                    }
+                    } */}
                     {appContextValue && appContextValue.selectedVisitDeatils.status == 1 &&
                         <Box
                             mt={1}

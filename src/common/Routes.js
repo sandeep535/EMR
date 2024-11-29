@@ -26,6 +26,7 @@ import SampleForm from "../Masters/ServiceMaster/SampleForm";
 
 import React, { useEffect, useContext } from 'react';
 import BillsList from "../pages/Bills/BillsList";
+import BillsTabs from "../pages/Bills/BillsTabs";
 
 const ApplicationRoutes = [
     { path: "/vist-dashboard", element: <VisitDasboard /> },
@@ -50,7 +51,7 @@ const ApplicationRoutes = [
     { path: "/uploadDocuments", element: <UploadDocuments /> },
     { path: "/bedMaster", element: <BedMaster /> },
     { path: "/labordersList", element: <LabOrdersList /> },
-    { path: "/bills", element: <BillsList /> },
+    { path: "/bills", element: <BillsTabs /> },
     { path: "/dynamicFormBuilder", element: <DynamicFormBuilder /> },
     
     { path: "/reactCodeBuilder", element: <ReactCodeFormBuilder /> },

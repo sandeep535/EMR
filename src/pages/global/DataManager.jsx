@@ -11,7 +11,7 @@ export const sendRequest = async payload => {
          serverUrl = serviceDetails.SERVICE_URL + payload.url;
     }
     var headers =  {
-        'content-type': 'application/json', 
+        'content-type': (payload.isMultiContent) ? '' :'application/json', 
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
         "X-TenantID" : sessionStorage.getItem("tenant"),
