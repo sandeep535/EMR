@@ -143,6 +143,11 @@ export default function VisitCreation(props) {
       EMRAlert.alertifyError("Please select atlease one service");
       return false;
     }
+    let isCheckAdmissionFileter = visitServiceList.filter((service)=>service.servicecode =="ADM");
+    let isAddmisionCheck = false;
+    if(isCheckAdmissionFileter && isCheckAdmissionFileter.length!=0){
+      isAddmisionCheck = true;
+    }
     var clientDeatils = "";
     if (selectedClientData && selectedClientData.seqid) {
       clientDeatils = selectedClientData;

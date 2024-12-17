@@ -1,4 +1,4 @@
-import React, {  useState } from 'react';
+import React, {  useState,useEffect  } from 'react';
 import Grid from '@mui/material/Grid';
 import CommonCard from '../../common/CommonCard';
 import { useForm } from "react-hook-form";
@@ -16,13 +16,16 @@ import { useTreeViewApiRef } from '@mui/x-tree-view/hooks';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import SLButton from '../../CoreComponents/SLButton';
-import CommonConst from '../../Utils/CommonConst';
+import APIS from '../../Utils/APIS';
+import { sendRequest } from '../../pages/global/DataManager';
 
 var obj = []
+
 const activeRadioButtonOptions = [
-    { label: 'Yes', value: '1' },
-    { label: 'No', value: '2' }
+    { id: 'Yes', value: '1' },
+    { id: 'No', value: '2' }
 ];
+
 const BedMaster = () => {
     const [instutionList, setInstutionList] = useState(obj);
     const [isFormShow, setisFormShow] = useState(false);
@@ -32,21 +35,43 @@ const BedMaster = () => {
     const apiRef = useTreeViewApiRef();
     const { control, handleSubmit, reset, watch, formState: { errors } } = useForm({
         defaultValues: {
-            isBed: '1'
+            isLast: '1'
         },
         resolver: yupResolver(BedMasterAdd),
-    })
-    const isBedWatch = watch('isBed');
+    });
+    useEffect(()=>{
+        getTableMaster();
+    },[])
+
+    async function getTableMaster(){
+        var payLoad = {
+            method: APIS.GET_MASTER_TABLE.METHOD,
+            url: APIS.GET_MASTER_TABLE.URL,
+            paramas: []
+          }
+          let result = await sendRequest(payLoad);
+          if (result) {
+            setInstutionList(result);
+          }
+    }
+
+    const isBedWatch = watch('isLast');
     const renderTree = (nodes) =>
         nodes.map((node) => (
             <>
                 {node && <Box sx={{ display: 'flex', flexDirection: 'row', cursor: 'pointer' }}>
-                    <TreeItem itemId={node.id} label={node.label}>
-                        {node.children && node.children.length > 0 && renderTree(node.children)}
+                    <TreeItem itemId={node.id} label={node.name}>
+                        {node.subGroups && node.subGroups.length > 0 && renderTree(node.subGroups)}
                     </TreeItem>
-                    {!node.isBed && <AddIcon sx={{ fontSize: 15, mt: 1 }} onClick={() => {
+                    {!node.isLast && <AddIcon sx={{ fontSize: 15, mt: 1 }} onClick={() => {
                         setselectedNode(node);
-                        setisFormShow(true)
+                        setisFormShow(true);
+                        if(node && node.subGroups && node.subGroups[0] && node.subGroups[0].isLast){
+
+                        }else{
+                            setBedLoist([])
+                        }
+                        
                     }} />}
                 </Box>}
 
@@ -57,28 +82,31 @@ const BedMaster = () => {
         return prevData.map(currentNode => {
             if (currentNode.id == selectedParentNode.id) {
                 var obj = {
-                    id: selectedParentNode.id + "-" + Date.now().toString(),
-                    label: formData.name,
-                    children: []
+                    id: selectedParentNode.id + "-" + Math.random().toString(),
+                    name: formData.name,
+                    subGroups: []
                 }
-                if (!currentNode.children)
-                    currentNode.children = []
-                if (formData.isBed == '1') {
-                    obj.isBed = true
+                if (!currentNode.subGroups)
+                    currentNode.subGroups = []
+                if (formData.isLast == '1') {
+                    obj.isLast = true
                 }
-                currentNode.children.push(obj);
+                currentNode.subGroups.push(obj);
                 return currentNode;
             } else {
-                if (currentNode.children && currentNode.children.length > 0) {
-                    return { ...currentNode, children: updateNodeName(selectedParentNode, currentNode.children, formData) };
+                if (currentNode.subGroups && currentNode.subGroups.length > 0) {
+                    return { ...currentNode, subGroups: updateNodeName(selectedParentNode, currentNode.subGroups, formData) };
                 } else {
                     return currentNode;
                 }
             }
         })
     }
+    
     function addChildtoTree(selectedParentNode, formData) {
+        console.log("----------------2")
         setInstutionList(prevData => {
+            console.log("----------------3",prevData)
             let affterchange = updateNodeName(selectedParentNode, prevData, formData);
             return affterchange
         });
@@ -87,39 +115,65 @@ const BedMaster = () => {
     }
     function resetForm() {
         reset({
-            isBed: '1'
+            isLast: '1'
         })
     }
     const bedMasterAddhhandleSubmit = async (data) => {
-        if (data.isBed == "1") {
+        console.log("----------------0")
+        if (data.isLast == "1") {
             var bedListCopy = [...bedList];
             bedListCopy.push(data);
             setBedLoist(bedListCopy);
             reset({
-                isBed:'1'
+                isLast:'1'
             });
+            let obj = {
+                name:data.name,
+                parent_id:selectedNode.id,
+                isLast:true
+            }
+            sendNodeToAPI(obj);
         } else{
             if (selectedNode == 'New') {
                 addMainBlock(data);
             } else {
+                console.log("----------------1")
                 addChildtoTree(selectedNode, data);
+                let obj = {
+                    name:data.name,
+                    parent_id:selectedNode.id,
+                    isLast:false
+                }
+                sendNodeToAPI(obj);
             }
         }
     }
+    async function sendNodeToAPI(data){
+        var payLoad = {
+            method: API.SAVE_MASTER_TABLE.METHOD,
+            url: APIS.SAVE_MASTER_TABLE.URL,
+            paramas: [data.name,data.parent_id,data.isLast],
+          }
+          let result = await sendRequest(payLoad);
+          if (result) {
+            alert("saved");
+            getTableMaster();
+          }
+    }
     function addMainBlock(formData) {
-        if (formData.isBed == "1") {
+        if (formData.isLast == "1") {
             var bedListCopy = [...bedList];
             bedListCopy.push(formData);
             setBedLoist(bedListCopy);
             reset({
-                isBed:'1'
+                isLast:'1'
             });
         } else {
             var copyOfInst = [...instutionList];
             var obj = {
                 id: formData.name + "-" + Date.now().toString(),
-                label: formData.name,
-                children: []
+                name: formData.name,
+                subGroups: []
             }
             copyOfInst.push(obj);
             setInstutionList(copyOfInst);
@@ -127,8 +181,10 @@ const BedMaster = () => {
         }
     }
     const handleAdd = () => {
+        console.log("-----------------handle add")
       let copyBedList = [...bedList];
       copyBedList.map(bed=>{
+      //  let affterchange = updateNodeName(selectedNode, prevData, bed);
         addChildtoTree(selectedNode, bed);
       })
       };
@@ -165,10 +221,10 @@ const BedMaster = () => {
                             <Grid container spacing={1}>
                                 <Grid item xs={3} spacing={0}>
                                     <SLRadioButton
-                                        name="isBed"
+                                        name="isLast"
                                         label={Translations.BED_MASTER.IS_BED}
                                         control={control}
-                                        options={CommonConst.activeRadioButtonOptions}
+                                        options={activeRadioButtonOptions}
                                         error={errors.status}
                                     />
                                 </Grid>
@@ -203,5 +259,185 @@ const BedMaster = () => {
         </>
     );
 };
+// const BedMaster = () => {
+//     const [instutionList, setInstutionList] = useState(obj);
+//     const [isFormShow, setisFormShow] = useState(false);
+//     const [selectedNode, setselectedNode] = useState([]);
+//     const [bedList, setBedLoist] = useState([]);
+
+//     const apiRef = useTreeViewApiRef();
+//     const { control, handleSubmit, reset, watch, formState: { errors } } = useForm({
+//         defaultValues: {
+//             isBed: '1'
+//         },
+//         resolver: yupResolver(BedMasterAdd),
+//     })
+//     const isBedWatch = watch('isBed');
+//     const renderTree = (nodes) =>
+//         nodes.map((node) => (
+//             <>
+//                 {node && <Box sx={{ display: 'flex', flexDirection: 'row', cursor: 'pointer' }}>
+//                     <TreeItem itemId={node.id} label={node.label}>
+//                         {node.children && node.children.length > 0 && renderTree(node.children)}
+//                     </TreeItem>
+//                     {!node.isBed && <AddIcon sx={{ fontSize: 15, mt: 1 }} onClick={() => {
+//                         setselectedNode(node);
+//                         setisFormShow(true)
+//                     }} />}
+//                 </Box>}
+
+//             </>
+//         ));
+
+//     const updateNodeName = (selectedParentNode, prevData, formData) => {
+//         return prevData.map(currentNode => {
+//             if (currentNode.id == selectedParentNode.id) {
+//                 var obj = {
+//                     id: selectedParentNode.id + "-" + Date.now().toString(),
+//                     label: formData.name,
+//                     children: []
+//                 }
+//                 if (!currentNode.children)
+//                     currentNode.children = []
+//                 if (formData.isBed == '1') {
+//                     obj.isBed = true
+//                 }
+//                 currentNode.children.push(obj);
+//                 return currentNode;
+//             } else {
+//                 if (currentNode.children && currentNode.children.length > 0) {
+//                     return { ...currentNode, children: updateNodeName(selectedParentNode, currentNode.children, formData) };
+//                 } else {
+//                     return currentNode;
+//                 }
+//             }
+//         })
+//     }
+//     function addChildtoTree(selectedParentNode, formData) {
+//         setInstutionList(prevData => {
+//             let affterchange = updateNodeName(selectedParentNode, prevData, formData);
+//             return affterchange
+//         });
+//         apiRef.current.setItemExpansion(null, selectedParentNode.id, true);
+//         closeFormEvent();
+//     }
+//     function resetForm() {
+//         reset({
+//             isBed: '1'
+//         })
+//     }
+//     const bedMasterAddhhandleSubmit = async (data) => {
+//         if (data.isBed == "1") {
+//             var bedListCopy = [...bedList];
+//             bedListCopy.push(data);
+//             setBedLoist(bedListCopy);
+//             reset({
+//                 isBed:'1'
+//             });
+//         } else{
+//             if (selectedNode == 'New') {
+//                 addMainBlock(data);
+//             } else {
+//                 addChildtoTree(selectedNode, data);
+//             }
+//         }
+//     }
+//     function addMainBlock(formData) {
+//         if (formData.isBed == "1") {
+//             var bedListCopy = [...bedList];
+//             bedListCopy.push(formData);
+//             setBedLoist(bedListCopy);
+//             reset({
+//                 isBed:'1'
+//             });
+//         } else {
+//             var copyOfInst = [...instutionList];
+//             var obj = {
+//                 id: formData.name + "-" + Date.now().toString(),
+//                 label: formData.name,
+//                 children: []
+//             }
+//             copyOfInst.push(obj);
+//             setInstutionList(copyOfInst);
+//             closeFormEvent();
+//         }
+//     }
+//     const handleAdd = () => {
+//       let copyBedList = [...bedList];
+//       copyBedList.map(bed=>{
+//         addChildtoTree(selectedNode, bed);
+//       })
+//       };
+//     function closeFormEvent() {
+//         resetForm();
+//         setisFormShow(false);
+//         setselectedNode([]);
+//     }
+//     return (
+//         <>
+//             <Grid container spacing={1}>
+//                 <Grid item xs={6} spacing={0}>
+//                     <CommonCard title={Translations.BED_MASTER.TITLE}>
+//                         <Box sx={{
+//                             height: '100%',
+//                             display: 'flex',
+//                             justifyContent: 'space-between',
+//                             padding: 2
+//                         }}>
+
+//                             <SimpleTreeView apiRef={apiRef}>
+//                                 {renderTree(instutionList)}
+//                             </SimpleTreeView>
+//                             <AddIcon sx={{ fontSize: 15, mt: 1, cursor: 'pointer' }} onClick={() => {
+//                                 setselectedNode('New');
+//                                 setisFormShow(true)
+//                             }} />
+//                         </Box>
+//                     </CommonCard>
+//                 </Grid>
+//                 <Grid item xs={6} spacing={1}>
+//                     {isFormShow && <CommonCard title={'Add Label'}>
+//                         <form onSubmit={handleSubmit(bedMasterAddhhandleSubmit)} >
+//                             <Grid container spacing={1}>
+//                                 <Grid item xs={3} spacing={0}>
+//                                     <SLRadioButton
+//                                         name="isBed"
+//                                         label={Translations.BED_MASTER.IS_BED}
+//                                         control={control}
+//                                         options={CommonConst.activeRadioButtonOptions}
+//                                         error={errors.status}
+//                                     />
+//                                 </Grid>
+//                                 <Grid item xs={5} spacing={0}>
+//                                     <SLTextField
+//                                         name="name"
+//                                         label={Translations.BED_MASTER.NAME}
+//                                         control={control}
+//                                         placeholder={Translations.BED_MASTER.NAME}
+//                                     />
+//                                 </Grid>
+//                                 <Grid item xs={4} spacing={0}>
+//                                     <FormButtonComponent button1={isBedWatch == "1" ? "Add" : "Save"} button2={"Close"} clearFormEvent={() => {
+//                                         closeFormEvent();
+//                                     }} />
+//                                 </Grid>
+//                             </Grid>
+//                         </form>
+//                         {bedList && bedList.map(bed =>
+//                             <><List>
+//                                 <ListItem sx={{ padding: 0 }}>
+//                                 {bed.name}
+//                                 </ListItem>
+//                             </List>
+//                             </>
+//                     )}
+//                       {bedList && bedList.length>0 &&  <SLButton variant="outlined" color="success" onClick={handleAdd}>Add</SLButton>}
+                   
+//                     </CommonCard>}
+//                 </Grid>
+//             </Grid>
+//         </>
+//     );
+// };
 
 export default BedMaster;

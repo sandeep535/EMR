@@ -8,7 +8,7 @@ import * as yup from "yup";
 
 const schema = yup
   .object({
-    name: yup.string().max(500)
+    name: yup.string().max(1500)
   })
   .required()
 const Notes = forwardRef((props, ref) => {

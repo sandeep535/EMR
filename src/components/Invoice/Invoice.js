@@ -25,14 +25,14 @@ const Invoice = ({ invoiceData }) => {
     return (
         <Box sx={{ maxWidth: 800, margin: '0 auto', padding: 4, border: '1px solid #ddd', borderRadius: '8px', backgroundColor: '#f9f9f9' }}>
             {/* Header Section */}
-            <Box textAlign="center" mb={3}>
+            {/* <Box textAlign="center" mb={3}>
                 <Typography variant="h4" fontWeight="bold">
                     {hospitalName}
                 </Typography>
                 <Typography variant="body1">{hospitalAddress}</Typography>
             </Box>
 
-            <Divider />
+            <Divider /> */}
 
             {/* Patient and Invoice Information */}
             <Box textAlign="center" mb={3}>
@@ -59,7 +59,7 @@ const Invoice = ({ invoiceData }) => {
 
             {/* Services Table */}
             <TableContainer component={Paper} sx={{ mt: 3 }}>
-                <Table>
+                <Table size="small">
                     <TableHead>
                         <TableRow>
                             <TableCell><strong>Service Name</strong></TableCell>

@@ -1,3 +1,5 @@
+
+import React, { useEffect, useContext } from 'react';
 import Registration from "../pages/registration-form/ClientRegistration";
 import VisitDasboard from "../pages/VisistDashboard/VisitDashboard";
 import VisitActivity from "../pages/VisitActivites/VisitActivity";
@@ -22,11 +24,8 @@ import LabOrdersList from "../pages/LabOrders/LabOrdersList";
 import DynamicFormBuilder from "./DynamicFormBuilder/DynamicFormBuilder";
 import ReactCodeFormBuilder from "./ReactCodeGenerater/ReactCodeFormBuilder";
 import SampleForm from "../Masters/ServiceMaster/SampleForm";
-
-
-import React, { useEffect, useContext } from 'react';
-import BillsList from "../pages/Bills/BillsList";
 import BillsTabs from "../pages/Bills/BillsTabs";
+import NotesList from "../pages/Notes/NotesList";
 
 const ApplicationRoutes = [
     { path: "/vist-dashboard", element: <VisitDasboard /> },
@@ -52,9 +51,12 @@ const ApplicationRoutes = [
     { path: "/bedMaster", element: <BedMaster /> },
     { path: "/labordersList", element: <LabOrdersList /> },
     { path: "/bills", element: <BillsTabs /> },
+    { path: "/notes", element: <NotesList /> },
     { path: "/dynamicFormBuilder", element: <DynamicFormBuilder /> },
     
+    
     { path: "/reactCodeBuilder", element: <ReactCodeFormBuilder /> },
+  
     
     { path: "/sampleForm", element: <SampleForm /> },
   ];

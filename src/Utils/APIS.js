@@ -89,6 +89,12 @@ const APIS={
         METHOD:"GET",
         ACTION:""
     },
+    GET_NOTES_BASED_CIENT_VISITID:{
+        URL:"visit/getNotesBasedOnClientOrVisitId/{0}",
+        METHOD:"GET",
+        ACTION:""
+    },
+    
     GET_DIAGNOSIS:{
         URL:"visit/getDiagnosis/{0}",
         METHOD:"GET",
@@ -223,9 +229,18 @@ const APIS={
         URL:'common/uploadFile',
         METHOD:"POST",
         ACTION:"FIle Upload"
-    }
+    },
     
-    
+    GET_MASTER_TABLE:{
+        URL:'api/groups/roots',
+        METHOD:"GET",
+        ACTION:"GET LOOKUPS"
+    },
+    SAVE_MASTER_TABLE:{
+        URL:'api/groups?name={0}&parentId={1}&isLast={2}',
+        METHOD:"POST",
+        ACTION:"GET LOOKUPS"
+    },
 
     
 }

@@ -23,6 +23,7 @@ import moment from 'moment';
 export default function EmployeeMaster(props) {
     const [rolesList, setRolesList] = useState([]);
     const [designationList, setDesignationList] = useState([]);
+    const [specialityListOptions, setSpecialityListOptions] = React.useState([]);
 
     const { control, handleSubmit, reset, setValue, formState: { errors } } = useForm({
         defaultValues: {
@@ -33,6 +34,7 @@ export default function EmployeeMaster(props) {
 
     useEffect(() => {
         getRoleMasterData();
+        getLookUpDetails();
     }, []);
 
     async function getRoleMasterData() {
@@ -46,6 +48,18 @@ export default function EmployeeMaster(props) {
             setRolesList(result);
         }
     }
+    async function getLookUpDetails() {
+        var payLoad = {
+          method: APIS.LOOKUP.METHOD,
+          url: APIS.LOOKUP.URL,
+          paramas: ["SPECILAITY"]
+        }
+        let result = await sendRequest(payLoad);
+        if (result && result.SPECILAITY) {
+          setSpecialityListOptions(result.SPECILAITY);
+        }
+        
+      }
     async function saveData(data) {
         var payLoad = {
             method: APIS.EMP_REGISTRATION.METHOD,
@@ -75,7 +89,8 @@ export default function EmployeeMaster(props) {
             age: data.age,
             dob: new Date(data.dob),
             mail: data.email,
-            mobilenumber: data.contact
+            mobilenumber: data.contact,
+            specilaity:data.specilaity
         }
         saveData(obj);
     }
@@ -121,6 +136,23 @@ export default function EmployeeMaster(props) {
                                         mapvalues={{ id: "id", value: 'masterdatavalue' }}
                                         isMultiSelect={false}
                                         id={"emprole-combo-box-demo"}
+                                        onInputChange={(data) => {
+
+                                        }}
+                                    />
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={4} spacing={1}>
+                                <FormControl variant="outlined" fullWidth>
+                                    <AutocompleteField
+                                        name="specilaity"
+                                        label={Translations.employeeRegistration.speciality}
+                                        control={control}
+                                        options={specialityListOptions}
+                                        placeholder={Translations.employeeRegistration.speciality}
+                                        mapvalues={{ id: "lookupid", value: 'lookupvalue' }}
+                                        isMultiSelect={false}
+                                        id={"speciality-combo-box-demo"}
                                         onInputChange={(data) => {
 
                                         }}

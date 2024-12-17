@@ -5,14 +5,14 @@
     isOpen:false,
     isRefreshMenu:false,
     subMenu:[{
-        title:"Doctor Dashboard",
+        title:"OP Doctor Dashboard",
         to:"/vist-dashboard",
         icon:"dashboard_customize",
         isOpen:false,
         isRefreshMenu:true,
         screencode:'VISIT_DAHSBOARD_SCREEN_VIEW'
     },{
-        title:"Nurse Dashboard",
+        title:"OP Nurse Dashboard",
         to:"/nurse-dashboard",
         icon:"dashboard_customize",
         isOpen:false,
@@ -43,6 +43,13 @@
     },{
         title:"Allergies",
         to:"/allergy",
+        icon:"favorite",
+        isPatientSpecific :true,
+        isRefreshMenu:false,
+        screencode:'PRESCRIPTIONS_SCREEN_VIEW'
+    },{
+        title:"Notes",
+        to:"/notes",
         icon:"favorite",
         isPatientSpecific :true,
         isRefreshMenu:false,

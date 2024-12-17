@@ -40,6 +40,7 @@ const RegistrationInformation = forwardRef((props, ref) => {
         }
         if (result && result.SALUTATION) {
             setTitleList(result.SALUTATION);
+            props.setValue("title", result.SALUTATION[0]);
         }
     }
     return (

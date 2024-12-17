@@ -15,7 +15,6 @@ import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Icon from '@mui/material/Icon';
-import logo from '../../../resources/LeafSpring_Logo1.jpeg';
 
 // const Item = ({ title, to, icon, selected, setSelected }) => {
 //   const theme = useTheme();

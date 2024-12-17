@@ -29,6 +29,7 @@ const Translations = {
         password:'Password',
         role:'Role',
         designation:'Designation',
+        speciality:'Speciality',
         empList:'Employe List',
         name:'Name',
         actions:'Actions',
@@ -55,8 +56,8 @@ const Translations = {
         token:'Token',
         visitDate:'Visit Date',
         addServices:'Add Services',
-        searchCleint:'Search Client',
-        clientDetails:'Client Details',
+        searchCleint:'Search Patient',
+        clientDetails:'Patient Details',
         visitDetails:'Visit Details'
     },
     "vitalsForm":{

@@ -53,16 +53,17 @@ export const DrugMasterSchema = Yup
 export const VisitCreationSchema = Yup
     .object({
         title: Yup.object().nullable().required("Title Required"),
-        firstname: Yup.string().required("Select First Name"),
-        lastname: Yup.string().required("Select Last Name"),
+        firstname: Yup.string().required("Select First Name").max(100, "First Name cannot exceed 100 characters"),
+        lastname: Yup.string().required("Select Last Name").max(100, "Last Name cannot exceed 100 characters"),
         gender: Yup.object().nullable().required("Select Gender"),
         dob: Yup.object().nullable().required("Select DOB"),
         age: Yup.string().required("Select Age"),
-        contact: Yup.string().required("Select contact"),
+        contact: Yup.string().matches(/^[0-9]{10}$/, 'Mobile number must be 10 digits').required("Select contact"),
         specility: Yup.object().nullable().required("Specility Required"),
         doctor: Yup.object().nullable().required("Doctor Required"),
         visitType: Yup.object().nullable().required("Visit Type Required"),
-        visitdate: Yup.object().nullable().required("Visit Date Required")
+        visitdate: Yup.object().nullable().required("Visit Date Required"),
+        email:Yup.string().email('Invalid email format')
     })
     .required()
 export const PatientCreationSchema = Yup
@@ -73,7 +74,7 @@ export const PatientCreationSchema = Yup
         gender: Yup.object().nullable().required("Select Gender"),
         dob: Yup.object().nullable().required("Select DOB"),
         age: Yup.string().required("Select Age"),
-        contact: Yup.string().required("Select contact"),
+        contact: Yup.string().matches(/^[0-9]{10}$/, 'Mobile number must be 10 digits').required("Select contact"),
 
     })
     .required()
@@ -87,10 +88,10 @@ export const EmployeeCreationSchema = Yup
         dob: Yup.object().nullable().required("Select DOB"),
         age: Yup.string().required("Select Age"),
         contact: Yup.string().required("Select contact"),
-        username: Yup.string().required("Enter User Name"),
-        password: Yup.string().required("Enter Password"),
+        //username: Yup.string().required("Enter User Name"),
+        //password: Yup.string().required("Enter Password"),
         role: Yup.object().nullable().required("Select role"),
-
+        specilaity:Yup.object().nullable().required("Select specilaity"),
     })
     .required()
 export const ServiceCreationSchema = Yup
