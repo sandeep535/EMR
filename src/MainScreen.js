@@ -37,15 +37,15 @@ export default function MainScreen(props) {
                     <Route path='/login/:tenant' element={<LoginPage />} />
                 </Routes>)}
             {appContextValue && appContextValue.isLogin &&
-                <Box style={{ display: "flex", flexDirection: "row", }}>
+                <Box style={{ display: "flex", flexDirection: "row", height: "100vh",overflow: "hidden", }}>
                     <Box>
                         <MyProSidebarProvider />
                     </Box>
-                    <Box style={{ width: '100%' }}>
+                    <Box style={{ width: '100%',height:'100%' }}>
                         <Box sx={{ height: '8%' }}>
                             <Topbar />
                         </Box>
-                        <Box sx={{ height: '92%', overflowY: 'scroll' }}>
+                        <Box sx={{ height: '92%', overflowY: 'auto' }}>
                             <Routes>
                                 {ApplicationRoutes.map((route, index) => (
                                     <Route key={index} path={route.path} element={route.element} />

@@ -43,6 +43,18 @@ const RegistrationInformation = forwardRef((props, ref) => {
             props.setValue("title", result.SALUTATION[0]);
         }
     }
+
+    function calculateAge(dateOfBirth) {
+        const today = new Date(); // Current date
+        const birthDate = new Date(dateOfBirth); // Convert input to Date object
+        let age = today.getFullYear() - birthDate.getFullYear(); // Initial age calculation
+        const monthDifference = today.getMonth() - birthDate.getMonth(); // Month difference
+        // Adjust age if the current month/day is before the birth month/day
+        if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
+          age--;
+        }
+        props.setValue("age",age);
+      }
     return (
         <Box display="grid" >
             <Grid container spacing={1}>
@@ -83,14 +95,6 @@ const RegistrationInformation = forwardRef((props, ref) => {
                         mapvalues={{ id: "lookupid", value: 'lookupvalue' }}
                     />
                 </Grid>
-                <Grid item xs={2} >
-                    <SLDatePicker
-                        name="dob"
-                        label={Translations.patientRegistration.dob}
-                        control={control}
-                        error={errors.dob}
-                    />
-                </Grid>
                 <Grid item xs={1} >
                     <SLTextField
                         name="age"
@@ -102,6 +106,19 @@ const RegistrationInformation = forwardRef((props, ref) => {
                         }}
                     />
                 </Grid>
+                <Grid item xs={2} >
+                    <SLDatePicker
+                        name="dob"
+                        label={Translations.patientRegistration.dob}
+                        control={control}
+                        error={errors.dob}
+                        onChange={(date)=>{
+                            console.log(date);
+                            calculateAge(date);
+                        }}
+                    />
+                </Grid>
+               
                 <Grid item xs={2}>
                     <SLTextField
                         name="contact"

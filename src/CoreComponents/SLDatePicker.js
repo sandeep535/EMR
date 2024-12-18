@@ -19,7 +19,10 @@ const SLDatePicker = ({ name, control, label, rules = {}, error, ...props }) => 
               label={label}
               value={value}
               onChange={(date) => {
-                onChange(date); // Update form state with the selected date
+                onChange(date);
+                if(props.onChange){
+                  props.onChange(date)
+                } // Update form state with the selected date
               }}
               renderInput={(params) => (
                 <TextField {...params} fullWidth variant="outlined" />
