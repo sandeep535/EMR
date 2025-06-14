@@ -1,12 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect,useContext } from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import styles from './ClientBannerCss';
 import userIcon from '../../resources/image-icon.png';
 import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
+import AppContext from '../Context/AppContext';
 
 export default function ClientBanner(props) {
+    const appContextValue = useContext(AppContext);
     useEffect(() => {
+        
     }, []);
     const status = props.visitData.status;
     const getBorderColor = () => {
@@ -45,7 +48,12 @@ export default function ClientBanner(props) {
                             </Grid>
                         </Grid>
                         <Grid container spacing={1} >
-                            <Grid item xs={12} container alignItems="center">
+                        <Grid item xs={4} container alignItems="center">
+                                <Typography sx={styles.div}> Mobile No:</Typography>
+                                <Typography sx={styles.div}> <strong>{props.clientData.contact}</strong></Typography>
+                            </Grid>
+                        
+                            <Grid item xs={6} container alignItems="center">
                                 <Typography sx={styles.div}> Visit Reason:</Typography>
                                 <Typography sx={styles.div}> <strong>{props.visitData.reason}</strong></Typography>
                             </Grid>

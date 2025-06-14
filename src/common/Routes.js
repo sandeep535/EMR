@@ -26,8 +26,10 @@ import ReactCodeFormBuilder from "./ReactCodeGenerater/ReactCodeFormBuilder";
 import SampleForm from "../Masters/ServiceMaster/SampleForm";
 import BillsTabs from "../pages/Bills/BillsTabs";
 import NotesList from "../pages/Notes/NotesList";
+import LoginPage from '../pages/Login/LoginPage';
 
 const ApplicationRoutes = [
+    { path: "/login/:tenant", element: <LoginPage /> },
     { path: "/vist-dashboard", element: <VisitDasboard /> },
     { path: "/nurse-dashboard", element: <VisitDasboard isFrom='nursedashboard' /> },
     { path: "/registration", element: <Registration /> },

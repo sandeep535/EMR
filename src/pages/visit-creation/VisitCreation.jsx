@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect } from 'react';
 import { Box } from '@mui/material'
 import Grid from '@mui/material/Grid';
@@ -269,7 +268,7 @@ export default function VisitCreation(props) {
                         control={control}
                         options={doctoroptions}
                         placeholder={Translations.visitCreation.DocName}
-                        mapvalues={{ id: "id", value: 'firstname' }}
+                        mapvalues={{ id: "id", value: ['firstname', 'lastname'] }}
                         isMultiSelect={false}
                         id={"doctor-combo-box-demo"}
                         onInputChange={(data) => {

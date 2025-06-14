@@ -6,9 +6,17 @@ import SLTabs from "../../CoreComponents/SLTabs";
 const BillsTabs = () => {
   const tabLabels = ["Bills", "Paymemnts"];
   const tabContents = [
-    <BillsList />,
-    <Paymemts />,
+    <React.Fragment key="bills">
+      <BillsList />
+    </React.Fragment>,
+    <React.Fragment key="payments">
+      <Paymemts />
+    </React.Fragment>,
   ];
+  // const tabContents = [
+  //   <BillsList />,
+  //   <Paymemts />,
+  // ];
 
   return (
     <div>

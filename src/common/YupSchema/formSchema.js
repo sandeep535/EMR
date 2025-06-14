@@ -152,6 +152,21 @@ export const BedMasterAdd = Yup
     })
     .required()
 
-export const DisplayFiledProperiesSchema = Yup.object({
-       
-    }).required()
+export const DisplayFiledProperiesSchema = Yup.object({}).required()
+
+export const AddPaymentSchema = Yup.object().shape({
+  billNumber: Yup.string().required('Required'),
+  billDate: Yup.date().required('Required'),
+  paymentDate: Yup.date().required('Required'),
+  paymentMethod: Yup.string().required('Required'),
+  chequeNumber: Yup.string().nullable(),
+  paymentAmount: Yup.number().required('Required'),
+  payingEntity: Yup.string().required('Required'),
+  paymentCategory: Yup.string().required('Required'),
+  paymentFrom: Yup.string().required('Required'),
+  payerId: Yup.string().required('Required'),
+  depositAmount: Yup.number().required('Required'),
+  depositDate: Yup.date().required('Required'),
+  discount: Yup.number(),
+  notes: Yup.string()
+});

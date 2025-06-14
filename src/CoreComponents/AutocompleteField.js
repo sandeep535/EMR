@@ -18,7 +18,6 @@ const AutocompleteField = ({
 }) => {
   return (
     <>
-
       <Controller
         name={name}
         control={control}
@@ -30,20 +29,23 @@ const AutocompleteField = ({
               id={id}
               options={options}
               key={option => option[mapvalues.id]}
-              getOptionLabel={option => option[mapvalues.value] || ""}
+              getOptionLabel={option => {
+                if (Array.isArray(mapvalues.value)) {
+                  return mapvalues.value.map(field => option[field]).join(' ') || "";
+                }
+                return option[mapvalues.value] || "";
+              }}
               value={value || null}
               onInputChange={(event, newInputValue) => {
                 if(onInputChange){
                   onInputChange(newInputValue)
                 }
-                
               }}
               onChange={(event, item) => {
                 onChange(item);
                 if(onchangeEventCallBack){
                   onchangeEventCallBack(item);
                 }
-               
               }}
               slotProps={{
                 popper: {
@@ -55,14 +57,15 @@ const AutocompleteField = ({
               renderOption={(props, option) => {
                 return (
                   <li {...props} key={option[mapvalues.id]}>
-                    {option[mapvalues.value]}
+                    {Array.isArray(mapvalues.value) 
+                      ? mapvalues.value.map(field => option[field]).join(' ')
+                      : option[mapvalues.value]}
                   </li>
                 );
               }}
               renderInput={(params) => <TextField {...params} label={label} error={!!error}
                 helperText={error ? error.message : ''} />}
             />
-
           </>
         }
       />

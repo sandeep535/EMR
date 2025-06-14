@@ -67,7 +67,7 @@ const BedMaster = () => {
                         setselectedNode(node);
                         setisFormShow(true);
                         if(node && node.subGroups && node.subGroups[0] && node.subGroups[0].isLast){
-
+                            console.log("node.subGroups[0].isLast",node.subGroups[0].isLast);
                         }else{
                             setBedLoist([])
                         }
@@ -150,7 +150,7 @@ const BedMaster = () => {
     }
     async function sendNodeToAPI(data){
         var payLoad = {
-            method: API.SAVE_MASTER_TABLE.METHOD,
+            method: APIS.SAVE_MASTER_TABLE.METHOD,
             url: APIS.SAVE_MASTER_TABLE.URL,
             paramas: [data.name,data.parent_id,data.isLast],
           }

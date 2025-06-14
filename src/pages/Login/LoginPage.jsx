@@ -55,8 +55,6 @@ export default function LoginPage(props) {
   useEffect(() => {
     sessionStorage.setItem("tenant",params.tenant)
     appContextValue.setTenant(params.tenant);
-
-    
     //appContextValue.setLeftMenuList(LeftMenu);
   }, [])
   async function fetchRolesTransData(roleid) {

@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import CommonCard from '../../common/CommonCard';
 import { PatientCreationSchema } from '../../common/YupSchema/formSchema';
 import { yupResolver } from "@hookform/resolvers/yup";
-import AddressComponent from '../../components/address/AddressComponent';
+// import  AddressComponent from '../../components/address/AddressComponent';
 
 const ClientRegistration = () => {
   const { control, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm({
@@ -66,7 +66,7 @@ const ClientRegistration = () => {
               <RegistrationInformation control={control} errors={errors} setValue={setValue} />
             </CommonCard>
             <CommonCard title={Translations.patientRegistration.address}>
-              <AddressComponent control={control} errors={errors} watch={watch} />
+               {/* <AddressComponent control={control} errors={errors} watch={watch} />  */}
             </CommonCard>
 
           </Box>

@@ -425,12 +425,15 @@ const ReactCodeFormBuilder = () => {
                                 {formGrid.map((zone, index) => (
                                     <Grid container direction="row" key={index}>
                                         {zone && zone.form && zone.form.map((form, subIndex) => (
-                                            <Grid item xs={Number(form.dynamicComponentProps[0].value)}  >
+                                            <Grid item xs={Number(form.dynamicComponentProps[0].value)} key={{subIndex}} >
                                                 <Box sx={{ width: '100%' }}>
                                                     <Typography variant="h6" gutterBottom>
                                                        {form.props && form.props[0] && form.props[0].value}
                                                     </Typography>
-                                                    <form onSubmit={handleSubmit((data) => onSubmit(data, formIndex))} style={{
+                                                    <form onSubmit={handleSubmit((data) => {
+                                                        console.log("data", data)
+                                                       // onSubmit(data, formIndex)
+                                                    })} style={{
                                                         padding: '10px',
                                                         border: '1px solid #ccc',
                                                         borderRadius: '8px',

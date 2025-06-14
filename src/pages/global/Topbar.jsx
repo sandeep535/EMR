@@ -43,7 +43,7 @@ const Topbar = () => {
   }
 
   return (
-    <Box position="fixed" style={{ background: colors, width: '100%', height: '8%', borderRadius: "5px" }}>
+    <Box position="fixed" style={{ background: colors, width: '80%', height: '8%', borderRadius: "5px" }}>
 
       <ModelPopUp size={'sm'} isOpen={open} title="Signout" handleClose={() => { setOpen(false) }} >
         <Stack spacing={3} direction="column" >
@@ -57,14 +57,11 @@ const Topbar = () => {
         </Stack>
       </ModelPopUp>
 
-      <Box display="flex" >
-        <p style={{ marginLeft: '68%', marginRight: "1%", color: '#fff' }}>Login User : <b>{loggedUser}</b></p>
-        <IconButton onClick={() => {
-          handleClickOpen()
-        }}>
+      <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
+        <p style={{ color: '#fff' }}>Login User: <b>{loggedUser}</b></p>
+        <IconButton onClick={handleClickOpen}>
           <LogoutIcon sx={{ color: 'white' }} />
         </IconButton>
-
       </Box>
     </Box>
   );

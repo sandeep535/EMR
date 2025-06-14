@@ -6,15 +6,15 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'bundle.js',
-    publicPath: (resourcePath, context) => {
-      // This could also inspect something in the HTML, URL, or some other dynamic source
-      if (typeof window !== 'undefined') {
-        const tenant = window.location.pathname.split('/')[2] || 'default-tenant';
-        return `/login/${tenant}/`;  // This will be applied at runtime
-      } else{
-        return `/login/emr2`;
-      }
-    },
+    publicPath: '/', 
+    // publicPath: (resourcePath, context) => {
+    //   if (typeof window !== 'undefined') {
+    //     const tenant = window.location.pathname.split('/')[2] || 'default-tenant';
+    //     return `/login/${tenant}`;
+    //   } else{
+    //     return `/login/emr2`;
+    //   }
+    // },
   },
   ignoreWarnings: [/Critical dependency:/],
   plugins: [
@@ -62,10 +62,10 @@ module.exports = {
    // compress: true,
     port: 3000,
     open: true,
-    open: 'http://localhost:3000/login/emr2',
-    historyApiFallback: {
-      index: '/login/emr2', // Optional: Set a fallback route if desired
+    // open: 'http://localhost:3000/login/emr2',
+    // historyApiFallback: {
+    //   index: '/login/emr2', // Optional: Set a fallback route if desired
      
-    },
+    // },
   },
 };

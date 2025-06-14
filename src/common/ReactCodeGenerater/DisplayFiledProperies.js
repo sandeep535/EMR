@@ -85,7 +85,7 @@ export default function DisplayFiledProperies(props) {
                                 {fields.map((field, index) => (
                                     <div key={field.id} style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
                                         {numberOfKeys.map((objectKey, indexob) => {
-                                            return (<div>
+                                            return (<div key={indexob} style={{ marginRight: 8 }}>
                                                 <SLTextField
                                                     name={`${item.key}[${index}].${objectKey}`}
                                                     label={`${objectKey}`}
@@ -104,10 +104,12 @@ export default function DisplayFiledProperies(props) {
 
                         } else if (item.isDynamicObject) {
                             let numberOfKeys = Object.keys(item.value);
-                            return (<div style={{ display: 'flex', alignItems: 'center' }}>
+                            return (
+                            <div style={{ display: 'flex', alignItems: 'center' }} key={item.key}>
                                 <span>{item.displaylabel}:</span>
                                 {numberOfKeys.map((objectKey, index) => (
                                     <SLTextField
+                                        key={index}
                                         name={`${item.key}.${objectKey}`}
                                         label={`${objectKey}`}
                                         control={control}
@@ -115,7 +117,8 @@ export default function DisplayFiledProperies(props) {
                                     />
                                 ))}
                                 {/* {getAPIDDOM(item)} */}
-                            </div>)
+                            </div>
+                            )
                         } else if(item.isStateValue && item.apiCallForState){
                             return (<>{getAPIDDOM(item)}</>)
                         } else {
