@@ -95,98 +95,218 @@ export default function VisitSummary(props) {
     
 
     const contentDiv = (
-        <Card variant="outlined"  >
-            <CardContent>
-                <Stack direction="row" justifyContent='center' alignItems="center">
-                    <Typography variant="h4" component="div">Visit Summary</Typography>
+        <Card variant="outlined" sx={{ maxWidth: '100%', margin: '20px auto', '@media print': { boxShadow: 'none' } }}>
+            <CardContent sx={{ '@media print': { padding: '8px' } }}>
+                <Stack direction="row" justifyContent='center' alignItems="center" sx={{ mb: 2 }}>
+                    <Typography variant="h4" component="div" sx={{ fontWeight: 'bold' }}>Visit Summary</Typography>
                 </Stack>
-                <Divider className='page-beak'/>
+                <Divider className='page-beak' sx={{ mb: 2 }}/>
                 <Box sx={{ p: 2 }}>
-                    <Typography variant="h4" gutterBottom sx={{ textDecoration: 'underline' }}>
+                    <Typography variant="h4" gutterBottom sx={{ textDecoration: 'underline', mb: 2 }}>
                         Vitals
                     </Typography>
                     <Box sx={{ p: 2 }}>
                         <Grid container spacing={2}>
-                            <Grid xs={2}>
-                                <Typography variant="h5" gutterBottom >
-                                    Height :{vitalsData.height}
+                            <Grid item xs={12} sm={6} md={4}>
+                                <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Box component="span" sx={{ minWidth: '140px', fontWeight: 'bold' }}>Height:</Box>
+                                    {vitalsData.height || '-'}
                                 </Typography>
                             </Grid>
-                            <Grid xs={2}>
-                                <Typography variant="h5" gutterBottom >
-                                    Weight :{vitalsData.weight}
+                            <Grid item xs={12} sm={6} md={4}>
+                                <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Box component="span" sx={{ minWidth: '140px', fontWeight: 'bold' }}>Weight:</Box>
+                                    {vitalsData.weight || '-'}
                                 </Typography>
                             </Grid>
-                            <Grid xs={2}>
-                                <Typography variant="h5" gutterBottom >
-                                    Temperature :{vitalsData.temperature}
+                            <Grid item xs={12} sm={6} md={4}>
+                                <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Box component="span" sx={{ minWidth: '140px', fontWeight: 'bold' }}>Temperature:</Box>
+                                    {vitalsData.temperature || '-'}
                                 </Typography>
                             </Grid>
-                            <Grid xs={2}>
-                                <Typography variant="h5" gutterBottom >
-                                    BP :{vitalsData .systolic && vitalsData.systolic + "/" + vitalsData.diastolic}
+                            <Grid item xs={12} sm={6} md={4}>
+                                <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Box component="span" sx={{ minWidth: '140px', fontWeight: 'bold' }}>BP:</Box>
+                                    {vitalsData.systolic && vitalsData.diastolic ? `${vitalsData.systolic}/${vitalsData.diastolic}` : '-'}
                                 </Typography>
                             </Grid>
-                            <Grid xs={2}>
-                                <Typography variant="h5" gutterBottom >
-                                    Respiratory Rate :{vitalsData.respiratoryrate}
+                            <Grid item xs={12} sm={6} md={4}>
+                                <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Box component="span" sx={{ minWidth: '140px', fontWeight: 'bold' }}>Respiratory Rate:</Box>
+                                    {vitalsData.respiratoryrate || '-'}
                                 </Typography>
                             </Grid>
-                            <Grid xs={2}>
-                                <Typography variant="h5" gutterBottom >
-                                    Pluse :{vitalsData.pulse}
+                            <Grid item xs={12} sm={6} md={4}>
+                                <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Box component="span" sx={{ minWidth: '140px', fontWeight: 'bold' }}>Pulse:</Box>
+                                    {vitalsData.pulse || '-'}
                                 </Typography>
                             </Grid>
-                            <Grid xs={2}>
-                                <Typography variant="h5" gutterBottom >
-                                    BMI :{vitalsData.bmi}
+                            <Grid item xs={12} sm={6} md={4}>
+                                <Typography variant="h5" gutterBottom sx={{ display: 'flex', alignItems: 'center' }}>
+                                    <Box component="span" sx={{ minWidth: '140px', fontWeight: 'bold' }}>BMI:</Box>
+                                    {vitalsData.bmi || '-'}
                                 </Typography>
                             </Grid>
                         </Grid>
                     </Box>
                 </Box>
-                <Divider className='page-beak'/>
+                <Divider className='page-beak' sx={{ my: 2 }}/>
                 <Box sx={{ p: 2 }}>
-                    <Typography variant="h4" gutterBottom sx={{ textDecoration: 'underline' }}>Diagnosis</Typography>
-                    <Typography variant="body" gutterBottom >{diagnosisData.description} 
+                    <Typography variant="h4" gutterBottom sx={{ textDecoration: 'underline', mb: 2 }}>Diagnosis</Typography>
+                    <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap', pl: 2 }}>
+                        {diagnosisData.description || "No diagnosis found"}
                     </Typography>
                 </Box>
-                <Divider className='page-beak'/>
+                <Divider className='page-beak' sx={{ my: 2 }}/>
                 <Box sx={{ p: 2 }}>
-                    <Typography variant="h4" gutterBottom sx={{ textDecoration: 'underline' }}>Notes</Typography>
-                    <Typography variant="body" gutterBottom >{notes.description}
+                    <Typography variant="h4" gutterBottom sx={{ textDecoration: 'underline', mb: 2 }}>Notes</Typography>
+                    <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap', pl: 2 }}>
+                        {notes.description || "No notes found"}
                     </Typography>
                 </Box>
-                <Divider className='page-beak'/>
+                <Divider className='page-beak' sx={{ my: 2 }}/>
                 <Box sx={{ p: 2 }}>
-                    <Typography variant="h4" gutterBottom sx={{ textDecoration: 'underline' }}>Prescriptions</Typography>
+                    <Typography variant="h4" gutterBottom sx={{ textDecoration: 'underline', mb: 2 }}>Prescriptions</Typography>
                     <Box>
-                        <TableContainer>
-                            <Table aria-label="simple table">
+                        <TableContainer 
+                            sx={{ 
+                                '@media print': { 
+                                    boxShadow: 'none',
+                                    pageBreakInside: 'avoid',
+                                    marginBottom: '20px'
+                                }
+                            }}
+                        >
+                            <Table 
+                                size="small" 
+                                sx={{ 
+                                    '@media print': { 
+                                        borderCollapse: 'collapse',
+                                        width: '100%'
+                                    },
+                                    '& .MuiTableCell-root': {
+                                        border: '1px solid #e0e0e0',
+                                        padding: '12px 16px',
+                                        fontSize: '14px'
+                                    }
+                                }}
+                            >
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell width={'30%'}>Drug Name</TableCell>
-                                        <TableCell width={'30%'}>SIG</TableCell>
-                                        <TableCell width={'20%'}>Start Date</TableCell>
-                                        <TableCell width={'20%'}>End Date</TableCell>
+                                        <TableCell 
+                                            align="left"
+                                            sx={{ 
+                                                fontWeight: 600,
+                                                backgroundColor: '#f8f9fa',
+                                                color: '#2c3e50',
+                                                borderBottom: '2px solid #dee2e6',
+                                                '@media print': {
+                                                    backgroundColor: '#f8f9fa !important',
+                                                    WebkitPrintColorAdjust: 'exact'
+                                                }
+                                            }}
+                                        >
+                                            Drug Name
+                                        </TableCell>
+                                        <TableCell 
+                                            align="left"
+                                            sx={{ 
+                                                fontWeight: 600,
+                                                backgroundColor: '#f8f9fa',
+                                                color: '#2c3e50',
+                                                borderBottom: '2px solid #dee2e6',
+                                                '@media print': {
+                                                    backgroundColor: '#f8f9fa !important',
+                                                    WebkitPrintColorAdjust: 'exact'
+                                                }
+                                            }}
+                                        >
+                                            SIG
+                                        </TableCell>
+                                        <TableCell 
+                                            align="center"
+                                            sx={{ 
+                                                fontWeight: 600,
+                                                backgroundColor: '#f8f9fa',
+                                                color: '#2c3e50',
+                                                borderBottom: '2px solid #dee2e6',
+                                                '@media print': {
+                                                    backgroundColor: '#f8f9fa !important',
+                                                    WebkitPrintColorAdjust: 'exact'
+                                                }
+                                            }}
+                                        >
+                                            Start Date
+                                        </TableCell>
+                                        <TableCell 
+                                            align="center"
+                                            sx={{ 
+                                                fontWeight: 600,
+                                                backgroundColor: '#f8f9fa',
+                                                color: '#2c3e50',
+                                                borderBottom: '2px solid #dee2e6',
+                                                '@media print': {
+                                                    backgroundColor: '#f8f9fa !important',
+                                                    WebkitPrintColorAdjust: 'exact'
+                                                }
+                                            }}
+                                        >
+                                            End Date
+                                        </TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {prescriptionData.map((row) => (
+                                    {prescriptionData.map((row, index) => (
                                         <TableRow
                                             key={row.name}
-                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                            sx={{ 
+                                                '&:hover': {
+                                                    backgroundColor: '#f8f9fa'
+                                                },
+                                                '@media print': {
+                                                    '&:hover': {
+                                                        backgroundColor: 'transparent'
+                                                    }
+                                                }
+                                            }}
                                         >
-                                            <TableCell component="th" scope="row">
+                                            <TableCell 
+                                                component="th" 
+                                                scope="row"
+                                                align="left"
+                                                sx={{ 
+                                                    fontWeight: 500,
+                                                    color: '#2c3e50'
+                                                }}
+                                            >
                                                 {row.drugname}
                                             </TableCell>
-                                            <TableCell>{row.sig}</TableCell>
-                                            <TableCell>
+                                            <TableCell 
+                                                align="left"
+                                                sx={{ 
+                                                    color: '#2c3e50'
+                                                }}
+                                            >
+                                                {row.sig}
+                                            </TableCell>
+                                            <TableCell 
+                                                align="center"
+                                                sx={{ 
+                                                    color: '#2c3e50'
+                                                }}
+                                            >
                                                 <Moment format="DD-MMM-YYYY">
                                                     {new Date(row.startdate)}
                                                 </Moment>
                                             </TableCell>
-                                            <TableCell>
+                                            <TableCell 
+                                                align="center"
+                                                sx={{ 
+                                                    color: '#2c3e50'
+                                                }}
+                                            >
                                                 <Moment format="DD-MMM-YYYY">
                                                     {new Date(row.endate)}
                                                 </Moment>
@@ -196,53 +316,175 @@ export default function VisitSummary(props) {
                                 </TableBody>
                             </Table>
                         </TableContainer>
-
-
                     </Box>
                 </Box>
-                <Divider className='page-beak'/>
-                <Box sx={{ p: 2 }}>
-                    <Typography variant="h4" gutterBottom sx={{ textDecoration: 'underline' }}>Lab Orders</Typography>
-                    <Box>
-                        <TableContainer>
-                            <Table aria-label="simple table">
+                <Divider className='page-beak' sx={{ my: 2 }}/>
+                <Box sx={{ 
+                    p: 2,
+                    '@media print': {
+                        pageBreakBefore: 'auto',
+                        pageBreakInside: 'avoid',
+                        marginTop: '20px'
+                    }
+                }}>
+                    <Typography 
+                        variant="h4" 
+                        gutterBottom 
+                        sx={{ 
+                            textDecoration: 'underline', 
+                            mb: 2,
+                            '@media print': {
+                                marginTop: '20px'
+                            }
+                        }}
+                    >
+                        Lab Orders
+                    </Typography>
+                    {labOrders && labOrders.length > 0 ? (
+                        <TableContainer 
+                            sx={{ 
+                                '@media print': { 
+                                    boxShadow: 'none',
+                                    marginTop: '10px'
+                                }
+                            }}
+                        >
+                            <Table 
+                                size="small" 
+                                sx={{ 
+                                    '@media print': { 
+                                        borderCollapse: 'collapse',
+                                        width: '100%'
+                                    },
+                                    '& .MuiTableCell-root': {
+                                        border: '1px solid #e0e0e0',
+                                        padding: '12px 16px',
+                                        fontSize: '14px'
+                                    }
+                                }}
+                            >
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell width={'30%'}>Lab Name</TableCell>
-
+                                        <TableCell 
+                                            align="left"
+                                            sx={{ 
+                                                fontWeight: 600,
+                                                backgroundColor: '#f8f9fa',
+                                                color: '#2c3e50',
+                                                borderBottom: '2px solid #dee2e6',
+                                                '@media print': {
+                                                    backgroundColor: '#f8f9fa !important',
+                                                    WebkitPrintColorAdjust: 'exact'
+                                                }
+                                            }}
+                                        >
+                                            Lab Name
+                                        </TableCell>
+                                        <TableCell 
+                                            align="left"
+                                            sx={{ 
+                                                fontWeight: 600,
+                                                backgroundColor: '#f8f9fa',
+                                                color: '#2c3e50',
+                                                borderBottom: '2px solid #dee2e6',
+                                                '@media print': {
+                                                    backgroundColor: '#f8f9fa !important',
+                                                    WebkitPrintColorAdjust: 'exact'
+                                                }
+                                            }}
+                                        >
+                                            Status
+                                        </TableCell>
+                                        <TableCell 
+                                            align="center"
+                                            sx={{ 
+                                                fontWeight: 600,
+                                                backgroundColor: '#f8f9fa',
+                                                color: '#2c3e50',
+                                                borderBottom: '2px solid #dee2e6',
+                                                '@media print': {
+                                                    backgroundColor: '#f8f9fa !important',
+                                                    WebkitPrintColorAdjust: 'exact'
+                                                }
+                                            }}
+                                        >
+                                            Order Date
+                                        </TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {labOrders.map((row) => (
                                         <TableRow
                                             key={row.name}
-                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                            sx={{ 
+                                                '&:hover': {
+                                                    backgroundColor: '#f8f9fa'
+                                                },
+                                                '@media print': {
+                                                    '&:hover': {
+                                                        backgroundColor: 'transparent'
+                                                    }
+                                                }
+                                            }}
                                         >
-                                            <TableCell component="th" scope="row">
+                                            <TableCell 
+                                                component="th" 
+                                                scope="row"
+                                                align="left"
+                                                sx={{ 
+                                                    fontWeight: 500,
+                                                    color: '#2c3e50'
+                                                }}
+                                            >
                                                 {row.labname}
                                             </TableCell>
-
+                                            <TableCell 
+                                                align="left"
+                                                sx={{ 
+                                                    color: '#2c3e50'
+                                                }}
+                                            >
+                                                {row.status || 'Pending'}
+                                            </TableCell>
+                                            <TableCell 
+                                                align="center"
+                                                sx={{ 
+                                                    color: '#2c3e50'
+                                                }}
+                                            >
+                                                <Moment format="DD-MMM-YYYY">
+                                                    {new Date(row.orderdate || new Date())}
+                                                </Moment>
+                                            </TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
                             </Table>
                         </TableContainer>
-
-
-                    </Box>
+                    ) : (
+                        <Box sx={{ 
+                            p: 2, 
+                            textAlign: 'center',
+                            backgroundColor: '#f8f9fa',
+                            borderRadius: '4px',
+                            border: '1px solid #dee2e6',
+                            '@media print': {
+                                marginTop: '10px'
+                            }
+                        }}>
+                            <Typography variant="body1" sx={{ color: '#6c757d' }}>
+                                No lab orders found for this visit
+                            </Typography>
+                        </Box>
+                    )}
                 </Box>
             </CardContent>
         </Card>
     );
 
     return (
-        <>
-        <Box className="main-class-visitsummary">
-           <SLCommonPrintComponent printContent={contentDiv} />
+        <Box className="main-class-visitsummary" sx={{ p: 2 }}>
+            <SLCommonPrintComponent printContent={contentDiv} />
         </Box>
-         
-        </>
-
-    )
-
+    );
 }

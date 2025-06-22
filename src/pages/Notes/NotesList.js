@@ -54,7 +54,7 @@ export default function NotesList() {
         notesRef.current.submitFormmData();
         setTimeout(() => {
             const notesData = notesRef.current.getFormData();
-            saveNotes(notesData);
+            //saveNotes(notesData);
         });
     };
 

@@ -154,7 +154,7 @@ const Vitals = forwardRef((props, ref) => {
                     </Grid>
                 </Grid>
 
-                <Grid container spacing={1}>
+                <Grid container spacing={1} sx={{ mt: 1 }}>
                     <Grid item xs={2} spacing={4}>
                         <SLTextField
                             name="pulse"

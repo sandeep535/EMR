@@ -22,8 +22,8 @@ const Vitals = () => {
       <Box m="0px">
         <form onSubmit={handleformAddSubmit(vitalshandleSubmit)} >
           <Box>
-            <Grid container spacing={2}>
-              <Grid item xs={12}>
+            <Grid container spacing={3} direction="column">
+              <Grid item>
                 <Grid container spacing={2}>
                   <Grid item xs={2}>
                     <SLTextField
@@ -75,7 +75,7 @@ const Vitals = () => {
                   </Grid>
                 </Grid>
               </Grid>
-              <Grid item xs={12} sx={{ mt: 3 }}>
+              <Grid item>
                 <Grid container spacing={2}>
                   <Grid item xs={2}>
                     <SLTextField
