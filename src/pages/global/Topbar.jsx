@@ -1,21 +1,12 @@
 import React from "react";
 import { useContext } from "react";
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, Typography } from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
-import Button from '@mui/material/Button';
-import Slide from '@mui/material/Slide';
+import AccountCircle from '@mui/icons-material/AccountCircle';
 import { useNavigate } from "react-router-dom";
 import AppContext from '../../components/Context/AppContext';
 import { tokens } from "../../theme";
 import ModelPopUp from "../../common/ModelPopup/ModelPopUp";
-import Stack from '@mui/material/Stack';
-
-const Transition = React.forwardRef(function Transition(
-  props,
-  ref,
-) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 
 const Topbar = () => {
   const loggedUser = sessionStorage.logged_user;
@@ -37,32 +28,40 @@ const Topbar = () => {
     sessionStorage.setItem("token","");
     sessionStorage.setItem("LoggedInUserDetails","");
     sessionStorage.setItem("leftMenu","");
-    // setIslogin(false);
-
     navigate("/login/" + sessionStorage.getItem("tenant"), { replace: true });
   }
 
   return (
-    <Box position="fixed" style={{ background: colors, width: '80%', height: '8%', borderRadius: "5px" }}>
-
-      <ModelPopUp size={'sm'} isOpen={open} title="Signout" handleClose={() => { setOpen(false) }} >
-        <Stack spacing={3} direction="column" >
-          <Stack spacing={2} direction="row">
-            <Box component="div" sx={{ fontSize: 18 }}>Do you want logout?</Box>
-          </Stack>
-          <Stack spacing={2} direction="row">
-            <Button onClick={doLogout} variant="contained">Yes</Button>
-            <Button onClick={handleClose} variant="outlined">No</Button>
-          </Stack>
-        </Stack>
-      </ModelPopUp>
-
-      <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
-        <p style={{ color: '#fff' }}>Login User: <b>{loggedUser}</b></p>
-        <IconButton onClick={handleClickOpen}>
-          <LogoutIcon sx={{ color: 'white' }} />
+    <Box
+      sx={{
+        position: 'fixed',
+        top: 0,
+        left: '250px',
+        right: 0,
+        zIndex: 1201,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        px: 2,
+        background: colors,
+        minHeight: 50,
+        width: 'calc(100% - 250px)',
+        flexWrap: 'wrap',
+        boxShadow: 1,
+      }}
+    >
+      <Typography variant="h6" sx={{ color: '#fff', fontWeight: 600 }}>
+        Login User: <span style={{ fontWeight: 700 }}>{loggedUser}</span>
+      </Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        <IconButton sx={{ color: '#fff' }}>
+          <AccountCircle />
+        </IconButton>
+        <IconButton sx={{ color: '#fff' }} onClick={handleClickOpen}>
+          <LogoutIcon />
         </IconButton>
       </Box>
+      <ModelPopUp open={open} handleClose={handleClose} handleConfirm={doLogout} />
     </Box>
   );
 };

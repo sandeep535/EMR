@@ -1,93 +1,69 @@
-import React, { useEffect, useContext, useRef } from "react";
+import React, { useEffect, useContext, useRef, useMemo } from "react";
 import { Routes, Route, useNavigate, useParams, useLocation } from "react-router-dom";
 import Box from "@mui/material/Box";
 import { MyProSidebarProvider } from "./pages/global/sidebar/sidebarContext";
 import Topbar from "./pages/global/Topbar";
-import LoginPage from "./pages/Login/LoginPage";
 import AppContext from "./components/Context/AppContext";
 import ApplicationRoutes from "./common/Routes";
+import { useAuth } from "./hooks/useAuth";
+import { useLayout } from "./hooks/useLayout";
+import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
+import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 
-export default function MainScreen(props) {
+export default function MainScreen() {
   const navigate = useNavigate();
   const location = useLocation();
   const params = useParams();
   const appContextValue = useContext(AppContext);
-  const initialAuthCheckDone = useRef(false);
+  
+  // Custom hooks for better separation of concerns
+  const { isAuthenticated, isLoading, error } = useAuth({
+    location,
+    params,
+    appContextValue,
+    navigate
+  });
+  
+  // Memoized routes to prevent unnecessary re-renders
+  const routes = useMemo(() => (
+    <Routes>
+      {ApplicationRoutes.map((route, index) => (
+        <Route
+          key={`${route.path}-${index}`}
+          path={route.path}
+          element={route.element}
+        />
+      ))}
+    </Routes>
+  ), []);
 
-  useEffect(() => {
-    // Skip if we've already done the initial auth check
-    if (initialAuthCheckDone.current) {
-      return;
-    }
+  // Show loading state while checking authentication
+  if (isLoading) {
+    return <LoadingSpinner message="Checking authentication..." />;
+  }
 
-    const sessionToken = sessionStorage.getItem("token");
-    const sessionLoggedInUserDetails = sessionStorage.getItem("LoggedInUserDetails");
-    const leftmenu = sessionStorage.getItem("leftMenu");
-
-    // Skip if already on login page
-    if (location.pathname.startsWith('/login/')) {
-      initialAuthCheckDone.current = true;
-      return;
-    }
-
-    try {
-      if (sessionToken && sessionLoggedInUserDetails) {
-        // Set context values
-        appContextValue.setIslogin(true);
-        appContextValue.setLoggedInUserDetails(JSON.parse(sessionLoggedInUserDetails));
-        
-        if (leftmenu) {
-          appContextValue.setLeftMenuList(JSON.parse(leftmenu));
-        }
-
-        // Only navigate if not on dashboard
-        if (!location.pathname.includes('dashboard')) {
-          navigate("/nurse-dashboard", { replace: true });
-        }
-      } else if (!appContextValue.isLogin) {
-        const currentTenant = params.tenant || 'emr2';
-        navigate(`/login/${currentTenant}`, { replace: true });
-      }
-    } catch (error) {
-      console.error("Error processing session data:", error);
-      sessionStorage.clear();
-      const currentTenant = params.tenant || 'emr2';
-      navigate(`/login/${currentTenant}`, { replace: true });
-    }
-
-    initialAuthCheckDone.current = true;
-  }, []); // Empty dependency array - only run on mount
+  // Show error state if authentication failed
+  if (error) {
+    return <ErrorBoundary error={error} />;
+  }
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexDirection: "row",
-        height: "100vh",
-        overflow: "hidden",
-      }}
-    >
-      {appContextValue.isLogin && (
-        <Box>
-          <MyProSidebarProvider />
-        </Box>
-      )}
-      <Box sx={{ width: "100%", height: "100%" }}>
-        {appContextValue.isLogin && (
-          <Box sx={{ height: "8%" }}>
+    <Box sx={{ display: 'flex', height: '100vh', width: '100vw' }}>
+      {/* Sidebar - 20% width */}
+      {isAuthenticated && (<Box sx={{ minWidth: 100, maxWidth: 400, height: '100vh', bgcolor: 'sidebar.main', display: 'flex', flexDirection: 'column' }}>
+        <MyProSidebarProvider />
+      </Box>)}
+      {/* Main Area */}
+      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', height: '100vh' }}>
+        {/* Topbar - 5% height */}
+        {isAuthenticated && (
+          <Box sx={{ height: '5vh', minHeight: 48, maxHeight: 80 }}>
             <Topbar />
           </Box>
         )}
-        <Box sx={{ height: appContextValue.isLogin ? "92%" : "100%", overflowY: "auto" }}>
-          <Routes>
-            {ApplicationRoutes.map((route, index) => (
-              <Route
-                key={index}
-                path={route.path}
-                element={route.element}
-              />
-            ))}
-          </Routes>
+        {/* Main Content */}
+        <Box sx={{ flex: 1, overflow: 'auto', bgcolor: 'background.default' }}>
+          {routes}
         </Box>
       </Box>
     </Box>

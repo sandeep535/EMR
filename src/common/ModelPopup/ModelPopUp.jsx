@@ -1,63 +1,21 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
+import Button from '@mui/material/Button';
+import DialogContentText from '@mui/material/DialogContentText';
 
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  '& .MuiDialogContent-root': {
-    padding: theme.spacing(2),
-  },
-  '& .MuiDialogActions-root': {
-    padding: theme.spacing(1),
-  },
-}));
+const ModelPopUp = ({ open, handleClose, handleConfirm }) => (
+  <Dialog open={open} onClose={handleClose}>
+    <DialogTitle>Sign Out</DialogTitle>
+    <DialogContent>
+      <DialogContentText>Do you want to logout?</DialogContentText>
+    </DialogContent>
+    <DialogActions>
+      <Button onClick={handleConfirm} color="primary" variant="contained">Yes</Button>
+      <Button onClick={handleClose} color="secondary" variant="outlined">No</Button>
+    </DialogActions>
+  </Dialog>
+);
 
-export default function ModelPopUp(props) {
-
-  const handleClose = () => {
-    props.handleClose()
-  };
-
-  return (
-    <React.Fragment>
-      <BootstrapDialog
-        fullWidth
-        maxWidth={props.size ? props.size :'sm'}
-        onClose={handleClose}
-        aria-labelledby="customized-dialog-title"
-        open={(props) ? props.isOpen : false}
-      >
-        {props.title && <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          {props.title}
-        </DialogTitle>}
-        <IconButton
-          aria-label="close"
-          onClick={handleClose}
-          sx={{
-            position: 'absolute',
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-        <DialogContent dividers>
-          {props.children}
-        </DialogContent>
-        {props.isActons &&
-          <DialogActions>
-            <Button autoFocus onClick={handleClose}>
-              Save changes
-            </Button>
-
-          </DialogActions>}
-      </BootstrapDialog>
-    </React.Fragment>
-  );
-}
+export default ModelPopUp;

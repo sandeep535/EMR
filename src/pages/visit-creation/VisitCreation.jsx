@@ -32,7 +32,7 @@ export default function VisitCreation(props) {
   const [visitid, setVisitid] = useState("");
 
   const visitServiceListRef = useRef();
-  const { control, handleSubmit, reset, setValue, formState: { errors } } = useForm({
+  const { control, handleSubmit, reset, setValue,getValues, formState: { errors } } = useForm({
     defaultValues: {},
     resolver: yupResolver(VisitCreationSchema),
   })
@@ -63,10 +63,11 @@ export default function VisitCreation(props) {
   async function getDoctorsData(value) {
     if (!value)
       return false;
+    let specility = getValues("specility") && getValues("specility").lookupid ? getValues("specility").lookupid : null;
     var payLoad = {
-      method: APIS.GET_EMPLOYES_BASED_ON_NAME.METHOD,
-      url: APIS.GET_EMPLOYES_BASED_ON_NAME.URL,
-      paramas: [value]
+      method: APIS.GET_EMPLOYES_BASED_ON_NAME_DESIGNATION.METHOD,
+      url: APIS.GET_EMPLOYES_BASED_ON_NAME_DESIGNATION.URL,
+      paramas: [specility,value]
     }
     let result = await sendRequest(payLoad);
     if (result) {

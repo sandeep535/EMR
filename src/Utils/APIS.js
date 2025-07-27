@@ -39,6 +39,11 @@ const APIS={
         METHOD:"GET",
         ACTION:""
     },
+    GET_EMPLOYES_BASED_ON_NAME_DESIGNATION:{
+        URL:"common/getEmployeesBasedOnName/{0}/{1}",
+        METHOD:"GET",
+        ACTION:""
+    },
     GET_SERVICE_MASTER_DATA_BASED_SERVICENAME:{
         URL:"common/getServiceMasterData/{0}",
         METHOD:"GET",

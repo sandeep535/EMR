@@ -148,7 +148,7 @@ export const VitalsSchema = Yup
 export const BedMasterAdd = Yup
     .object({
         name: Yup.string().required("Enter Name"),
-        isBed: Yup.string().required("Select Is Bed")
+        isLast: Yup.string().required("Select Is Bed")
     })
     .required()
 

@@ -1,12 +1,9 @@
-import { useContext } from "react";
-import { Menu, Sidebar } from "react-pro-sidebar";
+import { useContext, useState, useEffect, useCallback, useMemo } from "react";
 import { useSidebarContext } from "./sidebarContext";
-import { Link } from "react-router-dom";
 import { tokens } from "../../../theme";
-import { useTheme, Box, Typography } from "@mui/material";
+import { useTheme, Box, Typography, Drawer } from "@mui/material";
 import AppContext from '../../../components/Context/AppContext';
-import MenuItem from '@mui/material/MenuItem';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -15,174 +12,331 @@ import Collapse from '@mui/material/Collapse';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Icon from '@mui/material/Icon';
-
-// const Item = ({ title, to, icon, selected, setSelected }) => {
-//   const theme = useTheme();
-//   const colors = tokens(theme.palette.mode);
-//   return (
-//     <MenuItem
-//       active={selected === title}
-//       style={{ color: colors.grey[100] }}
-//       onClick={() => setSelected(title)}
-//       icon={icon}
-//       routerLink={<Link to={to} />}
-//     >
-//       <Typography>{title}</Typography>
-//     </MenuItem>
-//   );
-// };
+import logo from '../../../resources/LeafSpring_Logo1.jpeg';
 
 const MyProSidebar = () => {
   const appContextValue = useContext(AppContext);
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const { sidebarRTL, setSidebarRTL, sidebarImage } = useSidebarContext();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [localMenuState, setLocalMenuState] = useState({});
+  const [drawerOpen, setDrawerOpen] = useState(true);
 
-  const removePatientSpecific = (copyData) => {
-    copyData.map(item => {
+  // Initialize local menu state from context
+  useEffect(() => {
+    if (appContextValue.leftMenuList) {
+      const initialState = {};
+      appContextValue.leftMenuList.forEach((menu, index) => {
+        initialState[index] = menu.isOpen || false;
+      });
+      setLocalMenuState(initialState);
+    }
+  },[]);
+
+  const removePatientSpecific = useCallback((copyData) => {
+    return copyData.map(item => {
       if (Object.prototype.hasOwnProperty.call(item, "isPatientSpecific")) {
         item.isPatientSpecific = false;
       }
+      return item;
     });
-    return copyData;
-  }
-  const handleClick = (item, menuType, index) => {
+  }, []);
+
+  // Memoize the context setters to prevent unnecessary re-renders
+  const contextSetters = useMemo(() => ({
+    setSelectedLeftMenuItem: appContextValue.setSelectedLeftMenuItem,
+    setLeftMenuList: appContextValue.setLeftMenuList,
+    setSelectedVisitDeatils: appContextValue.setSelectedVisitDeatils,
+  }), [appContextValue.setSelectedLeftMenuItem, appContextValue.setLeftMenuList, appContextValue.setSelectedVisitDeatils]);
+
+  const handleClick = useCallback((item, menuType, index) => {
     if (menuType) {
-      var copyData = [...appContextValue.leftMenuList];
-      if (item.isRefreshMenu) {
+      // Handle submenu item click - don't update context to prevent re-render
+      contextSetters.setSelectedLeftMenuItem(item);
+      
+      // Only update context if it's a refresh menu and not patient-specific
+      if (item.isRefreshMenu && !item.isPatientSpecific) {
+        var copyData = [...appContextValue.leftMenuList];
         copyData = removePatientSpecific(copyData);
-        appContextValue.setLeftMenuList(copyData);
-        appContextValue.setSelectedVisitDeatils([]);
+        contextSetters.setLeftMenuList(copyData);
+        contextSetters.setSelectedVisitDeatils([]);
       }
-      appContextValue.setSelectedLeftMenuItem(item);
-      navigate(item.to);
+      
+      // Navigate without closing the drawer
+      navigate(item.to, { replace: false });
     } else {
+      // Handle main menu toggle
+      setLocalMenuState(prev => ({
+        ...prev,
+        [index]: !prev[index]
+      }));
+      
       let copyData = [...appContextValue.leftMenuList];
       copyData[index].isOpen = !copyData[index].isOpen;
-      if (item.isRefreshMenu) {
+      if (item.isRefreshMenu && !item.isPatientSpecific) {
         copyData = removePatientSpecific(copyData);
-        appContextValue.setSelectedVisitDeatils([]);
+        contextSetters.setSelectedVisitDeatils([]);
       }
-      appContextValue.setLeftMenuList(copyData);
+      contextSetters.setLeftMenuList(copyData);
     }
+  }, [contextSetters, navigate, removePatientSpecific]);
 
-  };
+  const drawerWidth = 250;
 
-  const navigate = useNavigate();
+  // Memoize the menu list to prevent unnecessary re-renders
+  const menuList = useMemo(() => {
+    if (!appContextValue.leftMenuList) return [];
+    
+    return appContextValue.leftMenuList.map((menu, index) => {
+      if (Object.prototype.hasOwnProperty.call(menu, "isPatientSpecific") === false && menu.subMenu.length !== 0) {
+        return (
+          <Box key={index}>
+            <ListItemButton 
+              onClick={() => handleClick(menu, "", index)}
+              sx={{ 
+                borderBottom: '1px solid rgba(255,255,255,0.05)',
+                '&:last-child': {
+                  borderBottom: 'none',
+                }
+              }}
+            >
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <ListItemIcon>
+                  <Icon>{menu.icon}</Icon>
+                </ListItemIcon>
+                <ListItemText primary={menu.title} />
+              </Box>
+              {localMenuState[index] ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+            <Collapse in={localMenuState[index]} timeout="auto" unmountOnExit>
+              {menu.subMenu && menu.subMenu.map((submenu, subIndex) => {
+                const isActive = appContextValue.selectedLeftMenuItem && 
+                               appContextValue.selectedLeftMenuItem.title === submenu.title;
+                return (
+                  <List key={`${index}-${subIndex}`} component="div" disablePadding>
+                    <ListItemButton 
+                      sx={{ 
+                        pl: 4,
+                        backgroundColor: isActive ? 'rgba(255,255,255,0.15)' : 'transparent',
+                        '&:hover': {
+                          backgroundColor: isActive ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.1)',
+                        },
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                      }}
+                      selected={isActive}
+                      onClick={() => handleClick(submenu, "submenu", index)}
+                    >
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <ListItemIcon>
+                          <Icon>{submenu.icon}</Icon>
+                        </ListItemIcon>
+                        <ListItemText primary={submenu.title} />
+                      </Box>
+                    </ListItemButton>
+                  </List>
+                )
+              })}
+            </Collapse>
+          </Box>
+        )
+      }
+      if (Object.prototype.hasOwnProperty.call(menu, "isPatientSpecific") === true && menu.isPatientSpecific === true && menu.subMenu.length !== 0) {
+        return (
+          <Box key={index}>
+            <ListItemButton 
+              onClick={() => handleClick(menu, "", index)}
+              sx={{ 
+                borderBottom: '1px solid rgba(255,255,255,0.05)',
+                '&:last-child': {
+                  borderBottom: 'none',
+                }
+              }}
+            >
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <ListItemIcon>
+                  <Icon>{menu.icon}</Icon>
+                </ListItemIcon>
+                <ListItemText primary={menu.title} />
+              </Box>
+              {localMenuState[index] ? <ExpandLess /> : <ExpandMore />}
+            </ListItemButton>
+            <Collapse in={localMenuState[index]} timeout="auto" unmountOnExit>
+              {menu.subMenu && menu.subMenu.map((submenu, subIndex) => {
+                const isActive = appContextValue.selectedLeftMenuItem && 
+                               appContextValue.selectedLeftMenuItem.title === submenu.title;
+                return (
+                  <List key={`${index}-${subIndex}`} component="div" disablePadding>
+                    <ListItemButton 
+                      sx={{ 
+                        pl: 4,
+                        backgroundColor: isActive ? 'rgba(255,255,255,0.15)' : 'transparent',
+                        '&:hover': {
+                          backgroundColor: isActive ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.1)',
+                        },
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                      }}
+                      selected={isActive}
+                      onClick={() => handleClick(submenu, "submenu", index)}
+                    >
+                      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <ListItemIcon>
+                          <Icon>{submenu.icon}</Icon>
+                        </ListItemIcon>
+                        <ListItemText primary={submenu.title} />
+                      </Box>
+                    </ListItemButton>
+                  </List>
+                )
+              })}
+            </Collapse>
+          </Box>
+        )
+      }
+      //return null;
+    });
+  }, [ localMenuState, handleClick]);
+
+  const logoSectionHeight = '5vh'; // or '64px' if you want a fixed height
+
   return (
-    <Box
+    <Drawer
+      variant="permanent"
       sx={{
-        position: "sticky",
-        display: "flex",
-        top: 0,
-        bottom: 0,
-        zIndex: 10000,
-        height:'100%',
-        "& .sidebar": {
-          border: "none",
-        },
-        "& .menu-icon": {
-          backgroundColor: "transparent !important",
-        },
-        "& .menu-item": {
-          // padding: "5px 35px 5px 20px !important",
-          backgroundColor: "transparent !important",
-        },
-        "& .menu-anchor": {
-          color: "inherit !important",
-          backgroundColor: "transparent !important",
-        },
-        "& .menu-item:hover": {
-          color: `${colors.blueAccent[500]} !important`,
-          backgroundColor: "transparent !important",
-        },
-        "& .menu-item.active": {
-          color: `${colors.greenAccent[500]} !important`,
-          backgroundColor: "transparent !important",
+        width: drawerWidth,
+        flexShrink: 0,
+        '& .MuiDrawer-paper': {
+          width: drawerWidth,
+          boxSizing: 'border-box',
+          backgroundColor: colors.themecolor.color,
+          border: 'none',
+          position: 'relative',
+          height: '100%',
+          overflow: 'hidden'
         },
       }}
+      open={drawerOpen}
     >
-     
-      <Sidebar
-        breakPoint="md"
-        rtl={sidebarRTL}
-        backgroundColor={colors.themecolor.color}
-        borderRaduis={'3px'}
-        image={sidebarImage}
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+          color: 'white',
+          overflow: 'hidden'
+        }}
       >
-        <Menu iconshape="square">
-          <Box sx={{ color: 'white' }}>
-            <List
-              sx={{ width: '100%', maxWidth: 360 ,height:'83vh',paddingBottom:0}}
-              component="nav"
-              aria-labelledby="nested-list-subheader"
-            >
-              {appContextValue && appContextValue.leftMenuList && appContextValue.leftMenuList.map((menu, index) => {
-                if (Object.prototype.hasOwnProperty.call(menu, "isPatientSpecific") === false && menu.subMenu.length !== 0) {
-                  return (
-                    <Box key={index}>
-                      <ListItemButton onClick={() => handleClick(menu, "", index)}>
-                        <ListItemIcon>
-                          <Icon style={{ color: 'white' }}>{menu.icon}</Icon>
-                        </ListItemIcon>
-                        <ListItemText primary={menu.title} />
-                        {menu.isOpen ? <ExpandLess /> : <ExpandMore />}
-                      </ListItemButton>
-                      <Collapse in={menu.isOpen} timeout="auto" unmountOnExit>
-                        {menu.subMenu && menu.subMenu.map(submenu => {
-                          return (
-                            <List key ={Math.random()} component="div" disablePadding className = { appContextValue && appContextValue.selectedLeftMenuItem.title == submenu.title && 'is-active' }>
-                              {appContextValue.title}
-                              <ListItemButton sx={{ pl: 4 }} onClick={() => handleClick(submenu, "submenu", index)}>
-                                <ListItemIcon>
-                                  <Icon style={{ color: 'white' }}>{submenu.icon}</Icon>
-                                </ListItemIcon>
-                                <ListItemText primary={submenu.title} />
-                              </ListItemButton>
-                            </List>
-                          )
-                        })}
-                      </Collapse>
-                    </Box>
-                  )
-                }
-                if (Object.prototype.hasOwnProperty.call(menu, "isPatientSpecific") === true && menu.isPatientSpecific === true && menu.subMenu.length !== 0) {
-                  return (
-                    <>
-                      <ListItemButton onClick={() => handleClick(menu, "", index)}>
-                        <ListItemIcon>
-                          <Icon style={{ color: 'white' }}>{menu.icon}</Icon>
-                        </ListItemIcon>
-                        <ListItemText primary={menu.title} />
-                        {menu.isOpen ? <ExpandLess /> : <ExpandMore />}
-                      </ListItemButton>
-                      <Collapse in={menu.isOpen} timeout="auto" unmountOnExit>
-                        {menu.subMenu && menu.subMenu.map((submenu, index) => {
-                          return (
-                            <List component="div" key={index} disablePadding className = { appContextValue && appContextValue.selectedLeftMenuItem.title == submenu.title && 'is-active' }>
-                              <ListItemButton sx={{ pl: 4 }} onClick={() => handleClick(submenu, "submenu", index)}>
-                                <ListItemIcon>
-                                  <Icon style={{ color: 'white' }}>{submenu.icon}</Icon>
-                                </ListItemIcon>
-                                <ListItemText primary={submenu.title} />
-                              </ListItemButton>
-                            </List>
-                          )
-                        })}
-                      </Collapse>
-                    </>
-                  )
-                }
+        {/* Top Logo Section */}
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: logoSectionHeight,
+            minHeight: 48, // match topbar minHeight
+            maxHeight: 80, // match topbar maxHeight
+            width: '100%',
+            background: '#fff',
+            borderBottom: '1px solid rgba(255,255,255,0.1)',
+            zIndex: 100000,
+          }}
+        >
+          <img
+            src={logo}
+            alt="Logo"
+            style={{
+              maxWidth: '80%',
+              width: '100%',
+              height: '100%',
+              objectFit: 'contain',
+              display: 'block',
+            }}
+          />
+        </Box>
 
-              })}
-            </List>
+        {/* Menu Section */}
+        <Box sx={{ 
+          flex: 1, 
+          overflowY: 'auto',
+          '&::-webkit-scrollbar': {
+            width: '6px',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: 'rgba(255,255,255,0.1)',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            background: 'rgba(255,255,255,0.3)',
+            borderRadius: '3px',
+          },
+        }}>
+          <List
+            sx={{ 
+              width: '100%', 
+              padding: 0,
+              '& .MuiListItemButton-root': {
+                color: 'white',
+                '&:hover': {
+                  backgroundColor: 'rgba(255,255,255,0.1)',
+                },
+                '&.Mui-selected': {
+                  backgroundColor: 'rgba(255,255,255,0.2)',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255,255,255,0.25)',
+                  },
+                },
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              },
+              '& .MuiListItemIcon-root': {
+                color: 'white',
+                minWidth: 40,
+              },
+              '& .MuiListItemText-primary': {
+                fontSize: '14px',
+                fontWeight: 500,
+              },
+            }}
+            component="nav"
+          >
+            {menuList}
+          </List>
+        </Box>
 
-          </Box>
-
-        </Menu>
-      </Sidebar>
-      
-    </Box>
+        {/* Bottom Logo Section */}
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: logoSectionHeight,
+            minHeight: 48, // match topbar minHeight
+            maxHeight: 80, // match topbar maxHeight
+            width: '100%',
+            background: '#fff',
+            borderTop: '1px solid rgba(255,255,255,0.1)',
+            zIndex: 10000,
+          }}
+        >
+          <img
+            src={logo}
+            alt="Logo"
+            style={{
+              maxWidth: '80%',
+              width: '100%',
+              height: '100%',
+              objectFit: 'contain',
+              display: 'block',
+            }}
+          />
+        </Box>
+      </Box>
+    </Drawer>
   );
 };
 

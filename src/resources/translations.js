@@ -61,7 +61,7 @@ const Translations = {
         visitDetails:'Visit Details'
     },
     "vitalsForm":{
-        height:'Height',
+        height:'Height(CM)',
         weight:'Weight',
         bmi:'BMI',
         bloodpressure :"Blood Pressure",

@@ -15,7 +15,7 @@ import { sendRequest } from '../global/DataManager';
 import AppContext from '../../components/Context/AppContext';
 import ErrorMessage from '../../components/ErrorMessage/Errormsg';
 import LeftMenu from '../../common/LeftMenu';
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -42,7 +42,8 @@ export default function LoginPage(props) {
   // }
   const appContextValue = useContext(AppContext);
   const [showError, setShowError] = useState(false);
-  const params= useParams()
+  const params = useParams();
+  const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -105,9 +106,12 @@ export default function LoginPage(props) {
       sessionStorage.setItem("token", result.token);
       sessionStorage.setItem("LoggedInUserDetails", JSON.stringify(result));
       appContextValue.setLoggedInUserDetails(result);
-      fetchRolesTransData(result.role.id);
+      await fetchRolesTransData(result.role.id);
       var loginUser = result.designation.lookupvalue+'.'+result.firstname+' '+result.lastname;
       sessionStorage.setItem('logged_user',loginUser);
+      
+      // Explicitly navigate to dashboard after successful login
+      navigate("/nurse-dashboard", { replace: true });
     }
     else {
       setShowError(true);

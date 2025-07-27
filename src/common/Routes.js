@@ -27,6 +27,7 @@ import SampleForm from "../Masters/ServiceMaster/SampleForm";
 import BillsTabs from "../pages/Bills/BillsTabs";
 import NotesList from "../pages/Notes/NotesList";
 import LoginPage from '../pages/Login/LoginPage';
+import BillsModuleScreen from '../pages/Bills/BillsModuleScreen';
 
 const ApplicationRoutes = [
     { path: "/login/:tenant", element: <LoginPage /> },
@@ -55,7 +56,7 @@ const ApplicationRoutes = [
     { path: "/bills", element: <BillsTabs /> },
     { path: "/notes", element: <NotesList /> },
     { path: "/dynamicFormBuilder", element: <DynamicFormBuilder /> },
-    
+    { path: "/billsScreen", element: <BillsModuleScreen /> },
     
     { path: "/reactCodeBuilder", element: <ReactCodeFormBuilder /> },
   

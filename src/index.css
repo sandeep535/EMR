@@ -158,9 +158,9 @@ main {
   background-color: rgba(0, 0, 0, 0.04);
 }
 
-.MuiBox-root {
+/* .MuiBox-root {
   z-index: 1;
-}
+} */
 
 ::-webkit-scrollbar {
   width: 5px;

@@ -210,8 +210,20 @@
         isOpen:false,
         isRefreshMenu:true,
         screencode:'DRUG_MASTER_SCREEN_VIEW'
-    }]
-    
-    
+    }] 
+},{
+    title:"Billing",
+    to:"/bills",
+    icon:"sync",
+    isOpen:false,
+    isRefreshMenu:false,
+    subMenu:[{
+            title:"Bills",
+            to:"/billsScreen",
+            icon:"manage_accounts",
+            isOpen:false,
+            isRefreshMenu:true,
+            screencode:'EMPLOYE_MASTER_SCREEN_VIEW'
+        }]
 }];
 export default LeftMenu

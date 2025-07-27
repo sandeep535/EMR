@@ -28,6 +28,7 @@ import CommonCard from '../../common/CommonCard';
 import Badge from '@mui/material/Badge';
 import VisitSummary from '../VisitSummary/VisitSummary';
 import VisitActivity from '../VisitActivites/VisitActivity';
+import { sessionManager } from '../../Utils/sessionManager';
 
 const borderColor = {
     1: '#3498db',
@@ -93,7 +94,7 @@ export default function VisitDasboard(props) {
         var payLoad = {
             method: APIS.GET_VISITS.METHOD,
             url: APIS.GET_VISITS.URL,
-            paramas: [new Date(localfromDate), new Date(localtoDate), visitStatus.id, count - 1, 10]
+            paramas: [new Date(localfromDate), new Date(localtoDate), visitStatus.id, count - 1, 16]
         }
         let result = await sendRequest(payLoad);
         if (result && result.visitDetailsDTO.length != 0) {
@@ -120,13 +121,16 @@ export default function VisitDasboard(props) {
     function gotoActivitiesPage(visit) {
         appContextValue.setSelectedVisitDeatils(visit);
         var copyData = [...appContextValue.leftMenuList];
-        copyData.map(item => {
-            if (Object.prototype.hasOwnProperty.call(item, "isPatientSpecific")) {
+        copyData.forEach(item => {
+            if (item.title === "Clinical Data") {
                 item.isOpen = true;
                 item.isPatientSpecific = true;
+            } else if (Object.prototype.hasOwnProperty.call(item, "isPatientSpecific")) {
+                item.isPatientSpecific = false;
             }
         });
         appContextValue.setLeftMenuList(copyData);
+        sessionManager.setLeftMenu(copyData);
         appContextValue.setSelectedLeftMenuItem({
             title: "Visit",
             to: "/visit-activity",
@@ -163,106 +167,107 @@ export default function VisitDasboard(props) {
     };
     return (
         <>
-
-            <Box sx={{ flexGrow: 1, m: 1, position: 'relative', zIndex: 1 }}>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={['DateField', 'DateField']}>
-                        <Grid container >
-                            <Grid item xs={2} spacing={1}>
-                                <DatePicker
-                                    label="From Date"
-                                    value={fromDate}
-                                    onChange={newValue => setFromDate(new Date(newValue))}
-                                    format="DD-MM-YYYY"
-                                    slotProps={{ textField: { size: 'small' } }}
-                                />
+            <Box sx={{  mt: 1,ml:1,display: 'flex', flexDirection: 'column', height: '100%' }}>
+                {/* Search (fixed) */}
+                <Box sx={{ flex: '0 0 auto', zIndex: 1 }}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DemoContainer components={['DateField', 'DateField']}>
+                            <Grid container >
+                                <Grid item xs={2} spacing={1}>
+                                    <DatePicker
+                                        label="From Date"
+                                        value={fromDate}
+                                        onChange={newValue => setFromDate(new Date(newValue))}
+                                        format="DD-MM-YYYY"
+                                        slotProps={{ textField: { size: 'small' } }}
+                                    />
+                                </Grid>
+                                <Grid item xs={2} spacing={1} sx={{ ml: 1 }}>
+                                    <DatePicker
+                                        label="To Date"
+                                        value={toDate}
+                                        onChange={newValue => {
+                                            setTodate(new Date(newValue));
+                                        }}
+                                        format="DD-MM-YYYY"
+                                        slotProps={{ textField: { size: 'small' } }}
+                                    />
+                                </Grid>
+                                <Grid item xs={2} spacing={0} sx={{ ml: 1 }}>
+                                    <Autocomplete
+                                        size="small"
+                                        disablePortal
+                                        id="visitTypeList"
+                                        options={visitStatusList}
+                                        key={option => option.id}
+                                        getOptionLabel={option => option.masterdatavalue || ""}
+                                        value={visitStatus}
+                                        onChange={(event, newValue) => {
+                                            setVisitStatus(newValue);
+                                        }}
+                                        renderOption={(props, option) => {
+                                            return (
+                                                <li {...props} key={option.id}>
+                                                    {option.masterdatavalue}
+                                                </li>
+                                            );
+                                        }}
+                                        renderInput={(params) => <TextField {...params} label={'Visit Status'} />}
+                                    />
+                                </Grid>
+                                <ColorLegend legendItems={legendItems} />
+                                <Box sx={{ mt: 1, fontSize: 14, fontWeight: 900 }}>{"Total Records: " + totalRecords}</Box>
                             </Grid>
-                            <Grid item xs={2} spacing={1} sx={{ ml: 1 }}>
-                                <DatePicker
-                                    label="To Date"
-                                    value={toDate}
-                                    onChange={newValue => {
-                                        setTodate(new Date(newValue));
-                                    }}
-                                    format="DD-MM-YYYY"
-                                    slotProps={{ textField: { size: 'small' } }}
+                        </DemoContainer>
+                    </LocalizationProvider>
+                </Box>
 
-                                />
-
-                            </Grid>
-                            <Grid item xs={2} spacing={0} sx={{ ml: 1 }}>
-                                <Autocomplete
-                                    size="small"
-                                    disablePortal
-                                    id="visitTypeList"
-                                    options={visitStatusList}
-                                    key={option => option.id}
-                                    getOptionLabel={option => option.masterdatavalue || ""}
-                                    value={visitStatus}
-                                    onChange={(event, newValue) => {
-                                        setVisitStatus(newValue);
-                                    }}
-                                    renderOption={(props, option) => {
-                                        return (
-                                            <li {...props} key={option.id}>
-                                                {option.masterdatavalue}
-                                            </li>
-                                        );
-                                    }}
-                                    renderInput={(params) => <TextField {...params} label={'Visit Status'} />}
-                                />
-                            </Grid>
-                            <ColorLegend legendItems={legendItems} />
-                            <Box sx={{ mt: 1, fontSize: 14, fontWeight: 900 }}>{"Total Records: " + totalRecords}</Box>
-                        </Grid>
-                    </DemoContainer>
-                </LocalizationProvider>
-            </Box>
-
-            <Box sx={{ m: 1, paddingTop: '80px' }} className='visit-cards-div' ref={listInnerRef}>
-                <Grid container spacing={1}  >
-                    {visitList && visitList.map(visit => {
-                        return (
-                            <Grid item xs={3} key={visit.id}>
-                                <Card sx={{ border: '2px solid #d3d3d3', borderLeftColor: borderColor[visit.status] }}>
-                                    <CardContent>
-                                        <Box>
-                                            <Typography sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }} gutterBottom>
-                                                <Typography sx={{ fontSize: 14, fontWeight: 700 }} >{visit.clientid.firstname + " " + visit.clientid.lastname}</Typography>
-
-                                                <Badge badgeContent={visit.token} color="success" ></Badge>
-                                            </Typography>
-                                            <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                                                {<Moment format="DD-MMM-YYYY">
-                                                    {new Date(visit.visitdate)}
-                                                </Moment>}
-                                            </Typography>
-                                        </Box>
-                                        <Box sx={styles.wrapper}>
-                                            <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
-                                                {visit.doctor.firstname + " " + visit.doctor.lastname}
-                                            </Typography>
-                                            <Box sx={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', fontSize: 16 }}>
-                                                <Icon sx={{ cursor: 'pointer', fontSize: 16, color: 'rgb(52, 152, 219)' }} onClick={(event) => { event.preventDefault(); gotoActivitiesPage(visit) }}>{"send"}</Icon>
-                                                <Icon sx={{ cursor: 'pointer', fontSize: 16, color: 'rgb(52, 152, 219)', ml: 1 }} onClick={(event) => { event.preventDefault(); openEditPopup(visit) }}>{"edit"}</Icon>
-                                                {visit && visit.status == 3 && <Icon sx={{ cursor: 'pointer', fontSize: 16, color: 'rgb(52, 152, 219)', ml: 1 }} onClick={(event) => { event.preventDefault(); openVisummaryPop(visit) }}>{"summarize"}</Icon>}
-                                                {props && props.isFrom == "nursedashboard" && <Icon sx={{ cursor: 'pointer', fontSize: 16, color: 'rgb(52, 152, 219)', ml: 1 }} onClick={(event) => { event.preventDefault(); openVisitActivity(visit) }}>{"tour"}</Icon>}
+                {/* Scrollable Content */}
+                <Box sx={{ flex: '1 1 auto', overflowY: 'auto', minHeight: 0, m: 1, paddingTop: '80px' }} className='visit-cards-div' ref={listInnerRef}>
+                    <Grid container spacing={1}  >
+                        {visitList && visitList.map(visit => {
+                            return (
+                                <Grid item xs={3} key={visit.id}>
+                                    <Card sx={{ border: '2px solid #d3d3d3', borderLeftColor: borderColor[visit.status] }}>
+                                        <CardContent>
+                                            <Box>
+                                                <Typography sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }} gutterBottom>
+                                                    <Typography sx={{ fontSize: 14, fontWeight: 700 }} >{visit.clientid.firstname + " " + visit.clientid.lastname}</Typography>
+                                                    <Badge badgeContent={visit.token} color="success" ></Badge>
+                                                </Typography>
+                                                <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
+                                                    {<Moment format="DD-MMM-YYYY">
+                                                        {new Date(visit.visitdate)}
+                                                    </Moment>}
+                                                </Typography>
                                             </Box>
-                                        </Box>
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                        )
-                    })}
+                                            <Box sx={styles.wrapper}>
+                                                <Typography sx={{ fontSize: 12 }} color="text.secondary" gutterBottom>
+                                                    {visit.doctor.firstname + " " + visit.doctor.lastname}
+                                                </Typography>
+                                                <Box sx={{ display: 'flex', flexDirection: 'row', cursor: 'pointer', fontSize: 16 }}>
+                                                    <Icon sx={{ cursor: 'pointer', fontSize: 16, color: 'rgb(52, 152, 219)' }} onClick={(event) => { event.preventDefault(); gotoActivitiesPage(visit) }}>{"send"}</Icon>
+                                                    <Icon sx={{ cursor: 'pointer', fontSize: 16, color: 'rgb(52, 152, 219)', ml: 1 }} onClick={(event) => { event.preventDefault(); openEditPopup(visit) }}>{"edit"}</Icon>
+                                                    {visit && visit.status == 3 && <Icon sx={{ cursor: 'pointer', fontSize: 16, color: 'rgb(52, 152, 219)', ml: 1 }} onClick={(event) => { event.preventDefault(); openVisummaryPop(visit) }}>{"summarize"}</Icon>}
+                                                    {props && props.isFrom == "nursedashboard" && <Icon sx={{ cursor: 'pointer', fontSize: 16, color: 'rgb(52, 152, 219)', ml: 1 }} onClick={(event) => { event.preventDefault(); openVisitActivity(visit) }}>{"tour"}</Icon>}
+                                                </Box>
+                                            </Box>
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                            )
+                        })}
+                    </Grid>
+                </Box>
 
-                </Grid>
+                {/* Pagination (fixed) */}
+                <Box sx={{ flex: '0 0 auto', zIndex: 1, bgcolor: 'background.paper' }}>
+                    <Stack spacing={2}>
+                        <Pagination count={Math.ceil(totalRecords / 16)} color="primary" page={count} onChange={handlePaginationChange} />
+                    </Stack>
+                </Box>
+            </Box>
 
-            </Box>
-            <Box >
-                <Stack spacing={2}>
-                    <Pagination count={Math.ceil(totalRecords / 5)} color="primary" page={count} onChange={handlePaginationChange} />
-                </Stack>
-            </Box>
             {isOpenEditPopup &&
                 <Box>
                     <FullScreenModelPopup title={"Edit Visit"} isOpen={isOpenEditPopup} handleClose={() => closeModelPopup()}>
@@ -281,7 +286,6 @@ export default function VisitDasboard(props) {
                     <FullScreenModelPopup title={"Visit Summary"} isOpen={isVisitActivityPopUp} handleClose={() => closeModelPopup()}>
                         <VisitActivity />
                     </FullScreenModelPopup>
-
                 </Box>
             }
         </>

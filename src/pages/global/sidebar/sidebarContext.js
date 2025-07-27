@@ -1,11 +1,9 @@
-import React, { useState, createContext, useContext } from "react";
-import { ProSidebarProvider } from "react-pro-sidebar";
+import React, { useState, createContext, useContext, useMemo } from "react";
 import MyProSidebar from "./MyProSidebar";
 import AppContext from '../../../components/Context/AppContext';
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import logo from '../../../resources/LeafSpring_Logo1.jpeg';
-import { useTheme, Box, Typography } from "@mui/material";
+import { Box } from "@mui/material";
 
 const SidebarContext = createContext({});
 
@@ -16,6 +14,7 @@ export const MyProSidebarProvider = ({ children }) => {
   const [sidebarImage, setSidebarImage] = useState(undefined);
   const appContextValue = useContext(AppContext);
   const navigate = useNavigate();
+  
   useEffect(() => {
     if (appContextValue.loggedInRolesTaks && Object.keys(appContextValue.loggedInRolesTaks).length != 0) {
       let copyRoles = [...appContextValue.loggedInRolesTaks];
@@ -40,75 +39,40 @@ export const MyProSidebarProvider = ({ children }) => {
         } else {
           navigate('/registration', { replace: true });
         }
-
       }
-
     }
   }, [appContextValue.loggedInRolesTaks]);
+
+  // Memoize the context value to prevent unnecessary re-renders
+  const contextValue = useMemo(() => ({
+    sidebarBackgroundColor,
+    setSidebarBackgroundColor,
+    sidebarImage,
+    setSidebarImage,
+    sidebarRTL,
+    setSidebarRTL,
+  }), [sidebarBackgroundColor, sidebarImage, sidebarRTL]);
+
   return (
-    <ProSidebarProvider>
-      {appContextValue.isLogin &&
-        <SidebarContext.Provider
-          value={{
-            sidebarBackgroundColor,
-            setSidebarBackgroundColor,
-
-            sidebarImage,
-            setSidebarImage,
-
-            sidebarRTL,
-            setSidebarRTL,
-
-
-          }}
-        >
-          <div
-            style={{
+    <>
+      {appContextValue.isLogin && (
+        <SidebarContext.Provider value={contextValue}>
+          <Box
+            sx={{
               display: "flex",
               flexDirection: sidebarRTL ? "row-reverse" : "row",
+              height: "100%",
             }}
           >
-            <div style={{
-              display: "flex",
-              flexDirection: sidebarRTL ? "row-reverse" : "column",
-            }}>
-
-              <Box style={{ zIndex: 100000 }} >
-                <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-                  <Box sx={{ width: '100%', height: '100%' }}>
-                    <img
-                      src={logo}
-                      height={50}
-                      width={'100%'}
-                      alt={"Logo"}
-                      loading="lazy"
-                    />
-                  </Box>
-                </Box>
-              </Box>
-              <Box style={{overflowY:'scroll'}}>
-                <MyProSidebar/>
-              </Box>
-
-              <Box style={{ zIndex: 10000 }} >
-                <Box sx={{ display: 'flex', flexDirection: 'row', width: '100%' }}>
-                  <Box sx={{ width: '100%', height: '100%' }}>
-                    <img
-                      src={logo}
-                      height={50}
-                      width={'100%'}
-                      alt={"Logo"}
-                      loading="lazy"
-                    />
-                  </Box>
-                </Box>
-              </Box>
-            </div>
-
-            {children}
-          </div>
-        </SidebarContext.Provider>}
-    </ProSidebarProvider>
+            <MyProSidebar />
+            <Box sx={{ flex: 1, overflow: 'hidden' }}>
+              {children}
+            </Box>
+          </Box>
+        </SidebarContext.Provider>
+      )}
+      {!appContextValue.isLogin && children}
+    </>
   );
 };
 
