@@ -50,6 +50,23 @@ export const DrugMasterSchema = Yup
         drugcode: Yup.string().required("Select Drug Code")
     })
     .required()
+export const AddmissionSchema = Yup
+    .object({
+        title: Yup.object().nullable().required("Title Required"),
+        firstname: Yup.string().required("Select First Name").max(100, "First Name cannot exceed 100 characters"),
+        lastname: Yup.string().required("Select Last Name").max(100, "Last Name cannot exceed 100 characters"),
+        gender: Yup.object().nullable().required("Select Gender"),
+        dob: Yup.object().nullable().required("Select DOB"),
+        age: Yup.string().required("Select Age"),
+        contact: Yup.string().matches(/^[0-9]{10}$/, 'Mobile number must be 10 digits').required("Select contact"),
+        specility: Yup.object().nullable().required("Specility Required"),
+        doctor: Yup.object().nullable().required("Doctor Required"),
+        admissionType: Yup.object().nullable().required("Visit Type Required"),
+        admisionDate: Yup.object().nullable().required("Visit Date Required"),
+        email:Yup.string().email('Invalid email format'),
+        admissionReason:Yup.string().required("Admission Reason Required")
+    })
+    .required()
 export const VisitCreationSchema = Yup
     .object({
         title: Yup.object().nullable().required("Title Required"),

@@ -9,31 +9,42 @@ const SLRadioButton = ({
     options = [],
     rules = {},
     row = true,
+    // standalone
+    value: standaloneValue,
+    onChange: standaloneOnChange,
+    error: standaloneError,
+    helperText: standaloneHelperText,
     ...props
 }) => {
-    return (
-        <FormControl component="fieldset" error={!!props.error} fullWidth sx={{ display: 'flex', flexDirection: "row" }}>
+    const renderGroup = (value, onChange, error) => (
+        <>
             <FormLabel component="legend">{label}</FormLabel>
-            <Controller
-                name={name}
-                control={control}
-                rules={rules}
-                render={({ field: { onChange, value }, fieldState: { error } }) => (
-                    <>
-                        <RadioGroup value={value || ''} onChange={onChange} row={row} {...props}>
-                            {options.map((option) => (
-                                <FormControlLabel
-                                    key={option.value}
-                                    value={option.value}
-                                    control={<Radio />}
-                                    label={option.id}
-                                />
-                            ))}
-                        </RadioGroup>
-                        {error && <FormHelperText>{error.message}</FormHelperText>}
-                    </>
-                )}
-            />
+            <RadioGroup value={value ?? ''} onChange={(e) => onChange && onChange(e.target.value)} row={row} {...props}>
+                {options.map((option) => (
+                    <FormControlLabel
+                        key={option.value}
+                        value={option.value}
+                        control={<Radio />}
+                        label={option.id}
+                    />
+                ))}
+            </RadioGroup>
+            {error && <FormHelperText>{error.message || standaloneHelperText}</FormHelperText>}
+        </>
+    );
+
+    return (
+        <FormControl component="fieldset" error={!!(standaloneError)} fullWidth sx={{ display: 'flex', flexDirection: "row" }}>
+            {control && name ? (
+                <Controller
+                    name={name}
+                    control={control}
+                    rules={rules}
+                    render={({ field: { onChange, value }, fieldState: { error } }) => renderGroup(value, onChange, error)}
+                />
+            ) : (
+                renderGroup(standaloneValue, standaloneOnChange, standaloneError)
+            )}
         </FormControl>
     );
 };

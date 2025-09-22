@@ -44,28 +44,28 @@
         title:"Allergies",
         to:"/allergy",
         icon:"favorite",
-        isPatientSpecific :true,
+        isPatientSpecific :false,
         isRefreshMenu:false,
         screencode:'PRESCRIPTIONS_SCREEN_VIEW'
     },{
         title:"Notes",
         to:"/notes",
         icon:"favorite",
-        isPatientSpecific :true,
+        isPatientSpecific :false,
         isRefreshMenu:false,
         screencode:'PRESCRIPTIONS_SCREEN_VIEW'
     },{
         title:"Visit Summaries",
         to:"/visitSummary",
         icon:"favorite",
-        isPatientSpecific :true,
+        isPatientSpecific :false,
         isRefreshMenu:false,
         screencode:'PRESCRIPTIONS_SCREEN_VIEW'
     },{
         title:"Vitals",
         to:"/vitalsList",
         icon:"favorite",
-        isPatientSpecific :false,
+        isPatientSpecific :true,
         isOpen:false,
         isRefreshMenu:false,
         screencode:'VITALS_SCREEN_VIEW'
@@ -115,6 +115,13 @@
     },{
         title:"Visit Creation",
         to:"/visit-creation",
+        icon:"design_services",
+        isOpen:false,
+        isRefreshMenu:true,
+        screencode:'VISIT_CREATION_SCREEN_VIEW'
+    },{
+        title:"Admission",
+        to:"/admission",
         icon:"design_services",
         isOpen:false,
         isRefreshMenu:true,

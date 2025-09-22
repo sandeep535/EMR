@@ -28,6 +28,8 @@ import BillsTabs from "../pages/Bills/BillsTabs";
 import NotesList from "../pages/Notes/NotesList";
 import LoginPage from '../pages/Login/LoginPage';
 import BillsModuleScreen from '../pages/Bills/BillsModuleScreen';
+import InstitutionMaster from '../pages/InstitutionMaster/InstitutionMaster';
+import Admission from '../pages/Admission/Admission';
 
 const ApplicationRoutes = [
     { path: "/login/:tenant", element: <LoginPage /> },
@@ -35,6 +37,7 @@ const ApplicationRoutes = [
     { path: "/nurse-dashboard", element: <VisitDasboard isFrom='nursedashboard' /> },
     { path: "/registration", element: <Registration /> },
     { path: "/visit-creation", element: <VisitCreation /> },
+    {path:'/admission',element:<Admission/>},
     { path: "/visit-activity", element: <VisitActivity /> },
     { path: "/employeeMaster", element: <EmployeeMaster /> },
     { path: "/serviceMaster", element: <ServiceMaster /> },
@@ -51,7 +54,7 @@ const ApplicationRoutes = [
     { path: "/visitSummary", element: <VisitSummary /> },
     { path: "/favorites", element: <FavoriteMatser /> },
     { path: "/uploadDocuments", element: <UploadDocuments /> },
-    { path: "/bedMaster", element: <BedMaster /> },
+    { path: "/bedMaster", element: <InstitutionMaster/> },
     { path: "/labordersList", element: <LabOrdersList /> },
     { path: "/bills", element: <BillsTabs /> },
     { path: "/notes", element: <NotesList /> },

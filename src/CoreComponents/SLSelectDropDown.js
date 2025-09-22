@@ -4,51 +4,66 @@ import { Controller } from 'react-hook-form';
 import { FormControl, InputLabel, Select, MenuItem, FormHelperText } from '@mui/material';
 
 const SLSelectDropDown = ({
-    name,
-    control,
-    label,
-    options = [],
-    rules = {},
-    error,
-    mapvalues,
-    onchangeEventCallBack,
-    ...props
+  name,
+  control,
+  label,
+  options = [],
+  rules = {},
+  error: externalError,
+  mapvalues,
+  onchangeEventCallBack,
+  // standalone
+  value: standaloneValue,
+  onChange: standaloneOnChange,
+  helperText: standaloneHelperText,
+  ...props
 }) => {
-    return (
-        <FormControl fullWidth error={!!error}>
-            <InputLabel size="small">{label}</InputLabel>
-            <Controller
-                name={name}
-                control={control}
-                rules={rules}
-                render={({ field: { onChange,onFormChange, value }, fieldState: { error } }) => (
-                    <>
-                        <Select
-                            value={() => value?.value || ''}
-                            size="small"
-                            onChange={(e) => {
-                                onChange(e); // React Hook Form's change handler
-                                if (onchangeEventCallBack) {
-                                    onchangeEventCallBack(e.target.value); // Custom change handler
-                                }
-                              }}
-                            renderValue={(o) => {
-                                return (value && value[mapvalues.value]) || '';
-                            }}
-                            label={label}
-                            {...props}>
-                            {options.map((option) => (
-                                <MenuItem key={option[mapvalues.id]} value={option}>
-                                    {option[mapvalues.value]}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                        {error && <FormHelperText>{error.message}</FormHelperText>}
-                    </>
-                )}
-            />
-        </FormControl>
-    );
+  const renderSelect = (value, onChange, error) => (
+    <>
+      <InputLabel size="small">{label}</InputLabel>
+      <Select
+        value={value ?? ''}
+        size="small"
+        onChange={(e) => {
+          const val = e.target.value;
+          if (onChange) onChange(val);
+          if (onchangeEventCallBack) onchangeEventCallBack(val);
+        }}
+        renderValue={() => {
+          if (!value) return '';
+          const option = value;
+          if (mapvalues) return option[mapvalues.value] || '';
+          return String(option.label ?? option.value ?? '');
+        }}
+        label={label}
+        {...props}
+      >
+        {options.map((option) => (
+          <MenuItem key={mapvalues ? option[mapvalues.id] : option.value} value={option}>
+            {mapvalues ? option[mapvalues.value] : (option.label ?? option.value)}
+          </MenuItem>
+        ))}
+      </Select>
+      {(error || externalError) && (
+        <FormHelperText>{(error || externalError)?.message || standaloneHelperText}</FormHelperText>
+      )}
+    </>
+  );
+
+  return (
+    <FormControl fullWidth error={!!(externalError)}>
+      {control && name ? (
+        <Controller
+          name={name}
+          control={control}
+          rules={rules}
+          render={({ field: { onChange, value }, fieldState: { error } }) => renderSelect(value, onChange, error)}
+        />
+      ) : (
+        renderSelect(standaloneValue, standaloneOnChange, undefined)
+      )}
+    </FormControl>
+  );
 };
 
 export default SLSelectDropDown;

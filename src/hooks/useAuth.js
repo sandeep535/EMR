@@ -25,7 +25,7 @@ export const useAuth = ({ location, params, appContextValue, navigate }) => {
 
         const sessionToken = sessionManager.getToken();
         const sessionLoggedInUserDetails = sessionManager.getUserDetails();
-        const leftmenu = sessionManager.getLeftMenu();
+        const leftmenu = appContextValue.leftMenuList ? [...appContextValue.leftMenuList]: sessionManager.getLeftMenu();
 
         if (sessionToken && sessionLoggedInUserDetails) {
           // Set context values

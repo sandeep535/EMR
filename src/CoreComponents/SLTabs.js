@@ -19,11 +19,14 @@ const TabPanel = ({ children, value, index }) => {
   );
 };
 
-const SLTabs = ({ tabLabels, tabContents }) => {
-  const [value, setValue] = useState(0);
+const SLTabs = ({ tabLabels, tabContents, value: controlledValue, onChange }) => {
+  const [internalValue, setInternalValue] = useState(0);
+  const isControlled = controlledValue !== undefined;
+  const value = isControlled ? controlledValue : internalValue;
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    if (onChange) onChange(newValue);
+    if (!isControlled) setInternalValue(newValue);
   };
 
   return (
@@ -41,7 +44,6 @@ const SLTabs = ({ tabLabels, tabContents }) => {
       {tabContents.map((content, index) => (
         <TabPanel key={index} value={value} index={index}>
             {content}
-         
         </TabPanel>
       ))}
     </Box>

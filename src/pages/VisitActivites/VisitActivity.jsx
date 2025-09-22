@@ -311,7 +311,6 @@ export default function VisitActivity(props) {
                         style={{ color: 'red', cursor: 'pointer' }}
                     >
                         <Tooltip title="Back to dashboard">
-                            {/* <ArrowBackIosIcon onClick={() => backtoDashboard()} /> */}
                             <SLBreadcrumbs items={breadcrumbItems} />
                         </Tooltip>
 
@@ -323,11 +322,7 @@ export default function VisitActivity(props) {
                             <SaveIcon style={{ color: 'blue', cursor: 'pointer', marginRight: '5px' }} onClick={() => { handlePrescriptionSubmit() }} />
                         </Tooltip>
                     }
-                    {/* {
-                        <Tooltip title="Save">
-                            <SaveIcon style={{ color: 'blue', cursor: 'pointer', marginRight: '5px' }} onClick={() => { handleSubmitNursedashboard() }} />
-                        </Tooltip>
-                    } */}
+                    
                     {appContextValue && appContextValue.selectedVisitDeatils.status == 1 &&
                         <Box
                             mt={1}

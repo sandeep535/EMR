@@ -3,14 +3,14 @@ import BillsList from "./BillsList";
 import Paymemts from "../Paymemts/Paymemts";
 import SLTabs from "../../CoreComponents/SLTabs";
 
-const BillsTabs = () => {
+const BillsTabs = ({ clientId }) => {
   const tabLabels = ["Bills", "Paymemnts"];
   const tabContents = [
     <React.Fragment key="bills">
-      <BillsList />
+      <BillsList clientId={clientId}/>
     </React.Fragment>,
     <React.Fragment key="payments">
-      <Paymemts />
+      <Paymemts clientId={clientId}/>
     </React.Fragment>,
   ];
   // const tabContents = [

@@ -60,6 +60,15 @@ const Translations = {
         clientDetails:'Patient Details',
         visitDetails:'Visit Details'
     },
+    "admission":{
+        pagetitle:'ADMISSION',
+        pagesubtitle:'Create a admission for patient',
+        clientDetails:'Patient Details',
+        visitDetails:'Visit Details',
+        admissionType:'Admission Type',
+        admissionDate:'Admission Date',
+        admissionReason:'Admission Reason',
+    },
     "vitalsForm":{
         height:'Height(CM)',
         weight:'Weight',

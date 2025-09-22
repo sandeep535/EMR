@@ -230,6 +230,11 @@ const APIS={
         METHOD:"GET",
         ACTION:"BILL"
     },
+    GET_PENDING_BILLS_CLIENTID:{
+        URL:'bill/billsByClient/{0}/{1}',
+        METHOD:"GET",
+        ACTION:"GET_PENDING_BILLS_CLIENTID"
+    },
     File_UPLOAD:{
         URL:'common/uploadFile',
         METHOD:"POST",
@@ -246,7 +251,27 @@ const APIS={
         METHOD:"POST",
         ACTION:"GET LOOKUPS"
     },
-
+    PAY_BILL:{
+        URL:'bill/billPayment/{0}',
+        METHOD:'POST',
+        ACTION:'PAY BILL'
+    },
+    INS_MASTER:{
+        URL:'masters/institution-units',
+        METHOD:'GET',
+        ACTION:'INSTITUTION MASTER'
+    },
+    INS_MASTER_POST:{
+        URL:'masters/institution-units',
+        METHOD:'POST',
+        ACTION:'INSTITUTION MASTER'
+    },
+    GET_INST_BASED_PARENT:{
+        URL:'masters/institution-units/children?parentId={0}',
+        METHOD:'GET',
+        ACTION:'GET PATRENT INSTITUTION MASTER'
+    },
+    
     
 }
 export default APIS;
