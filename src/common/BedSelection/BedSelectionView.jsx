@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardActionArea, Box, Typography } from "@mui/material";
+import { Card, CardActionArea, Box, Typography, Grid } from "@mui/material";
 import BedIcon from "@mui/icons-material/Hotel";
 
 const BedCard = ({ bed, selected, onClick }) => {
@@ -31,4 +31,32 @@ const BedCard = ({ bed, selected, onClick }) => {
   );
 };
 
-export default BedCard;
+const BedSelectionView = ({ bed = [] }) => {
+  if (!bed || bed.length === 0) {
+    return (
+      <Box sx={{ p: 2, textAlign: 'center' }}>
+        <Typography variant="body2" color="text.secondary">
+          No beds selected
+        </Typography>
+      </Box>
+    );
+  }
+
+  return (
+    <Box sx={{ p: 2 }}>
+      <Typography variant="h6" mb={2}>
+        Selected Beds ({bed.length})
+      </Typography>
+      <Grid container spacing={2}>
+        {bed.map((bedItem, index) => (
+          <Grid item key={bedItem.id || index}>
+            <BedCard bed={bedItem} selected={true} />
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
+  );
+};
+
+export default BedSelectionView;
+export { BedCard };

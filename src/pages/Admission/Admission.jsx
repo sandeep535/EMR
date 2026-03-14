@@ -80,7 +80,7 @@ export default function Admission(props) {
       setVisitDataInEditMode();
     }else{
       reset({
-        visitdate: dayjs(moment(new Date()).format("YYYY-MM-DD"))
+        admisionDate: dayjs(moment(new Date()).format("YYYY-MM-DD"))
       })
     }
   }
@@ -115,7 +115,8 @@ export default function Admission(props) {
   const visitCreationhandleSubmit = async (data) => {
     handleSubmit1(data);
   }
-  async function handleSubmit1(data) {
+    async function handleSubmit1(data) {
+     console.log(data);
     var clientDeatils = "";
     if (selectedClientData && selectedClientData.seqid) {
       clientDeatils = selectedClientData;
@@ -132,31 +133,32 @@ export default function Admission(props) {
       };
     }
     let sendingObj = {
-      visitdate: new Date(data.visitdate),
+      admisionDate: new Date(data.admisionDate),
       doctor: data.doctor,
-      visittype: data.visitType,
+      admissionType: data.admissionType,
       specilaity: data.specility,
-      reason: data.visitreason,
+      reason: data.admissionReason,
       status: 1,
       clientid: clientDeatils,
-      token: data.token,
-      paymenttype: data.paymenttype,
-      visitid: (props?.isEdit == "true") ? props?.visitEditData?.visitid : null
+      admissionId: (props?.isEdit == "true") ? props?.visitEditData?.admissionId : null,
+      bed:bedList
     }
-    var payLoad = {
-      method: APIS.SAVE_VISIT.METHOD,
-      url: APIS.SAVE_VISIT.URL,
-      paramas: [],
-      data: sendingObj
-    }
-    let result = await sendRequest(payLoad);
-    if (result) {
-      EMRAlert.alertifySuccess("Visit Saved Succussfully.you token number is " + result.token + "");
+    console.log(sendingObj);
 
-      clearVisitForm()
-    } else {
-      EMRAlert.alertifyError("Not created")
-    }
+    // var payLoad = {
+    //   method: APIS.SAVE_VISIT.METHOD,
+    //   url: APIS.SAVE_VISIT.URL,
+    //   paramas: [],
+    //   data: sendingObj
+    // }
+    // let result = await sendRequest(payLoad);
+    // if (result) {
+    //   EMRAlert.alertifySuccess("Visit Saved Succussfully.you token number is " + result.token + "");
+
+    //   clearVisitForm()
+    // } else {
+    //   EMRAlert.alertifyError("Not created")
+    // }
   }
 
   const handleBedPicked = useCallback((bed) => {

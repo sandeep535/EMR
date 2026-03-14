@@ -25,7 +25,7 @@ const BedSelection = ({ onChange, labelPrefix = 'Select', initialParentId = -999
     const isBedFlag = (item) => !!(item && (item.isBed || item.bed));
 
     if (isBedFlag(first)) {
-      if (onChange) onChange(first);
+      if (onChange) onChange(options);
       return; // do not render a dropdown for bed
     }
 

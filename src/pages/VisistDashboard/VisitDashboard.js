@@ -71,7 +71,7 @@ export default function VisitDasboard(props) {
     useEffect(() => {
         setCount(1);
         getVisitDetails();
-    }, [toDate, fromDate]);
+    }, [toDate, fromDate, props.patienttype]);
     useEffect(() => {
         getVisitStatusList();
        // generateBill()
@@ -82,8 +82,7 @@ export default function VisitDasboard(props) {
     useEffect(() => {
         setCount(1);
         getVisitDetails();
-
-    }, [visitStatus]);
+    }, [visitStatus, props.patienttype]);
    
     async function getVisitDetails() {
         if (!visitStatus) {
@@ -91,10 +90,11 @@ export default function VisitDasboard(props) {
         }
         let localfromDate = fromDate ? new Date(fromDate).setHours(0, 0, 0) : new Date().setHours(0, 0, 0);
         let localtoDate = toDate ? new Date(toDate).setHours(23, 59, 59) : new Date().setHours(23, 59, 59);
+        const isPatientTypeInPatient = props?.patienttype ? props.patienttype === 'INPATIENT' : true;
         var payLoad = {
             method: APIS.GET_VISITS.METHOD,
             url: APIS.GET_VISITS.URL,
-            paramas: [new Date(localfromDate), new Date(localtoDate), visitStatus.id, count - 1, 16]
+            paramas: [new Date(localfromDate), new Date(localtoDate), visitStatus.id, count - 1, 16,props?.patienttype]
         }
         let result = await sendRequest(payLoad);
         if (result && result.visitDetailsDTO.length != 0) {

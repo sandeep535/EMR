@@ -177,6 +177,7 @@ export default function VisitCreation(props) {
       services: visitServiceList,
       token: data.token,
       paymenttype: data.paymenttype,
+      patienttype: props.patienttype,
       visitid: (props?.isEdit == "true") ? props?.visitEditData?.visitid : null
     }
     var payLoad = {

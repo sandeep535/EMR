@@ -11,6 +11,14 @@
         isOpen:false,
         isRefreshMenu:true,
         screencode:'VISIT_DAHSBOARD_SCREEN_VIEW'
+    },
+    {
+        title:"IP Doctor Dashboard",
+        to:"/admission-dashboard",
+        icon:"dashboard_customize",
+        isOpen:false,
+        isRefreshMenu:true,
+        screencode:'VISIT_DAHSBOARD_SCREEN_VIEW'
     },{
         title:"OP Nurse Dashboard",
         to:"/nurse-dashboard",

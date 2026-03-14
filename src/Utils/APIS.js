@@ -55,7 +55,7 @@ const APIS={
         ACTION:"Save Visist"
     },
     GET_VISITS:{
-        URL:"visit/getVisits/{0}/{1}/{2}/{3}/{4}",
+        URL:"visit/getVisits/{0}/{1}/{2}/{3}/{4}/{5}",
         METHOD:"GET",
         ACTION:"Get Visist"
     },

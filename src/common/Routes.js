@@ -33,11 +33,12 @@ import Admission from '../pages/Admission/Admission';
 
 const ApplicationRoutes = [
     { path: "/login/:tenant", element: <LoginPage /> },
-    { path: "/vist-dashboard", element: <VisitDasboard /> },
+    { path: "/vist-dashboard", element: <VisitDasboard patienttype='INPATIENT'/> },
+    { path: "/admission-dashboard", element: <VisitDasboard patienttype='OUTPATIENT' /> },
     { path: "/nurse-dashboard", element: <VisitDasboard isFrom='nursedashboard' /> },
     { path: "/registration", element: <Registration /> },
-    { path: "/visit-creation", element: <VisitCreation /> },
-    {path:'/admission',element:<Admission/>},
+    { path: "/visit-creation", element: <VisitCreation patienttype='INPATIENT' /> },
+    { path: "/admission", element: <VisitCreation patienttype='OUTPATIENT' /> },
     { path: "/visit-activity", element: <VisitActivity /> },
     { path: "/employeeMaster", element: <EmployeeMaster /> },
     { path: "/serviceMaster", element: <ServiceMaster /> },
