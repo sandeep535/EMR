@@ -17,7 +17,6 @@ import AppContext from '../../components/Context/AppContext';
 import EMRAlert from '../../Utils/CustomAlert';
 import AllergiesList from './AllergiesList';
 import CommonCard from '../../common/CommonCard';
-import ClientBanner from '../../components/ClientBanner/ClientBanner';
 import AutocompleteField from '../../CoreComponents/AutocompleteField';
 import SLTextField from '../../CoreComponents/SLTextField';
 import { useForm } from "react-hook-form";
@@ -189,9 +188,6 @@ const Allergies = forwardRef((props, ref) => {
     }
     return (
         <Box sx={{ m: 1 }}>
-            <Grid xs={12} container>
-                <ClientBanner clientData={appContextValue.selectedVisitDeatils.clientid} visitData={appContextValue.selectedVisitDeatils} />
-            </Grid>
             <CommonCard title={"Add Allergies"}>
                 <Box >
                     <form onSubmit={handleSubmit(diagnosisMasterhandleSubmit)} >

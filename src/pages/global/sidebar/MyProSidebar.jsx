@@ -33,7 +33,7 @@ const MyProSidebar = () => {
       });
       setLocalMenuState(initialState);
     }
-  }, []);
+  }, [appContextValue.leftMenuList]);
 
   const removePatientSpecific = useCallback((copyData) => {
     return copyData.map((item) => {

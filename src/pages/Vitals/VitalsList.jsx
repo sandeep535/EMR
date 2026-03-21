@@ -4,7 +4,6 @@ import Grid from '@mui/material/Grid';
 import AppContext from '../../components/Context/AppContext';
 import { sendRequest } from '../global/DataManager';
 import APIS from '../../Utils/APIS';
-import ClientBanner from '../../components/ClientBanner/ClientBanner';
 import CommonCard from '../../common/CommonCard';
 import CustomDataGrid from '../../common/DataGrid/CustomDataGrid';
 import ModelPopUp from '../../common/ModelPopup/ModelPopUp';
@@ -73,8 +72,6 @@ export default function VisitCreation() {
         <Box sx={{ m: 1 }}>
             <Box >
                 <Grid xs={12} container>
-                    <ClientBanner clientData={appContextValue.selectedVisitDeatils.clientid} visitData={appContextValue.selectedVisitDeatils} />
-                </Grid>
                 <CommonCard title={"Vitals List"} iconsList={[{ title: 'Add Vitals', icon: 'add_icon' }]} catchCliedEvent={(clickedEvent) => {
                     setIsOpen(true);
                 }}>
@@ -82,7 +79,7 @@ export default function VisitCreation() {
                         <CustomDataGrid tableHeaders={vitalsListTableData} tableData={vitalsList}></CustomDataGrid>
                     </Grid>
                 </CommonCard>
-
+                </Grid>
             </Box>
             <ModelPopUp isOpen={isOpen} handleClose={() => { setIsOpen(false) }} >
                 <Vitals isActionButtonReq={true} refreshVitalsList={() => { setIsOpen(false); getVitalsData() }} />

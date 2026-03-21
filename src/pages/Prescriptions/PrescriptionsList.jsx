@@ -3,7 +3,6 @@ import { Box } from '@mui/material'
 import AppContext from '../../components/Context/AppContext';
 import { sendRequest } from '../global/DataManager';
 import APIS from '../../Utils/APIS';
-import ClientBanner from '../../components/ClientBanner/ClientBanner';
 import CommonCard from '../../common/CommonCard';
 import CustomDataGrid from '../../common/DataGrid/CustomDataGrid';
 import ModelPopUp from '../../common/ModelPopup/ModelPopUp';
@@ -64,9 +63,6 @@ export default function PrescriptionsList() {
 
     return (
         <Box sx={{ m: 1 }}>
-            <Grid xs={12} container>
-                <ClientBanner clientData={appContextValue.selectedVisitDeatils.clientid} visitData={appContextValue.selectedVisitDeatils} />
-            </Grid>
             <CommonCard title={"Prescription List"} iconsList={[{ title: 'Add Presxription', icon: 'add_icon' }]} catchCliedEvent={(clickedEvent) => {
                 setIsOpen(true);
             }}>

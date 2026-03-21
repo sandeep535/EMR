@@ -1,153 +1,105 @@
-import React, { useEffect, useState, useContext, useRef } from "react";
-import { Box } from "@mui/material";
+import React, { useEffect, useState, useContext } from "react";
+import { Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip, IconButton, Dialog, DialogTitle, DialogContent, Typography, Chip } from "@mui/material";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import PrintIcon from "@mui/icons-material/Print";
+import CloseIcon from "@mui/icons-material/Close";
+import Moment from "react-moment";
 import AppContext from "../../components/Context/AppContext";
-import CommonCard from "../../common/CommonCard";
-import Translations from "../../resources/translations";
-import CustomDataGrid from "../../common/DataGrid/CustomDataGrid";
 import APIS from "../../Utils/APIS";
 import { sendRequest } from "../global/DataManager";
-import Button from "@mui/material/Button";
-import { styled } from "@mui/material/styles";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import IconButton from "@mui/material/IconButton";
-import CloseIcon from "@mui/icons-material/Close";
-import Typography from "@mui/material/Typography";
 import AddPayment from "./AddPayment";
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  "& .MuiDialogContent-root": {
-    padding: theme.spacing(2),
-  },
-  "& .MuiDialogActions-root": {
-    padding: theme.spacing(1),
-  },
-}));
-const pendingPaymentsListHeaders = [
-  {
-    name: Translations.BILLS_LIST.BILLNO,
-    datakey: "billNumber",
-    width: "20%",
-  },
-  {
-    name: Translations.BILLS_LIST.BILLDATE,
-    width: "20%",
-    datakey: "billDate",
-    isDateFiled: true,
-  },
-  {
-    name: Translations.BILLS_LIST.BILLAMOUNT,
-    width: "20%",
-    datakey: "billAmount",
-  },
-  {
-    name: Translations.BILLS_LIST.TOTALAMOUNT,
-    width: "10%",
-    datakey: "billAmountBeforeDiscount",
-  },
-  {
-    name: Translations.BILLS_LIST.DISCOUNTINPERCENTAGE,
-    width: "10%",
-    datakey: "visitDiscountPercentage",
-  },
-  {
-    name: Translations.BILLS_LIST.DISCOUNTAMOUNT,
-    width: "10%",
-    datakey: "visitDiscount",
-  },
-  {
-    name: Translations.DIAGNOSIS_MASTER.ACTIONS,
-    width: "10%",
-    isActions: true,
-    actions: [
-      {
-        icon: "add",
-      },
-      {
-        icon: "print",
-      },
-    ],
-  },
+
+const headers = [
+  { key: "billNumber", label: "Bill No." },
+  { key: "billDate", label: "Bill Date", isDate: true },
+  { key: "billAmountBeforeDiscount", label: "Total Amt" },
+  { key: "visitDiscountPercentage", label: "Disc %" },
+  { key: "visitDiscount", label: "Disc Amt" },
+  { key: "billAmount", label: "Net Amount" },
+  { key: "action", label: "" },
 ];
-export default function PendingPayments(props) {
-  const [billtableData, setBilltableData] = useState([]);
-  const [isPaymentPopupDisplay, setIsPaymentPopupDisplay] = useState(false);
+
+export default function PendingPayments({ clientId }) {
+  const [rows, setRows] = useState([]);
+  const [selectedBill, setSelectedBill] = useState(null);
   const appContextValue = useContext(AppContext);
 
-  useEffect(() => {
-    getBills();
-  }, []);
+  useEffect(() => { fetchBills(); }, []);
 
-  async function getBills() {
-    let visitid = "";
-    if (props && props.visitId) {
-      visitid = props.visitId;
-    } else {
-      visitid = appContextValue.selectedVisitDeatils.visitid;
-    }
-    var payLoad = {
-      method: APIS.GET_GENERATE_BILL.METHOD,
-      url: APIS.GET_GENERATE_BILL.URL,
-      paramas: [visitid],
-    };
-    let result = await sendRequest(payLoad);
-    if (result && result) {
-      setBilltableData(result);
-    } else {
-      setBilltableData([]);
-    }
+  async function fetchBills() {
+    const visitid = appContextValue.selectedVisitDeatils?.visitid;
+    if (!visitid) return;
+    const result = await sendRequest({ method: APIS.GET_GENERATE_BILL.METHOD, url: APIS.GET_GENERATE_BILL.URL, paramas: [visitid] });
+    setRows(result || []);
   }
-  const handleClose = () => {
-    setIsPaymentPopupDisplay(false);
-  };
-  return (
-    <>
-      <Box sx={{ flexGrow: 1, m: 1 }}>
-        <CommonCard title={Translations.PAYMENTS_SCREEN.TITLE}>
-          <CustomDataGrid
-            tableHeaders={pendingPaymentsListHeaders}
-            tableData={billtableData}
-            triggerEvent={(row, action) => {
-              console.log("row", row, "action", action);
-              setIsPaymentPopupDisplay(true);
-            }}
-          ></CustomDataGrid>
-        </CommonCard>
 
-        <Box>
-          <BootstrapDialog
-            onClose={handleClose}
-            aria-labelledby="customized-dialog-title"
-            open={isPaymentPopupDisplay}
-            maxWidth="lg"
-          >
-            <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-             Payment
-            </DialogTitle>
-            <IconButton
-              aria-label="close"
-              onClick={handleClose}
-              sx={(theme) => ({
-                position: "absolute",
-                right: 8,
-                top: 8,
-                color: theme.palette.grey[500],
-              })}
-            >
-              <CloseIcon />
-            </IconButton>
-            <DialogContent dividers>
-              <AddPayment/>
-            </DialogContent>
-            {/* <DialogActions>
-              <Button autoFocus onClick={handleClose}>
-                Save changes
-              </Button>
-            </DialogActions> */}
-          </BootstrapDialog>
+  const totalPending = rows.reduce((sum, r) => sum + (r.billAmount || 0), 0);
+
+  return (
+    <Box>
+      {rows.length > 0 && (
+        <Box sx={{ px: 2, py: 1, borderBottom: '1px solid #f0f0f0' }}>
+          <Chip label={`Total Pending: ₹${totalPending.toLocaleString()}`} size="small"
+            sx={{ bgcolor: '#fff3e0', color: '#e65100', fontWeight: 600 }} />
         </Box>
-      </Box>
-    </>
+      )}
+      <TableContainer>
+        <Table size="small">
+          <TableHead>
+            <TableRow sx={{ bgcolor: "#fafafa" }}>
+              {headers.map((h) => (
+                <TableCell key={h.key} sx={{ fontWeight: 600, fontSize: 12, color: "text.secondary", borderBottom: "2px solid #e0e0e0" }}>{h.label}</TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={headers.length} align="center" sx={{ py: 3, color: "text.disabled", fontSize: 13 }}>No pending payments</TableCell>
+              </TableRow>
+            ) : rows.map((row, i) => (
+              <TableRow key={i} hover sx={{ "&:last-child td": { border: 0 } }}>
+                {headers.map((h) => (
+                  <TableCell key={h.key} sx={{ fontSize: 12 }}>
+                    {h.isDate ? <Moment format="DD-MMM-YYYY">{new Date(row[h.key])}</Moment>
+                      : h.key === "action" ? (
+                        <Box sx={{ display: "flex", gap: 0.5 }}>
+                          <Tooltip title="Add Payment">
+                            <IconButton size="small" onClick={() => setSelectedBill(row)}>
+                              <AddCircleOutlineIcon sx={{ fontSize: 16, color: "#1976d2" }} />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="Print">
+                            <IconButton size="small">
+                              <PrintIcon sx={{ fontSize: 16, color: "#757575" }} />
+                            </IconButton>
+                          </Tooltip>
+                        </Box>
+                      ) : row[h.key] ?? "-"}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      {/* Add Payment Dialog */}
+      <Dialog open={!!selectedBill} onClose={() => setSelectedBill(null)} maxWidth="md" fullWidth>
+        <DialogTitle sx={{ display: "flex", alignItems: "center", justifyContent: "space-between", py: 1.5, px: 2, borderBottom: "1px solid #e0e0e0" }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <AddCircleOutlineIcon sx={{ color: "#1976d2" }} />
+            <Typography fontWeight={600}>Add Payment</Typography>
+            {selectedBill && <Chip label={`Bill #${selectedBill.billNumber}`} size="small" sx={{ bgcolor: "#e3f2fd", color: "#1976d2" }} />}
+          </Box>
+          <IconButton size="small" onClick={() => setSelectedBill(null)}>
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent sx={{ p: 2 }}>
+          <AddPayment />
+        </DialogContent>
+      </Dialog>
+    </Box>
   );
 }

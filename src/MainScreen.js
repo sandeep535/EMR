@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useRef, useMemo } from "react";
+import React, { useEffect, useContext, useRef } from "react";
 import { Routes, Route, useNavigate, useParams, useLocation } from "react-router-dom";
 import Box from "@mui/material/Box";
 import { MyProSidebarProvider } from "./pages/global/sidebar/sidebarContext";
@@ -9,6 +9,7 @@ import { useAuth } from "./hooks/useAuth";
 import { useLayout } from "./hooks/useLayout";
 import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
+import ClientBanner from "./components/ClientBanner/ClientBanner";
 
 export default function MainScreen() {
   const navigate = useNavigate();
@@ -24,18 +25,25 @@ export default function MainScreen() {
     navigate
   });
   
-  // Memoized routes to prevent unnecessary re-renders
-  const routes = useMemo(() => (
+  const isPatientSpecificScreen = appContextValue.leftMenuList
+    ?.some(menu =>
+      menu.isPatientSpecific === true &&
+      menu.subMenu?.some(item => item.to === location.pathname)
+    );
+
+  const showBanner = isPatientSpecificScreen && appContextValue.selectedVisitDeatils?.clientid;
+
+  const routes = (
     <Routes>
       {ApplicationRoutes.map((route, index) => (
         <Route
           key={`${route.path}-${index}`}
           path={route.path}
-          element={route.element}
+          element={React.cloneElement(route.element, { key: location.pathname })}
         />
       ))}
     </Routes>
-  ), []);
+  );
 
   // Show loading state while checking authentication
   if (isLoading) {
@@ -63,6 +71,14 @@ export default function MainScreen() {
         )}
         {/* Main Content */}
         <Box sx={{ flex: 1, overflow: 'auto', bgcolor: 'background.default' }}>
+          {showBanner && (
+            <Box sx={{ px: 1, pt: 1 }}>
+              <ClientBanner
+                clientData={appContextValue.selectedVisitDeatils.clientid}
+                visitData={appContextValue.selectedVisitDeatils}
+              />
+            </Box>
+          )}
           {routes}
         </Box>
       </Box>

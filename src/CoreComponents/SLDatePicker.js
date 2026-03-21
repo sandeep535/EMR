@@ -6,19 +6,17 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 const SLDatePicker = ({ name, control, label, rules = {}, error: externalError, value: standaloneValue, onChange: standaloneOnChange, helperText: standaloneHelperText, ...props }) => {
+  const { onChange: _ignored, ...restProps } = props;
   const renderPicker = (value, onChange, error) => (
     <>
       <DatePicker
         label={label}
         value={value}
-        onChange={(date) => {
-          if (onChange) onChange(date);
-          if (props.onChange) props.onChange(date);
-        }}
+        onChange={(date) => onChange && onChange(date)}
         renderInput={(params) => (
           <TextField {...params} fullWidth variant="outlined" />
         )}
-        {...props}
+        {...restProps}
         format="DD-MM-YYYY"
         fullWidth
         slotProps={{ textField: { size: 'small' } }}

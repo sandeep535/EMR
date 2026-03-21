@@ -271,6 +271,11 @@ const APIS={
         METHOD:'GET',
         ACTION:'GET PATRENT INSTITUTION MASTER'
     },
+    ASSIGN_BED:{
+        URL:'masters/bed-assignments/assign',
+        METHOD:'POST',
+        ACTION:'ASSIGN BED'
+    },
     
     
 }

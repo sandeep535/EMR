@@ -1,70 +1,96 @@
-import React, { useEffect,useContext } from 'react';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
-import styles from './ClientBannerCss';
-import userIcon from '../../resources/image-icon.png';
-import PersonAddAltIcon from '@mui/icons-material/PersonAddAlt';
-import AppContext from '../Context/AppContext';
+import React from 'react';
+import { Box, Typography, Avatar, Chip, Divider } from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
+import PhoneIcon from '@mui/icons-material/Phone';
+import WcIcon from '@mui/icons-material/Wc';
+import CakeIcon from '@mui/icons-material/Cake';
+import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 
-export default function ClientBanner(props) {
-    const appContextValue = useContext(AppContext);
-    useEffect(() => {
-        
-    }, []);
-    const status = props.visitData.status;
-    const getBorderColor = () => {
-        switch (status) {
-            case 1:
-                return '#3498db'; // Change this to your desired color
-            case 2:
-                return '#f0776c';
-            case 3:
-                return '#1abc9c';  // Change this to your desired color
-            default:
-                return '#ffd071'; // Default border color
-        }
-    }
+const statusConfig = {
+    1: { color: '#3498db', label: 'Not Started' },
+    2: { color: '#f0776c', label: 'Inactive' },
+    3: { color: '#1abc9c', label: 'In Progress' },
+    4: { color: '#ffd071', label: 'Completed' },
+};
+
+const InfoItem = ({ icon, label, value }) => (
+    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
+        <Box sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center' }}>{icon}</Box>
+        <Box>
+            <Typography variant="caption" color="text.secondary" sx={{ lineHeight: 1 }}>{label}</Typography>
+            <Typography variant="body2" fontWeight={600} sx={{ lineHeight: 1.4 }}>{value || '—'}</Typography>
+        </Box>
+    </Box>
+);
+
+export default function ClientBanner({ clientData, visitData }) {
+    if (!clientData) return null;
+
+    const status = visitData?.status;
+    const { color: statusColor, label: statusLabel } = statusConfig[status] || { color: '#ccc', label: 'Unknown' };
+
     return (
-        <>
-            {props.clientData &&
-                <Grid container spacing={1} className='client-banner'>
-                    <Grid item xs={1} className='grid-item custom-grid-img' >
-                        <PersonAddAltIcon style={{ fontSize: 50 }} />
-                        {/* <img alt="User Image" src={userIcon} style={{ height: '65px', width: '90px', margin: '-5px', marginBottom: '-10px' }}></img> */}
-                    </Grid>
-                    <Grid item xs={11} className='grid-item  custom-grid-client'>
-                        <Grid container spacing={1}>
-                            <Grid item xs={4} container alignItems="center">
-                                <Typography sx={styles.div}> Name:</Typography>
-                                <Typography sx={styles.div}><strong>{(props.clientData.firstname + " " + props.clientData.lastname)}</strong></Typography>
-                            </Grid>
-                            <Grid item xs={4} container alignItems="center">
-                                <Typography sx={styles.div}> Age:</Typography>
-                                <Typography sx={styles.div}> <strong>{props.clientData.age}</strong></Typography>
-                            </Grid>
-                            <Grid item xs={4} container alignItems="center">
-                                <Typography sx={styles.div}> Gender:</Typography>
-                                <Typography sx={styles.div}> <strong>{(props.clientData.gender.lookupvalue)}</strong></Typography>
-                            </Grid>
-                        </Grid>
-                        <Grid container spacing={1} >
-                        <Grid item xs={4} container alignItems="center">
-                                <Typography sx={styles.div}> Mobile No:</Typography>
-                                <Typography sx={styles.div}> <strong>{props.clientData.contact}</strong></Typography>
-                            </Grid>
-                        
-                            <Grid item xs={6} container alignItems="center">
-                                <Typography sx={styles.div}> Visit Reason:</Typography>
-                                <Typography sx={styles.div}> <strong>{props.visitData.reason}</strong></Typography>
-                            </Grid>
-                        </Grid>
-                    </Grid>
+        <Box sx={{
+            display: 'flex',
+            alignItems: 'center',
+            borderRadius: 2,
+            border: '1px solid #e0e0e0',
+            overflow: 'hidden',
+            bgcolor: 'background.paper',
+            boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+            mb: 2,
+        }}>
+            {/* Status color bar */}
+            <Box sx={{ width: 6, alignSelf: 'stretch', bgcolor: statusColor, flexShrink: 0 }} />
 
-                </Grid>
+            {/* Avatar */}
+            <Box sx={{ px: 2, py: 1.5 }}>
+                <Avatar sx={{ bgcolor: statusColor, width: 48, height: 48 }}>
+                    <PersonIcon />
+                </Avatar>
+            </Box>
 
+            <Divider orientation="vertical" flexItem sx={{ my: 1 }} />
 
+            {/* Info fields */}
+            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3, px: 3, py: 1.5, flex: 1 }}>
+                <InfoItem
+                    icon={<PersonIcon fontSize="small" />}
+                    label="Patient Name"
+                    value={`${clientData.firstname} ${clientData.lastname}`}
+                />
+                <InfoItem
+                    icon={<CakeIcon fontSize="small" />}
+                    label="Age"
+                    value={clientData.age}
+                />
+                <InfoItem
+                    icon={<WcIcon fontSize="small" />}
+                    label="Gender"
+                    value={clientData.gender?.lookupvalue}
+                />
+                <InfoItem
+                    icon={<PhoneIcon fontSize="small" />}
+                    label="Mobile"
+                    value={clientData.contact}
+                />
+                {visitData?.reason && (
+                    <InfoItem
+                        icon={<MedicalServicesIcon fontSize="small" />}
+                        label="Visit Reason"
+                        value={visitData.reason}
+                    />
+                )}
+            </Box>
 
-            }
-        </>
+            {/* Status chip */}
+            <Box sx={{ pr: 2 }}>
+                <Chip
+                    label={statusLabel}
+                    size="small"
+                    sx={{ bgcolor: statusColor, color: '#fff', fontWeight: 600, fontSize: 11 }}
+                />
+            </Box>
+        </Box>
     );
 }

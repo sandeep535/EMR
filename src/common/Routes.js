@@ -31,6 +31,8 @@ import BillsModuleScreen from '../pages/Bills/BillsModuleScreen';
 import InstitutionMaster from '../pages/InstitutionMaster/InstitutionMaster';
 import Admission from '../pages/Admission/Admission';
 
+import AssignBed from '../pages/BedAssignment/AssignBed';
+
 const ApplicationRoutes = [
     { path: "/login/:tenant", element: <LoginPage /> },
     { path: "/vist-dashboard", element: <VisitDasboard patienttype='INPATIENT'/> },
@@ -56,6 +58,7 @@ const ApplicationRoutes = [
     { path: "/favorites", element: <FavoriteMatser /> },
     { path: "/uploadDocuments", element: <UploadDocuments /> },
     { path: "/bedMaster", element: <InstitutionMaster/> },
+    { path: "/assign-bed", element: <AssignBed /> },
     { path: "/labordersList", element: <LabOrdersList /> },
     { path: "/bills", element: <BillsTabs /> },
     { path: "/notes", element: <NotesList /> },

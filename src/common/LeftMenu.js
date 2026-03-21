@@ -7,7 +7,7 @@
     subMenu:[{
         title:"OP Doctor Dashboard",
         to:"/vist-dashboard",
-        icon:"dashboard_customize",
+        icon:"medical_services",
         isOpen:false,
         isRefreshMenu:true,
         screencode:'VISIT_DAHSBOARD_SCREEN_VIEW'
@@ -15,35 +15,35 @@
     {
         title:"IP Doctor Dashboard",
         to:"/admission-dashboard",
-        icon:"dashboard_customize",
+        icon:"local_hospital",
         isOpen:false,
         isRefreshMenu:true,
         screencode:'VISIT_DAHSBOARD_SCREEN_VIEW'
     },{
         title:"OP Nurse Dashboard",
         to:"/nurse-dashboard",
-        icon:"dashboard_customize",
+        icon:"health_and_safety",
         isOpen:false,
         isRefreshMenu:true,
         screencode:'VISIT_DAHSBOARD_SCREEN_VIEW'
     },{
         title:"Visits Statistics",
         to:"/vist-statistics",
-        icon:"dashboard_customize",
+        icon:"bar_chart",
         isOpen:false,
         isRefreshMenu:true,
         screencode:'VISIT_DAHSBOARD_SCREEN_VIEW'
     }]
 },{
     title:"Clinical Data",
-    icon:"favorite",
+    icon:"monitor_heart",
     isPatientSpecific :false,
     isOpen:false,
     isRefreshMenu:false,
     subMenu:[{
         title:"Visit",
         to:"/visit-activity",
-        icon:"favorite",
+        icon:"event_note",
         isPatientSpecific :false,
         isOpen:false,
         isRefreshMenu:false,
@@ -51,28 +51,28 @@
     },{
         title:"Allergies",
         to:"/allergy",
-        icon:"favorite",
+        icon:"coronavirus",
         isPatientSpecific :false,
         isRefreshMenu:false,
         screencode:'PRESCRIPTIONS_SCREEN_VIEW'
     },{
         title:"Notes",
         to:"/notes",
-        icon:"favorite",
+        icon:"sticky_note_2",
         isPatientSpecific :false,
         isRefreshMenu:false,
         screencode:'PRESCRIPTIONS_SCREEN_VIEW'
     },{
         title:"Visit Summaries",
         to:"/visitSummary",
-        icon:"favorite",
+        icon:"summarize",
         isPatientSpecific :false,
         isRefreshMenu:false,
         screencode:'PRESCRIPTIONS_SCREEN_VIEW'
     },{
         title:"Vitals",
         to:"/vitalsList",
-        icon:"favorite",
+        icon:"monitor_heart",
         isPatientSpecific :true,
         isOpen:false,
         isRefreshMenu:false,
@@ -80,31 +80,38 @@
     },{
         title:"Prescriptions",
         to:"/prescriptionsList",
-        icon:"favorite",
+        icon:"medication",
         isPatientSpecific :false,
         isRefreshMenu:false,
         screencode:'PRESCRIPTIONS_SCREEN_VIEW'
     },{
         title:"Lab Orders",
         to:"/labordersList",
-        icon:"favorite",
+        icon:"biotech",
         isPatientSpecific :false,
         isRefreshMenu:false,
         screencode:'PRESCRIPTIONS_SCREEN_VIEW'
     },{
         title:"Upload Documents",
         to:"/uploadDocuments",
-        icon:"favorite",
+        icon:"upload_file",
         isPatientSpecific :false,
         isRefreshMenu:false,
         screencode:'PRESCRIPTIONS_SCREEN_VIEW'
     },{
         title:"Bills",
         to:"/bills",
-        icon:"favorite",
+        icon:"receipt_long",
         isPatientSpecific :false,
         isRefreshMenu:false,
         screencode:'PRESCRIPTIONS_SCREEN_VIEW'
+    },{
+        title:"Assign Bed",
+        to:"/assign-bed",
+        icon:"hotel",
+        isPatientSpecific :false,
+        isRefreshMenu:false,
+        screencode:'DRUG_MASTER_SCREEN_VIEW'
     }]
 },
 {
@@ -123,14 +130,14 @@
     },{
         title:"Visit Creation",
         to:"/visit-creation",
-        icon:"design_services",
+        icon:"add_circle_outline",
         isOpen:false,
         isRefreshMenu:true,
         screencode:'VISIT_CREATION_SCREEN_VIEW'
     },{
         title:"Admission",
         to:"/admission",
-        icon:"design_services",
+        icon:"transfer_within_a_station",
         isOpen:false,
         isRefreshMenu:true,
         screencode:'VISIT_CREATION_SCREEN_VIEW'
@@ -138,7 +145,7 @@
 },{
     title:"Masters",
     to:"/employeeMaster",
-    icon:"sync",
+    icon:"settings",
     isOpen:false,
     isRefreshMenu:false,
     subMenu:[{
@@ -151,7 +158,7 @@
     },{
         title:"Service Master",
         to:"/serviceMaster",
-        icon:"lan",
+        icon:"miscellaneous_services",
         isOpen:false,
         isRefreshMenu:true,
         screencode:'SERVICE_MASTER_SCREEN_VIEW'
@@ -172,56 +179,56 @@
     },{
         title:"Allergy Master",
         to:"/allergyMaster",
-        icon:"medication",
+        icon:"coronavirus",
         isOpen:false,
         isRefreshMenu:true,
         screencode:'DRUG_MASTER_SCREEN_VIEW'
     },{
         title:"Diagnosis Master",
         to:"/diagnosismaster",
-        icon:"medication",
+        icon:"search",
         isOpen:false,
         isRefreshMenu:true,
         screencode:'DRUG_MASTER_SCREEN_VIEW'
     },{
         title:"Lab Master",
         to:"/labmaster",
-        icon:"medication",
+        icon:"science",
         isOpen:false,
         isRefreshMenu:true,
         screencode:'DRUG_MASTER_SCREEN_VIEW'
     },{
         title:"Favorates",
         to:"/favorites",
-        icon:"medication",
+        icon:"star",
         isOpen:false,
         isRefreshMenu:true,
         screencode:'DRUG_MASTER_SCREEN_VIEW'
     },{
         title:"Bed Master",
         to:"/bedMaster",
-        icon:"medication",
+        icon:"king_bed",
         isOpen:false,
         isRefreshMenu:true,
         screencode:'DRUG_MASTER_SCREEN_VIEW'
     },{
         title:"Form Builder",
         to:"/dynamicFormBuilder",
-        icon:"medication",
+        icon:"dynamic_form",
         isOpen:false,
         isRefreshMenu:true,
         screencode:'DRUG_MASTER_SCREEN_VIEW'
     },{
         title:"React Code Builder",
         to:"/reactCodeBuilder",
-        icon:"medication",
+        icon:"code",
         isOpen:false,
         isRefreshMenu:true,
         screencode:'DRUG_MASTER_SCREEN_VIEW'
     },{
         title:"SampleForm",
         to:"/sampleForm",
-        icon:"medication",
+        icon:"article",
         isOpen:false,
         isRefreshMenu:true,
         screencode:'DRUG_MASTER_SCREEN_VIEW'
@@ -229,13 +236,13 @@
 },{
     title:"Billing",
     to:"/bills",
-    icon:"sync",
+    icon:"payments",
     isOpen:false,
     isRefreshMenu:false,
     subMenu:[{
             title:"Bills",
             to:"/billsScreen",
-            icon:"manage_accounts",
+            icon:"receipt_long",
             isOpen:false,
             isRefreshMenu:true,
             screencode:'EMPLOYE_MASTER_SCREEN_VIEW'
