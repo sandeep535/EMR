@@ -5,6 +5,7 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import WcIcon from '@mui/icons-material/Wc';
 import CakeIcon from '@mui/icons-material/Cake';
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
+import HotelIcon from '@mui/icons-material/Hotel';
 
 const statusConfig = {
     1: { color: '#3498db', label: 'Not Started' },
@@ -23,7 +24,7 @@ const InfoItem = ({ icon, label, value }) => (
     </Box>
 );
 
-export default function ClientBanner({ clientData, visitData }) {
+export default function ClientBanner({ clientData, visitData, bedInfo }) {
     if (!clientData) return null;
 
     const status = visitData?.status;
@@ -81,6 +82,11 @@ export default function ClientBanner({ clientData, visitData }) {
                         value={visitData.reason}
                     />
                 )}
+                <InfoItem
+                    icon={<HotelIcon fontSize="small" />}
+                    label="Assigned Bed"
+                    value={bedInfo || '—'}
+                />
             </Box>
 
             {/* Status chip */}

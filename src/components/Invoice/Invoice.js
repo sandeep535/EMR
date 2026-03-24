@@ -1,122 +1,134 @@
 import React from 'react';
-import { Box, Typography, Divider, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Box, Typography, Divider, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+
+// invoiceData shape:
+// { patientName, patientId, phoneNumber, patientAddress, doctorName,
+//   invoiceNumber, billDate, services[], billAmountBeforeDiscount,
+//   visitDiscount, visitDiscountPercentage, billAmount, payments[] }
 
 const Invoice = ({ invoiceData }) => {
-    const invoiceData1 = {
-        hospitalName: 'City Hospital',
-        hospitalAddress: '123 Main Street, Anytown, AN 12345',
-        patientName: 'John Doe',
-        patientId: '123456',
-        date: new Date().toLocaleDateString(),
-        phoneNumber:9032151096,
-        doctorName:'Sandeep',
-        invoiceNumber:'1212131',
-        patientAddress:"Hyderabad",
-        services: [
-            { description: 'Consultation Fee', cost: 50.00 },
-            { description: 'X-Ray', cost: 100.00 },
-            { description: 'Blood Test', cost: 30.00 },
-            { description: 'Medication', cost: 45.00 },
-        ],
-        totalAmount: 225.00, // Sum of all services
-    };
-    const { hospitalName, hospitalAddress, patientName, patientId,phoneNumber,patientAddress, date, services, totalAmount,doctorName,invoiceNumber } = invoiceData;
+  const {
+    patientName, patientId, phoneNumber, patientAddress, doctorName,
+    invoiceNumber, billDate, services = [], billAmountBeforeDiscount,
+    visitDiscount, visitDiscountPercentage, billAmount, payments = [],
+  } = invoiceData;
 
-    return (
-        <Box sx={{ maxWidth: 800, margin: '0 auto', padding: 4, border: '1px solid #ddd', borderRadius: '8px', backgroundColor: '#f9f9f9' }}>
-            {/* Header Section */}
-            {/* <Box textAlign="center" mb={3}>
-                <Typography variant="h4" fontWeight="bold">
-                    {hospitalName}
-                </Typography>
-                <Typography variant="body1">{hospitalAddress}</Typography>
-            </Box>
+  const totalPaid = payments.reduce((s, p) => s + (p.paymentAmount || 0), 0);
+  const remaining = (billAmount || 0) - totalPaid;
 
-            <Divider /> */}
+  const cellStyle = { fontSize: 12, py: 0.8, px: 1.5, borderBottom: '1px solid #e0e0e0' };
+  const headStyle = { fontSize: 12, fontWeight: 700, py: 0.8, px: 1.5, bgcolor: '#f5f7fa', borderBottom: '2px solid #d0d0d0' };
 
-            {/* Patient and Invoice Information */}
-            <Box textAlign="center" mb={3}>
-                <Typography variant="h6" fontWeight="bold">
-                    Invoice
-                </Typography>
-            </Box>
-            <Box mt={3} mb={3}>
-                <Box display="flex" justifyContent="space-between" mt={2}>
-                    <Box>
-                        <Typography variant="body1"><strong>Patient Name:</strong> {patientName}</Typography>
-                        <Typography variant="body1"><strong>Phone Number:</strong> {phoneNumber}</Typography>
-                        <Typography variant="body1"><strong>Address:</strong> {patientAddress}</Typography>
-                    </Box>
-                    <Box>
-                        <Typography variant="body1"><strong>Invoice No:</strong> {invoiceNumber}</Typography>
-                        <Typography variant="body1"><strong>Date:</strong> {date}</Typography>
-                        <Typography variant="body1"><strong>Doctor Name:</strong> {doctorName}</Typography>
-                    </Box>
-                </Box>
-            </Box>
+  return (
+    <Box sx={{ maxWidth: 780, mx: 'auto', p: 4, fontFamily: 'Arial, sans-serif', color: '#222' }}>
 
-            <Divider />
+      {/* Header */}
+      <Box sx={{ textAlign: 'center', mb: 2 }}>
+        <Typography variant="h5" fontWeight={700} letterSpacing={1}>INVOICE</Typography>
+        <Typography variant="body2" color="text.secondary">{invoiceNumber}</Typography>
+      </Box>
 
-            {/* Services Table */}
-            <TableContainer component={Paper} sx={{ mt: 3 }}>
-                <Table size="small">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell><strong>Service Name</strong></TableCell>
-                            <TableCell><strong>Quantity</strong></TableCell>
-                            <TableCell align="right"><strong>Price</strong></TableCell>
-                            <TableCell align="right"><strong>Discount</strong></TableCell>
-                            <TableCell align="right"><strong>Total</strong></TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {services.map((service, index) => (
-                            <TableRow key={index}>
-                                <TableCell>{service.serviceid.servicename}</TableCell>
-                                <TableCell >${service.quantity}</TableCell>
-                                <TableCell align="right">${service.serviceprice.toFixed(2)}</TableCell>
-                                <TableCell align="right">${service.servicediscount.toFixed(2)}</TableCell>
-                                <TableCell align="right">${service.servicetotalamount.toFixed(2)}</TableCell>
-                            </TableRow>
-                        ))}
-                        <TableRow>
-                            <TableCell align="right"></TableCell>
-                            <TableCell align="right"></TableCell>
-                            <TableCell align="right"></TableCell>
-                            <TableCell align="right"><strong>Total</strong></TableCell>
-                            <TableCell align="right"><strong>${totalAmount.toFixed(2)}</strong></TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell align="right"></TableCell>
-                            <TableCell align="right"></TableCell>
-                            <TableCell align="right"></TableCell>
-                            <TableCell align="right"><strong>Total Discount</strong></TableCell>
-                            <TableCell align="right"><strong>${totalAmount.toFixed(2)}</strong></TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell align="right"></TableCell>
-                            <TableCell align="right"></TableCell>
-                            <TableCell align="right"></TableCell>
-                            <TableCell align="right"><strong>Tax</strong></TableCell>
-                            <TableCell align="right"><strong>${totalAmount.toFixed(2)}</strong></TableCell>
-                        </TableRow>
-                        <TableRow>
-                            <TableCell align="right"></TableCell>
-                            <TableCell align="right"></TableCell>
-                            <TableCell align="right"></TableCell>
-                            <TableCell align="right"><strong>Toatal Amount</strong></TableCell>
-                            <TableCell align="right"><strong>${totalAmount.toFixed(2)}</strong></TableCell>
-                        </TableRow>
-                    </TableBody>
-                </Table>
-            </TableContainer>
+      <Divider sx={{ mb: 2 }} />
 
-            {/* Footer Section */}
-            <Box textAlign="center" mt={4}>
-                <Typography variant="body2">Thank you for choosing our hospital services. Get well soon!</Typography>
-            </Box>
+      {/* Patient + Bill Info */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 3 }}>
+        <Box>
+          <Typography variant="body2"><strong>Patient Name:</strong> {patientName}</Typography>
+          <Typography variant="body2"><strong>Patient ID:</strong> {patientId}</Typography>
+          <Typography variant="body2"><strong>Phone:</strong> {phoneNumber}</Typography>
+          {patientAddress && <Typography variant="body2"><strong>Address:</strong> {patientAddress}</Typography>}
         </Box>
-    );
-}
+        <Box sx={{ textAlign: 'right' }}>
+          <Typography variant="body2"><strong>Invoice No:</strong> {invoiceNumber}</Typography>
+          <Typography variant="body2"><strong>Bill Date:</strong> {billDate}</Typography>
+          <Typography variant="body2"><strong>Doctor:</strong> {doctorName}</Typography>
+        </Box>
+      </Box>
+
+      {/* Services Table */}
+      <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 0.5, color: '#1976d2', textTransform: 'uppercase', fontSize: 11 }}>Services</Typography>
+      <Table size="small" sx={{ mb: 2, border: '1px solid #e0e0e0' }}>
+        <TableHead>
+          <TableRow>
+            <TableCell sx={headStyle}>#</TableCell>
+            <TableCell sx={headStyle}>Service</TableCell>
+            <TableCell sx={{ ...headStyle, textAlign: 'right' }}>Qty</TableCell>
+            <TableCell sx={{ ...headStyle, textAlign: 'right' }}>Price</TableCell>
+            <TableCell sx={{ ...headStyle, textAlign: 'right' }}>Discount</TableCell>
+            <TableCell sx={{ ...headStyle, textAlign: 'right' }}>Amount</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {services.map((s, i) => (
+            <TableRow key={i}>
+              <TableCell sx={cellStyle}>{i + 1}</TableCell>
+              <TableCell sx={cellStyle}>{s.serviceName || s.serviceid?.servicename || '-'}</TableCell>
+              <TableCell sx={{ ...cellStyle, textAlign: 'right' }}>{s.quantity || 1}</TableCell>
+              <TableCell sx={{ ...cellStyle, textAlign: 'right' }}>₹{Number(s.serviceAmount || s.serviceprice || 0).toFixed(2)}</TableCell>
+              <TableCell sx={{ ...cellStyle, textAlign: 'right' }}>₹{Number(s.servicediscount || 0).toFixed(2)}</TableCell>
+              <TableCell sx={{ ...cellStyle, textAlign: 'right' }}>₹{Number(s.servicetotalamount || s.serviceAmount || s.serviceprice || 0).toFixed(2)}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+
+      {/* Bill Summary */}
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 3 }}>
+        <Box sx={{ minWidth: 260, border: '1px solid #e0e0e0', borderRadius: 1, overflow: 'hidden' }}>
+          {[
+            { label: 'Gross Amount', value: billAmountBeforeDiscount },
+            { label: `Discount (${visitDiscountPercentage || 0}%)`, value: visitDiscount, color: '#e65100' },
+            { label: 'Net Amount', value: billAmount, bold: true, bgcolor: '#f5f7fa' },
+            { label: 'Total Paid', value: totalPaid, color: '#2e7d32' },
+            { label: 'Balance Due', value: remaining, bold: true, color: remaining > 0 ? '#d32f2f' : '#2e7d32', bgcolor: remaining > 0 ? '#fff3e0' : '#e8f5e9' },
+          ].map((r, i) => (
+            <Box key={i} sx={{ display: 'flex', justifyContent: 'space-between', px: 2, py: 0.7, bgcolor: r.bgcolor || 'transparent', borderBottom: '1px solid #f0f0f0' }}>
+              <Typography variant="body2" fontWeight={r.bold ? 700 : 400}>{r.label}</Typography>
+              <Typography variant="body2" fontWeight={r.bold ? 700 : 400} color={r.color || 'inherit'}>
+                ₹{Number(r.value || 0).toFixed(2)}
+              </Typography>
+            </Box>
+          ))}
+        </Box>
+      </Box>
+
+      {/* Payment History */}
+      {payments.length > 0 && (
+        <>
+          <Typography variant="subtitle2" fontWeight={700} sx={{ mb: 0.5, color: '#2e7d32', textTransform: 'uppercase', fontSize: 11 }}>Payment History</Typography>
+          <Table size="small" sx={{ mb: 3, border: '1px solid #e0e0e0' }}>
+            <TableHead>
+              <TableRow>
+                <TableCell sx={headStyle}>#</TableCell>
+                <TableCell sx={headStyle}>Date</TableCell>
+                <TableCell sx={{ ...headStyle, textAlign: 'right' }}>Amount</TableCell>
+                <TableCell sx={headStyle}>Mode</TableCell>
+                <TableCell sx={headStyle}>Txn No.</TableCell>
+                <TableCell sx={headStyle}>Remarks</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {payments.map((p, i) => (
+                <TableRow key={i}>
+                  <TableCell sx={cellStyle}>{i + 1}</TableCell>
+                  <TableCell sx={cellStyle}>{p.paymentDate ? new Date(p.paymentDate).toLocaleDateString('en-IN') : '-'}</TableCell>
+                  <TableCell sx={{ ...cellStyle, textAlign: 'right' }}>₹{Number(p.paymentAmount || 0).toFixed(2)}</TableCell>
+                  <TableCell sx={cellStyle}>{p.paymentMode?.masterdatavalue || '-'}</TableCell>
+                  <TableCell sx={cellStyle}>{p.transactionNumber || '-'}</TableCell>
+                  <TableCell sx={cellStyle}>{p.remarks || '-'}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </>
+      )}
+
+      <Divider sx={{ mb: 2 }} />
+      <Box sx={{ textAlign: 'center' }}>
+        <Typography variant="caption" color="text.secondary">Thank you for choosing our services. Get well soon!</Typography>
+      </Box>
+    </Box>
+  );
+};
 
 export default Invoice;

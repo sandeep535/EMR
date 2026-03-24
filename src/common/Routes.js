@@ -25,6 +25,7 @@ import DynamicFormBuilder from "./DynamicFormBuilder/DynamicFormBuilder";
 import ReactCodeFormBuilder from "./ReactCodeGenerater/ReactCodeFormBuilder";
 import SampleForm from "../Masters/ServiceMaster/SampleForm";
 import BillsTabs from "../pages/Bills/BillsTabs";
+import VisitBillsTabs from "../pages/Bills/VisitBillsTabs";
 import NotesList from "../pages/Notes/NotesList";
 import LoginPage from '../pages/Login/LoginPage';
 import BillsModuleScreen from '../pages/Bills/BillsModuleScreen';
@@ -60,7 +61,7 @@ const ApplicationRoutes = [
     { path: "/bedMaster", element: <InstitutionMaster/> },
     { path: "/assign-bed", element: <AssignBed /> },
     { path: "/labordersList", element: <LabOrdersList /> },
-    { path: "/bills", element: <BillsTabs /> },
+    { path: "/bills", element: <VisitBillsTabs /> },
     { path: "/notes", element: <NotesList /> },
     { path: "/dynamicFormBuilder", element: <DynamicFormBuilder /> },
     { path: "/billsScreen", element: <BillsModuleScreen /> },

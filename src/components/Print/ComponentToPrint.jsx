@@ -13,35 +13,13 @@ export class ComponentToPrint extends React.PureComponent {
                 <style type="text/css" media="print">
                     {`
                         @page {
-                            size: landscape;
-                        
+                            size: A4 portrait;
+                            margin: 16mm;
                         }
-                        .header {
-                            position: fixed;
-                            top: 0;
-                            left: 0;
-                            width: 100%;
-                            height: 50px; /* Adjust as needed */
-                            background: #f8f9fa;
-                            text-align: center;
-                            border-bottom: 1px solid #ddd;
-                            padding: 10px;
-                        }
-                        .footer {
-                            position: fixed;
-                            bottom: 0;
-                            left: 0;
-                            width: 100%;
-                            height: 50px; /* Adjust as needed */
-                            background: #f8f9fa;
-                            text-align: center;
-                            border-top: 1px solid #ddd;
-                            padding: 10px;
-                        }
-                        .print-wrapper {
-                            margin-top: 60px; /* Match header height */
-                            margin-bottom: 60px; /* Match footer height */
-                        }
+                        body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                        .header { display: none; }
+                        .footer { display: none; }
+                        .print-wrapper { margin: 0; }
                     `}
                 </style>
                 <div className="header">Header Content</div>

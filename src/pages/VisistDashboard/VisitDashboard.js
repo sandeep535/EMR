@@ -266,10 +266,12 @@ export default function VisitDasboard(props) {
                                                             onClick={(e) => { e.preventDefault(); openVisitActivity(visit); }}>tour</Icon>
                                                     </Tooltip>
                                                 )}
-                                                <Tooltip title="Assign Bed">
-                                                    <HotelIcon sx={{ fontSize: 18, color: '#9c27b0', cursor: 'pointer' }}
-                                                        onClick={(e) => { e.preventDefault(); gotoAssignBed(visit); }} />
-                                                </Tooltip>
+                                                {props?.patienttype === 'OUTPATIENT' && (
+                                                    <Tooltip title="Assign Bed">
+                                                        <HotelIcon sx={{ fontSize: 18, color: '#9c27b0', cursor: 'pointer' }}
+                                                            onClick={(e) => { e.preventDefault(); gotoAssignBed(visit); }} />
+                                                    </Tooltip>
+                                                )}
                                             </Box>
                                         </CardContent>
                                     </Card>

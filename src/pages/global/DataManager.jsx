@@ -2,13 +2,14 @@ import axios from 'axios';
 import serviceDetails from '../../Utils/Service';
 
 export const sendRequest = async payload => {
-    
+    console.log("Sending request:", payload);
     let serverUrl = serviceDetails.SERVICE_URL;
     if (payload.method == "GET") {
         let subURL = appendGetVariblesToUrl(payload.url, payload.paramas);
         serverUrl = serverUrl + subURL;
     }else{
-         serverUrl = serviceDetails.SERVICE_URL + payload.url;
+         let subURL = appendGetVariblesToUrl(payload.url, payload.paramas);
+         serverUrl = serviceDetails.SERVICE_URL +subURL;
     }
     var headers =  {
         'content-type': (payload.isMultiContent) ? '' :'application/json', 

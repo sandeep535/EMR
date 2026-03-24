@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useRef } from "react";
+import React, { useEffect, useContext, useRef, useState } from "react";
 import { Routes, Route, useNavigate, useParams, useLocation } from "react-router-dom";
 import Box from "@mui/material/Box";
 import { MyProSidebarProvider } from "./pages/global/sidebar/sidebarContext";
@@ -10,6 +10,8 @@ import { useLayout } from "./hooks/useLayout";
 import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner";
 import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 import ClientBanner from "./components/ClientBanner/ClientBanner";
+import { sendRequest } from "./pages/global/DataManager";
+import APIS from "./Utils/APIS";
 
 export default function MainScreen() {
   const navigate = useNavigate();
@@ -32,6 +34,23 @@ export default function MainScreen() {
     );
 
   const showBanner = isPatientSpecificScreen && appContextValue.selectedVisitDeatils?.clientid;
+  const [bedInfo, setBedInfo] = useState(null);
+
+  useEffect(() => {
+    if (!showBanner) { setBedInfo(null); return; }
+    const patientId = appContextValue.selectedVisitDeatils?.clientid?.seqid;
+    if (!patientId) return;
+    const url = APIS.GET_PATIENT_ACTIVE_BED.URL.replace('{patientId}', patientId);
+    sendRequest({ method: APIS.GET_PATIENT_ACTIVE_BED.METHOD, url })
+      .then(result => {
+        if (result && result.length > 0) {
+          const bed = result[0];
+          setBedInfo(bed.bedPath|| null);
+        } else {
+          setBedInfo(null);
+        }
+      });
+  }, [showBanner, appContextValue.selectedVisitDeatils?.clientid?.seqid]);
 
   const routes = (
     <Routes>
@@ -76,6 +95,7 @@ export default function MainScreen() {
               <ClientBanner
                 clientData={appContextValue.selectedVisitDeatils.clientid}
                 visitData={appContextValue.selectedVisitDeatils}
+                bedInfo={bedInfo}
               />
             </Box>
           )}

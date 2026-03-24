@@ -276,6 +276,16 @@ const APIS={
         METHOD:'POST',
         ACTION:'ASSIGN BED'
     },
+    GET_PATIENT_ACTIVE_BED:{
+        URL:'masters/bed-assignments/patient/{patientId}/active',
+        METHOD:'GET',
+        ACTION:'GET PATIENT ACTIVE BED'
+    },
+    BILL_SEARCH:{
+        URL:'bill/search',
+        METHOD:'GET',
+        ACTION:'BILL SEARCH'
+    }
     
     
 }
