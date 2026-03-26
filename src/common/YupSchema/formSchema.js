@@ -27,10 +27,10 @@ export const AllergiesScreenSchema = Yup.object({
 
 export const PrescriptionSchema = Yup
     .object({
-        selectedDrugValues: Yup.object().required("Select Drug"),
-        dose: Yup.string().required("Select Dose"),
-        doseunit: Yup.string().required("Select Unit"),
-        sig: Yup.string().required("Select SIG"),
+        selectedDrugValues: Yup.object().nullable().required("Select Drug"),
+        dose: Yup.string().nullable(),
+        doseunit: Yup.string().nullable(),
+        sig: Yup.string().nullable(),
     })
     .required()
 export const LabordersSchema = Yup

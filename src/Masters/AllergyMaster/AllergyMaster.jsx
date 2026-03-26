@@ -1,311 +1,168 @@
 import React, { useState, useEffect } from 'react';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
+import { Box, Paper, Typography, Grid, FormControl, Chip, Tooltip, IconButton } from '@mui/material';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import SearchIcon from '@mui/icons-material/Search';
 import APIS from '../../Utils/APIS';
 import { sendRequest } from '../../pages/global/DataManager';
 import Translations from '../../resources/translations';
-import FormButtonComponent from '../../components/FormButtonComponent/FormButtonComponent';
-import FormControl from '@mui/material/FormControl';
 import EMRAlert from '../../Utils/CustomAlert';
 import CustomDataGrid from '../../common/DataGrid/CustomDataGrid';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import CommonCard from '../../common/CommonCard';
 import AutocompleteField from '../../CoreComponents/AutocompleteField';
 import SLTextField from '../../CoreComponents/SLTextField';
-import { AllergyNewMasterSchema, AllergySearchMasterSchema } from '../../common/YupSchema/formSchema';
 import SLRadioButton from '../../CoreComponents/SLRadioButton';
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import SLButton from '../../CoreComponents/SLButton';
+import { AllergyNewMasterSchema, AllergySearchMasterSchema } from '../../common/YupSchema/formSchema';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import CommonConst from '../../Utils/CommonConst';
 
-const activeRadioButtonOptions = [
-    { label: 'Active', value: '1' },
-    { label: 'In-active', value: '2' }
-];
 const allergiesListHeaders = [{
-    name: Translations.ALLERGY_MASTER.ALLERGY_TYPE,
-    datakey: 'allergytype.lookupvalue',
-    width: '20%'
+    name: Translations.ALLERGY_MASTER.ALLERGY_TYPE, datakey: 'allergytype.lookupvalue', width: '20%'
 }, {
-    name: Translations.ALLERGY_MASTER.ALLERGY_CODE,
-    width: '20%',
-    datakey: 'allergycode'
+    name: Translations.ALLERGY_MASTER.ALLERGY_CODE, datakey: 'allergycode', width: '20%'
 }, {
-    name: Translations.ALLERGY_MASTER.ALLERGY_NAME,
-    width: '40%',
-    datakey: 'allergyname'
+    name: Translations.ALLERGY_MASTER.ALLERGY_NAME, datakey: 'allergyname', width: '35%'
 }, {
-    name: Translations.ALLERGY_MASTER.STATUS,
-    width: '10%',
-    datakey: 'status',
-    mappingData: { 1: "Active", 2: "In-active" }
+    name: Translations.ALLERGY_MASTER.STATUS, datakey: 'status', width: '10%',
+    isChip: true, mappingData: { 1: 'Active', 2: 'In-active' }, chipColor: '#e8f5e9', chipTextColor: '#2e7d32'
 }, {
-    name: Translations.ALLERGY_MASTER.ACTIONS,
-    width: '10%',
-    isActions: true,
-    actions: [{
-        icon: 'edit'
-    }]
+    name: Translations.ALLERGY_MASTER.ACTIONS, width: '10%', isActions: true,
+    actions: [{ icon: 'edit', color: '#673AB7' }]
 }];
-export default function AllergyMaster(props) {
+
+export default function AllergyMaster() {
     const [allergiesTypeCombo, setAllergiesTypeCombo] = useState([]);
-    const [mode, setMode] = useState();
-    const [editModeData, setEditModeData] = useState(null);
+    const [tableData, setTableData] = useState([]);
     const [totalcount, setTotalcount] = useState(0);
     const [showAddForm, setShowAddForm] = useState(false);
+    const [editMode, setEditMode] = useState(null);
 
-    const [tableData, setTableData] = useState([]);
+    const { control: sc, handleSubmit: hss, reset: sr } = useForm({ defaultValues: { status: '1' }, resolver: yupResolver(AllergySearchMasterSchema) });
+    const { control: ac, handleSubmit: has, reset: ar, formState: { errors: ae } } = useForm({ defaultValues: { status: '1' }, resolver: yupResolver(AllergyNewMasterSchema) });
 
-
-    const { control: searchControl, handleSubmit: handleSearchSubmit, reset: handleSearchReset, formState: { errors: searchFormError } } = useForm({
-        defaultValues: {
-            status: 1
-        },
-        resolver: yupResolver(AllergySearchMasterSchema),
-    });
-
-    const { control: addFormControl, handleSubmit: handleformAddSubmit, reset: handleAddFormReset, formState: { errors: AddformError } } = useForm({
-        defaultValues: {
-            status: 1
-        },
-        resolver: yupResolver(AllergyNewMasterSchema),
-    });
-
-    useEffect(() => {
-        getLookUpDetails();
-        getAllergiesList();
-    }, []);
+    useEffect(() => { getLookUpDetails(); getAllergiesList(); }, []);
 
     async function getLookUpDetails() {
-        var payLoad = {
-            method: APIS.LOOKUP.METHOD,
-            url: APIS.LOOKUP.URL,
-            paramas: ["ALLERGY_TYPE"]
-        }
-        let result = await sendRequest(payLoad);
-        if (result && result.ALLERGY_TYPE) {
-            setAllergiesTypeCombo(result.ALLERGY_TYPE);
-        }
+        const result = await sendRequest({ method: APIS.LOOKUP.METHOD, url: APIS.LOOKUP.URL, paramas: ['ALLERGY_TYPE'] });
+        if (result?.ALLERGY_TYPE) setAllergiesTypeCombo(result.ALLERGY_TYPE);
     }
-    function clearForm() {
-        handleAddFormReset({
-            status: '1'
-        })
-    }
-
-    async function allergyMasterhandleSubmit(data1) {
-        let data = {
-            allergyid: (mode == "edit") ? editModeData.allergyid : "",
-            allergyname: data1.allergyname,
-            status: data1.status,
-            allergycode: data1.allergycode,
-            allergytype: data1.allergytype
-        }
-        var payLoad = {
-            method: APIS.SAVE_ALLERIES_MASTER.METHOD,
-            url: APIS.SAVE_ALLERIES_MASTER.URL,
-            paramas: [],
-            data: data
-        }
-        let result = await sendRequest(payLoad);
-        if (result) {
-            EMRAlert.alertifySuccess("Allergy Saved Succussfully");
-            clearForm();
-            if (mode == 'edit') {
-                setMode();
-                setEditModeData(null);
-                setShowAddForm(false);
-            }
-            getAllergiesList();
-        } else {
-            EMRAlert.alertifyError("Not Saved");
-        }
-    }
-    async function openEditmode(row, action) {
-        setMode("edit");
-        setEditModeData(row);
-        setShowAddForm(true);
-        handleAddFormReset({
-            allergytype: row.allergytype,
-            allergycode: row.allergycode,
-            allergyname: row.allergyname,
-            status: row.status
-        })
-
-    }
-
 
     async function getAllergiesList(data) {
-
-        let data1 = {
-            allergyid: data ? data.allergyid : "",
-            allergyname: (data) ? data.allergyname : "",
-            status: (data) ? data.status : 1,
-            allergycode: (data) ? data.allergycode : null,
-            allergytype: null//data? data.allergyType:''
-        }
-        var mainDTO = {
-            pagenumber: 0,
-            pagesize: 20,
-            allergieslist: [data1]
-        }
-        var payLoad = {
-            method: APIS.GET_ALLERIES_MASTER_LIST.METHOD,
-            url: APIS.GET_ALLERIES_MASTER_LIST.URL,
-            paramas: [],
-            data: mainDTO
-        }
-        let result = await sendRequest(payLoad);
-        if (result && result.allergieslist.length != 0) {
-            setTableData(result.allergieslist);
-            setTotalcount(result.totalcount);
-        } else {
-            setTableData([]);
-        }
-
+        const result = await sendRequest({
+            method: APIS.GET_ALLERIES_MASTER_LIST.METHOD, url: APIS.GET_ALLERIES_MASTER_LIST.URL, paramas: [],
+            data: { pagenumber: 0, pagesize: 20, allergieslist: [{ allergyid: data?.allergyid || '', allergyname: data?.allergyname || '', status: data?.status || 1, allergycode: data?.allergycode || null, allergytype: null }] }
+        });
+        if (result?.allergieslist?.length) { setTableData(result.allergieslist); setTotalcount(result.totalcount); }
+        else setTableData([]);
     }
-    const allergyMasterSearchhandleSubmit = async (data) => {
-        getAllergiesList(data)
+
+    async function onAddSubmit(data) {
+        const result = await sendRequest({
+            method: APIS.SAVE_ALLERIES_MASTER.METHOD, url: APIS.SAVE_ALLERIES_MASTER.URL, paramas: [],
+            data: { allergyid: editMode?.allergyid || '', allergyname: data.allergyname, status: data.status, allergycode: data.allergycode, allergytype: data.allergytype }
+        });
+        if (result) {
+            EMRAlert.alertifySuccess('Allergy saved successfully');
+            ar({ status: '1' }); setShowAddForm(false); setEditMode(null); getAllergiesList();
+        } else EMRAlert.alertifyError('Not saved');
+    }
+
+    function openEditmode(row) {
+        setEditMode(row); setShowAddForm(true);
+        ar({ allergytype: row.allergytype, allergycode: row.allergycode, allergyname: row.allergyname, status: row.status });
     }
 
     return (
-        <>
+        <Box sx={{ m: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
 
-            {showAddForm &&
-                <CommonCard title={Translations.ALLERGY_MASTER.ADD_ALLERGY_TITLE}>
-                    <Box m="0px">
-                        <form onSubmit={handleformAddSubmit(allergyMasterhandleSubmit)} >
-                            <Box>
-                                <Grid xs={12} container spacing={1}>
-                                    <Grid item xs={2} spacing={1}>
-                                        <FormControl variant="outlined" fullWidth>
-                                            <AutocompleteField
-                                                name="allergytype"
-                                                label={Translations.ALLERGY_MASTER.ALLERGY_TYPE}
-                                                control={addFormControl}
-                                                options={allergiesTypeCombo}
-                                                placeholder={Translations.ALLERGY_MASTER.ALLERGY_TYPE}
-                                                mapvalues={{ id: "lookupid", value: 'lookupvalue' }}
-                                                isMultiSelect={false}
-                                                id={"allergyType-combo-box-demo"}
-                                                error={AddformError.allergyType}
-                                                onInputChange={(data) => {
-
-                                                }} />
-
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item xs={2} spacing={1}>
-                                        <SLTextField
-                                            name="allergycode"
-                                            label={Translations.ALLERGY_MASTER.ALLERGY_CODE}
-                                            control={addFormControl}
-                                            placeholder={Translations.ALLERGY_MASTER.ALLERGY_CODE}
-                                            error={AddformError.allergycode}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={2} spacing={1}>
-                                        <SLTextField
-                                            name="allergyname"
-                                            label={Translations.ALLERGY_MASTER.ALLERGY_NAME}
-                                            control={addFormControl}
-                                            placeholder={Translations.ALLERGY_MASTER.ALLERGY_NAME}
-                                            error={AddformError.allergyname}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={2} spacing={1}>
-                                        <SLRadioButton
-                                            name="status"
-                                            label={Translations.ALLERGY_MASTER.STATUS}
-                                            control={addFormControl}
-                                            options={CommonConst.activeRadioButtonOptions}
-                                            error={AddformError.status}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={2} spacing={1}>
-                                        <FormButtonComponent button1={"Save"} button2={"Close"} clearFormEvent={() => {
-                                            clearForm();
-                                            setShowAddForm(false);
-                                        }} />
-                                    </Grid>
-                                </Grid>
-                            </Box>
-                        </form>
+            {/* Add/Edit Form */}
+            {showAddForm && (
+                <Paper variant="outlined" sx={{ borderRadius: 2, overflow: 'hidden' }}>
+                    <Box sx={{ px: 2, py: 1.2, bgcolor: '#f5f7fa', borderBottom: '1px solid #e0e0e0', display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <WarningAmberIcon sx={{ fontSize: 18, color: '#673AB7' }} />
+                        <Typography variant="subtitle2" fontWeight={600} color="text.secondary">{editMode ? 'EDIT ALLERGY' : 'ADD ALLERGY'}</Typography>
+                        {editMode && <Chip label="Editing" size="small" sx={{ bgcolor: '#ede7f6', color: '#673AB7', fontWeight: 600, fontSize: 11 }} />}
                     </Box>
-
-                </CommonCard>
-            }
-
-            <CommonCard title={Translations.ALLERGY_MASTER.ALLERGY_LIST_TITLE}>
-                <form onSubmit={handleSearchSubmit(allergyMasterSearchhandleSubmit)} >
-                    <Box m="0px">
-                        <Box>
-                            <Grid xs={12} container spacing={1}>
-                                <Grid item xs={2} spacing={1}>
-                                    <FormControl variant="outlined" fullWidth>
-                                        <AutocompleteField
-                                            name="allergyType"
-                                            label={Translations.ALLERGY_MASTER.ALLERGY_TYPE}
-                                            control={searchControl}
-                                            options={allergiesTypeCombo}
-                                            placeholder={Translations.ALLERGY_MASTER.ALLERGY_TYPE}
-                                            mapvalues={{ id: "lookupid", value: 'lookupvalue' }}
-                                            isMultiSelect={false}
-                                            id={"allergyType-combo-box-demo"}
-                                            error={searchFormError.allergyType}
-                                            onInputChange={(data) => {
-
-                                            }}
-                                        />
+                    <Box sx={{ p: 2 }}>
+                        <form onSubmit={has(onAddSubmit)}>
+                            <Grid container spacing={2} alignItems="center">
+                                <Grid item xs={12} sm={3}>
+                                    <FormControl fullWidth>
+                                        <AutocompleteField name="allergytype" label={Translations.ALLERGY_MASTER.ALLERGY_TYPE} control={ac}
+                                            options={allergiesTypeCombo} placeholder={Translations.ALLERGY_MASTER.ALLERGY_TYPE}
+                                            mapvalues={{ id: 'lookupid', value: 'lookupvalue' }} isMultiSelect={false} id="allergytype-combo" error={ae.allergytype} />
                                     </FormControl>
                                 </Grid>
-                                <Grid item xs={2} spacing={1}>
-                                    <SLTextField
-                                        name="allergycode"
-                                        label={Translations.ALLERGY_MASTER.ALLERGY_CODE}
-                                        control={searchControl}
-                                        placeholder={Translations.ALLERGY_MASTER.ALLERGY_CODE}
-                                        error={searchFormError.allergycode}
-                                    />
+                                <Grid item xs={6} sm={2}>
+                                    <SLTextField name="allergycode" label={Translations.ALLERGY_MASTER.ALLERGY_CODE} control={ac} placeholder={Translations.ALLERGY_MASTER.ALLERGY_CODE} error={ae.allergycode} />
                                 </Grid>
-                                <Grid item xs={2} spacing={1}>
-                                    <SLTextField
-                                        name="allergyname"
-                                        label={Translations.ALLERGY_MASTER.ALLERGY_NAME}
-                                        control={searchControl}
-                                        placeholder={Translations.ALLERGY_MASTER.ALLERGY_NAME}
-                                        error={searchFormError.allergyname}
-                                    />
+                                <Grid item xs={6} sm={3}>
+                                    <SLTextField name="allergyname" label={Translations.ALLERGY_MASTER.ALLERGY_NAME} control={ac} placeholder={Translations.ALLERGY_MASTER.ALLERGY_NAME} error={ae.allergyname} />
                                 </Grid>
-                                <Grid item xs={2} spacing={1}>
-                                    <SLRadioButton
-                                        name="status"
-                                        label={Translations.ALLERGY_MASTER.STATUS}
-                                        control={searchControl}
-                                        options={CommonConst.activeRadioButtonOptions}
-                                        error={searchFormError.status}
-                                    />
+                                <Grid item xs={12} sm={2}>
+                                    <SLRadioButton name="status" label="Status" control={ac} options={CommonConst.activeRadioButtonOptions} />
                                 </Grid>
-                                <Grid item xs={2} spacing={1}>
-                                    <FormButtonComponent button1={"Search"} button2={"Clear"} clearFormEvent={() => {
-
-                                    }} />
+                                <Grid item xs={12} sm={2} sx={{ display: 'flex', gap: 1, justifyContent: 'flex-end' }}>
+                                    <SLButton variant="outlined" onClick={() => { ar({ status: '1' }); setShowAddForm(false); setEditMode(null); }}
+                                        sx={{ textTransform: 'none', borderColor: '#673AB7', color: '#673AB7' }}>Cancel</SLButton>
+                                    <SLButton type="submit" variant="contained"
+                                        sx={{ textTransform: 'none', fontWeight: 600, bgcolor: '#673AB7', '&:hover': { bgcolor: '#512DA8' } }}>
+                                        {editMode ? 'Update' : 'Save'}
+                                    </SLButton>
                                 </Grid>
-                                <Grid item xs={2} spacing={1}>
-                                    <AddCircleOutlineIcon onClick={() => { setShowAddForm(true) }} />
-                                </Grid>
-
                             </Grid>
-                        </Box>
-                        <Box >
-                            <CustomDataGrid tableHeaders={allergiesListHeaders} tableData={tableData} totalcount={totalcount} rowsPerPage={20} paginationChangeEvent={(number) => {
-                            }} triggerEvent={(row, action) => {
-                                openEditmode(row, action);
-                            }}></CustomDataGrid>
-                        </Box>
+                        </form>
                     </Box>
-                </form>
-            </CommonCard>
-        </>
-    )
+                </Paper>
+            )}
+
+            {/* List with search */}
+            <Paper variant="outlined" sx={{ borderRadius: 2, overflow: 'hidden' }}>
+                <Box sx={{ px: 2, py: 1.2, bgcolor: '#f5f7fa', borderBottom: '1px solid #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <ListAltIcon sx={{ fontSize: 18, color: '#673AB7' }} />
+                        <Typography variant="subtitle2" fontWeight={600} color="text.secondary">ALLERGY LIST</Typography>
+                    </Box>
+                    <Tooltip title="Add Allergy">
+                        <IconButton size="small" onClick={() => setShowAddForm(true)} sx={{ bgcolor: '#ede7f6', color: '#673AB7' }}>
+                            <AddCircleOutlineIcon fontSize="small" />
+                        </IconButton>
+                    </Tooltip>
+                </Box>
+                <Box sx={{ px: 2, py: 1.5, borderBottom: '1px solid #f0f0f0' }}>
+                    <form onSubmit={hss(getAllergiesList)}>
+                        <Grid container spacing={2} alignItems="center">
+                            <Grid item xs={12} sm={3}>
+                                <FormControl fullWidth>
+                                    <AutocompleteField name="allergyType" label={Translations.ALLERGY_MASTER.ALLERGY_TYPE} control={sc}
+                                        options={allergiesTypeCombo} placeholder={Translations.ALLERGY_MASTER.ALLERGY_TYPE}
+                                        mapvalues={{ id: 'lookupid', value: 'lookupvalue' }} isMultiSelect={false} id="search-allergytype-combo" />
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={6} sm={2}>
+                                <SLTextField name="allergycode" label={Translations.ALLERGY_MASTER.ALLERGY_CODE} control={sc} placeholder={Translations.ALLERGY_MASTER.ALLERGY_CODE} />
+                            </Grid>
+                            <Grid item xs={6} sm={3}>
+                                <SLTextField name="allergyname" label={Translations.ALLERGY_MASTER.ALLERGY_NAME} control={sc} placeholder={Translations.ALLERGY_MASTER.ALLERGY_NAME} />
+                            </Grid>
+                            <Grid item xs={12} sm={2}>
+                                <SLRadioButton name="status" label="Status" control={sc} options={CommonConst.activeRadioButtonOptions} />
+                            </Grid>
+                            <Grid item xs={12} sm={2} sx={{ display: 'flex', gap: 1 }}>
+                                <SLButton type="submit" variant="contained" startIcon={<SearchIcon />}
+                                    sx={{ textTransform: 'none', fontWeight: 600, bgcolor: '#673AB7', '&:hover': { bgcolor: '#512DA8' } }}>Search</SLButton>
+                                <SLButton variant="outlined" onClick={() => { sr({ status: '1' }); getAllergiesList(); }}
+                                    sx={{ textTransform: 'none', borderColor: '#673AB7', color: '#673AB7' }}>Clear</SLButton>
+                            </Grid>
+                        </Grid>
+                    </form>
+                </Box>
+                <CustomDataGrid tableHeaders={allergiesListHeaders} tableData={tableData} totalcount={totalcount}
+                    rowsPerPage={20} paginationChangeEvent={() => {}}
+                    triggerEvent={(row) => openEditmode(row)} />
+            </Paper>
+        </Box>
+    );
 }

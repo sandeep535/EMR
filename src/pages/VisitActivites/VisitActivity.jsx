@@ -219,8 +219,8 @@ export default function VisitActivity(props) {
             let finalLabData = [];
             if (labOrderData && labOrderData.description) {
                 labOrderData = labOrderData.description;
-                let onloadApiResData = customapisData.labOredersAPIdata;
-                onloadApiResData.forEach(item => {
+                let onloadApiResData = customapisData.labOredersAPIdata || [];
+               onloadApiResData &&  onloadApiResData.forEach(item => {
                     const isThere = labOrderData.some(order =>
                         item.labmasterid && item.labmasterid.labid === order.labid
                     );
@@ -350,27 +350,27 @@ export default function VisitActivity(props) {
             <Box sx={{ overflowY: 'auto', maxHeight: 'calc(100vh - 220px)' }}>
                 <Grid container spacing={1.5}>
                     <Grid item xs={6}>
-                        <SectionCard><Vitals ref={vitalsRef} /></SectionCard>
+                        <Vitals ref={vitalsRef} />
                     </Grid>
                     <Grid item xs={6}>
-                        <SectionCard>
+                        
                             <Diagnosis
                                 label={"Diagnosis"}
                                 ref={diagnosissRef}
                                 data={customapisData.diagnosissAPIData ? customapisData.diagnosissAPIData : []}
                             />
-                        </SectionCard>
+                       
                     </Grid>
                     <Grid item xs={6}>
-                        <SectionCard><Notes label={"General Notes"} ref={notesRef} /></SectionCard>
+                        <Notes label={"General Notes"} ref={notesRef} />
                     </Grid>
                     <Grid item xs={6}>
-                        <SectionCard>
+                        
                             <LabOrder label={"Lab Orders"} data={customapisData.labOredersAPIdata} ref={labRef} />
-                        </SectionCard>
+                        
                     </Grid>
                     <Grid item xs={12}>
-                        <SectionCard><Prescriptions ref={prescriptionRef} /></SectionCard>
+                        <Prescriptions ref={prescriptionRef} />
                     </Grid>
                 </Grid>
             </Box>

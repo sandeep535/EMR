@@ -106,6 +106,13 @@
         isRefreshMenu:false,
         screencode:'PRESCRIPTIONS_SCREEN_VIEW'
     },{
+        title:"Services",
+        to:"/services",
+        icon:"medical_services",
+        isPatientSpecific :true,
+        isRefreshMenu:false,
+        screencode:'PRESCRIPTIONS_SCREEN_VIEW'
+    },{
         title:"Assign Bed",
         to:"/assign-bed",
         icon:"hotel",

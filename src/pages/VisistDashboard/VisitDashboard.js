@@ -4,9 +4,8 @@ import { sendRequest } from '../global/DataManager';
 import APIS from '../../Utils/APIS';
 import { useNavigate } from "react-router-dom";
 import AppContext from '../../components/Context/AppContext';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import dayjs from 'dayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Moment from 'react-moment';
@@ -149,8 +148,7 @@ export default function VisitDasboard(props) {
                 {/* Filter Bar */}
                 <Paper variant="outlined" sx={{ borderRadius: 2, p: 1.5 }}>
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DemoContainer components={['DateField', 'DateField']} sx={{ pt: 0 }}>
-                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexWrap: 'wrap' }}>
                                 <DatePicker
                                     label="From Date"
                                     value={fromDate}
@@ -190,7 +188,6 @@ export default function VisitDasboard(props) {
                                     <Chip label={`Total: ${totalRecords}`} size="small" color="primary" variant="outlined" />
                                 </Box>
                             </Box>
-                        </DemoContainer>
                     </LocalizationProvider>
                 </Paper>
 

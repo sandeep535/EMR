@@ -1,6 +1,5 @@
 import React, { useEffect, useContext, useState, useRef } from 'react';
 import { Box } from '@mui/material'
-import Grid from '@mui/material/Grid';
 import AppContext from '../../components/Context/AppContext';
 import { sendRequest } from '../global/DataManager';
 import APIS from '../../Utils/APIS';
@@ -59,23 +58,19 @@ export default function NotesList() {
 
     return (
         <Box sx={{ m: 1 }}>
-            <Box >
+            <Box sx={{ width: '100%' }}>
                 <CommonCard title={"Notes List"} iconsList={[{ title: 'Add Note', icon: 'add_icon' }]} catchCliedEvent={(clickedEvent) => {
                     setIsOpen(true);
                 }}>
-                    <Grid xs={12} container>
-                        <CustomDataGrid tableHeaders={notesTableHeaders} tableData={notesList} triggerEvent={(row, action) => {
-                            setIsOpen(true);
-                            setTimeout(() => {
-                                notesRef.current.setFormData(row.description);
-                            }, 100)
-
-                        }}></CustomDataGrid>
-                    </Grid>
+                    <CustomDataGrid tableHeaders={notesTableHeaders} tableData={notesList} triggerEvent={(row, action) => {
+                        setIsOpen(true);
+                        setTimeout(() => {
+                            notesRef.current.setFormData(row.description);
+                        }, 100)
+                    }}></CustomDataGrid>
                 </CommonCard>
-
             </Box>
-            <ModelPopUp isOpen={isOpen} handleClose={() => { setIsOpen(false) }} >
+            <ModelPopUp isOpen={isOpen} title="General Notes" handleClose={() => { setIsOpen(false) }} >
                 <Notes label={"General Notes"} ref={notesRef} />
                 <SLButton variant="outlined" color="success" onClick={handleAdd}>{"Save"}</SLButton>
             </ModelPopUp>

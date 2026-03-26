@@ -1,10 +1,9 @@
-
 import React from 'react';
 import { Button } from '@mui/material';
 
-const SLButton = ({ variant = 'contained', color = 'primary', onClick, children }) => {
+const SLButton = ({ variant = 'contained', color = 'primary', onClick, children, ...rest }) => {
   return (
-    <Button variant={variant} color={color} onClick={onClick}>
+    <Button variant={variant} color={color} onClick={onClick} {...rest}>
       {children}
     </Button>
   );

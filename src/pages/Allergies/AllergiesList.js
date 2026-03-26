@@ -1,83 +1,78 @@
 import React, { useState, useEffect, useContext } from 'react';
-import Box from '@mui/material/Box';
+import { Box, Paper, Typography, Chip } from '@mui/material';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
 import APIS from '../../Utils/APIS';
 import { sendRequest } from '../global/DataManager';
 import Translations from '../../resources/translations';
 import AppContext from '../../components/Context/AppContext';
 import CustomDataGrid from '../../common/DataGrid/CustomDataGrid';
-import CommonCard from '../../common/CommonCard';
 
 const allergiesListHeaders = [{
     name: Translations.ALLERGY.ALLERGYNAME,
     datakey: 'allergy',
-    width: '30%'
+    width: '25%'
 }, {
     name: Translations.ALLERGY.SERVERITY,
-    width: '20%',
+    width: '15%',
     datakey: 'severity.lookupvalue'
 }, {
     name: Translations.ALLERGY.INDICATIONS,
-    width: '40%',
+    width: '35%',
     datakey: 'indications'
 }, {
     name: Translations.ALLERGY.STATUS,
-    width: '10%',
+    width: '15%',
     datakey: 'status',
-    mappingData: { 1: "Active", 2: "In-active" }
+    isChip: true,
+    mappingData: { 1: 'Active', 2: 'In-active' },
+    chipColor: '#e8f5e9',
+    chipTextColor: '#2e7d32',
 }, {
     name: Translations.ALLERGY_MASTER.ACTIONS,
     width: '10%',
     isActions: true,
-    actions: [{
-        icon: 'edit'
-    }]
-}]
+    actions: [{ icon: 'edit', color: '#673AB7' }]
+}];
 
-export default function AllergiesList(props) {
+export default function AllergiesList({ isRefresh, selectedRecord }) {
     const appContextValue = useContext(AppContext);
     const [tableData, setTableData] = useState([]);
-    useEffect(() => {
-        getAllerigies();
-    }, []);
-    useEffect(() => {
-        if (props.isRefresh) {
-            getAllerigies();
-        }
-    }, [props.isRefresh]);
-    async function getAllerigies() {
-        var obj = {
-            pagenumber: 0,
-            pagesize: 1,
-            visitid: null,
-            clientid: appContextValue.selectedVisitDeatils.clientid.seqid,
-            allergy: '',
-            status: -999,
-            severity: null
 
-        }
-        var payLoad = {
+    useEffect(() => { getAllerigies(); }, []);
+    useEffect(() => { if (isRefresh) getAllerigies(); }, [isRefresh]);
+
+    async function getAllerigies() {
+        const result = await sendRequest({
             method: APIS.GET_ALLERIGIES_DATA.METHOD,
             url: APIS.GET_ALLERIGIES_DATA.URL,
             paramas: [],
-            data: obj
-            //paramas: [0, (appContextValue.selectedVisitDeatils) ? appContextValue.selectedVisitDeatils.clientid.seqid : 0],
-        }
-        let result = await sendRequest(payLoad);
-        if (result && result.allergieslist && result.length !== 0) {
-            setTableData(result.allergieslist);
-            //allergiesref.current.setFormData1(result);
-        }
+            data: {
+                pagenumber: 0, pagesize: 1,
+                visitid: null,
+                clientid: appContextValue.selectedVisitDeatils.clientid.seqid,
+                allergy: '', status: -999, severity: null
+            }
+        });
+        if (result?.allergieslist?.length) setTableData(result.allergieslist);
     }
-    function triggerEventActions(row, action) {
-        props.selectedRecord(row, action)
-    }
+
     return (
-        <Box >
-            <CommonCard title={"Allergies List"}>
-                <CustomDataGrid tableHeaders={allergiesListHeaders} tableData={tableData} triggerEvent={(row, action) => {
-                    triggerEventActions(row, action)
-                }}></CustomDataGrid>
-            </CommonCard>
-        </Box>
-    )
+        <Paper variant="outlined" sx={{ borderRadius: 2, overflow: 'hidden', width: '100%' }}>
+            <Box sx={{ px: 2, py: 1.2, bgcolor: '#f5f7fa', borderBottom: '1px solid #e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    <WarningAmberIcon sx={{ fontSize: 18, color: '#673AB7' }} />
+                    <Typography variant="subtitle2" fontWeight={600} color="text.secondary">ALLERGIES LIST</Typography>
+                </Box>
+                {tableData.length > 0 && (
+                    <Chip label={`${tableData.length} record(s)`} size="small"
+                        sx={{ bgcolor: '#ede7f6', color: '#673AB7', fontWeight: 600, fontSize: 11 }} />
+                )}
+            </Box>
+            <CustomDataGrid
+                tableHeaders={allergiesListHeaders}
+                tableData={tableData}
+                triggerEvent={(row, action) => selectedRecord && selectedRecord(row, action)}
+            />
+        </Paper>
+    );
 }

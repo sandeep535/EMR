@@ -29,6 +29,7 @@ import VisitBillsTabs from "../pages/Bills/VisitBillsTabs";
 import NotesList from "../pages/Notes/NotesList";
 import LoginPage from '../pages/Login/LoginPage';
 import BillsModuleScreen from '../pages/Bills/BillsModuleScreen';
+import VisitServices from '../pages/Services/VisitServices';
 import InstitutionMaster from '../pages/InstitutionMaster/InstitutionMaster';
 import Admission from '../pages/Admission/Admission';
 
@@ -62,6 +63,7 @@ const ApplicationRoutes = [
     { path: "/assign-bed", element: <AssignBed /> },
     { path: "/labordersList", element: <LabOrdersList /> },
     { path: "/bills", element: <VisitBillsTabs /> },
+    { path: "/services", element: <VisitServices /> },
     { path: "/notes", element: <NotesList /> },
     { path: "/dynamicFormBuilder", element: <DynamicFormBuilder /> },
     { path: "/billsScreen", element: <BillsModuleScreen /> },

@@ -7,7 +7,7 @@ import IconButton from '@mui/material/IconButton';
 
 export default function CommonCard({ children, title, iconsList, catchCliedEvent }) {
   return (
-    <Card className='common-card'>
+    <Card className='common-card' sx={{ width: '100%' }}>
       <CardHeader
         className='common-card-header'
         title={title}

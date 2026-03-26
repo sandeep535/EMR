@@ -12,8 +12,10 @@ import Vitals from './Vitals';
 
 const vitalsListTableData = [{
     name: "Date",
-    datakey: 'date',
-    width: '20%'
+    datakey: 'createdDate',
+    width: '20%',
+    isDateFiled: true,
+    dateFormat: 'DD-MM-YYYY HH:mm'
 }, {
     name: "Height",
     width: '20%',
@@ -52,6 +54,8 @@ export default function VisitCreation() {
     const [vitalsList, setVitalsList] = React.useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const appContextValue = useContext(AppContext);
+    const [page, setPage] = useState(0);
+    const rowsPerPage = 10;
     useEffect(() => {
         getVitalsData();
     }, []);
@@ -70,18 +74,14 @@ export default function VisitCreation() {
 
     return (
         <Box sx={{ m: 1 }}>
-            <Box >
-                <Grid xs={12} container>
+            <Box sx={{ width: '100%' }}>
                 <CommonCard title={"Vitals List"} iconsList={[{ title: 'Add Vitals', icon: 'add_icon' }]} catchCliedEvent={(clickedEvent) => {
                     setIsOpen(true);
                 }}>
-                    <Grid xs={12} container>
-                        <CustomDataGrid tableHeaders={vitalsListTableData} tableData={vitalsList}></CustomDataGrid>
-                    </Grid>
+                    <CustomDataGrid tableHeaders={vitalsListTableData} tableData={vitalsList} rowsPerPage={rowsPerPage} totalcount={vitalsList.length} paginationChangeEvent={(newPage) => setPage(newPage)}></CustomDataGrid>
                 </CommonCard>
-                </Grid>
             </Box>
-            <ModelPopUp isOpen={isOpen} handleClose={() => { setIsOpen(false) }} >
+            <ModelPopUp isOpen={isOpen} title="Add Vitals" handleClose={() => { setIsOpen(false) }} >
                 <Vitals isActionButtonReq={true} refreshVitalsList={() => { setIsOpen(false); getVitalsData() }} />
             </ModelPopUp>
         </Box>

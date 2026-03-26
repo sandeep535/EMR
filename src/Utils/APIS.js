@@ -285,6 +285,11 @@ const APIS={
         URL:'bill/search',
         METHOD:'GET',
         ACTION:'BILL SEARCH'
+    },
+    SAVE_VISIT_SERVICES:{
+        URL:'visit/saveVisitServices',
+        METHOD:'POST',
+        ACTION:'SAVE VISIT SERVICES'
     }
     
     
