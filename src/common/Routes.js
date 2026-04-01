@@ -33,6 +33,8 @@ import VisitServices from '../pages/Services/VisitServices';
 import InstitutionMaster from '../pages/InstitutionMaster/InstitutionMaster';
 import Admission from '../pages/Admission/Admission';
 
+import Discharge from '../pages/Discharge/Discharge';
+
 import AssignBed from '../pages/BedAssignment/AssignBed';
 
 const ApplicationRoutes = [
@@ -61,6 +63,7 @@ const ApplicationRoutes = [
     { path: "/uploadDocuments", element: <UploadDocuments /> },
     { path: "/bedMaster", element: <InstitutionMaster/> },
     { path: "/assign-bed", element: <AssignBed /> },
+    { path: "/discharge", element: <Discharge /> },
     { path: "/labordersList", element: <LabOrdersList /> },
     { path: "/bills", element: <VisitBillsTabs /> },
     { path: "/services", element: <VisitServices /> },

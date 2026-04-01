@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useCallback } from 'react';
 import { Box } from '@mui/material';
 import AppContext from '../../components/Context/AppContext';
 import { sendRequest } from '../global/DataManager';
@@ -38,14 +38,19 @@ export default function PrescriptionsList() {
         if (result?.length) setPrescriptionlist(result);
     }
 
+    const handleOpenModal = useCallback(() => setIsOpen(true), []);
+    const handleCloseModal = useCallback(() => setIsOpen(false), []);
+    const handlePaginationChange = useCallback((newPage) => setPage(newPage), []);
+    const handleRefresh = useCallback(() => { setIsOpen(false); getprescriptionlist(); }, []);
+
     return (
         <Box sx={{ m: 1, width: '100%' }}>
             <CommonCard title="Prescription List" iconsList={[{ title: 'Add Prescription', icon: 'add_icon' }]}
                 catchCliedEvent={() => setIsOpen(true)}>
-                <CustomDataGrid tableHeaders={prescriptionTableData} tableData={prescriptionlist} rowsPerPage={rowsPerPage} totalcount={prescriptionlist.length} paginationChangeEvent={(newPage) => setPage(newPage)} />
+                <CustomDataGrid tableHeaders={prescriptionTableData} tableData={prescriptionlist} rowsPerPage={rowsPerPage} totalcount={prescriptionlist.length} paginationChangeEvent={handlePaginationChange} />
             </CommonCard>
-            <ModelPopUp isOpen={isOpen} title="Add Prescription" maxWidth="lg" handleClose={() => setIsOpen(false)}>
-                <Prescriptions isActionButtonReq={true} refreshPrescriptionList={() => { setIsOpen(false); getprescriptionlist(); }} />
+            <ModelPopUp isOpen={isOpen} title="Add Prescription" maxWidth="lg" handleClose={handleCloseModal}>
+                <Prescriptions isActionButtonReq={true} refreshPrescriptionList={handleRefresh} />
             </ModelPopUp>
         </Box>
     );

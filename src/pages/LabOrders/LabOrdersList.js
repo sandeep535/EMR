@@ -1,4 +1,4 @@
-import React, { useRef, useContext, useEffect, useState } from 'react';
+import React, { useRef, useContext, useEffect, useState, useCallback } from 'react';
 import { Box } from '@mui/material';
 import APIS from '../../Utils/APIS';
 import { sendRequest } from '../../pages/global/DataManager';
@@ -60,6 +60,9 @@ export default function LabOrdersList() {
         }
     }
 
+    const handleSubmit = useCallback(() => labRef.current.submitFormmData(), []);
+    const handlePaginationChange = useCallback(() => {}, []);
+
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, m: 1 }}>
 
@@ -75,7 +78,7 @@ export default function LabOrdersList() {
                 </Box>
                 <SLButton
                     variant="contained"
-                    onClick={() => labRef.current.submitFormmData()}
+                    onClick={handleSubmit}
                     sx={{ textTransform: 'none', fontWeight: 600, bgcolor: '#673AB7', '&:hover': { bgcolor: '#512DA8' }, mb: 0.2 }}>
                     {Translations.LAB_ORDER.ADD}
                 </SLButton>
@@ -89,7 +92,7 @@ export default function LabOrdersList() {
                         tableData={tableData}
                         totalcount={totalcount}
                         rowsPerPage={20}
-                        paginationChangeEvent={() => {}}
+                        paginationChangeEvent={handlePaginationChange}
                     />
                 </CommonCard>
             </Box>

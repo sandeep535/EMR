@@ -16,6 +16,7 @@ import AppContext from '../../components/Context/AppContext';
 import ErrorMessage from '../../components/ErrorMessage/Errormsg';
 import LeftMenu from '../../common/LeftMenu';
 import { useParams, useNavigate } from "react-router-dom";
+import { sessionManager } from '../../Utils/sessionManager';
 
 function Copyright(props) {
   return (
@@ -68,6 +69,7 @@ export default function LoginPage(props) {
     let result = await sendRequest(payLoad);
     if (result && result.size !== 0) {
       appContextValue.setLoggedInRolesTaks(result);
+      sessionManager.setRolesTasks(result);
       var obj = {}
       for(var i=0;i<result.length;i++){
         obj[result[i].actioncode] = result[i].ispermission;
@@ -109,11 +111,7 @@ export default function LoginPage(props) {
       await fetchRolesTransData(result.role.id);
       var loginUser = result.designation.lookupvalue+'.'+result.firstname+' '+result.lastname;
       sessionStorage.setItem('logged_user',loginUser);
-      
-      // Explicitly navigate to dashboard after successful login
-      navigate("/nurse-dashboard", { replace: true });
-    }
-    else {
+    } else {
       setShowError(true);
     }
   }

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState, useContext } from 'react';
+import React, { useRef, useEffect, useState, useContext, useCallback } from 'react';
 import { Box, Divider, Paper, Tooltip, IconButton, Chip } from '@mui/material';
 import { sendRequest } from '../global/DataManager';
 import APIS from '../../Utils/APIS';
@@ -290,6 +290,14 @@ export default function VisitActivity(props) {
     const visitStatus = appContextValue?.selectedVisitDeatils?.status;
     const { color: statusColor, label: statusLabel } = statusConfig[visitStatus] || { color: '#ccc', label: '' };
 
+    const handleStartVisit = useCallback(() => updateVisitStatus(3, "Started"), []);
+    const handleCloseVisit = useCallback(() => updateVisitStatus(4, "Closed"), []);
+    const handleSave = useCallback(() => handlePrescriptionSubmit(), []);
+    const handlePrintClick = useCallback(() => {
+        setEnablePrint(true);
+        setTimeout(() => { handlePrint(); }, 100);
+    }, [handlePrint]);
+
     return (
         <Box sx={{ m: 1, display: 'flex', flexDirection: 'column', gap: 1 }}>
 
@@ -314,7 +322,7 @@ export default function VisitActivity(props) {
 
                     {visitStatus == 1 && (
                         <Tooltip title="Start Visit">
-                            <IconButton size="small" sx={{ color: '#1abc9c' }} onClick={() => updateVisitStatus(3, "Started")}>
+                            <IconButton size="small" sx={{ color: '#1abc9c' }} onClick={handleStartVisit}>
                                 <StartIcon fontSize="small" />
                             </IconButton>
                         </Tooltip>
@@ -323,12 +331,12 @@ export default function VisitActivity(props) {
                     {visitStatus == 3 && (
                         <>
                             <Tooltip title="Save">
-                                <IconButton size="small" sx={{ color: '#1976d2' }} onClick={() => handlePrescriptionSubmit()}>
+                                <IconButton size="small" sx={{ color: '#1976d2' }} onClick={handleSave}>
                                     <SaveIcon fontSize="small" />
                                 </IconButton>
                             </Tooltip>
                             <Tooltip title="Close Visit">
-                                <IconButton size="small" sx={{ color: '#f0776c' }} onClick={() => updateVisitStatus(4, "Closed")}>
+                                <IconButton size="small" sx={{ color: '#f0776c' }} onClick={handleCloseVisit}>
                                     <BlindsClosedIcon fontSize="small" />
                                 </IconButton>
                             </Tooltip>
@@ -336,10 +344,7 @@ export default function VisitActivity(props) {
                     )}
 
                     <Tooltip title="Print">
-                        <IconButton size="small" sx={{ color: '#757575' }} onClick={() => {
-                            setEnablePrint(true);
-                            setTimeout(() => { handlePrint(); }, 100);
-                        }}>
+                        <IconButton size="small" sx={{ color: '#757575' }} onClick={handlePrintClick}>
                             <PrintIcon fontSize="small" />
                         </IconButton>
                     </Tooltip>

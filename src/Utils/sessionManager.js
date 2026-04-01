@@ -4,7 +4,8 @@ export const SESSION_KEYS = {
   USER_DETAILS: 'LoggedInUserDetails',
   LEFT_MENU: 'leftMenu',
   TENANT: 'tenant',
-  LOGGED_USER: 'logged_user'
+  LOGGED_USER: 'logged_user',
+  ROLES_TASKS: 'rolesTasks'
 };
 
 // Session management utilities
@@ -21,6 +22,10 @@ export const sessionManager = {
   },
   getTenant: () => sessionStorage.getItem(SESSION_KEYS.TENANT),
   getLoggedUser: () => sessionStorage.getItem(SESSION_KEYS.LOGGED_USER),
+  getRolesTasks: () => {
+    const roles = sessionStorage.getItem(SESSION_KEYS.ROLES_TASKS);
+    return roles ? JSON.parse(roles) : null;
+  },
 
   // Set session data
   setToken: (token) => sessionStorage.setItem(SESSION_KEYS.TOKEN, token),
@@ -28,6 +33,7 @@ export const sessionManager = {
   setLeftMenu: (menu) => sessionStorage.setItem(SESSION_KEYS.LEFT_MENU, JSON.stringify(menu)),
   setTenant: (tenant) => sessionStorage.setItem(SESSION_KEYS.TENANT, tenant),
   setLoggedUser: (user) => sessionStorage.setItem(SESSION_KEYS.LOGGED_USER, user),
+  setRolesTasks: (roles) => sessionStorage.setItem(SESSION_KEYS.ROLES_TASKS, JSON.stringify(roles)),
 
   // Clear session data
   clearToken: () => sessionStorage.removeItem(SESSION_KEYS.TOKEN),

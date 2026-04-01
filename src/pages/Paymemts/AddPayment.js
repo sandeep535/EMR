@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Grid, Box, FormControl } from "@mui/material";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -45,6 +45,8 @@ const AddPayment = ({ billId, billAmount, paidAmount, onSuccess }) => {
       if (onSuccess) onSuccess();
     }
   };
+
+  const handleReset = useCallback(() => reset(), [reset]);
 
   return (
     <Box sx={{ p: 1 }}>
@@ -103,7 +105,7 @@ const AddPayment = ({ billId, billAmount, paidAmount, onSuccess }) => {
             />
           </Grid>
           <Grid item xs={12} textAlign="right">
-            <Button type="button" variant="outlined" onClick={() => reset()} sx={{ mr: 1, textTransform: 'none' }}>Clear</Button>
+            <Button type="button" variant="outlined" onClick={handleReset} sx={{ mr: 1, textTransform: 'none' }}>Clear</Button>
             <Button type="submit" variant="contained" disabled={isAmountExceeded} sx={{ textTransform: 'none', fontWeight: 600 }}>Save Payment</Button>
           </Grid>
         </Grid>

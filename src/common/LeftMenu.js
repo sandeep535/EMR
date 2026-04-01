@@ -119,6 +119,13 @@
         isPatientSpecific :false,
         isRefreshMenu:false,
         screencode:'DRUG_MASTER_SCREEN_VIEW'
+    },{
+        title:"Discharge",
+        to:"/discharge",
+        icon:"logout",
+        isPatientSpecific :true,
+        isRefreshMenu:false,
+        screencode:'PRESCRIPTIONS_SCREEN_VIEW'
     }]
 },
 {
@@ -199,7 +206,7 @@
         screencode:'DRUG_MASTER_SCREEN_VIEW'
     },{
         title:"Lab Master",
-        to:"/labmaster",
+        to:"/labMaster",
         icon:"science",
         isOpen:false,
         isRefreshMenu:true,

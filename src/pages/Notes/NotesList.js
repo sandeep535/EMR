@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState, useRef } from 'react';
+import React, { useEffect, useContext, useState, useRef, useCallback } from 'react';
 import { Box } from '@mui/material'
 import AppContext from '../../components/Context/AppContext';
 import { sendRequest } from '../global/DataManager';
@@ -56,21 +56,21 @@ export default function NotesList() {
         });
     };
 
+    const handleOpenModal = useCallback(() => setIsOpen(true), []);
+    const handleCloseModal = useCallback(() => setIsOpen(false), []);
+    const handleTriggerEvent = useCallback((row) => {
+        setIsOpen(true);
+        setTimeout(() => { notesRef.current.setFormData(row.description); }, 100);
+    }, []);
+
     return (
         <Box sx={{ m: 1 }}>
             <Box sx={{ width: '100%' }}>
-                <CommonCard title={"Notes List"} iconsList={[{ title: 'Add Note', icon: 'add_icon' }]} catchCliedEvent={(clickedEvent) => {
-                    setIsOpen(true);
-                }}>
-                    <CustomDataGrid tableHeaders={notesTableHeaders} tableData={notesList} triggerEvent={(row, action) => {
-                        setIsOpen(true);
-                        setTimeout(() => {
-                            notesRef.current.setFormData(row.description);
-                        }, 100)
-                    }}></CustomDataGrid>
+                <CommonCard title={"Notes List"} iconsList={[{ title: 'Add Note', icon: 'add_icon' }]} catchCliedEvent={handleOpenModal}>
+                    <CustomDataGrid tableHeaders={notesTableHeaders} tableData={notesList} triggerEvent={handleTriggerEvent}></CustomDataGrid>
                 </CommonCard>
             </Box>
-            <ModelPopUp isOpen={isOpen} title="General Notes" handleClose={() => { setIsOpen(false) }} >
+            <ModelPopUp isOpen={isOpen} title="General Notes" handleClose={handleCloseModal} >
                 <Notes label={"General Notes"} ref={notesRef} />
                 <SLButton variant="outlined" color="success" onClick={handleAdd}>{"Save"}</SLButton>
             </ModelPopUp>

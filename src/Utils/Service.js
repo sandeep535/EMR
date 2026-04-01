@@ -1,4 +1,4 @@
-const serviceDetails ={
-    SERVICE_URL :`http://localhost:8082/api/`
+const serviceDetails = {
+    SERVICE_URL: process.env.REACT_APP_API_URL
 }
 export default serviceDetails

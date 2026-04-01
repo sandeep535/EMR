@@ -16,32 +16,25 @@ export const MyProSidebarProvider = ({ children }) => {
   const navigate = useNavigate();
   
   useEffect(() => {
-    if (appContextValue.loggedInRolesTaks && Object.keys(appContextValue.loggedInRolesTaks).length != 0) {
-      let copyRoles = [...appContextValue.loggedInRolesTaks];
-      let defaultScreenData = "";
-      copyRoles.forEach(role => {
-        if (role.defaultoptionvalue) {
-          defaultScreenData = role;
-        }
-      });
-      if (defaultScreenData) {
-        var leftmenuScreen = ""
-        let copyleftMenuList = [...appContextValue.leftMenuList];
-        copyleftMenuList.forEach(mainMenu => {
-          mainMenu.subMenu.forEach(submenu => {
-            if (submenu.screencode == defaultScreenData.actioncode) {
-              leftmenuScreen = submenu;
-            }
-          })
+    if (!appContextValue.isLogin) return;
+    if (!appContextValue.loggedInRolesTaks || Object.keys(appContextValue.loggedInRolesTaks).length === 0) return;
+
+    let copyRoles = [...appContextValue.loggedInRolesTaks];
+    let defaultScreenData = copyRoles.find(role => role.defaultoptionvalue);
+
+    if (defaultScreenData) {
+      let leftmenuScreen = null;
+      appContextValue.leftMenuList.forEach(mainMenu => {
+        mainMenu.subMenu.forEach(submenu => {
+          if (submenu.screencode === defaultScreenData.actioncode) {
+            leftmenuScreen = submenu;
+          }
         });
-        if (leftmenuScreen) {
-          navigate(leftmenuScreen.to, { replace: true });
-        } else {
-          navigate('/registration', { replace: true });
-        }
-      }
+      });
+      appContextValue.setSelectedLeftMenuItem(leftmenuScreen || null);
+      navigate(leftmenuScreen ? leftmenuScreen.to : '/registration', { replace: true });
     }
-  }, [appContextValue.loggedInRolesTaks]);
+  }, [appContextValue.loggedInRolesTaks, appContextValue.isLogin]);
 
   // Memoize the context value to prevent unnecessary re-renders
   const contextValue = useMemo(() => ({

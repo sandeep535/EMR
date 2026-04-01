@@ -24,11 +24,14 @@ const Topbar = () => {
   };
   const doLogout = () => {
     setOpen(false);
+    sessionStorage.clear();
     appContextValue.setIslogin(false);
-    sessionStorage.setItem("token","");
-    sessionStorage.setItem("LoggedInUserDetails","");
-    sessionStorage.setItem("leftMenu","");
-    navigate("/login/" + sessionStorage.getItem("tenant"), { replace: true });
+    appContextValue.setLeftMenuList([]);
+    appContextValue.setSelectedVisitDeatils([]);
+    appContextValue.setLoggedInUserDetails({});
+    appContextValue.setLoggedInRolesTaks({});
+    appContextValue.setSelectedLeftMenuItem(null);
+    navigate("/login/" + (appContextValue.tenant || 'emr2'), { replace: true });
   }
 
   return (

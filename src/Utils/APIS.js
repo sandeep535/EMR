@@ -235,10 +235,35 @@ const APIS={
         METHOD:"GET",
         ACTION:"GET_PENDING_BILLS_CLIENTID"
     },
-    File_UPLOAD:{
-        URL:'common/uploadFile',
+    FILE_UPLOAD:{
+        URL:'documents/upload',
         METHOD:"POST",
-        ACTION:"FIle Upload"
+        ACTION:"File Upload"
+    },
+    GET_DOCS_BY_PATIENT:{
+        URL:'documents/patient/{0}',
+        METHOD:"GET",
+        ACTION:"Get Documents By Patient"
+    },
+    GET_DOCS_BY_VISIT:{
+        URL:'documents/visit/{0}',
+        METHOD:"GET",
+        ACTION:"Get Documents By Visit"
+    },
+    GET_DOCS_BY_PATIENT_TYPE:{
+        URL:'documents/patient/{0}/type/{1}',
+        METHOD:"GET",
+        ACTION:"Get Documents By Patient And Type"
+    },
+    DELETE_DOCUMENT:{
+        URL:'documents/{0}',
+        METHOD:"DELETE",
+        ACTION:"Delete Document"
+    },
+    DOWNLOAD_DOCUMENT:{
+        URL:'documents/download/{0}',
+        METHOD:"GET",
+        ACTION:"Download Document"
     },
     
     GET_MASTER_TABLE:{
@@ -290,6 +315,21 @@ const APIS={
         URL:'visit/saveVisitServices',
         METHOD:'POST',
         ACTION:'SAVE VISIT SERVICES'
+    },
+    SAVE_DISCHARGE:{
+        URL:'discharge/save',
+        METHOD:'POST',
+        ACTION:'Save Discharge'
+    },
+    GET_DISCHARGE_BY_PATIENT:{
+        URL:'discharge/patient/{0}',
+        METHOD:'GET',
+        ACTION:'Get Discharge By Patient'
+    },
+    GET_DISCHARGE_BY_VISIT:{
+        URL:'discharge/visit/{0}',
+        METHOD:'GET',
+        ACTION:'Get Discharge By Visit'
     }
     
     
